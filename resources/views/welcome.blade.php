@@ -18,21 +18,26 @@
 <body class="login">
     <div class="login_page">
         AUTOLOG WMS
-    </div>
-    <div class="login_page_inputs">
-        <label>Empresa
-        <img class="icon_login" src="{{ asset('/icons/empresa.png') }}" alt="Empresa"> <input type="text" placeholder="Empresa">
-        </label>
-        <label>Usuário
-        <br>
-        <img class="icon_login" src="{{ asset('/icons/login.png') }}" alt="Usuário"> <input type="text" placeholder="Usuário / Email">
-        </label>
-        <label>Senha
-        <br>
-        <img class="icon_login" src="{{ asset('/icons/senha.png') }}" alt="Senha"> <input type="password" placeholder="Senha">
-        </label>
-        <a href="#features" class="button">Entrar</a>
-    </div>
+    </div> 
+    <form class="form-horizontal" role="form" method="POST" action="{{ url('/login') }}">
+      {{ csrf_field() }}
+        <div class="row">
+                <div class="small-10 medium-6 small-centered columns login_page_inputs">
+                    <label>Empresa
+                        <input class="input_login form-control" type="text" placeholder="Empresa">
+                    </label>
+                    <label>Usuário
+                        <input class="input_login form-control" name="email" id="email" type="text" required placeholder="Usuário / Email">
+                    </label>
+                    <label>Senha
+                        <input class="input_login form-control" type="password" name="password" id="password" required placeholder="Senha">
+                    </label>
+                    <button type="submit" class="expanded button entrar">
+                        Login
+                    </button>
+                </div>
+        </div>
+    </form>
     <div class="login_page_rodape">
         TWX 2016
     </div>
