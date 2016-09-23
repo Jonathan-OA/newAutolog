@@ -40,7 +40,9 @@ body{
     margin-left: 10px;
 }
 
-/*       Cabeçalho        */
+/* --------------------------------------------*/
+/*              Header Layout                  */
+/* --------------------------------------------*/
 .lay_header{
     color: white;
     background-color: #128B0B;
@@ -79,8 +81,10 @@ body{
     width: 17px;
 }
 
+/* --------------------------------------------*/
+/*                   Menu                      */
+/* --------------------------------------------*/
 
-/*         Menu        */
 .lay_menu{
     float: left;
     padding: 5px 15px;
@@ -111,6 +115,11 @@ body{
 
 [aria-expanded=true] .menu_ext{
     border-left: 10px solid #17263d;
+}
+
+.is-accordion-submenu a{
+   display: block;
+    line-height: 1em;
 }
 
 /* --------------------------------------------*/
@@ -146,10 +155,6 @@ body{
     text-align: center;
     font-size: 12px;
     background-color: #128B0B;
-}
-
-.icon_login{
-    width: 2rem;
 }
 
 .columns{

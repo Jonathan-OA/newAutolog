@@ -15,6 +15,7 @@ class Kernel extends HttpKernel
      */
     protected $middleware = [
         \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
+        \App\Http\Middleware\MenuMid::class, //Middleware do Menu deve ser executado em todas as paginas
     ];
 
     /**

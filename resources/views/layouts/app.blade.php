@@ -45,6 +45,8 @@
         </div>
     </div>
     <div class="lay_menu_op" id="lay_menu_op">
+        {!! $MyNavBar->asUl(array('class' => 'vertical menu', 'data-accordion-menu' => '')) !!}
+        <!--
         <ul class="vertical menu" data-accordion-menu>
             <li>
                 <a class="menu_ext" href="#"><img class="icon_menu" src="{{ asset('/icons/operacoes.png') }}" alt="Operações">  Operações</a>
@@ -57,6 +59,7 @@
             <li><a href="#"><img class="icon_menu" src="{{ asset('/icons/etiquetas.png') }}" alt="Etiquetas">  Etiquetas</a></li>
             <li><a href="#"><img class="icon_menu" src="{{ asset('/icons/configuracoes.png') }}" alt="Configurações">  Configurações</a></li>
         </ul>
+        -->
     </div>
     @yield('content')
 
