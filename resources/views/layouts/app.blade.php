@@ -61,7 +61,9 @@
         </ul>
         -->
     </div>
-    @yield('content')
+    <div class="small-10 columns  content">
+        @yield('content')
+    </div>
 
     <!-- Scripts -->
     

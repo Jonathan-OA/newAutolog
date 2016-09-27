@@ -27,6 +27,7 @@ a{
     color: white;
 }
 
+
 a:hover{
     color: white;
 }
@@ -36,9 +37,17 @@ body{
 }
 
 .container{
-    float:left;
-    margin-left: 10px;
+    display: flex;
+    flex-direction: row;
+    margin: 0;
+    padding: 0;
+    width: 100%;
 }
+
+.content {
+    float: right;
+}
+
 
 /* --------------------------------------------*/
 /*              Header Layout                  */
@@ -158,9 +167,36 @@ body{
 }
 
 .columns{
-    padding: 0 !important;
+    padding: 0;
 }
+
 
 .button{
     background-color: #172540;
+}
+
+/* --------------------------------------------*/
+/*                 Instalador                  */
+/* --------------------------------------------*/
+.ins_title{
+    color: #172540;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.ins_caption{
+    padding: 2px 0 2px 5px;
+    color: white;
+    background-color: #172540;   
+    font-size: 0.9rem;
+}
+
+.table_default tr {
+        box-shadow: 1px 0 1px 0 rgba(0, 0, 0, 0.2);
+        line-height: 0.5;
+        color: #172540;
+}
+
+.table_default td {
+        color: #172540;
 }
