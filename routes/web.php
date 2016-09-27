@@ -20,3 +20,4 @@ Route::group(['middleware' => 'web'], function() {
 });
 
 Route::get('/install', 'InstallController@index');
+

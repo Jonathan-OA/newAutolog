@@ -26,22 +26,20 @@
         <div class="title"> AUTOLOG WMS </div>
         <!-- Authentication Links -->
         <div class="lay_login show-for-medium">
-        @if (Auth::guest())        
-                <a class="tiny button" href="{{ url('/login') }}">Login</a>
-                <a class="tiny button" href="{{ url('/register') }}">Register</a>
-        @else
                 <img class="icon" src="{{ asset('/icons/account.png') }}" alt="Account">
                 <div class="lay_logout">
-                    <a  href="{{ Auth::logout() }}">
+                    <a  href="{{ url('/logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
                         <img class="icon" src="{{ asset('/icons/logout.png') }}" alt="Logout">
                     </a>
+                    <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
+                                        {{ csrf_field() }}
+                    </form>
                 </div>
                 <div class="lay_account">
-                    AUTOLOG
+                    {{ strtoupper(Auth::user()->name) }}
                     </br>
                     CHFR - 01
                 </div>
-        @endif
         </div>
     </div>
     <div class="lay_menu_op" id="lay_menu_op">
