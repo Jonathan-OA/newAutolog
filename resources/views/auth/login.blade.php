@@ -12,38 +12,46 @@
 
     <!-- Styles -->
     
-    <link href="css/foundation.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/app.css" rel="stylesheet">
 </head>
 <body class="login">
     <div class="login_page">
         AUTOLOG WMS
-    </div> 
+    </div>
+    </br>
     <form class="form-horizontal" role="form" method="POST" action="{{ url('/login') }}">
       {{ csrf_field() }}
         <div class="row">
-                <div class="small-10 medium-6 small-centered columns login_page_inputs">
-                    <label>Empresa
-                        <input class="input_login form-control" type="text" placeholder="Empresa">
-                    </label>
-                    <label>Usuário
-                        <input class="input_login form-control" name="email" id="email" type="text" required placeholder="Usuário / Email">
-                    </label>
-                    <label>Senha
-                        <input class="input_login form-control" type="password" name="password" id="password" required placeholder="Senha">
-                    </label>
-                    <button type="submit" class="expanded button entrar">
+                <div class="col-xs-10 col-sm-6 col-centered login_page_inputs">
+                    <div class="form-group">
+                        <label for="company_id">Empresa</label>
+                        <select name="company_id" id="company_id" class="form-control">
+                            @foreach ($companies as $company)
+                               <option value={{ $company->id }}> {{ $company->name}} - {{ $company->branch}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="code">Usuário</label>
+                        <input type="text" class="form-control" name="code"  id="code" placeholder="Usuário" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Senha</label>
+                        <input type="password" class="form-control" name="password" id="password" placeholder="Senha" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary entrar btn-block center-block">
                         Login
                     </button>
                 </div>
         </div>
     </form>
-    <div class="login_page_rodape">
+    <footer class="login_page_rodape">
         TWX 2016
-    </div>
+    </footer>
     <script src="js/vendor/jquery.js"></script>
     <script src="js/vendor/what-input.js"></script>
-    <script src="js/foundation.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
     <script src="js/app.js"></script>
 
     <script>

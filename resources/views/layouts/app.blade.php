@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-bren">
+<html lang="pt-br">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -13,6 +13,7 @@
     <!-- Styles -->
     
     <link href="css/foundation.css" rel="stylesheet">
+    <link href="css/semantic.min.css" rel="stylesheet">
     <link href="css/app.css" rel="stylesheet">
 
 </head>
@@ -65,10 +66,12 @@
 
     <!-- Scripts -->
     
-    <script src="js/vendor/jquery.js"></script>
+    <script src="js/vendor/jquery.min.js"></script>
     <script src="js/vendor/what-input.js"></script>
     <script src="js/foundation.min.js"></script>
+    <script src="js/semantic.min.js"></script>
     <script src="js/app.js"></script>
+
 
     <script>
       $(document).foundation();

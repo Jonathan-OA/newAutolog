@@ -48,6 +48,11 @@ body{
     float: right;
 }
 
+.col-centered{
+    float: none;
+    margin: 0 auto;
+}
+
 
 /* --------------------------------------------*/
 /*              Header Layout                  */
@@ -138,7 +143,7 @@ body{
 .login{
    background-color: #F3F3F3;
    color: #128B0B;
-   padding-top:10%;
+   padding-top:9%;
 }
 
 .login label{

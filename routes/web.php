@@ -17,7 +17,8 @@ Auth::routes();
 Route::group(['middleware' => 'web'], function() {
     Route::get('/home', 'HomeController@index');
     Route::get('/', 'HomeController@index');
+    Route::get('/install', 'InstallController@index');
 });
 
-Route::get('/install', 'InstallController@index');
+
 

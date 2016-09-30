@@ -12,7 +12,9 @@
             @foreach ($modulos as $modulo)
                 <tr>
                     <td align="center" width="50">
-                       <input type="checkbox" name="modulo_chk[]" checked="{{ $modulo->enabled}}"> 
+                        <div class="icheckbox">
+                            <input type="checkbox" name="modulo_chk[]" checked="{{ $modulo->enabled}}"> 
+                        </div>
                     </td>   
                     <td>
                         {{ $modulo->name }}

@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\View;
+use App;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -23,6 +25,8 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        $companies = App\Company::all();
+        View::share('companies', $companies);
         $this->registerPolicies();
 
         //
