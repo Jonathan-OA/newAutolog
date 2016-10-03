@@ -43,7 +43,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-2 hidden-sm">
+        <div class="col-md-2 hidden-sm no-pad-rg">
             <div class="lay_menu_op" id="lay_menu_op">
                 {!! $MyNavBar->asUl(array('class' => 'vertical menu', 'data-accordion-menu' => '')) !!}
                 <!--
@@ -63,7 +63,9 @@
             </div>
         </div>
         <div class="col-sm-10">
+           <div class="container-fluid">
                 @yield('content')
+           </div>
         </div>
     </div>
 

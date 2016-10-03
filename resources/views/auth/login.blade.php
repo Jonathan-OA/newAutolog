@@ -43,6 +43,12 @@
                     <button type="submit" class="btn btn-primary entrar btn-block center-block">
                         Login
                     </button>
+                    <br>
+                    @if (count($errors))
+                            @foreach($errors->all() as $error)
+                                <div class="alert alert-danger text-center" role="alert">{{ $error }} </div>
+                            @endforeach
+                    @endif
                 </div>
         </div>
     </form>

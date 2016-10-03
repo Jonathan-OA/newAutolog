@@ -34,7 +34,7 @@ a:hover{
 }
 
 body{
-    background-color: white;
+    background-color: #d0d0d0;
     overflow: hidden;
 }
 
@@ -54,8 +54,6 @@ body{
     float: none;
     margin: 0 auto;
 }
-
-
 
 
 /* --------------------------------------------*/
@@ -100,6 +98,22 @@ body{
 }
 
 /* --------------------------------------------*/
+/*                Panel Layout                 */
+/* --------------------------------------------*/
+
+.pad-ct{
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-top: 8px;
+}
+
+.panel-heading{
+    color: #17263d !important;
+    font-weight: bold;
+    text-decoration: underline;
+
+}
+/* --------------------------------------------*/
 /*                   Menu                      */
 /* --------------------------------------------*/
 
@@ -143,6 +157,10 @@ body{
     line-height: 1em;
 }
 
+.no-pad-rg{
+    padding-right: 0px;
+}
+
 /* --------------------------------------------*/
 /*               Página de Login               */
 /* --------------------------------------------*/
@@ -178,9 +196,7 @@ body{
     background-color: #128B0B;
 }
 
-.columns{
-    padding: 0;
-}
+
 
 
 .button{
@@ -190,25 +206,24 @@ body{
 /* --------------------------------------------*/
 /*                 Instalador                  */
 /* --------------------------------------------*/
-.ins_title{
-    color: #172540;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
 
-.ins_caption{
-    padding: 2px 0 2px 5px;
-    color: white;
-    background-color: #172540;   
-    font-size: 0.9rem;
-}
-
-.table_default tr {
+.table tr {
         box-shadow: 1px 0 1px 0 rgba(0, 0, 0, 0.2);
         line-height: 0.5;
         color: #172540;
 }
 
-.table_default td {
+.table td {
         color: #172540;
+}
+.table th{
+    color: white;
+    background-color: #17263d;
+    font-weight: normal;
+}
+.btn span.glyphicon {    			
+	opacity: 0;				
+}
+.btn.active span.glyphicon {				
+	opacity: 1;				
 }
