@@ -11,6 +11,7 @@
 /* --------------------------------------------*/
 /*               Layout Principal              */
 /* --------------------------------------------*/
+
 *{
     margin: 0;
 	padding: 0;
@@ -34,6 +35,7 @@ a:hover{
 
 body{
     background-color: white;
+    overflow: hidden;
 }
 
 .container{
@@ -52,6 +54,8 @@ body{
     float: none;
     margin: 0 auto;
 }
+
+
 
 
 /* --------------------------------------------*/
@@ -101,17 +105,17 @@ body{
 
 .lay_menu{
     float: left;
-    padding: 5px 15px;
+    padding: 8px 15px;
 }
 
 .lay_menu_op{
     float: left;
-    font-family: 'Tahoma';
-    font-size: 0.85rem;
+    font-family: 'Verdana';
+    font-size: 1.4rem;
     padding-top: 3px;
     background-color: #F3F3F3;
-    width: 15em;
-    height: 100%;
+    width: 100%;
+    height: 93vh;
     color: #464a55;
     box-shadow: 1px 0 1px 0 rgba(0, 0, 0, 0.2);
 }
@@ -119,8 +123,11 @@ body{
 .lay_menu_op li a{
     border-left: 10px solid #128B0B;
     color: #464a55;
+    display: inline-block;
+    width: 100%;
     box-shadow: 1px 0 1px 0 rgba(0, 0, 0, 0.2);
     padding: 0.6rem 1rem;
+    text-decoration: none;
 }
 
 .lay_menu_op li a:hover {

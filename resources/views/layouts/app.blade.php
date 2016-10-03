@@ -12,8 +12,7 @@
 
     <!-- Styles -->
     
-    <link href="css/foundation.css" rel="stylesheet">
-    <link href="css/semantic.min.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/app.css" rel="stylesheet">
 
 </head>
@@ -26,7 +25,7 @@
         </div>
         <div class="title"> AUTOLOG WMS </div>
         <!-- Authentication Links -->
-        <div class="lay_login show-for-medium">
+        <div class="lay_login hidden-sm">
                 <img class="icon" src="{{ asset('/icons/account.png') }}" alt="Account">
                 <div class="lay_logout">
                     <a  href="{{ url('/logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
@@ -43,33 +42,36 @@
                 </div>
         </div>
     </div>
-    <div class="lay_menu_op" id="lay_menu_op">
-        {!! $MyNavBar->asUl(array('class' => 'vertical menu', 'data-accordion-menu' => '')) !!}
-        <!--
-        <ul class="vertical menu" data-accordion-menu>
-            <li>
-                <a class="menu_ext" href="#"><img class="icon_menu" src="{{ asset('/icons/operacoes.png') }}" alt="Operações">  Operações</a>
-                <ul class="menu vertical nested">
-                <li><a href="#">Item 1A</a></li>
-                <li><a href="#">Item 1B</a></li>
+    <div class="row">
+        <div class="col-md-2 hidden-sm">
+            <div class="lay_menu_op" id="lay_menu_op">
+                {!! $MyNavBar->asUl(array('class' => 'vertical menu', 'data-accordion-menu' => '')) !!}
+                <!--
+                <ul class="vertical menu" data-accordion-menu>
+                    <li>
+                        <a class="menu_ext" href="#"><img class="icon_menu" src="{{ asset('/icons/operacoes.png') }}" alt="Operações">  Operações</a>
+                        <ul class="menu vertical nested">
+                        <li><a href="#">Item 1A</a></li>
+                        <li><a href="#">Item 1B</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#"><img class="icon_menu" src="{{ asset('/icons/ajustes.png') }}" alt="Ajustes">  Ajustes</a></li>
+                    <li><a href="#"><img class="icon_menu" src="{{ asset('/icons/etiquetas.png') }}" alt="Etiquetas">  Etiquetas</a></li>
+                    <li><a href="#"><img class="icon_menu" src="{{ asset('/icons/configuracoes.png') }}" alt="Configurações">  Configurações</a></li>
                 </ul>
-            </li>
-            <li><a href="#"><img class="icon_menu" src="{{ asset('/icons/ajustes.png') }}" alt="Ajustes">  Ajustes</a></li>
-            <li><a href="#"><img class="icon_menu" src="{{ asset('/icons/etiquetas.png') }}" alt="Etiquetas">  Etiquetas</a></li>
-            <li><a href="#"><img class="icon_menu" src="{{ asset('/icons/configuracoes.png') }}" alt="Configurações">  Configurações</a></li>
-        </ul>
-        -->
-    </div>
-    <div class="small-10 columns  content">
-        @yield('content')
+                -->
+            </div>
+        </div>
+        <div class="col-sm-10">
+                @yield('content')
+        </div>
     </div>
 
     <!-- Scripts -->
     
     <script src="js/vendor/jquery.min.js"></script>
     <script src="js/vendor/what-input.js"></script>
-    <script src="js/foundation.min.js"></script>
-    <script src="js/semantic.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
     <script src="js/app.js"></script>
 
 
