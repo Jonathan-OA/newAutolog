@@ -33,7 +33,7 @@
                 </div>
                 
             </div>
-            <button type="submit" class="btn btn-primary center-block">
+            <button type="submit" class="btn btn-success center-block">
                         Prosseguir
                         </button>
         </div>
