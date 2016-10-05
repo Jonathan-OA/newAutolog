@@ -9,9 +9,10 @@
                 </div>
 
                 <div class="panel-body">
-                    You are logged in!
+                    <div id="dbTarget" style="position:relative;" class="rf"></div>
                 </div>
             </div>
         </div>
     </div>
 @endsection
+

@@ -28,7 +28,7 @@
                         <label for="company_id">Empresa</label>
                         <select name="company_id" id="company_id" class="form-control">
                             @foreach ($companies as $company)
-                               <option value={{% $company->id %}}> {{% $company->name%}} - {{% $company->branch%}}</option>
+                               <option value={{% $company->id %}}> {{% $company->name %}} - {{% $company->branch %}}</option>
                             @endforeach
                         </select>
                     </div>
