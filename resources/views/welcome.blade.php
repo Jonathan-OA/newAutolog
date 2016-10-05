@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- CSRF Token -->
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="csrf-token" content="{{% csrf_token() %}}">
 
-    <title>{{ config('app.name', 'AUTOLOG WMS') }}</title>
+    <title>{{% config('app.name', 'AUTOLOG WMS') %}}</title>
 
     <!-- Styles -->
     
@@ -19,8 +19,8 @@
     <div class="login_page">
         AUTOLOG WMS
     </div> 
-    <form class="form-horizontal" role="form" method="POST" action="{{ url('/login') }}">
-      {{ csrf_field() }}
+    <form class="form-horizontal" role="form" method="POST" action="{{% url('/login') %}}">
+      {{% csrf_field() %}}
         <div class="row">
                 <div class="small-10 medium-6 small-centered columns login_page_inputs">
                     <label>Empresa

@@ -20,10 +20,10 @@
                             @foreach ($modulos as $modulo)
                                 <tr>
                                     <td align="center" width="50">
-                                            <input type="checkbox" name="modulo_chk[]" autocomplete="off" checked="{{ $modulo->enabled}}">
+                                            <input type="checkbox" name="modulo_chk[]" autocomplete="off" checked="{{% $modulo->enabled%}}">
                                     </td>   
                                     <td>
-                                        {{ $modulo->name }}
+                                        {{% $modulo->name %}}
                                     </td>
                                 </tr>
                             @endforeach

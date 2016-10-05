@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-br" ng-app>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -71,15 +71,11 @@
 
     <!-- Scripts -->
     
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
     <script src="js/vendor/jquery.min.js"></script>
     <script src="js/vendor/what-input.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/app.js"></script>
-
-
-    <script>
-      $(document).foundation();
-    </script>
 
 </body>
 </html>

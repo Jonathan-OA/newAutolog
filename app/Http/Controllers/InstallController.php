@@ -11,6 +11,6 @@ class InstallController extends Controller
 {
     public function index(){
         $modulos = App\Module::all();
-        return view('modulos.install.install', ['modulos' => $modulos]);
+        return view('modulos.instalador.index', ['modulos' => $modulos]);
     }
 }
