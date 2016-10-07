@@ -19,6 +19,8 @@ Route::group(['middleware' => 'web'], function() {
     Route::get('/', 'HomeController@index');
     Route::get('/install', 'InstallController@index');
     Route::get('/producao', 'Modulos\Producao\ProductionController@index');
+    //API
+    Route::get('/documents', 'Modulos\Producao\ProductionController@getDocuments');
 });
 
 

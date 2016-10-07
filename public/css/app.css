@@ -19,7 +19,6 @@
 	font-size: 100%;
 	vertical-align: baseline;
     text-decoration: none;
-    color: white;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
@@ -111,7 +110,10 @@ body{
     color: #17263d !important;
     font-weight: bold;
     text-decoration: underline;
+}
 
+.ui-grid-canvas, .ui-grid-filter-input{
+    color: #17263d !important;  
 }
 /* --------------------------------------------*/
 /*                   Menu                      */

@@ -5,25 +5,18 @@
         <div class="col-md-12 pad-ct">
             <div class="panel panel-default" >
                 <div class="panel-heading">
-                    Instalação do Sistema
+                    Módulo de Produção
                 </div>
-                <table ng-controller="ProductionCtl">
-                    <tr ng-repeat="document in documents">
-                                        {{ document.number }}
-                                    </tr>
-
-                </table>
-                
+                <div ng-controller="MainCtrl">
+                 <div class="panel-body">
+                        <div ui-grid="gridOptions" ui-grid-selection ui-grid-expandable ui-grid-pagination class="grid">
+                        <div>
+                    </div>
+                </div>
             </div>
-            <button type="submit" class="btn btn-success center-block">
-                        Prosseguir
-                        </button>
         </div>
     </div>
+    <script>
+</script>
 @endsection
 
-<script>
-    var ProductionCtl = function($scope){
-        $scope.documents = {{% $documents %}};
-    }
-</script>

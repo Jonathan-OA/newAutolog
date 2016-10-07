@@ -11,10 +11,11 @@ $( document ).ready(function() {
 });
 
 //Geração dos Grids
-var app = angular.module('app', ['ngTouch', 'ui.grid', 'ui.grid.selection', 'ui.grid.expandable','ui.grid.pagination']);
+var app = angular.module('grid_prod', ['ngTouch', 'ui.grid', 'ui.grid.selection','ui.grid.pagination']);
 
 app.controller('MainCtrl', ['$scope','$http', function ($scope, $http) {
-
+		
+		
 		$scope.highlightFilteredHeader = function( row, rowRenderIndex, col, colRenderIndex ) {
 		    if( col.filters[0].term ){
 		      return 'header-filtered';
@@ -27,30 +28,18 @@ app.controller('MainCtrl', ['$scope','$http', function ($scope, $http) {
 			enableFiltering: true,
 			fastWatch: true,
 		    columnDefs: [
-		    { field: 'numero', headerCellClass: $scope.highlightFilteredHeader },
-		    { field: 'tipo' },
-		    { field: 'status', cellClass: function(grid, row, col, rowRenderIndex, colRenderIndex) {
-										            return 'stat'+grid.getCellValue(row,col);
-										           }},
-		    { field: 'emissao' },
-      		{ field: 'clifor' }],
+		    { name: 'Número', field: 'number', headerCellClass: $scope.highlightFilteredHeader },
+		    { name: 'Tipo', field: 'document_type_code' },
+			{ name: 'Status', field: 'document_status_id',cellTemplate: '<div class="ui-grid-cell-contents"><div class="grid_cell stat{{grid.getCellValue(row, col)}}">{{grid.getCellValue(row, col)}}</div></div>' },
+		    { name: 'Emissão', field: 'emission_date' },
+      		{ name: 'Cliente', field: 'customer_id' }],
       		enablePaginationControls: false,
-    		paginationPageSize: 18,
-      		expandableRowTemplate: 'docitm.html',
-			expandableRowHeight: 150
-	        
+    		paginationPageSize: 18
       	};
-
+		  
 		//Carrega grid com os 3 mil ultimos documentos
-        $http.get('http://localhost:81/WebService/grid')
+        $http.get('http://localhost/AutologN/public/documents')
          .success(function (data) {
-             for(i = 0; i < data.length; i++){
-
-	            data[i].subGridOptions = {
-	              columnDefs: [ {name:"Id", field:"num"},{name:"Name", field:"nome"} ],
-	              data: data[i].itens
-	            }
-	          }
              $scope.gridOptions.data = data;
          })
          .error(function (data, status, headers, config) {
@@ -58,3 +47,4 @@ app.controller('MainCtrl', ['$scope','$http', function ($scope, $http) {
          });
 
 }]);
+
