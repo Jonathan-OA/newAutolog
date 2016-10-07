@@ -97,7 +97,7 @@ body{
 }
 
 /* --------------------------------------------*/
-/*                Panel Layout                 */
+/*             Panel Layout + Grid             */
 /* --------------------------------------------*/
 
 .pad-ct{
@@ -114,6 +114,74 @@ body{
 
 .ui-grid-canvas, .ui-grid-filter-input{
     color: #17263d !important;  
+}
+
+.grid_cell{
+    margin: 0 12px;
+    border-radius: 15px 50px
+}
+
+.ui-grid-header-cell, .ui-grid-cell{
+    text-align: center !important
+}
+
+.ui-grid-header-cell {
+    color:white !important
+}
+
+.ui-grid-row:hover .ui-grid-cell {
+  background-color: #B6C3C6;
+}
+
+.stat0{
+    background: -webkit-linear-gradient(#CECECE, #A2A2A2);
+    background: linear-gradient(#CECECE, #A2A2A2);
+}
+
+.stat1{
+    background: -webkit-linear-gradient(#96D26E, #3E9A01);
+    background: linear-gradient(#96D26E, #3E9A01);
+}
+
+.stat8{
+    background: -webkit-linear-gradient(#70A8CD, #3E84B1);
+    background: linear-gradient(#70A8CD, #3E84B1);
+}
+
+.stat7{
+    background: -webkit-linear-gradient(#E06565, #FF4545);
+    background: linear-gradient(#E06565, #FF4545);
+}
+
+.stat4{
+    background: -webkit-linear-gradient(#A935FF, #8D41C5);
+    background: linear-gradient(#A935FF, #8D41C5);
+}
+
+.stat2{
+    background: -webkit-linear-gradient(#FFFF79, #EAEA2F);
+    background: linear-gradient(#FFFF79, #EAEA2F);
+}
+
+.stat10{
+    background: -webkit-linear-gradient(#FFBF48, #FFA500);
+    background: linear-gradient(#FFBF48, #FFA500);
+}
+
+.icon_grid{
+    height: 40px;
+    background-color: #efefef;
+    padding: 5px;
+    border: 1px solid #9c9c9c;
+    border-radius: 12px
+}
+
+.icon_grid:hover{
+    background-color: #d8d5d5;
+}
+
+.buttons_grid{
+    margin: 14px 0 0 2%;
 }
 /* --------------------------------------------*/
 /*                   Menu                      */

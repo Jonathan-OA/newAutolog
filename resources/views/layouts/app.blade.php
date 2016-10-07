@@ -14,15 +14,6 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/ui-grid/ui-grid.min.css" type="text/css">
     <link href="css/app.css" rel="stylesheet">
-    
-    <style>
-        .ui-grid-header-cell, .ui-grid-cell{text-align: center !important}
-        .ui-grid-header-cell {color:white !important}
-        .stat7{background-color: #27658A !important}
-        .stat5{background-color: #FFCA00 !important}
-        .stat11{background-color: orange !important}
-    </style>
-
 
 </head>
 <body>
