@@ -18,7 +18,7 @@ class MenuMid
     {
         \Menu::make('MyNavBar', function($menu){
             $modulos = Module::where('enabled',1)
-                             ->where('submodule', '')
+                             ->where('submodule', NULL)
                              ->get();
             $cont = 1;
             foreach($modulos as $mod){
@@ -30,7 +30,7 @@ class MenuMid
                                 ->append('<span class="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></span>');;
                 $submodules = Module::where('enabled',1)
                              ->where('module', $mod->module)
-                             ->where('submodule','<>','')
+                             ->where('submodule','<>',NULL)
                              ->get();
                 foreach($submodules as $sub){
                         $menu->$nickname->add($sub->name, array('url' => $sub->url, 'class'=> "collapse collapse".$nickname, 'aria-expanded' => 'false'));

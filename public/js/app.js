@@ -11,9 +11,11 @@ $( document ).ready(function() {
 });
 
 //Geração dos Grids
-var app = angular.module('grid_prod', ['ngTouch', 'ui.grid', 'ui.grid.selection','ui.grid.pagination', 'ui.grid.exporter']);
+var app = angular.module('grid_prod', ['ngTouch', 'ui.grid', 'ui.grid.selection',
+									   'ui.grid.pagination','ui.grid.saveState',
+									   'ui.grid.moveColumns']);
 
-app.controller('MainCtrl', ['$scope','$http','uiGridConstants', function ($scope, $http, uiGridConstants) {
+app.controller('MainCtrl', ['$scope','$http', function ($scope, $http) {
 		
 		$scope.highlightFilteredHeader = function( row, rowRenderIndex, col, colRenderIndex ) {
 		    if( col.filters[0].term ){
@@ -30,11 +32,6 @@ app.controller('MainCtrl', ['$scope','$http','uiGridConstants', function ($scope
 				$scope.gridApi = gridApi;
 			},
 			enableGridMenu: true,
-			exporterCsvFilename: 'myFile.csv',
-			exporterPdfDefaultStyle: {fontSize: 9},
-			exporterPdfTableStyle: {margin: [30, 30, 30, 30]},
-			exporterPdfTableHeaderStyle: {fontSize: 10, bold: true, italics: true, color: 'red'},
-			exporterPdfHeader: { text: "My Header", style: 'headerStyle' },
 		    columnDefs: [
 		    { name: 'Número', field: 'number', headerCellClass: $scope.highlightFilteredHeader },
 		    { name: 'Tipo', field: 'document_type_code' },
@@ -44,9 +41,34 @@ app.controller('MainCtrl', ['$scope','$http','uiGridConstants', function ($scope
       		enablePaginationControls: false,
     		paginationPageSize: 18
       	};
-		  
+
+
+		$scope.saveState = function() {
+			var datas = $scope.gridApi.saveState.save();
+			localStorage.setItem('Autolog_GridProd', JSON.stringify(datas));
+			$http.post('http://localhost/AutologN/public/api/grid', datas)
+            .success(function (data, status, headers, config) {
+                $scope.PostDataResponse = data;
+            }).error(function (data, status, header, config) {
+               console.log('Erro ao Buscar Grid Salvo');
+            });
+		};
+		
+		$scope.restoreState = function() {
+			var columns = localStorage.getItem('Autolog_GridProd');
+			console.log(columns);
+			if (columns) {
+				$scope.gridApi.saveState.restore( $scope, JSON.parse(columns) );
+			}else{
+				$http.get('http://localhost/AutologN/public/api/grid/Produção')
+				.success(function (data) {
+					$scope.gridApi.saveState.restore( $scope, data );
+				})
+			}
+		};
+
 		//Carrega grid com os 3 mil ultimos documentos
-        $http.get('http://localhost:81/AutologN/public/documents')
+        $http.get('http://localhost/AutologN/public/api/documentsProd')
          .success(function (data) {
              $scope.gridOptions.data = data;
          })
