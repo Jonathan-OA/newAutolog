@@ -12,6 +12,7 @@
     <!-- Styles -->
     
     <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/razorflow.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/ui-grid/ui-grid.min.css" type="text/css">
     <link href="css/app.css" rel="stylesheet">
 
@@ -81,7 +82,10 @@
 
     <script src="js/vendor/what-input.js"></script>
     <script src="js/bootstrap.min.js"></script>
+    <script src="js/razorflow.min.js"></script>
+    <script src="js/razorflow.devtools.min.js"></script>
     <script src="js/app.js"></script>
+    <script src="js/dashboard_app.js"></script>
     <script src="js/release/ui-grid.min.js"></script>
 
 </body>

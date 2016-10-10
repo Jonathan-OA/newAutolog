@@ -5,23 +5,13 @@
 // maintain the most stable and secure 
 
 StandaloneDashboard(function(db){
-	// YOU CAN DELETE THE ENTIRE CONTENTS OF THIS FUNCTION AND CUSTOMIZE
-	// AS PER YOUR REQUIREMENT. 
-	// These components are simply here to give you a quick introduction of how RazorFlow Works
-	//
-	var kpi = new KPIComponent ();
-	kpi.setDimensions (4, 2);
-	kpi.setCaption ("Separado");
-	kpi.setValue (42,{
-        numberPrefix: "$", 
-        valueTextColor: "#ff000d"
-    });
-	db.addComponent (kpi);
-	// Add a chart to the dashboard. This is a simple chart with no customization.
 	var chart = new ChartComponent();
-	chart.setCaption("Sales");
-	chart.setDimensions (6, 6);	
-	chart.setLabels (["2013", "2014", "2015"]);
-	chart.addSeries ([3151, 1121, 4982]);
-	db.addComponent (chart);
+    chart.setDimensions (12, 4);
+    chart.setCaption("A pie chart");
+    chart.setLabels (["Jan", "Feb", "Mar"]);
+    chart.setPieValues ([10, 14, 13]);
+    chart.onItemClick(function(obj) {
+        console.log(obj);
+    });
+    db.addComponent (chart);
 });
