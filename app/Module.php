@@ -17,6 +17,6 @@ class Module extends Model
      */
 
     protected $fillable = [
-        'name','enabled','url'
+        'name','enabled','url','module','submodule'
     ];
 }

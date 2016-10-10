@@ -93,7 +93,16 @@ body{
 }
 
 .icon_menu{
-    width: 17px;
+    width: 2rem;
+    margin-right: 1.6rem;
+}
+
+.menu_ext ul li{
+    padding-left: 1.1rem;
+}
+
+.glyphicon{
+    float: right !important;
 }
 
 /* --------------------------------------------*/
@@ -126,7 +135,10 @@ body{
 }
 
 .ui-grid-header-cell {
-    color:white !important
+    color:white !important;
+    font-size: 1.4rem;
+    font-weight: normal;
+    background-color: #17263d !important;
 }
 
 .ui-grid-row:hover .ui-grid-cell {
@@ -169,7 +181,7 @@ body{
 }
 
 .icon_grid{
-    height: 40px;
+    height: 35px;
     background-color: #efefef;
     padding: 5px;
     border: 1px solid #9c9c9c;

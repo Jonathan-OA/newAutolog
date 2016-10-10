@@ -17,18 +17,26 @@ class MenuMid
     public function handle($request, Closure $next)
     {
         \Menu::make('MyNavBar', function($menu){
-            $modulos = Module::where('enabled',1)->get();
-            foreach($modulos as $name){
-                $menu->add($name->name, $name->url)->link->attr(array('class' => 'menu_ext'));
+            $modulos = Module::where('enabled',1)
+                             ->where('submodule', '')
+                             ->get();
+            $cont = 1;
+            foreach($modulos as $mod){
+                $nickname = 'Nick'.$cont;
+                $menu->add($mod->name, array('class' => 'menu_ext', 'nickname' => $nickname))
+                     ->link->attr(array('data-toggle' => "collapse", 'href' => ".collapse".$nickname, 'aria-expanded'=>"false", 'aria-controls'=> "collapseExample"));
+                //Icone
+                $menu->$nickname->prepend('<img class="icon_menu" src="icons/'.$mod->icon.'.png" alt="Operações">')
+                                ->append('<span class="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></span>');;
+                $submodules = Module::where('enabled',1)
+                             ->where('module', $mod->module)
+                             ->where('submodule','<>','')
+                             ->get();
+                foreach($submodules as $sub){
+                        $menu->$nickname->add($sub->name, array('url' => $sub->url, 'class'=> "collapse collapse".$nickname, 'aria-expanded' => 'false'));
+                }
+                $cont++;
             }
-            /*$menu->add('Operações', 'operacoes')->link->attr(array('class' => 'menu_ext'));
-            $menu->operacoes->add('Teste');
-            
-            $menu->add('Etiquetas','etiquetas')->link->attr(array('class' => 'menu_ext'));;
-            $menu->etiquetas->add('Teste2');
-            $menu->add('Ajustes', 'ajustes');
-            $menu->add('Configurações',  'configuracoes');
-            */
         });
         return $next($request);
     }

@@ -3,7 +3,7 @@
 @section('content')
     <div class="row">
         <div class="col-md-12 pad-ct">
-            <div class="panel panel-default" >
+            <div class="panel panel-default" ng-controller="MainCtrl" >
                 <div class="panel-heading">
                     Módulo de Produção
                 </div>
@@ -14,10 +14,13 @@
                     <a href="#" id="button_menu"> 
                         <img class="icon_grid" src="<% asset('/icons/import.png') %>" alt="Importar">
                     </a>
+                    <a href="#" id="toggleFiltering" ng-click="toggleFiltering()"> 
+                        <img class="icon_grid" src="<% asset('/icons/filter.png') %>" alt="Filtrar">
+                    </a>
                 </div>
                  <div class="panel-body">
-                    <div ng-controller="MainCtrl">
-                            <div ui-grid="gridOptions" ui-grid-selection ui-grid-expandable ui-grid-pagination class="grid">
+                    <div>
+                            <div ui-grid="gridOptions" ui-grid-selection ui-grid-pagination ui-grid-auto-resize ui-grid-exporter class="grid">
                             </div>
                     </div>
                  </div>
