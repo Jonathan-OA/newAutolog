@@ -3,9 +3,9 @@
 @section('content')
     <div class="row">
         <div class="col-md-12 pad-ct">
-            <div class="panel panel-default" ng-controller="MainCtrl" >
+            <div class="panel panel-default" ng-controller="DetCtrl" >
                 <div class="panel-heading">
-                    Módulo de Produção
+                    Módulo de Produção - Itens 
                 </div>
                 <div class="row buttons_grid">
                     <a href="#" id="button_menu" data-toggle="modal" data-target="#myModal"> 
@@ -20,31 +20,14 @@
                 </div>
                  <div class="panel-body">
                     <div>
-                            <div ui-grid="gridOptions" ui-grid-selection ui-grid-pagination ui-grid-move-columns ui-grid-save-state class="grid">
-                            </div>
+                        <div ui-grid="gridOptions" ui-grid-selection ui-grid-pagination ui-grid-move-columns ui-grid-save-state class="grid">
+                        </div>
                     </div>
                     <button id="save" type="button" class="btn btn-success" ng-click="saveState()">Save</button>
             <button id="restore" type="button" class="btn btn-success" ng-click="restoreState()">Restore</button>
                  </div>
             </div>
             
-        </div>
-    </div>
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-            <div class="modal-body">
-                <div class="panel panel-default" ng-controller="MainCtrl" >
-                <div class="panel-heading">
-                    Módulo de Produção
-                </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
-            </div>
         </div>
     </div>
 @endsection

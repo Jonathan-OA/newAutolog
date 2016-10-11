@@ -19,8 +19,10 @@ Route::group(['middleware' => 'web'], function() {
     Route::get('/', 'HomeController@index');
     Route::get('/install', 'InstallController@index');
     Route::get('/producao', 'Modulos\Producao\ProductionController@index');
+    Route::get('/producao/{document}/detalhes', ['uses' => 'Modulos\Producao\ProductionController@items']);
     //API
     Route::get('/api/documentsProd', 'Modulos\Producao\ProductionController@getDocuments');
+    Route::get('/api/itemsProd/{document}', 'Modulos\Producao\ProductionController@getItems');
     Route::post('/api/grid/', 'Modulos\Geral\GridController@setColumns');
     Route::get('/api/grid/{module}', 'Modulos\Geral\GridController@getColumns');
 });

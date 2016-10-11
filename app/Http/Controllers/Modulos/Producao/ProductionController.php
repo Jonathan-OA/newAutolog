@@ -12,12 +12,20 @@ use App;
 class ProductionController extends Controller
 {
     public function index(){
-        $documents = App\Document::all();
-        return view('modulos.producao.grid')->with(['documents' => json_encode($documents)]); 
+        return view('modulos.producao.grid'); 
+    }
+
+    public function items($id){
+        return view('modulos.producao.gridDet')->with(['document' => $id]); 
     }
 
     public function getDocuments(){
         $documents = App\Document::all()->take(1000);
+        return $documents->toArray();
+    }
+
+    public function getItems($document_id){
+        $documents = App\DocumentItem::where('document_id',$document_id)->get();
         return $documents->toArray();
     }
 }
