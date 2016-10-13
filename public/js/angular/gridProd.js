@@ -72,8 +72,7 @@ app.controller('MainCtrl', ['$scope','$http','uiGridConstants','$timeout', funct
 }]);
 
 //Grid de documentos
-app.controller('DetCtrl', ['$scope','$http','uiGridConstants','$timeout', function ($scope, $http, uiGridConstants, $timeout) {
-
+app.controller('DetCtrl', ['$scope','$http','uiGridConstants','$timeout','$window', function ($scope, $http, uiGridConstants, $timeout, $window) {
 		$scope.gridOptions = {
 			enableFullRowSelection: true,
 			multiSelect: false,
@@ -123,20 +122,24 @@ app.controller('DetCtrl', ['$scope','$http','uiGridConstants','$timeout', functi
 				})
 			}
 		};
+		//Pega o valor da variavel que foi definido na view
+		$scope.$watch("document_id", function(){
+			//Carrega grid com os 3 mil ultimos documentos
+			$http.get('http://localhost/AutologN/public/api/itemsProd/'+$scope.document_id)
+			.success(function (data) {
+				$scope.gridOptions.data = data;
+			})
+			.error(function (data, status, headers, config) {
+				console.log("Errouuu");
+			});
+			//Esconde / Mostra os filtros
+			$scope.toggleFiltering = function(){
+				$scope.gridOptions.enableFiltering = !$scope.gridOptions.enableFiltering;
+				$scope.gridApi.core.notifyDataChange( uiGridConstants.dataChange.COLUMN );
+			};
+		});
 
-		//Carrega grid com os 3 mil ultimos documentos
-        $http.get('http://localhost/AutologN/public/api/ItemsProd')
-         .success(function (data) {
-             $scope.gridOptions.data = data;
-         })
-         .error(function (data, status, headers, config) {
-             console.log("Errouuu");
-         });
-		 //Esconde / Mostra os filtros
-		 $scope.toggleFiltering = function(){
-			$scope.gridOptions.enableFiltering = !$scope.gridOptions.enableFiltering;
-			$scope.gridApi.core.notifyDataChange( uiGridConstants.dataChange.COLUMN );
-		};
+		
 
 }]);
 

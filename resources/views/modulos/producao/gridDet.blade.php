@@ -1,10 +1,12 @@
+
 @extends('layouts.app')
 
 @section('content')
-    <div class="row">
+    <div class="row" ng-app="grid_prod">
         <div class="col-md-12 pad-ct">
-            <div class="panel panel-default" ng-controller="DetCtrl" >
-                <div class="panel-heading">
+            <!-- //NG-INIT recebe os parâmetros que vem da URL e passa para o controller definido no NG-CONTROLLER -->
+            <div class="panel panel-default" ng-controller="DetCtrl"  >
+                <div class="panel-heading" ng-init="document_id=<% $document %>">
                     Módulo de Produção - Itens 
                 </div>
                 <div class="row buttons_grid">
@@ -24,7 +26,7 @@
                         </div>
                     </div>
                     <button id="save" type="button" class="btn btn-success" ng-click="saveState()">Save</button>
-            <button id="restore" type="button" class="btn btn-success" ng-click="restoreState()">Restore</button>
+                    <button id="restore" type="button" class="btn btn-success" ng-click="restoreState()">Restore</button>
                  </div>
             </div>
             
@@ -32,5 +34,5 @@
     </div>
 @endsection
 @section('scripts')
-    <script src="js/angular/gridProd.js"></script>
+    <script src="<% asset('/js/angular/gridProd.js') %>"></script>
 @endsection

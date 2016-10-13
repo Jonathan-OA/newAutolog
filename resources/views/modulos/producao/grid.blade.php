@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="row">
+    <div class="row" ng-app="grid_prod">
         <div class="col-md-12 pad-ct">
             <div class="panel panel-default" ng-controller="MainCtrl" >
                 <div class="panel-heading">
