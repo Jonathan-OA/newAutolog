@@ -1,8 +1,8 @@
-
 @extends('layouts.app')
 
 @section('content')
-    <div class="row" ng-app="grid_prod">
+
+    <div class="row " ng-app="grid_prod">
         <div class="col-md-12 pad-ct">
             <!-- //NG-INIT recebe os parâmetros que vem da URL e passa para o controller definido no NG-CONTROLLER -->
             <div class="panel panel-default" ng-controller="DetCtrl"  >
@@ -10,7 +10,7 @@
                     Módulo de Produção - Itens 
                 </div>
                 <div class="row buttons_grid">
-                    <a href="#" id="button_menu" data-toggle="modal" data-target="#myModal"> 
+                    <a href="#" id="button_menu" data-toggle="modal" data-target=""> 
                         <img class="icon_grid" src="<% asset('/icons/add.png') %>" alt="Adicionar">
                     </a>
                     <a href="#" id="button_menu"> 
@@ -25,6 +25,12 @@
                         <div ui-grid="gridOptions" ui-grid-selection ui-grid-pagination ui-grid-move-columns ui-grid-save-state class="grid">
                         </div>
                     </div>
+                    <script type="text/ng-template" id="options">
+                        <div class="ui-grid-cell-contents">
+                            <a href="#" class=" glyphicon glyphicon-zoom-in icon_action"></a>
+                            <a href="#" class=" glyphicon glyphicon glyphicon-tasks icon_action"></a>
+                        </div>
+                    </script>
                     <button id="save" type="button" class="btn btn-success" ng-click="saveState()">Save</button>
                     <button id="restore" type="button" class="btn btn-success" ng-click="restoreState()">Restore</button>
                  </div>

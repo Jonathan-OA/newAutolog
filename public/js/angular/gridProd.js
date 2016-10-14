@@ -5,6 +5,12 @@ var app = angular.module('grid_prod', ['ui.grid', 'ui.grid.selection',
 //Grid de documentos
 app.controller('MainCtrl', ['$scope','$http','uiGridConstants','$timeout', function ($scope, $http, uiGridConstants, $timeout) {
 
+	$(function() {
+		$('#hhhaaa').click(function(){
+			alert('hue');
+		})
+	});
+
 		$scope.gridOptions = {
 			enableFullRowSelection: true,
 			multiSelect: false,
@@ -26,7 +32,8 @@ app.controller('MainCtrl', ['$scope','$http','uiGridConstants','$timeout', funct
 		    { name: 'Tipo', field: 'document_type_code' },
 			{ name: 'Status', field: 'document_status_id',cellTemplate: '<div class="ui-grid-cell-contents"><div class="grid_cell stat{{grid.getCellValue(row, col)}}">{{grid.getCellValue(row, col)}}</div></div>' },
 		    { name: 'Emissão', field: 'emission_date' },
-      		{ name: 'Cliente', field: 'customer_id' }],
+      		{ name: 'Cliente', field: 'customer_id' },
+			{ name: 'Opções', cellTemplate: 'options'}],
       		enablePaginationControls: false,
     		paginationPageSize: 18
       	};
@@ -94,7 +101,7 @@ app.controller('DetCtrl', ['$scope','$http','uiGridConstants','$timeout','$windo
 		    { name: 'Unidade', field: 'uom_code' },
 			{ name: 'Quantidade', field: 'qty' },
 			{ name: 'Status', field: 'document_status_id',cellTemplate: '<div class="ui-grid-cell-contents"><div class="grid_cell stat{{grid.getCellValue(row, col)}}">{{grid.getCellValue(row, col)}}</div></div>' },
-		    ],
+		    { name: 'Opções', cellTemplate: 'options'}],
       		enablePaginationControls: false,
     		paginationPageSize: 18
       	};

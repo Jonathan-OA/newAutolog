@@ -7,4 +7,9 @@ $( document ).ready(function() {
             $(this).css('menu');
         }
     })
+
+    $('#hhhaaa').click(function(){
+       alert('hue');
+    })
+
 });

@@ -195,6 +195,15 @@ body{
 .buttons_grid{
     margin: 14px 0 0 2%;
 }
+
+.icon_action{
+    background-color: #128b0b;
+    padding: 3px;
+    border-radius: 5px;
+    border: 1px solid #5d5d5d;
+    text-decoration: none !important;
+    float: none !important;
+}
 /* --------------------------------------------*/
 /*                   Menu                      */
 /* --------------------------------------------*/
