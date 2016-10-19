@@ -22,7 +22,7 @@
                 </div>
                  <div class="panel-body">
                     <div>
-                        <div ui-grid="gridOptions" ui-grid-selection ui-grid-pagination ui-grid-move-columns ui-grid-save-state class="grid">
+                        <div ui-grid="gridDetalhes" ui-grid-auto-resize ui-grid-selection ui-grid-pagination ui-grid-move-columns ui-grid-save-state class="grid">
                         </div>
                     </div>
                     <script type="text/ng-template" id="options">

@@ -8,8 +8,6 @@ $( document ).ready(function() {
         }
     })
 
-    $('#hhhaaa').click(function(){
-       alert('hue');
-    })
+
 
 });
