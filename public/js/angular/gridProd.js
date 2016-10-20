@@ -1,9 +1,9 @@
 //Geração dos Grids de Produção
 var app = angular.module('grid_prod', ['ui.grid', 'ui.grid.selection',
 									   'ui.grid.pagination','ui.grid.saveState',
-									   'ui.grid.moveColumns']);
+									   'ui.grid.moveColumns', 'ui.grid.autoResize']);
 //Grid de documentos
-app.controller('MainCtrl', ['$scope','$http','uiGridConstants','$timeout', function ($scope, $http, uiGridConstants, $timeout) {
+app.controller('MainCtrl', ['$rootScope','$scope','$http','uiGridConstants','$timeout', function ($rootScope,$scope, $http, uiGridConstants, $timeout) {
 		
 		$scope.gridOptions = {
 			enableFullRowSelection: false,
@@ -22,7 +22,7 @@ app.controller('MainCtrl', ['$scope','$http','uiGridConstants','$timeout', funct
 		    { name: 'Tipo', field: 'document_type_code' },
 			{ name: 'Status', field: 'document_status_id',
 			filter: {
-          term: '1',
+			  term: '1',
 			  type: uiGridConstants.filter.SELECT,
               selectOptions: [ { value: '1', label: 'Liberado' },{ value: '2', label: 'Em execução' },{ value: '0', label: 'Pendente' }]},
 		      cellTemplate: '<div class="ui-grid-cell-contents"><div class="grid_cell stat{{grid.getCellValue(row, col)}}">{{grid.getCellValue(row, col)}}</div></div>' },
@@ -32,6 +32,10 @@ app.controller('MainCtrl', ['$scope','$http','uiGridConstants','$timeout', funct
       		enablePaginationControls: false,
     		paginationPageSize: 18
       	};
+
+		$scope.showGridDet = function(id, number){
+			$rootScope.showGrid(id,number);
+		}
 
 		$scope.saveState = function() {
 			var datas = $scope.gridApi.saveState.save();
@@ -75,17 +79,14 @@ app.controller('MainCtrl', ['$scope','$http','uiGridConstants','$timeout', funct
 }]);
 
 //Grid de documentos
-app.controller('DetCtrl', ['$scope','$http','uiGridConstants','$timeout', function ($scope, $http, uiGridConstants, $timeout) {
+app.controller('DetCtrl', ['$rootScope','$scope','$http','uiGridConstants','$timeout','$interval', function ($rootScope,$scope, $http, uiGridConstants, $timeout, $interval) {
 		$scope.gridDetalhes = {};
-		
+		$scope.gridDetalhes.data = [];
 		$scope.gridDetalhes = {
 			enableFullRowSelection: true,
 			multiSelect: false,
 			enableFiltering: false,
 			fastWatch: true,
-			onRegisterApi: function(gridApi){
-				$scope.gridApiDet = gridApi;
-			},
 			enableGridMenu: true,
 		    columnDefs: [
 		    { name: 'Item', field: 'item_code' },
@@ -121,29 +122,28 @@ app.controller('DetCtrl', ['$scope','$http','uiGridConstants','$timeout', functi
 			}
 		};
 
-		$scope.showGrid = function(id){
-			$scope.dataLoaded = false;
-			 $scope.loading = true;
-			//Pega o valor da variavel que foi definido na view
-				//Carrega grid com os 3 mil ultimos documentos
-				$http.get('http://localhost/AutologN/public/api/itemsProd/'+id)
-				.success(function (data) {
-					$scope.gridDetalhes.data = data;
-					$scope.dataLoaded = true;
-					//$scope.gridApi.core.refresh();
-				})
-				.error(function (data, status, headers, config) {
-					console.log("Errouuu kk");
-				});
-				//Esconde / Mostra os filtros
-				$scope.toggleFiltering = function(){
-					$scope.gridDetalhes.enableFiltering = !$scope.gridDetalhes.enableFiltering;
-					$scope.gridApiDet.core.notifyDataChange( uiGridConstants.dataChange.COLUMN );
-				};
-			$scope.loading = false;
+		$rootScope.showGrid = function(id, number){
+			$scope.documentNumber = number;
+			$scope.gridDetalhes.onRegisterApi = function (gridApi) {
+				$scope.gridApiDet = gridApi;
+			}
+
+			$http.get('http://localhost/AutologN/public/api/itemsProd/'+id)
+			.success(function (data) {
+				$scope.gridDetalhes.data = data;
+				$scope.dataLoaded = true;
+			})
+			.error(function (data, status, headers, config) {
+				console.log("Errouuu kk");
+			});		
 		}
 
-		
+		//Esconde / Mostra os filtros
+		$scope.toggleFiltering = function(){
+			$rootScope.gridDetalhes.enableFiltering = !$scope.gridDetalhes.enableFiltering;
+			$rootScope.gridApiDet.core.notifyDataChange( uiGridConstants.dataChange.COLUMN );
+		};
+
 
 }]);
 

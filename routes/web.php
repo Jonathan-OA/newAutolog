@@ -25,6 +25,8 @@ Route::group(['middleware' => 'web'], function() {
     Route::get('/api/itemsProd/{document}', 'Modulos\Producao\ProductionController@getItems');
     Route::post('/api/grid/', 'Modulos\Geral\GridController@setColumns');
     Route::get('/api/grid/{module}', 'Modulos\Geral\GridController@getColumns');
+
+
 });
 
 

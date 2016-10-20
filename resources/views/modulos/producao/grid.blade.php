@@ -3,6 +3,22 @@
 @section('content')
     <div class="row" ng-app="grid_prod">
         <div class="col-md-12 pad-ct">
+        <!-- Grid de Detalhes (Carrega quando clica na lupa na coluna de opções) -->  
+        <div id="myModal" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content" ng-controller="DetCtrl">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            Módulo de Produção - Documento: {{ documentNumber }}
+                        </div>
+                        <div class="panel-body">
+                            <div ui-grid="gridDetalhes" ui-grid-auto-resize ui-grid-selection ui-grid-pagination ui-grid-move-columns ui-grid-save-state class="grid" ></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
             <div class="panel panel-default" ng-controller="MainCtrl" >
                 <div class="panel-heading">
                     Módulo de Produção
@@ -24,8 +40,8 @@
                             <div ui-grid="gridOptions"  ui-grid-auto-resize ui-grid-selection ui-grid-pagination ui-grid-move-columns ui-grid-save-state class="grid">
                             </div>
                             <script type="text/ng-template" id="options">
-                                <div id="hhhaaa" class="ui-grid-cell-contents" ng-controller="DetCtrl">
-                                    <a href="#"  data-toggle="modal"  ng-click="showGrid(4)" data-target="#myModal" class=" glyphicon glyphicon-zoom-in icon_action"></a>
+                                <div id="hhhaaa" class="ui-grid-cell-contents" ng-controller="MainCtrl">
+                                    <a href="#"  data-toggle="modal"  ng-click="showGridDet(row.entity.id, row.entity.number)" data-target="#myModal" class=" glyphicon glyphicon-zoom-in icon_action"></a>
                                     <a href="#" class=" glyphicon glyphicon glyphicon-tasks icon_action"></a>
                                 </div>
                             </script>
@@ -36,14 +52,7 @@
             </div>
             
         </div>
-        <!-- Grid de Detalhes (Carrega quando clica na lupa na coluna de opções) -->
-        <div id="myModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" ng-controller="DetCtrl">
-                <div class="modal-dialog modal-lg" role="document">
-                    <div class="modal-content">
-                    <div ui-grid="gridDetalhes" ui-grid-selection ui-grid-pagination ui-grid-move-columns ui-grid-save-state class="grid" ng-show="dataLoaded">
-                    </div>
-                </div>
-            </div>
+        
     </div>
     
 @endsection
