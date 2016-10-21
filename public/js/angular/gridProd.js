@@ -92,7 +92,7 @@ app.controller('DetCtrl', ['$rootScope','$scope','$http','uiGridConstants','$tim
 		    { name: 'Item', field: 'item_code' },
 		    { name: 'Unidade', field: 'uom_code' },
 			{ name: 'Quantidade', field: 'qty' },
-			{ name: 'Status', field: 'document_status_id',cellTemplate: '<div class="ui-grid-cell-contents"><div class="grid_cell stat{{grid.getCellValue(row, col)}}">{{grid.getCellValue(row, col)}}</div></div>' },
+			{ name: 'Status', field: 'status',cellTemplate: '<div class="ui-grid-cell-contents"><div class="grid_cell stat{{grid.getCellValue(row, col)}}">{{grid.getCellValue(row, col)}}</div></div>' },
 		    { name: 'Opções', cellTemplate: 'options'}],
       		enablePaginationControls: false,
     		paginationPageSize: 18
@@ -124,6 +124,9 @@ app.controller('DetCtrl', ['$rootScope','$scope','$http','uiGridConstants','$tim
 
 		$rootScope.showGrid = function(id, number){
 			$scope.documentNumber = number;
+			
+			$scope.gridDetalhes.data = [];
+			
 			$scope.gridDetalhes.onRegisterApi = function (gridApi) {
 				$scope.gridApiDet = gridApi;
 			}

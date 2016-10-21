@@ -13,6 +13,8 @@
                         </div>
                         <div class="panel-body">
                             <div ui-grid="gridDetalhes" ui-grid-auto-resize ui-grid-selection ui-grid-pagination ui-grid-move-columns ui-grid-save-state class="grid" ></div>
+                                <button id="save" type="button" class="btn btn-success" ng-click="saveState()">Save</button>
+                                <button id="restore" type="button" class="btn btn-success" ng-click="restoreState()">Restore</button>
                         </div>
                     </div>
                 </div>
