@@ -39,7 +39,7 @@
                 </div>
                  <div class="panel-body">
                     <div>
-                            <div ui-grid="gridOptions"  ui-grid-auto-resize ui-grid-selection ui-grid-pagination ui-grid-move-columns ui-grid-save-state class="grid">
+                            <div ui-grid="gridOptions"  ui-grid-resize-columns ui-grid-selection ui-grid-pagination ui-grid-move-columns ui-grid-save-state class="grid">
                             </div>
                             <script type="text/ng-template" id="options">
                                 <div id="hhhaaa" class="ui-grid-cell-contents" ng-controller="MainCtrl">
