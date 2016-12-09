@@ -9,9 +9,8 @@
     <title><% config('app.name', 'AUTOLOG WMS') %></title>
 
     <!-- Styles -->
-    
+    <link href="<% asset('/datatables/datatables.min.css') %>"  rel="stylesheet">
     <link href="<% asset('/css/bootstrap.min.css') %> " rel="stylesheet">
-    <link rel="stylesheet" href="<% asset('/css/ui-grid/ui-grid.min.css') %>" type="text/css">
     <link href="<% asset('/css/app.css') %>" rel="stylesheet">
 
 </head>
@@ -56,15 +55,17 @@
 
     <!-- Scripts -->
     
-    <script src="<% asset('/js/angular/angular.min.js') %>"></script>
+    {{-- <script src="<% asset('/js/angular/angular.min.js') %>"></script>
     <script src="<% asset('/js/vendor/jquery.min.js') %>"></script>
     <script src="<% asset('/js/angular/angular-touch.min.js') %>"></script>
-    <script src="<% asset('/js/angular/angular-animate.min.js') %>"></script>
-
+    <script src="<% asset('/js/angular/angular-animate.min.js') %>"></script> --}}
+    <script src="<% asset('/js/vendor/jquery.min.js') %>"></script> 
+    <script src="<% asset('/datatables/datatables.min.js') %>"></script>
+      
     <script src="<% asset('/js/vendor/what-input.js') %>"></script>
     <script src="<% asset('/js/bootstrap.min.js') %>"></script>
     <script src="<% asset('/js/app.js') %>"></script>
-    <script src="<% asset('/js/release/ui-grid.min.js') %>"></script>
+    {{-- <script src="<% asset('/js/release/ui-grid.min.js') %>"></script> --}}
 
     @yield('scripts')
 

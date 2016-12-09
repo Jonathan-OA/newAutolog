@@ -138,6 +138,16 @@ body {
     text-decoration: underline;
 }
 
+thead {
+    line-height: 0.5;
+    background-color: #17263d;
+    color: white;
+}
+
+tbody td {
+    vertical-align: middle;
+}
+
 .ui-grid-canvas,
 .ui-grid-filter-input {
     color: #17263d !important;
