@@ -57,9 +57,9 @@
     <script>
     $( document ).ready(function() {
 
-        $('#myTable tfoot th').each( function () {
+        $('#myTable thead th').each( function () {
             var title = $(this).text();
-            $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+            $(this).append( '<input type="text" placeholder="Search '+title+'" />' );
         } );
 
        var table =  $('#myTable').DataTable( {
@@ -71,7 +71,7 @@
                             dataSrc: ''
                         },
                         columns: [
-                            {data: 'number', className: 'text-center'},
+                            {data: 'number', className: 'text-center',},
                             {data: 'document_type_code', className: 'text-center'},
                             {data: 'document_status_id', className: 'text-center'},
                             {data: 'emission_date', className: 'text-center'},
@@ -79,10 +79,9 @@
                             {data: null},
                             
                         ],
-                        "createdRow": function ( row, data, index ) {
-                                $('td', row).eq(1).html('<div class="grid_cell stat'+data['document_status_id']+'">'+data['document_status_id']+'</div>');
-                        }
-                    }); 
+                       
+        }); 
+        //Ativa Filtros
         table.columns().every( function () {
             var that = this;
     
@@ -94,8 +93,6 @@
                 }
             } );
         });
-
-       console.log(table.state());
 
     });
     </script>

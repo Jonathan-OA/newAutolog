@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use DB;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -26,6 +27,9 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
+        $schedule->call(function () {
+            DB::table('importacao')->insert(['date_imp' => date('Y-m-d H:i:s'), 'obs1' => 'testeImp Automatica']);
+        })->everyMinute();
     }
 
     /**
@@ -33,6 +37,7 @@ class Kernel extends ConsoleKernel
      *
      * @return void
      */
+     
     protected function commands()
     {
         require base_path('routes/console.php');

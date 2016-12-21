@@ -58,7 +58,7 @@
     {{-- <script src="<% asset('/js/angular/angular.min.js') %>"></script>
     <script src="<% asset('/js/vendor/jquery.min.js') %>"></script>
     <script src="<% asset('/js/angular/angular-touch.min.js') %>"></script>
-    <script src="<% asset('/js/angular/angular-animate.min.js') %>"></script> --}}
+    <script src="<% asset('/js/angular/angular-animate.min.js') %>"></script>  --}}
     <script src="<% asset('/js/vendor/jquery.min.js') %>"></script> 
     <script src="<% asset('/datatables/datatables.min.js') %>"></script>
       
