@@ -3,10 +3,25 @@
 @section('content')
     <div class="row" >
         <div class="col-md-12 pad-ct">
-
-            <div class="panel panel-default" ng-controller="MainCtrl" >
+            <div id="ModalTeste" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" >
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                Módulo de Recebimento - Documento:
+                            </div>
+                            <div class="panel-body">
+                                <div ui-grid="gridDetalhes"  class="grid" ></div>
+                                    <button id="save" type="button" class="btn btn-success" ng-click="saveState()">Save</button>
+                                    <button id="restore" type="button" class="btn btn-success" ng-click="restoreState()">Restore</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>                 
+            <div class="panel panel-default"  >
                 <div class="panel-heading">
-                    Módulo de Produção
+                    Módulo de Recebimento
                 </div>
                 <div class="row buttons_grid">
                     <a href="#" id="button_menu" data-toggle="modal" data-target="#ModalTeste"> 
@@ -57,9 +72,9 @@
     <script>
     $( document ).ready(function() {
 
-        $('#myTable thead th').each( function () {
+        $('#myTable tfoot th').each( function () {
             var title = $(this).text();
-            $(this).append( '<input type="text" placeholder="Search '+title+'" />' );
+            $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
         } );
 
        var table =  $('#myTable').DataTable( {
@@ -76,10 +91,8 @@
                             {data: 'document_status_id', className: 'text-center'},
                             {data: 'emission_date', className: 'text-center'},
                             {data: 'customer_id', className: 'text-center'},
-                            {data: null},
-                            
-                        ],
-                       
+                            {defaultContent: '<div class="teste"> </div>' },             
+                        ],         
         }); 
         //Ativa Filtros
         table.columns().every( function () {

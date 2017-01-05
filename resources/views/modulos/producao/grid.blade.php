@@ -3,6 +3,7 @@
 @section('content')
     <div class="row" ng-app="grid_prod">
         <div class="col-md-12 pad-ct">
+
         <!-- Grid de Detalhes (Carrega quando clica na lupa na coluna de opções) -->  
         <div id="myModal" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
             <div class="modal-dialog modal-lg" role="document">
@@ -26,7 +27,7 @@
                     Módulo de Produção
                 </div>
                 <div class="row buttons_grid">
-                    <a href="#" id="button_menu" data-toggle="modal" data-target="#ModalTeste"> 
+                    <a href="producao/add" id="button_menu" data-toggle="modal" > 
                         <img class="icon_grid" src="<% asset('/icons/add.png') %>" alt="Adicionar">
                     </a>
                     <a href="#" id="button_menu"> 

@@ -21,6 +21,8 @@ Route::group(['middleware' => 'web'], function() {
     Route::get('/producao', 'Modulos\Producao\ProductionController@index');
     Route::get('/recebimento', 'Modulos\Recebimento\ReceiptController@index');
     Route::get('/producao/detalhes/{document}', 'Modulos\Producao\ProductionController@items');
+    Route::resource('documents', 'DocumentController');
+
     //API
     Route::get('/api/documentsProd', 'Modulos\Producao\ProductionController@getDocuments');
     Route::get('/api/itemsProd/{document}', 'Modulos\Producao\ProductionController@getItems');
