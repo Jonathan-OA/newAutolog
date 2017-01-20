@@ -3,9 +3,11 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Models\Customer;
 
-class StoreDocument extends FormRequest
+class UpdateCustomerRequest extends FormRequest
 {
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -23,10 +25,6 @@ class StoreDocument extends FormRequest
      */
     public function rules()
     {
-        return [
-            'number' => 'required|unique:documents,number,NULL,id,document_type_code,OPR|max:20',
-            'document_type_code' => 'required|in:OPR',
-            
-        ];
+        return Customer::$rules;
     }
 }

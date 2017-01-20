@@ -22,6 +22,7 @@ Route::group(['middleware' => 'web'], function() {
     Route::get('/recebimento', 'Modulos\Recebimento\ReceiptController@index');
     Route::get('/producao/detalhes/{document}', 'Modulos\Producao\ProductionController@items');
     Route::resource('documents', 'DocumentController');
+    Route::resource('customers', 'CustomerController');
 
     //API
     Route::get('/api/documentsProd', 'Modulos\Producao\ProductionController@getDocuments');
@@ -32,6 +33,8 @@ Route::group(['middleware' => 'web'], function() {
     //IMPORTAÇÃO
     Route::get('/import', 'ImportacaoGeralController@index');
 });
+
+
 
 
 

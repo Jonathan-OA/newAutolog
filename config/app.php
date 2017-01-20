@@ -90,7 +90,7 @@ return [
     |
     */
 
-    'fallback_locale' => 'en',
+    'fallback_locale' => 'pt-br',
 
     /*
     |--------------------------------------------------------------------------
@@ -163,6 +163,11 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
         'Lavary\Menu\ServiceProvider',
+        Collective\Html\HtmlServiceProvider::class,
+        Laracasts\Flash\FlashServiceProvider::class,
+        Prettus\Repository\Providers\RepositoryServiceProvider::class,
+        \InfyOm\Generator\InfyOmGeneratorServiceProvider::class,
+        \InfyOm\AdminLTETemplates\AdminLTETemplatesServiceProvider::class, 
 
         /*
          * Package Service Providers...
@@ -227,6 +232,9 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Menu'       => 'Lavary\Menu\Facade',
         'Input' => Illuminate\Support\Facades\Input::class,
+        'Form'      => Collective\Html\FormFacade::class,
+        'Html'      => Collective\Html\HtmlFacade::class,
+        'Flash'     => Laracasts\Flash\Flash::class,
 
     ],
 

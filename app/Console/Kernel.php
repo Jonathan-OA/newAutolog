@@ -29,7 +29,7 @@ class Kernel extends ConsoleKernel
         //          ->hourly();
         $schedule->call(function () {
             DB::table('importacao')->insert(['date_imp' => date('Y-m-d H:i:s'), 'obs1' => 'testeImp Automatica']);
-        })->everyMinute();
+        })->everyFiveMinutes();
     }
 
     /**

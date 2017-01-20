@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Session;
 use App\Http\Requests\StoreDocument;
+use Flash;
+use Response;
 
 use App;
 
@@ -17,7 +19,7 @@ class DocumentController extends Controller
      */
     public function index()
     {
-        echo 'aeee';exit;
+       
     }
 
     /**
@@ -28,7 +30,7 @@ class DocumentController extends Controller
     public function create()
     {  
         $tipos = App\DocumentType::getDocTypes('030');
-        return view('modulos.producao.addDocument')->with(['tipos' => $tipos]); 
+        return view('modulos.producao.addDocument')->with(['tipos' => $tipos]);
     }
 
     /**
@@ -59,9 +61,10 @@ class DocumentController extends Controller
             $msg = "Documento já existe!";
             $erro = true;
         }
-        
-        $tipos = App\DocumentType::getDocTypes('030');
-        return redirect()->action('DocumentController@create',['msg' => $msg]);
+
+        flash($msg, 'success');
+
+        return redirect(route('documents.create'));
         //return view('modulos.producao.addDocument')->with(['tipos' => $tipos, 'msg' => $msg, 'erro' => $erro]);
     }
 
