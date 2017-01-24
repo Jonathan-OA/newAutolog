@@ -13,7 +13,6 @@
     <link href="<% asset('/css/ui-grid/ui-grid.min.css') %>"  rel="stylesheet">
     <link href="<% asset('/css/bootstrap.min.css') %> " rel="stylesheet">
     <link href="<% asset('/css/app.css') %>" rel="stylesheet">
-    <link href="<% asset('/css/sweetalert/sweetalert.css') %>" rel="stylesheet">
 
 </head>
 <body>
@@ -68,6 +67,7 @@
     <script src="<% asset('/js/bootstrap.min.js') %>"></script>
     <script src="<% asset('/js/app.js') %>"></script>
     <script src="<% asset('/js/release/ui-grid.min.js') %>"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
 
     @yield('scripts')
 
