@@ -23,6 +23,7 @@ Route::group(['middleware' => 'web'], function() {
     Route::get('/producao/detalhes/{document}', 'Modulos\Producao\ProductionController@items');
     Route::resource('documents', 'DocumentController');
     Route::resource('customers', 'CustomerController');
+    Route::resource('permissions', 'PermissionController');
 
     //API
     Route::get('/api/documentsProd', 'Modulos\Producao\ProductionController@getDocuments');
@@ -38,3 +39,12 @@ Route::group(['middleware' => 'web'], function() {
 
 
 
+
+
+
+
+Route::resource('permissions', 'PermissionController');
+
+Route::resource('permissions', 'PermissionController');
+
+Route::resource('permissions', 'PermissionController');
