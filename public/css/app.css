@@ -138,6 +138,10 @@ body {
     text-decoration: underline;
 }
 
+.panel {
+    height: 85vh;
+}
+
 thead {
     line-height: 0.5;
     background-color: #17263d;
@@ -232,6 +236,20 @@ tbody td {
     border: 1px solid #5d5d5d;
     text-decoration: none !important;
     float: none !important;
+}
+
+.th_grid {
+    white-space: nowrap;
+    width: 1%;
+    border: 1px solid white;
+    vertical-align: middle !important;
+    text-align: center;
+}
+
+.form_fields {
+    overflow-y: auto;
+    height: 72vh;
+    margin-bottom: 3vh;
 }
 
 

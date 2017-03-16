@@ -53,9 +53,12 @@
                             </div>
                         </div>
                     </div>
-                    <div id="dbTarget" style="position:relative;" class="rf"></div>
-                    <div id="chart"></div>
-                    <div id="dataset-picker">
+                    <svg id="fillgauge1" width="97%" height="250" onclick="gauge1.update(NewValue());"></svg>
+<svg id="fillgauge2" width="19%" height="200" onclick="gauge2.update(NewValue());"></svg>
+<svg id="fillgauge3" width="19%" height="200" onclick="gauge3.update(NewValue());"></svg>
+<svg id="fillgauge4" width="19%" height="200" onclick="gauge4.update(NewValue());"></svg>
+<svg id="fillgauge5" width="19%" height="200" onclick="gauge5.update(NewValue());"></svg>
+<svg id="fillgauge6" width="19%" height="200" onclick="gauge6.update(NewValue());"></svg>
                     </div>
                 </div>
             </div>
@@ -65,116 +68,78 @@
 
 @section('scripts')
 <script type="text/javascript">
-      var margin = { top: 50, right: 0, bottom: 100, left: 30 },
-          width = 960 - margin.left - margin.right,
-          height = 430 - margin.top - margin.bottom,
-          gridSize = Math.floor(width / 24),
-          legendElementWidth = gridSize*2,
-          buckets = 9,
-          colors = ["#ffffd9","#edf8b1","#c7e9b4","#7fcdbb","#41b6c4","#1d91c0","#225ea8","#253494","#081d58"], // alternatively colorbrewer.YlGnBu[9]
-          days = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
-          times = ["1a", "2a", "3a", "4a", "5a", "6a", "7a", "8a", "9a", "10a", "11a", "12a", "1p", "2p", "3p", "4p", "5p", "6p", "7p", "8p", "9p", "10p", "11p", "12p"];
-          datasets = ["data.tsv", "data2.tsv"];
+     var gauge1 = loadLiquidFillGauge("fillgauge1", 55);
+    var config1 = liquidFillGaugeDefaultSettings();
+    config1.circleColor = "#FF7777";
+    config1.textColor = "#FF4444";
+    config1.waveTextColor = "#FFAAAA";
+    config1.waveColor = "#FFDDDD";
+    config1.circleThickness = 0.2;
+    config1.textVertPosition = 0.2;
+    config1.waveAnimateTime = 1000;
+    var gauge2= loadLiquidFillGauge("fillgauge2", 28, config1);
+    var config2 = liquidFillGaugeDefaultSettings();
+    config2.circleColor = "#D4AB6A";
+    config2.textColor = "#553300";
+    config2.waveTextColor = "#805615";
+    config2.waveColor = "#AA7D39";
+    config2.circleThickness = 0.1;
+    config2.circleFillGap = 0.2;
+    config2.textVertPosition = 0.8;
+    config2.waveAnimateTime = 2000;
+    config2.waveHeight = 0.3;
+    config2.waveCount = 1;
+    var gauge3 = loadLiquidFillGauge("fillgauge3", 60.1, config2);
+    var config3 = liquidFillGaugeDefaultSettings();
+    config3.textVertPosition = 0.8;
+    config3.waveAnimateTime = 5000;
+    config3.waveHeight = 0.15;
+    config3.waveAnimate = false;
+    config3.waveOffset = 0.25;
+    config3.valueCountUp = false;
+    config3.displayPercent = false;
+    var gauge4 = loadLiquidFillGauge("fillgauge4", 50, config3);
+    var config4 = liquidFillGaugeDefaultSettings();
+    config4.circleThickness = 0.15;
+    config4.circleColor = "#808015";
+    config4.textColor = "#555500";
+    config4.waveTextColor = "#FFFFAA";
+    config4.waveColor = "#AAAA39";
+    config4.textVertPosition = 0.8;
+    config4.waveAnimateTime = 1000;
+    config4.waveHeight = 0.05;
+    config4.waveAnimate = true;
+    config4.waveRise = false;
+    config4.waveHeightScaling = false;
+    config4.waveOffset = 0.25;
+    config4.textSize = 0.75;
+    config4.waveCount = 3;
+    var gauge5 = loadLiquidFillGauge("fillgauge5", 60.44, config4);
+    var config5 = liquidFillGaugeDefaultSettings();
+    config5.circleThickness = 0.4;
+    config5.circleColor = "#6DA398";
+    config5.textColor = "#0E5144";
+    config5.waveTextColor = "#6DA398";
+    config5.waveColor = "#246D5F";
+    config5.textVertPosition = 0.52;
+    config5.waveAnimateTime = 5000;
+    config5.waveHeight = 0;
+    config5.waveAnimate = false;
+    config5.waveCount = 2;
+    config5.waveOffset = 0.25;
+    config5.textSize = 1.2;
+    config5.minValue = 30;
+    config5.maxValue = 150
+    config5.displayPercent = false;
+    var gauge6 = loadLiquidFillGauge("fillgauge6", 120, config5);
 
-      var svg = d3.select("#chart").append("svg")
-          .attr("width", width + margin.left + margin.right)
-          .attr("height", height + margin.top + margin.bottom)
-          .append("g")
-          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-      var dayLabels = svg.selectAll(".dayLabel")
-          .data(days)
-          .enter().append("text")
-            .text(function (d) { return d; })
-            .attr("x", 0)
-            .attr("y", function (d, i) { return i * gridSize; })
-            .style("text-anchor", "end")
-            .attr("transform", "translate(-6," + gridSize / 1.5 + ")")
-            .attr("class", function (d, i) { return ((i >= 0 && i <= 4) ? "dayLabel mono axis axis-workweek" : "dayLabel mono axis"); });
-
-      var timeLabels = svg.selectAll(".timeLabel")
-          .data(times)
-          .enter().append("text")
-            .text(function(d) { return d; })
-            .attr("x", function(d, i) { return i * gridSize; })
-            .attr("y", 0)
-            .style("text-anchor", "middle")
-            .attr("transform", "translate(" + gridSize / 2 + ", -6)")
-            .attr("class", function(d, i) { return ((i >= 7 && i <= 16) ? "timeLabel mono axis axis-worktime" : "timeLabel mono axis"); });
-
-      var heatmapChart = function(tsvFile) {
-        d3.tsv(tsvFile,
-        function(d) {
-          return {
-            day: +d.day,
-            hour: +d.hour,
-            value: +d.value
-          };
-        },
-        function(error, data) {
-          var colorScale = d3.scale.quantile()
-              .domain([0, buckets - 1, d3.max(data, function (d) { return d.value; })])
-              .range(colors);
-
-          var cards = svg.selectAll(".hour")
-              .data(data, function(d) {return d.day+':'+d.hour;});
-
-          cards.append("title");
-
-          cards.enter().append("rect")
-              .attr("x", function(d) { return (d.hour - 1) * gridSize; })
-              .attr("y", function(d) { return (d.day - 1) * gridSize; })
-              .attr("rx", 4)
-              .attr("ry", 4)
-              .attr("class", "hour bordered")
-              .attr("width", gridSize)
-              .attr("height", gridSize)
-              .style("fill", colors[0]);
-
-          cards.transition().duration(1000)
-              .style("fill", function(d) { return colorScale(d.value); });
-
-          cards.select("title").text(function(d) { return d.value; });
-          
-          cards.exit().remove();
-
-          var legend = svg.selectAll(".legend")
-              .data([0].concat(colorScale.quantiles()), function(d) { return d; });
-
-          legend.enter().append("g")
-              .attr("class", "legend");
-
-          legend.append("rect")
-            .attr("x", function(d, i) { return legendElementWidth * i; })
-            .attr("y", height)
-            .attr("width", legendElementWidth)
-            .attr("height", gridSize / 2)
-            .style("fill", function(d, i) { return colors[i]; });
-
-          legend.append("text")
-            .attr("class", "mono")
-            .text(function(d) { return "≥ " + Math.round(d); })
-            .attr("x", function(d, i) { return legendElementWidth * i; })
-            .attr("y", height + gridSize);
-
-          legend.exit().remove();
-
-        });  
-      };
-
-      heatmapChart(datasets[0]);
-      
-      var datasetpicker = d3.select("#dataset-picker").selectAll(".dataset-button")
-        .data(datasets);
-
-      datasetpicker.enter()
-        .append("input")
-        .attr("value", function(d){ return "Dataset " + d })
-        .attr("type", "button")
-        .attr("class", "dataset-button")
-        .on("click", function(d) {
-          heatmapChart(d);
-        });
+    function NewValue(){
+        if(Math.random() > .5){
+            return Math.round(Math.random()*100);
+        } else {
+            return (Math.random()*100).toFixed(1);
+        }
+    }
     </script>
 
 @endsection

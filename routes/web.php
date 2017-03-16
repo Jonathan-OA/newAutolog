@@ -48,3 +48,77 @@ Route::resource('permissions', 'PermissionController');
 Route::resource('permissions', 'PermissionController');
 
 Route::resource('permissions', 'PermissionController');
+
+Route::resource('customers', 'CustomersController');
+
+Route::resource('customers', 'CustomersController');
+
+Route::resource('customers', 'CustomersController');
+
+Route::resource('customers', 'CustomersController');
+
+Route::resource('customers', 'CustomersController');
+
+Route::resource('customers', 'CustomersController');
+
+Route::resource('customers', 'CustomersController');
+
+Route::resource('customers', 'CustomersController');
+
+Route::resource('customers', 'CustomersController');
+
+Route::resource('customers', 'CustomersController');
+
+Route::resource('customers', 'CustomersController');
+
+Route::resource('customers', 'CustomersController');
+
+Route::resource('customers', 'CustomersController');
+
+Route::resource('customers', 'CustomersController');
+
+Route::resource('customers', 'CustomersController');
+
+Route::resource('customers', 'CustomersController');
+
+Route::resource('customers', 'CustomersController');
+
+Route::resource('customers', 'CustomersController');
+
+Route::resource('customers', 'CustomersController');
+
+Route::resource('customers', 'CustomersController');
+
+Route::resource('customers', 'CustomersController');
+
+Route::resource('customers', 'CustomersController');
+
+Route::resource('customers', 'CustomersController');
+
+Route::resource('customers', 'CustomersController');
+
+Route::resource('customers', 'CustomersController');
+
+Route::resource('customers', 'CustomersController');
+
+Route::resource('customers', 'CustomersController');
+
+Route::resource('customers', 'CustomersController');
+
+Route::resource('customers', 'CustomersController');
+
+Route::resource('customers', 'CustomersController');
+
+Route::resource('customers', 'CustomersController');
+
+Route::resource('customers', 'CustomersController');
+
+Route::resource('customers', 'CustomersController');
+
+Route::resource('customers', 'CustomersController');
+
+Route::resource('customers', 'CustomersController');
+
+Route::resource('customers', 'CustomersController');
+
+Route::resource('customers', 'CustomersController');

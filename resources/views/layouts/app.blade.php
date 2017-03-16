@@ -13,6 +13,7 @@
     <link href="<% asset('/css/ui-grid/ui-grid.min.css') %>"  rel="stylesheet">
     <link href="<% asset('/css/bootstrap.min.css') %> " rel="stylesheet">
     <link href="<% asset('/css/app.css') %>" rel="stylesheet">
+    @yield('css')
 
 </head>
 <body>
@@ -67,7 +68,11 @@
     <script src="<% asset('/js/bootstrap.min.js') %>"></script>
     <script src="<% asset('/js/app.js') %>"></script>
     <script src="<% asset('/js/release/ui-grid.min.js') %>"></script>
-    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="http://ui-grid.info/docs/grunt-scripts/csv.js"></script>
+    <script src="http://ui-grid.info/docs/grunt-scripts/pdfmake.js"></script>
+    <script src="http://ui-grid.info/docs/grunt-scripts/vfs_fonts.js"></script>
+    <script src="<% asset('/js/liquidFillGauge.js') %>"></script>
+    <script src="https://d3js.org/d3.v3.min.js"></script>
 
     @yield('scripts')
 
