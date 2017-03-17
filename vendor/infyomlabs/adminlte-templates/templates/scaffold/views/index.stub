@@ -25,3 +25,17 @@
         </div>
     </div>
 @endsection
+@section('scripts')
+<script>
+$(function() {
+    $("#$MODEL_NAME_PLURAL_CAMEL$-table").DataTable({
+        "scrollX": true,
+        ajax: '$MODEL_NAME_PLURAL_CAMEL$/datatable',
+        columns: [ $FIELDS_DATATABLE$ ,
+                   defaultContent: "<div> <a href="{!! route('$ROUTE_NAMED_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.show', [$$MODEL_NAME_CAMEL$->$PRIMARY_KEY_NAME$]) !!}" class='btn btn-default btn-xs'><i class="glyphicon glyphicon-eye-open"></i></a>
+                                           <a href="{!! route('$ROUTE_NAMED_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.edit', [$$MODEL_NAME_CAMEL$->$PRIMARY_KEY_NAME$]) !!}" class='btn btn-default btn-xs'><i class="glyphicon glyphicon-edit"></i></a></div>
+                 "]
+    });
+});
+</script>
+@endsection

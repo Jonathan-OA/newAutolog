@@ -48,7 +48,8 @@
                 {!! $MyNavBar->asUl(array('class' => 'vertical menu', 'data-accordion-menu' => '')) !!}
             </div>
         </div>
-        <div class="col-sm-10">
+        <!-- ID: ctrl_rsp é responsavel pela mudança de colunas no design responsivo quando esconde o menu-->
+        <div id="ctrl_rsp" class="col-md-10 col-sm-12 ">
            <div class="container-fluid">
                 @yield('content')
            </div>
@@ -62,17 +63,12 @@
     <script src="<% asset('/js/angular/angular-touch.min.js') %>"></script>
     <script src="<% asset('/js/angular/angular-animate.min.js') %>"></script> 
     <!-- <script src="<% asset('/js/vendor/jquery.min.js') %>"></script>  -->
-    <!-- <script src="<% asset('/datatables/datatables.min.js') %>"></script>  -->
+     <script src="<% asset('/datatables/datatables.min.js') %>"></script>  
       
     <script src="<% asset('/js/vendor/what-input.js') %>"></script>
     <script src="<% asset('/js/bootstrap.min.js') %>"></script>
     <script src="<% asset('/js/app.js') %>"></script>
     <script src="<% asset('/js/release/ui-grid.min.js') %>"></script>
-    <script src="http://ui-grid.info/docs/grunt-scripts/csv.js"></script>
-    <script src="http://ui-grid.info/docs/grunt-scripts/pdfmake.js"></script>
-    <script src="http://ui-grid.info/docs/grunt-scripts/vfs_fonts.js"></script>
-    <script src="<% asset('/js/liquidFillGauge.js') %>"></script>
-    <script src="https://d3js.org/d3.v3.min.js"></script>
 
     @yield('scripts')
 

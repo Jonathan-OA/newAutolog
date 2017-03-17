@@ -127,7 +127,7 @@ body {
 /* --------------------------------------------*/
 
 .pad-ct {
-    padding-left: 0px;
+    padding-left: 12px;
     padding-right: 12px;
     padding-top: 8px;
 }
@@ -177,6 +177,9 @@ tbody td {
 .ui-grid-row:hover .ui-grid-cell {
     background-color: #B6C3C6;
 }
+
+
+/* Cores relacionadas aos status dos documentos*/
 
 .stat0 {
     background: -webkit-linear-gradient(#CECECE, #A2A2A2);

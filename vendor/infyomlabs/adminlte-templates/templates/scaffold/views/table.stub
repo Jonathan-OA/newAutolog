@@ -3,7 +3,7 @@
 <table class="table table-responsive">
     <thead>
         $FIELD_HEADERS$
-        <th colspan="3">AAAAction</th>
+        <th colspan="3">ction</th>
     </thead>
     <tbody>
     @foreach($$MODEL_NAME_PLURAL_CAMEL$ as $$MODEL_NAME_CAMEL$)

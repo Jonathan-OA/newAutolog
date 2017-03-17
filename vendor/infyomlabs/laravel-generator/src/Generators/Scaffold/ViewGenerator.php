@@ -180,8 +180,21 @@ class ViewGenerator extends BaseGenerator
             }
         }
 
-        FileUtil::createFile($this->path, 'index.blade.php', $templateData);
+        $datatable = '';
+        //ATUALIZA TABELA PARA CRIAR JS DO DATATABLE
+        foreach ($this->commandData->fields as $field) {
+            if($field->name != 'id'){
+                $datatable .= "{ data: '$field->name' },
+                        ";
+            }
+        }
+        $datatable = substr($datatable, -1);
+        
+        $templateData = str_replace('$FIELDS_DATATABLE$', $datatable, $templateData);
+        //
 
+        FileUtil::createFile($this->path, 'index.blade.php', $templateData);
+        
         $this->commandData->commandInfo('index.blade.php created');
     }
 

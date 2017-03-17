@@ -22,7 +22,9 @@ Route::group(['middleware' => 'web'], function() {
     Route::get('/recebimento', 'Modulos\Recebimento\ReceiptController@index');
     Route::get('/producao/detalhes/{document}', 'Modulos\Producao\ProductionController@items');
     Route::resource('documents', 'DocumentController');
+    Route::get('customers/datatable', 'CustomersController@getData');
     Route::resource('customers', 'CustomerController');
+    
     Route::resource('permissions', 'PermissionController');
 
     //API
@@ -48,6 +50,28 @@ Route::resource('permissions', 'PermissionController');
 Route::resource('permissions', 'PermissionController');
 
 Route::resource('permissions', 'PermissionController');
+
+Route::resource('customers', 'CustomersController');
+
+Route::resource('customers', 'CustomersController');
+
+Route::resource('customers', 'CustomersController');
+
+Route::resource('customers', 'CustomersController');
+
+Route::resource('customers', 'CustomersController');
+
+Route::resource('customers', 'CustomersController');
+
+Route::resource('customers', 'CustomersController');
+
+Route::resource('customers', 'CustomersController');
+
+Route::resource('customers', 'CustomersController');
+
+Route::resource('customers', 'CustomersController');
+
+Route::resource('customers', 'CustomersController');
 
 Route::resource('customers', 'CustomersController');
 

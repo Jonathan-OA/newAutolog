@@ -25,3 +25,33 @@
         </div>
     </div>
 @endsection
+@section('scripts')
+<script>
+$(function() {
+    $("#customers-table").DataTable({
+        "scrollX": true,
+        ajax: 'customers/datatable',
+        columns: [  { data: 'code' },
+                    { data: 'company_id' },
+                    { data: 'name' },
+                    { data: 'trading_name' },
+                    { data: 'cnpj' },
+                    { data: 'state_registration' },
+                    { data: 'address' },
+                    { data: 'number' },
+                    { data: 'neighbourhood' },
+                    { data: 'city' },
+                    { data: 'state' },
+                    { data: 'country' },
+                    { data: 'zip_code' },
+                    { data: 'phone1' },
+                    { data: 'phone2' },
+                    { data: 'active' },
+                    { data: 'obs1' },
+                    { data: 'obs2' },
+                    { data: 'obs3' }
+                ],
+    });
+});
+</script>
+@endsection

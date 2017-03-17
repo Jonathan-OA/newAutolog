@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 use Flash;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Response;
+use Datatables;
+use App;
 
 class CustomersController extends AppBaseController
 {
@@ -151,5 +153,15 @@ class CustomersController extends AppBaseController
         Flash::success('Customers deleted successfully.');
 
         return redirect(route('customers.index'));
+    }
+
+    /**
+    * Process datatables ajax request.
+    *
+    * @return \Illuminate\Http\JsonResponse
+    */
+    public function getData()
+    {
+        return Datatables::of(App\Models\Customers::query())->make(true);
     }
 }
