@@ -5,7 +5,7 @@
         <div class="col-md-12 pad-ct">
             <div class="panel panel-default" >
                 <div class="panel-heading">
-                   $MODEL_NAME_PLURAL$
+                   Vehicles
                 </div>
                 
                 <div class="panel panel-default">
@@ -13,10 +13,10 @@
                         <div class="col-md-12">
                             @include('flash::message')
                             <div class="row buttons_grid">
-                                <a class="btn btn-success"  href="{!! route('$ROUTE_NAMED_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.create') !!}">Adicionar</a>
+                                <a class="btn btn-success"  href="{!! route('vehicles.create') !!}">Adicionar</a>
                             </div>
                             <div class="panel-body">
-                                @include('$VIEW_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.table')
+                                @include('vehicles.table')
                             </div>
                         </div>
                     </div>
@@ -27,18 +27,17 @@
 @endsection
 @section('scripts')
 <script>
-    $(function() {
-      $("#$MODEL_NAME_PLURAL_CAMEL$-table").DataTable({
-            "scrollX": true,
-            ajax: '$MODEL_NAME_PLURAL_CAMEL$/datatable',
-            fixedColumns:   {
-                leftColumns: 0,
-                rightColumns: 1
-            },
-            columns: [ $FIELDS_DATATABLE$ ],
-      });
-                    
+$(function() {
+    $("#vehicles-table").DataTable({
+        "scrollX": true,
+        ajax: 'vehicles/datatable',
+        columns: [ { data: 'company_id' },
+                { data: 'courier_id' },
+                { data: 'vehicle_type_id' },
+                { data: 'number_plate' },
+                ,
+                   {defaultContent: "<a href=\"{!! route('vehicles.show', [$vehicles->id]) !!}\" class='btn btn-default btn-xs'><i class=\"glyphicon glyphicon-eye-open\"></i></a>"}]
     });
-
+});
 </script>
 @endsection

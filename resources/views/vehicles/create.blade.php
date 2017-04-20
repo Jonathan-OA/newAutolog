@@ -1,24 +1,28 @@
 @extends('layouts.app')
+
 @section('content')
     <div class="row">
         <div class="col-md-12 pad-ct">
             <div class="panel panel-default" >
                 <div class="panel-heading">
-                    $MODEL_NAME_HUMAN$
+                    Vehicles
                 </div>
                 <div class="panel panel-default">
                     @include('adminlte-templates::common.errors')
                     <div class="panel-body" >
                         <div class="row">
                             <div class="col-md-12">
-                                {!! Form::model($$MODEL_NAME_CAMEL$, ['route' => ['$ROUTE_NAMED_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.update', $$MODEL_NAME_CAMEL$->$PRIMARY_KEY_NAME$], 'method' => 'patch']) !!}
-                                  @include('$VIEW_PREFIX$$MODEL_NAME_PLURAL_SNAKE$.fields')
+                                {!! Form::open(['route' => 'vehicles.store']) !!}
+                                <div class="form-group">
+                                    @include('vehicles.fields')
+                                </div>
                                 {!! Form::close() !!}
                             </div>
                         </div>
-                    </div>
+                    </div>   
                 </div>
             </div>
         </div>
+
     </div>
 @endsection

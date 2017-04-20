@@ -183,12 +183,12 @@ class ViewGenerator extends BaseGenerator
         $datatable = '';
         //ATUALIZA TABELA PARA CRIAR JS DO DATATABLE
         foreach ($this->commandData->fields as $field) {
-            if($field->name != 'id'){
+            if($field->name != 'id' && $field->name != 'created_at'  && $field->name != 'updated_at'){
                 $datatable .= "{ data: '$field->name' },
-                        ";
+                ";
             }
         }
-        $datatable = substr($datatable, -1);
+        $datatable = substr($datatable,0,-1);
         
         $templateData = str_replace('$FIELDS_DATATABLE$', $datatable, $templateData);
         //
