@@ -164,3 +164,7 @@ Route::resource('vehicles', 'VehiclesController');
 Route::resource('vehicles', 'VehiclesController');
 
 Route::resource('customers', 'CustomersController');
+
+Route::resource('customers', 'CustomersController');
+
+Route::resource('customers', 'CustomersController');

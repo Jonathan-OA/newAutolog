@@ -28,10 +28,10 @@
 @section('scripts')
 <script>
     $(function() {
-        var table = $("#customers-table").DataTable({
-                        "scrollX": true,
-                        ajax: 'customers/datatable',
-                        columns: [ { data: 'code' },
+      var table = $("#customers-table").DataTable({
+            "scrollX": true,
+            ajax: 'customers/datatable',
+            columns: [ { data: 'code' },
                 { data: 'company_id' },
                 { data: 'name' },
                 { data: 'trading_name' },
@@ -50,12 +50,13 @@
                 { data: 'obs1' },
                 { data: 'obs2' },
                 { data: 'obs3' },
-                
-                { name: 'Ação', data: null,
-                    defaultContent: "<button id='edit'><img class='icon' src='<% asset('/icons/editar.png') %>'' alt='Editar'></button><button id='remove'><img class='icon' src='<% asset('/icons/remover.png') %>'' alt='Remover'></button>" },],
-                    });
-                    
-        $('#customers-table tbody').on( 'click', 'button', function () {
+                { data: null,
+                  className: "td_grid",
+                  defaultContent: "<button id='edit'><img class='icon' src='<% asset('/icons/editar.png') %>'' alt='Editar'></button><button id='remove'><img class='icon' src='<% asset('/icons/remover.png') %>'' alt='Remover'></button>" 
+                }],
+      });
+      
+      $('#customers-table tbody').on( 'click', 'button', function () {
             var data = table.row( $(this).parents('tr') ).data();
             var id = $(this).attr('id');
             if(id == 'edit'){
@@ -66,7 +67,8 @@
                 window.location.href = "{!! URL::to('customers/"+data.id+"/destroy') !!}";
             }
             
-        });
+    });
+                    
     });
 
 </script>

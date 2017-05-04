@@ -28,15 +28,31 @@
 @section('scripts')
 <script>
     $(function() {
-      $("#$MODEL_NAME_PLURAL_CAMEL$-table").DataTable({
+      var table = $("#$MODEL_NAME_PLURAL_CAMEL$-table").DataTable({
             "scrollX": true,
             ajax: '$MODEL_NAME_PLURAL_CAMEL$/datatable',
             fixedColumns:   {
                 leftColumns: 0,
                 rightColumns: 1
             },
-            columns: [ $FIELDS_DATATABLE$ ],
+            columns: [ $FIELDS_DATATABLE$
+                       { data: null,
+                          defaultContent: "<button id='edit'><img class='icon' src='<% asset('/icons/editar.png') %>'' alt='Editar'></button><button id='remove'><img class='icon' src='<% asset('/icons/remover.png') %>'' alt='Remover'></button>" 
+                       }],
       });
+      
+      $('#$MODEL_NAME_PLURAL_CAMEL$-table tbody').on( 'click', 'button', function () {
+            var data = table.row( $(this).parents('tr') ).data();
+            var id = $(this).attr('id');
+            if(id == 'edit'){
+                //Editar Registro
+                window.location.href = "{!! URL::to('$MODEL_NAME_PLURAL_CAMEL$/"+data.id+"/edit') !!}";
+            }else{
+                //Excluir Registro
+                window.location.href = "{!! URL::to('$MODEL_NAME_PLURAL_CAMEL$/"+data.id+"/destroy') !!}";
+            }
+            
+    });
                     
     });
 

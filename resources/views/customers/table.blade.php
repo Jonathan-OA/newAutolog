@@ -22,6 +22,7 @@
         <th class="th_grid">Obs1</th>
         <th class="th_grid">Obs2</th>
         <th class="th_grid">Obs3</th>
+        <th class="th_grid">Ação</th>
             </thead>
             <tbody>
             @foreach($customers as $customers)

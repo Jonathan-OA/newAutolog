@@ -249,10 +249,22 @@ tbody td {
     text-align: center;
 }
 
+.td_grid:not(th) {
+    display: inline-table;
+}
+
 .form_fields {
     overflow-y: auto;
     height: 72vh;
     margin-bottom: 3vh;
+}
+
+.dataTables_scrollBody {
+    height: 55vh !important;
+}
+
+.table.dataTable {
+    margin-bottom: 0px !important;
 }
 
 
