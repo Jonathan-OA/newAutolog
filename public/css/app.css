@@ -259,10 +259,6 @@ tbody td {
     margin-bottom: 3vh;
 }
 
-.dataTables_scrollBody {
-    height: 55vh !important;
-}
-
 .table.dataTable {
     margin-bottom: 0px !important;
 }

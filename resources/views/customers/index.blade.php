@@ -29,7 +29,11 @@
 <script>
     $(function() {
       var table = $("#customers-table").DataTable({
-            "scrollX": true,
+            scrollX: true,
+            bLengthChange: false,
+            scrollY:        '60vh',
+            scrollCollapse: true,
+            pagingType: 'full_numbers',
             ajax: 'customers/datatable',
             columns: [ { data: 'code' },
                 { data: 'company_id' },
