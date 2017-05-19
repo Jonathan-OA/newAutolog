@@ -72,10 +72,12 @@
                 window.location.href = "{!! URL::to('customers/"+data.id+"/edit') !!}";
             }else{
                 //Excluir Registro
+                var tk = $('meta[name="csrf-token"]').attr('content');
                 $.ajax({
-                    url: 'customers/destroy',
-                    data: {id: data.id},
-                    type: 'DELETE'
+                    url: 'customers/'+data.id,
+                    type: 'post',
+                    data: {_method: 'delete', _token :tk},
+                    success: function(scs){ table.ajax.reload( null, false );}
                 });
                 //$.post( "customers/destroy", { data.id } );
             }
