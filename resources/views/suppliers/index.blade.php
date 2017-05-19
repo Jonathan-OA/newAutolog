@@ -5,7 +5,7 @@
         <div class="col-md-12 pad-ct">
             <div class="panel panel-default" >
                 <div class="panel-heading">
-                   Customers
+                   Suppliers
                 </div>
                 
                 <div class="panel panel-default">
@@ -13,10 +13,10 @@
                         <div class="col-md-12">
                             @include('flash::message')
                             <div class="row buttons_grid">
-                                <a class="btn btn-success"  href="{!! route('customers.create') !!}">Adicionar</a>
+                                <a class="btn btn-success"  href="{!! route('suppliers.create') !!}">Adicionar</a>
                             </div>
                             <div class="panel-body">
-                                @include('customers.table')
+                                @include('suppliers.table')
                             </div>
                         </div>
                     </div>
@@ -28,13 +28,9 @@
 @section('scripts')
 <script>
     $(function() {
-      var table = $("#customers-table").DataTable({
-            scrollX: true,
-            bLengthChange: false,
-            scrollY:        '60vh',
-            scrollCollapse: true,
-            paging: false,
-            ajax: 'customers/datatable',
+      var table = $("#suppliers-table").DataTable({
+            "scrollX": true,
+            ajax: 'suppliers/datatable',
             fixedColumns:   {
                 leftColumns: 0,
                 rightColumns: 1
@@ -58,26 +54,21 @@
                 { data: 'obs1' },
                 { data: 'obs2' },
                 { data: 'obs3' },
-                { data: null,
-                  className: "td_grid",
-                  defaultContent: "<button id='edit'><img class='icon' src='<% asset('/icons/editar.png') %>'' alt='Editar'></button><button id='remove'><img class='icon' src='<% asset('/icons/remover.png') %>'' alt='Remover'></button>" 
-                }],
+               
+                       { data: null,
+                          defaultContent: "<button id='edit'><img class='icon' src='<% asset('/icons/editar.png') %>'' alt='Editar'></button><button id='remove'><img class='icon' src='<% asset('/icons/remover.png') %>'' alt='Remover'></button>" 
+                       }],
       });
       
-      $('#customers-table tbody').on( 'click', 'button', function () {
+      $('#suppliers-table tbody').on( 'click', 'button', function () {
             var data = table.row( $(this).parents('tr') ).data();
             var id = $(this).attr('id');
             if(id == 'edit'){
                 //Editar Registro
-                window.location.href = "{!! URL::to('customers/"+data.id+"/edit') !!}";
+                window.location.href = "{!! URL::to('suppliers/"+data.id+"/edit') !!}";
             }else{
                 //Excluir Registro
-                $.ajax({
-                    url: 'customers/destroy',
-                    data: {id: data.id},
-                    type: 'DELETE'
-                });
-                //$.post( "customers/destroy", { data.id } );
+                window.location.href = "{!! URL::to('suppliers/"+data.id+"/destroy') !!}";
             }
             
     });

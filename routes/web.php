@@ -168,3 +168,5 @@ Route::resource('customers', 'CustomersController');
 Route::resource('customers', 'CustomersController');
 
 Route::resource('customers', 'CustomersController');
+
+Route::resource('suppliers', 'SuppliersController');
