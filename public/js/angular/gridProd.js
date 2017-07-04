@@ -4,8 +4,9 @@ var app = angular.module('grid_prod', ['ui.grid', 'ui.grid.selection',
     'ui.grid.moveColumns', 'ui.grid.autoResize',
     'ui.grid.resizeColumns', 'ui.grid.exporter'
 ]);
+
 //Grid de documentos
-app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '$timeout', function($rootScope, $scope, $http, uiGridConstants, $timeout) {
+app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '$timeout', '$element', function($rootScope, $scope, $http, uiGridConstants, $timeout, $element) {
 
     $scope.gridOptions = {
         enableFullRowSelection: false,
@@ -64,7 +65,7 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
     $scope.saveState = function() {
         var datas = $scope.gridApi.saveState.save();
         localStorage.setItem('Autolog_GridProd', JSON.stringify(datas));
-        $http.post('http://localhost/AutologN/public/api/grid', datas)
+        $http.post('api/grid', datas)
             .success(function(data, status, headers, config) {
                 $scope.PostDataResponse = data;
             }).error(function(data, status, header, config) {
@@ -79,7 +80,7 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
         if (columns) {
             $scope.gridApi.saveState.restore($scope, JSON.parse(columns));
         } else {
-            $http.get('http://localhost/AutologN/public/api/grid/Produção')
+            $http.get('api/grid/Produção')
                 .success(function(data) {
                     $scope.gridApi.saveState.restore($scope, data);
                 })
@@ -87,7 +88,7 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
     };
 
     //Carrega grid com os 3 mil ultimos documentos
-    $http.get('http://localhost/AutologN/public/api/documentsProd')
+    $http.get('api/documentsProd')
         .success(function(data) {
             $scope.gridOptions.data = data;
         })
@@ -100,9 +101,18 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
         $scope.gridApi.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
     };
 
+    //Carrega botões para o documento
+    $scope.showActions = function(modulo, id) {
+        $.get('getButtons/' + modulo, function(data) {
+            //Remove a div gerada anteriormente (caso exista)
+            $('#div_buttons').remove();
+            //Carrega os botões
+            $element.append(data);
+        })
+    };
 }]);
 
-//Grid de documentos
+//Grid de detalhes dos documentos
 app.controller('DetCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '$timeout', '$interval', function($rootScope, $scope, $http, uiGridConstants, $timeout, $interval) {
     $scope.gridDetalhes = {};
     $scope.gridDetalhes.data = [];
@@ -126,7 +136,7 @@ app.controller('DetCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '
     $scope.saveState = function() {
         var datas = $scope.gridApiDet.saveState.save();
         localStorage.setItem('Autolog_GridProdDet', JSON.stringify(datas));
-        $http.post('http://localhost/AutologN/public/api/grid', datas)
+        $http.post('api/grid', datas)
             .success(function(data, status, headers, config) {
                 $scope.PostDataResponse = data;
             }).error(function(data, status, header, config) {
@@ -140,7 +150,7 @@ app.controller('DetCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '
         if (columns) {
             $scope.gridApiDet.saveState.restore($scope, JSON.parse(columns));
         } else {
-            $http.get('http://localhost/AutologN/public/api/grid/Produção')
+            $http.get('api/grid/Produção')
                 .success(function(data) {
                     $scope.gridApiDet.saveState.restore($scope, data);
                 })
@@ -156,7 +166,7 @@ app.controller('DetCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '
             $scope.gridApiDet = gridApi;
         }
 
-        $http.get('http://localhost/AutologN/public/api/itemsProd/' + id)
+        $http.get('api/itemsProd/' + id)
             .success(function(data) {
                 $scope.gridDetalhes.data = data;
                 $scope.dataLoaded = true;

@@ -37,6 +37,7 @@ return array(
     'Monolog\\' => array($vendorDir . '/monolog/monolog/src/Monolog'),
     'League\\Fractal\\' => array($vendorDir . '/league/fractal/src'),
     'League\\Flysystem\\' => array($vendorDir . '/league/flysystem/src'),
+    'Kodeine\\Acl\\' => array($vendorDir . '/kodeine/laravel-acl/src/Kodeine/Acl'),
     'InfyOm\\Generator\\' => array($vendorDir . '/infyomlabs/laravel-generator/src'),
     'InfyOm\\AdminLTETemplates\\' => array($vendorDir . '/infyomlabs/adminlte-templates/src'),
     'Illuminate\\' => array($vendorDir . '/laravel/framework/src/Illuminate'),

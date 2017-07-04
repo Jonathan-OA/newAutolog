@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 use Flash;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Response;
+use Datatables;
+use App;
 
 class $MODEL_NAME$Controller extends AppBaseController
 {
@@ -151,5 +153,14 @@ class $MODEL_NAME$Controller extends AppBaseController
         Flash::success('$MODEL_NAME_HUMAN$ deleted successfully.');
 
         return redirect(route('$ROUTE_NAMED_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.index'));
+    }
+
+    /**
+     * Get data from model 
+     *
+     */
+    public function getData()
+    {
+        return Datatables::of(App\Models\$MODEL_NAME$::query())->make(true);
     }
 }

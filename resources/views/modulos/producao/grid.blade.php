@@ -45,7 +45,7 @@
                             <script type="text/ng-template" id="options">
                                 <div id="hhhaaa" class="ui-grid-cell-contents" ng-controller="MainCtrl">
                                     <a href="#"  data-toggle="modal"  ng-click="showGridDet(row.entity.id, row.entity.number)" data-target="#myModal" class=" glyphicon glyphicon-zoom-in icon_action"></a>
-                                    <a href="#" class=" glyphicon glyphicon glyphicon-tasks icon_action"></a>
+                                    <a href="#" class=" glyphicon glyphicon glyphicon-tasks icon_action" ng-click="showActions('producao', row.entity.id)" ></a>
                                 </div>
                             </script>
                     </div>

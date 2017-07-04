@@ -23,9 +23,12 @@ Route::group(['middleware' => 'web'], function() {
     Route::get('/producao/detalhes/{document}', 'Modulos\Producao\ProductionController@items');
     Route::resource('documents', 'DocumentController');
     Route::get('customers/datatable', 'CustomersController@getData');
+    Route::get('roles/datatable', 'RolesController@getData');
     Route::resource('customers', 'CustomerController');
-    
     Route::resource('permissions', 'PermissionController');
+
+    //Botões
+    Route::get('getButtons/{modulo}', 'ButtonsController@getButtons');
 
     //API
     Route::get('/api/documentsProd', 'Modulos\Producao\ProductionController@getDocuments');
@@ -39,134 +42,11 @@ Route::group(['middleware' => 'web'], function() {
 
 
 
-
-
-
-
-
-
 Route::resource('permissions', 'PermissionController');
-
-Route::resource('permissions', 'PermissionController');
-
-Route::resource('permissions', 'PermissionController');
-
-Route::resource('customers', 'CustomersController');
-
-Route::resource('customers', 'CustomersController');
-
-Route::resource('customers', 'CustomersController');
-
-Route::resource('customers', 'CustomersController');
-
-Route::resource('customers', 'CustomersController');
-
-Route::resource('customers', 'CustomersController');
-
-Route::resource('customers', 'CustomersController');
-
-Route::resource('customers', 'CustomersController');
-
-Route::resource('customers', 'CustomersController');
-
-Route::resource('customers', 'CustomersController');
-
-Route::resource('customers', 'CustomersController');
-
-Route::resource('customers', 'CustomersController');
-
-Route::resource('customers', 'CustomersController');
-
-Route::resource('customers', 'CustomersController');
-
-Route::resource('customers', 'CustomersController');
-
-Route::resource('customers', 'CustomersController');
-
-Route::resource('customers', 'CustomersController');
-
-Route::resource('customers', 'CustomersController');
-
-Route::resource('customers', 'CustomersController');
-
-Route::resource('customers', 'CustomersController');
-
-Route::resource('customers', 'CustomersController');
-
-Route::resource('customers', 'CustomersController');
-
-Route::resource('customers', 'CustomersController');
-
-Route::resource('customers', 'CustomersController');
-
-Route::resource('customers', 'CustomersController');
-
-Route::resource('customers', 'CustomersController');
-
-Route::resource('customers', 'CustomersController');
-
-Route::resource('customers', 'CustomersController');
-
-Route::resource('customers', 'CustomersController');
-
-Route::resource('customers', 'CustomersController');
-
-Route::resource('customers', 'CustomersController');
-
-Route::resource('customers', 'CustomersController');
-
-Route::resource('customers', 'CustomersController');
-
-Route::resource('customers', 'CustomersController');
-
-Route::resource('customers', 'CustomersController');
-
-Route::resource('customers', 'CustomersController');
-
-Route::resource('customers', 'CustomersController');
-
-Route::resource('customers', 'CustomersController');
-
-Route::resource('customers', 'CustomersController');
-
-Route::resource('customers', 'CustomersController');
-
-Route::resource('customers', 'CustomersController');
-
-Route::resource('customers', 'CustomersController');
-
-Route::resource('customers', 'CustomersController');
-
-Route::resource('customers', 'CustomersController');
-
-Route::resource('customers', 'CustomersController');
-
-Route::resource('customers', 'CustomersController');
-
-Route::resource('customers', 'CustomersController');
-
-Route::resource('customers', 'CustomersController');
-
-Route::resource('customers', 'CustomersController');
-
-Route::resource('customers', 'CustomersController');
-
-Route::resource('customers', 'CustomersController');
-
-Route::resource('customers', 'CustomersController');
-
-Route::resource('customers', 'CustomersController');
-
-Route::resource('vehicles', 'VehiclesController');
-
-Route::resource('vehicles', 'VehiclesController');
-
-Route::resource('vehicles', 'VehiclesController');
-
-Route::resource('customers', 'CustomersController');
-
-Route::resource('customers', 'CustomersController');
 
 Route::resource('customers', 'CustomersController');
 
 Route::resource('suppliers', 'SuppliersController');
+
+Route::resource('roles', 'RolesController');
+Route::get('roles/datatable', 'RolesController@getData');

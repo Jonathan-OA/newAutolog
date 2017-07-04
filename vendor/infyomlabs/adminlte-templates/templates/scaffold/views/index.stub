@@ -37,7 +37,8 @@
             },
             columns: [ $FIELDS_DATATABLE$
                        { data: null,
-                          defaultContent: "<button id='edit'><img class='icon' src='<% asset('/icons/editar.png') %>'' alt='Editar'></button><button id='remove'><img class='icon' src='<% asset('/icons/remover.png') %>'' alt='Remover'></button>" 
+                         className: "td_grid",
+                         defaultContent: "<button id='edit'><img class='icon' src='<% asset('/icons/editar.png') %>'' alt='Editar'></button><button id='remove'><img class='icon' src='<% asset('/icons/remover.png') %>'' alt='Remover'></button>" 
                        }],
       });
       
@@ -49,7 +50,15 @@
                 window.location.href = "{!! URL::to('$MODEL_NAME_PLURAL_CAMEL$/"+data.id+"/edit') !!}";
             }else{
                 //Excluir Registro
-                window.location.href = "{!! URL::to('$MODEL_NAME_PLURAL_CAMEL$/"+data.id+"/destroy') !!}";
+                if(confirm('Deseja excluir este registro?')){
+                    var tk = $('meta[name="csrf-token"]').attr('content');
+                    $.ajax({
+                        url: '$MODEL_NAME_PLURAL_CAMEL$/'+data.id,
+                        type: 'post',
+                        data: {_method: 'delete', _token :tk},
+                        success: function(scs){ table.ajax.reload( null, false );}
+                    });
+                }
             }
             
     });

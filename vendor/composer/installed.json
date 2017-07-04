@@ -794,12 +794,12 @@
         "version_normalized": "0.9.7.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/padraic/mockery.git",
+            "url": "https://github.com/mockery/mockery.git",
             "reference": "4de7969f4664da3cef1ccd83866c9f59378c3371"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/padraic/mockery/zipball/4de7969f4664da3cef1ccd83866c9f59378c3371",
+            "url": "https://api.github.com/repos/mockery/mockery/zipball/4de7969f4664da3cef1ccd83866c9f59378c3371",
             "reference": "4de7969f4664da3cef1ccd83866c9f59378c3371",
             "shasum": ""
         },
@@ -4643,6 +4643,60 @@
             "laravel",
             "laravel4",
             "laravel5"
+        ]
+    },
+    {
+        "name": "kodeine/laravel-acl",
+        "version": "1.0.x-dev",
+        "version_normalized": "1.0.9999999.9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/kodeine/laravel-acl.git",
+            "reference": "82f872ad86d714a066d8f8fb510ef75a17f8ec7f"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/kodeine/laravel-acl/zipball/82f872ad86d714a066d8f8fb510ef75a17f8ec7f",
+            "reference": "82f872ad86d714a066d8f8fb510ef75a17f8ec7f",
+            "shasum": ""
+        },
+        "require": {
+            "illuminate/support": "~5.0",
+            "php": ">=5.5.9"
+        },
+        "require-dev": {
+            "doctrine/dbal": "^2.5",
+            "orchestra/testbench": "~3.0",
+            "phpunit/phpunit": "~4.0"
+        },
+        "time": "2017-06-12 20:14:52",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Kodeine\\Acl\\": "src/Kodeine/Acl"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Ahsen M.",
+                "homepage": "https://github.com/kodeine",
+                "role": "Developer"
+            }
+        ],
+        "description": "Light-weight role-based permissions for Laravel 5 built in Auth system.",
+        "keywords": [
+            "acl",
+            "auth",
+            "eloquent",
+            "laravel",
+            "permissions",
+            "roles",
+            "security"
         ]
     }
 ]
