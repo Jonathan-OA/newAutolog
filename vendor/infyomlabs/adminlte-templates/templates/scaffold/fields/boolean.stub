@@ -1,5 +1,5 @@
 <!-- 'Boolean FIELD_NAME_TITLE$ Field' checked by default -->
-{!! Form::label('$FIELD_NAME$', '$FIELD_NAME_TITLE$:') !!}
+{!! Form::label('$FIELD_NAME$', Lang::get('models.$FIELD_NAME$').':') !!}
 <label class="checkbox-inline">
 {!! Form::checkbox('$FIELD_NAME$', 1, true) !!}
 <!-- remove {, true} to make it unchecked by default -->

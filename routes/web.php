@@ -18,9 +18,9 @@ Route::group(['middleware' => 'web'], function() {
     Route::get('/home', 'HomeController@index');
     Route::get('/', 'HomeController@index');
     Route::get('/install', 'InstallController@index');
-    Route::get('/producao', 'Modulos\Producao\ProductionController@index');
-    Route::get('/recebimento', 'Modulos\Recebimento\ReceiptController@index');
-    Route::get('/producao/detalhes/{document}', 'Modulos\Producao\ProductionController@items');
+    Route::get('/production', 'Modules\Production\ProductionController@index');
+    Route::get('/recebimento', 'Modules\Receipt\ReceiptController@index');
+    Route::get('/production/details/{document}', 'Modules\Production\ProductionController@items');
     Route::resource('documents', 'DocumentController');
     Route::get('customers/datatable', 'CustomersController@getData');
     Route::get('roles/datatable', 'RolesController@getData');
@@ -31,10 +31,10 @@ Route::group(['middleware' => 'web'], function() {
     Route::get('getButtons/{modulo}', 'ButtonsController@getButtons');
 
     //API
-    Route::get('/api/documentsProd', 'Modulos\Producao\ProductionController@getDocuments');
-    Route::get('/api/itemsProd/{document}', 'Modulos\Producao\ProductionController@getItems');
-    Route::post('/api/grid/', 'Modulos\Geral\GridController@setColumns');
-    Route::get('/api/grid/{module}', 'Modulos\Geral\GridController@getColumns');
+    Route::get('/api/documentsProd', 'Modules\Production\ProductionController@getDocuments');
+    Route::get('/api/itemsProd/{document}', 'Modules\Production\ProductionController@getItems');
+    Route::post('/api/grid/', 'Modules\Geral\GridController@setColumns');
+    Route::get('/api/grid/{module}', 'Modules\Geral\GridController@getColumns');
 
     //IMPORTAÇÃO
     Route::get('/import', 'ImportacaoGeralController@index');
@@ -50,3 +50,28 @@ Route::resource('suppliers', 'SuppliersController');
 
 Route::resource('roles', 'RolesController');
 Route::get('roles/datatable', 'RolesController@getData');
+
+
+Route::resource('roles', 'RolesController');
+Route::get('roles/datatable', 'RolesController@getData');
+
+Route::resource('roles', 'RolesController');
+Route::get('roles/datatable', 'RolesController@getData');
+
+Route::resource('roles', 'RolesController');
+Route::get('roles/datatable', 'RolesController@getData');
+
+Route::resource('roles', 'RolesController');
+Route::get('roles/datatable', 'RolesController@getData');
+
+Route::resource('roles', 'RolesController');
+Route::get('roles/datatable', 'RolesController@getData');
+
+Route::resource('roles', 'RolesController');
+Route::get('roles/datatable', 'RolesController@getData');
+
+Route::resource('roles', 'RolesController');
+Route::get('roles/datatable', 'RolesController@getData');
+
+Route::resource('customers', 'CustomersController');
+Route::get('customers/datatable', 'CustomersController@getData');

@@ -12,6 +12,7 @@ use Prettus\Repository\Criteria\RequestCriteria;
 use Response;
 use Datatables;
 use App;
+use Lang;
 
 class CustomersController extends AppBaseController
 {
@@ -61,7 +62,7 @@ class CustomersController extends AppBaseController
 
         $customers = $this->customersRepository->create($input);
 
-        Flash::success('Customers saved successfully.');
+        Flash::success(Lang::get('validation.save_success'));
 
         return redirect(route('customers.index'));
     }
@@ -98,7 +99,7 @@ class CustomersController extends AppBaseController
         $customers = $this->customersRepository->findWithoutFail($id);
 
         if (empty($customers)) {
-            Flash::error('Customers not found');
+            Flash::error(Lang::get('validation.not_found'));
 
             return redirect(route('customers.index'));
         }
@@ -119,14 +120,14 @@ class CustomersController extends AppBaseController
         $customers = $this->customersRepository->findWithoutFail($id);
 
         if (empty($customers)) {
-            Flash::error('Customers not found');
+            Flash::error(Lang::get('validation.not_found'));
 
             return redirect(route('customers.index'));
         }
 
         $customers = $this->customersRepository->update($request->all(), $id);
 
-        Flash::success('Customers updated successfully.');
+        Flash::success(Lang::get('validation.update_success'));
 
         return redirect(route('customers.index'));
     }
@@ -143,23 +144,22 @@ class CustomersController extends AppBaseController
         $customers = $this->customersRepository->findWithoutFail($id);
 
         if (empty($customers)) {
-            Flash::error('Customers not found');
+            Flash::error(Lang::get('validation.not_found'));
 
             return redirect(route('customers.index'));
         }
 
         $this->customersRepository->delete($id);
 
-        Flash::success('Customers deleted successfully.');
+        Flash::success(Lang::get('validation.delete_success'));
 
         return redirect(route('customers.index'));
     }
 
     /**
-    * Process datatables ajax request.
-    *
-    * @return \Illuminate\Http\JsonResponse
-    */
+     * Get data from model 
+     *
+     */
     public function getData()
     {
         return Datatables::of(App\Models\Customers::query())->make(true);

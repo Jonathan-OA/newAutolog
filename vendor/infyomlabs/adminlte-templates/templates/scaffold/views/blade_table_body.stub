@@ -4,7 +4,7 @@
         <table class="table table-bordered" id="$MODEL_NAME_PLURAL_CAMEL$-table">
             <thead>
                 $FIELD_HEADERS$
-                <th class="th_grid">Ação</th>
+                <th class="th_grid">@lang('models.action')</th>
             </thead>
             <tbody>
             @foreach($$MODEL_NAME_PLURAL_CAMEL$ as $$MODEL_NAME_CAMEL$)

@@ -3,10 +3,10 @@
         <div class="table-responsive" style="margin: 0 15px 0 15px">
         <table class="table table-bordered" id="roles-table">
             <thead>
-                <th class="th_grid">Name</th>
-        <th class="th_grid">Slug</th>
-        <th class="th_grid">Description</th>
-                <th class="th_grid">Ação</th>
+                <th class="th_grid">@lang('models.name') </th>
+        <th class="th_grid">@lang('models.slug') </th>
+        <th class="th_grid">@lang('models.description') </th>
+                <th class="th_grid">@lang('models.action')</th>
             </thead>
             <tbody>
             @foreach($roles as $roles)

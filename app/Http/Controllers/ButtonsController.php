@@ -10,6 +10,6 @@ class ButtonsController extends Controller
         
         $permissions = ['edit' => 1];
 
-        return view("modulos.$modulo.getButtons")->with(['permissions' => $permissions]);
+        return view("modules.$modulo.getButtons")->with(['permissions' => $permissions]);
     }
 }

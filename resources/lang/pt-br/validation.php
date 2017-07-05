@@ -81,6 +81,10 @@ return [
     'timezone'             => 'The :attribute must be a valid zone.',
     'unique'               => 'The :attribute has already been taken.',
     'url'                  => 'The :attribute format is invalid.',
+    'save_success'         => 'Registro adicionado com sucesso.',
+    'update_success'         => 'Registro atualizado com sucesso.',
+    'delete_success'         => 'Registro excluído com sucesso.',
+    'not_found'              => 'Registro não encontrado.',
 
     /*
     |--------------------------------------------------------------------------

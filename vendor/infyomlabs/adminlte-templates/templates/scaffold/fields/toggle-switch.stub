@@ -1,5 +1,5 @@
 <!-- 'bootstrap / Toggle Switch $FIELD_NAME_TITLE$ Field' -->
-{!! Form::label('$FIELD_NAME$', '$FIELD_NAME_TITLE$:') !!}
+{!! Form::label('$FIELD_NAME$', Lang::get('models.$FIELD_NAME$').':') !!}
 <label class="checkbox-inline">
 {!! Form::checkbox('$FIELD_NAME$', 1, true,  ['data-toggle' => 'toggle']) !!}
 </label>

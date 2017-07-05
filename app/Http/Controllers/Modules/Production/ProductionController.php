@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Modulos\Producao;
+namespace App\Http\Controllers\Modules\Production;
 
 use Illuminate\Http\Request;
 
@@ -12,11 +12,11 @@ use App;
 class ProductionController extends Controller
 {
     public function index(){
-        return view('modulos.producao.grid'); 
+        return view('modules.production.grid'); 
     }
 
     public function items($id){
-        return view('modulos.producao.gridDet')->with(['document' => $id]); 
+        return view('modules.production.gridDet')->with(['document' => $id]); 
     }
 
     public function getDocuments(){

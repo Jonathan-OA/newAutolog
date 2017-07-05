@@ -8,11 +8,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * Class Roles
  * @package App\Models
- * @version July 4, 2017, 7:54 pm UTC
+ * @version July 5, 2017, 7:57 pm UTC
  */
 class Roles extends Model
 {
-
     public $table = 'roles';
     
     const CREATED_AT = 'created_at';
@@ -46,7 +45,7 @@ class Roles extends Model
      * @var array
      */
     public static $rules = [
-        
+        'description' => 'max:10'
     ];
 
     /**

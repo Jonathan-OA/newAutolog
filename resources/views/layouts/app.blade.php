@@ -12,6 +12,7 @@
     <!-- <link href="<% asset('/datatables/datatables.min.css') %>"  rel="stylesheet"> -->
     <link href="<% asset('/css/ui-grid/ui-grid.min.css') %>"  rel="stylesheet">
     <link href="<% asset('/css/bootstrap.min.css') %> " rel="stylesheet">
+    <link href="https://unpkg.com/microtip/microtip.css" rel="stylesheet">
     <link href="<% asset('/css/app.css') %>" rel="stylesheet">
     @yield('css')
 
@@ -65,7 +66,6 @@
     <!-- <script src="<% asset('/js/vendor/jquery.min.js') %>"></script>  -->
      <script src="<% asset('/datatables/datatables.min.js') %>"></script>  
      <script src="https://cdn.datatables.net/fixedcolumns/3.2.2/js/dataTables.fixedColumns.min.js"></script>  
-      
     <script src="<% asset('/js/vendor/what-input.js') %>"></script>
     <script src="<% asset('/js/bootstrap.min.js') %>"></script>
     <script src="<% asset('/js/app.js') %>"></script>

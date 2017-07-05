@@ -12,6 +12,7 @@ use Prettus\Repository\Criteria\RequestCriteria;
 use Response;
 use Datatables;
 use App;
+use Lang;
 
 class RolesController extends AppBaseController
 {
@@ -61,7 +62,7 @@ class RolesController extends AppBaseController
 
         $roles = $this->rolesRepository->create($input);
 
-        Flash::success('Roles saved successfully.');
+        Flash::success(Lang::get('validation.save_success'));
 
         return redirect(route('roles.index'));
     }
@@ -98,7 +99,7 @@ class RolesController extends AppBaseController
         $roles = $this->rolesRepository->findWithoutFail($id);
 
         if (empty($roles)) {
-            Flash::error('Roles not found');
+            Flash::error(Lang::get('validation.not_found'));
 
             return redirect(route('roles.index'));
         }
@@ -119,14 +120,14 @@ class RolesController extends AppBaseController
         $roles = $this->rolesRepository->findWithoutFail($id);
 
         if (empty($roles)) {
-            Flash::error('Roles not found');
+            Flash::error(Lang::get('validation.not_found'));
 
             return redirect(route('roles.index'));
         }
 
         $roles = $this->rolesRepository->update($request->all(), $id);
 
-        Flash::success('Roles updated successfully.');
+        Flash::success(Lang::get('validation.update_success'));
 
         return redirect(route('roles.index'));
     }
@@ -143,14 +144,14 @@ class RolesController extends AppBaseController
         $roles = $this->rolesRepository->findWithoutFail($id);
 
         if (empty($roles)) {
-            Flash::error('Roles not found');
+            Flash::error(Lang::get('validation.not_found'));
 
             return redirect(route('roles.index'));
         }
 
         $this->rolesRepository->delete($id);
 
-        Flash::success('Roles deleted successfully.');
+        Flash::success(Lang::get('validation.delete_success'));
 
         return redirect(route('roles.index'));
     }

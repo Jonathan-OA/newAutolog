@@ -27,7 +27,7 @@
                     Módulo de Produção
                 </div>
                 <div class="row buttons_grid">
-                    <a href="producao/add" id="button_menu" data-toggle="modal" > 
+                    <a href="production/add" id="button_menu" data-toggle="modal" > 
                         <img class="icon_grid" src="<% asset('/icons/add.png') %>" alt="Adicionar">
                     </a>
                     <a href="#" id="button_menu"> 
@@ -45,7 +45,7 @@
                             <script type="text/ng-template" id="options">
                                 <div id="hhhaaa" class="ui-grid-cell-contents" ng-controller="MainCtrl">
                                     <a href="#"  data-toggle="modal"  ng-click="showGridDet(row.entity.id, row.entity.number)" data-target="#myModal" class=" glyphicon glyphicon-zoom-in icon_action"></a>
-                                    <a href="#" class=" glyphicon glyphicon glyphicon-tasks icon_action" ng-click="showActions('producao', row.entity.id)" ></a>
+                                    <a href="#" class=" glyphicon glyphicon glyphicon-tasks icon_action" ng-click="showActions('production', row.entity.id)" ></a>
                                 </div>
                             </script>
                     </div>
