@@ -6,7 +6,7 @@
             <div class="panel panel-default" >
                 <div class="panel-heading">
                    <!-- Texto baseado no arquivo de linguagem -->
-                   @lang('models.suppliers') 
+                   @lang('models.operations') 
                 </div>
                 
                 <div class="panel panel-default">
@@ -15,10 +15,10 @@
                             @include('flash::message')
                             <div id="msg_excluir"></div>
                             <div class="row buttons_grid">
-                                <a class="btn btn-success"  href="{!! route('suppliers.create') !!}">@lang('buttons.add')</a>
+                                <a class="btn btn-success"  href="{!! route('operations.create') !!}">@lang('buttons.add')</a>
                             </div>
                             <div class="panel-body">
-                                @include('suppliers.table')
+                                @include('operations.table')
                             </div>
                         </div>
                     </div>
@@ -30,51 +30,42 @@
 @section('scripts')
 <script>
     $(function() {
-      var table = $("#suppliers-table").DataTable({
-            "scrollX": true,
-            ajax: 'suppliers/datatable',
+      var table = $("#operations-table").DataTable({
+            scrollX: true,
+            scrollY: "47vh",
+            ajax: 'operations/datatable',
             fixedColumns:   {
                 leftColumns: 0,
                 rightColumns: 1
             },
             columns: [ { data: 'code' },
-                { data: 'company_id' },
-                { data: 'name' },
-                { data: 'trading_name' },
-                { data: 'cnpj' },
-                { data: 'state_registration' },
-                { data: 'address' },
-                { data: 'number' },
-                { data: 'neighbourhood' },
-                { data: 'city' },
-                { data: 'state' },
-                { data: 'country' },
-                { data: 'zip_code' },
-                { data: 'phone1' },
-                { data: 'phone2' },
-                { data: 'active' },
-                { data: 'obs1' },
-                { data: 'obs2' },
-                { data: 'obs3' },
+                { data: 'type' },
+                { data: 'module' },
+                { data: 'level' },
+                { data: 'action' },
+                { data: 'description' },
+                { data: 'local' },
+                { data: 'writes_log' },
                
                        { data: null,
                          className: "td_grid",
-                         defaultContent: "<button id='edit'><img class='icon' src='<% asset('/icons/editar.png') %>'' title='@lang('buttons.edit')'></button><button id='remove'><img class='icon' src='<% asset('/icons/remover.png') %>'' title='@lang('buttons.remove')'></button>" 
+                         defaultContent: "<button id='edit'><img class='icon' src='<% asset('/icons/editar.png') %>'' title='@lang('buttons.edit')'></button><button id='remove'><img class='icon' src='<% asset('/icons/remover.png') %>'' title='@lang('buttons.remove')'></button>",
+                         width: "90px" 
                        }],
       });
       
-      $('#suppliers-table tbody').on( 'click', 'button', function () {
+      $('#operations-table tbody').on( 'click', 'button', function () {
             var data = table.row( $(this).parents('tr') ).data();
             var id = $(this).attr('id');
             if(id == 'edit'){
                 //Editar Registro
-                window.location.href = "{!! URL::to('suppliers/"+data.id+"/edit') !!}";
+                window.location.href = "{!! URL::to('operations/"+data.id+"/edit') !!}";
             }else{
                 //Excluir Registro
                 if(confirm('@lang("buttons.msg_remove")')){
                     var tk = $('meta[name="csrf-token"]').attr('content');
                     $.ajax({
-                        url: 'suppliers/'+data.id,
+                        url: 'operations/'+data.id,
                         type: 'post',
                         data: {_method: 'delete', _token :tk},
                         success: function(scs){ 

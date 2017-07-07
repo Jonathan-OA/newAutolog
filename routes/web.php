@@ -23,7 +23,6 @@ Route::group(['middleware' => 'web'], function() {
     Route::get('/production/details/{document}', 'Modules\Production\ProductionController@items');
     Route::resource('documents', 'DocumentController');
     Route::get('customers/datatable', 'CustomersController@getData');
-    Route::get('roles/datatable', 'RolesController@getData');
     Route::resource('customers', 'CustomerController');
     Route::resource('permissions', 'PermissionController');
 
@@ -44,34 +43,16 @@ Route::group(['middleware' => 'web'], function() {
 
 Route::resource('permissions', 'PermissionController');
 
+//
+Route::get('roles/datatable', 'RolesController@getData');
+Route::resource('roles', 'RolesController');
+
+Route::get('customers/datatable', 'CustomersController@getData');
 Route::resource('customers', 'CustomersController');
 
+Route::get('suppliers/datatable', 'SuppliersController@getData');
 Route::resource('suppliers', 'SuppliersController');
 
-Route::resource('roles', 'RolesController');
-Route::get('roles/datatable', 'RolesController@getData');
 
-
-Route::resource('roles', 'RolesController');
-Route::get('roles/datatable', 'RolesController@getData');
-
-Route::resource('roles', 'RolesController');
-Route::get('roles/datatable', 'RolesController@getData');
-
-Route::resource('roles', 'RolesController');
-Route::get('roles/datatable', 'RolesController@getData');
-
-Route::resource('roles', 'RolesController');
-Route::get('roles/datatable', 'RolesController@getData');
-
-Route::resource('roles', 'RolesController');
-Route::get('roles/datatable', 'RolesController@getData');
-
-Route::resource('roles', 'RolesController');
-Route::get('roles/datatable', 'RolesController@getData');
-
-Route::resource('roles', 'RolesController');
-Route::get('roles/datatable', 'RolesController@getData');
-
-Route::resource('customers', 'CustomersController');
-Route::get('customers/datatable', 'CustomersController@getData');
+Route::get('operations/datatable', 'OperationsController@getData');
+Route::resource('operations', 'OperationsController');

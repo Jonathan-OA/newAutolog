@@ -8,11 +8,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * Class Suppliers
  * @package App\Models
- * @version May 8, 2017, 12:44 pm UTC
+ * @version July 6, 2017, 12:32 pm UTC
  */
 class Suppliers extends Model
 {
-
     public $table = 'suppliers';
     
     const CREATED_AT = 'created_at';

@@ -31,7 +31,9 @@
 <script>
     $(function() {
       var table = $("#customers-table").DataTable({
-            "scrollX": true,
+            scrollX: true,
+            scrollY: "47vh",
+            scrollCollapse: true,
             ajax: 'customers/datatable',
             fixedColumns:   {
                 leftColumns: 0,
@@ -56,11 +58,11 @@
                 { data: 'obs1' },
                 { data: 'obs2' },
                 { data: 'obs3' },
-               
-                       { data: null,
-                         className: "td_grid",
-                         defaultContent: "<button id='edit'><img class='icon' src='<% asset('/icons/editar.png') %>'' title='@lang('buttons.edit')'></button><button id='remove'><img class='icon' src='<% asset('/icons/remover.png') %>'' title='@lang('buttons.remove')'></button>" 
-                       }],
+                { data: null,
+                    className: "td_grid",
+                    defaultContent: "<button id='edit'><img class='icon' src='<% asset('/icons/editar.png') %>'' title='@lang('buttons.edit')'></button><button id='remove'><img class='icon' src='<% asset('/icons/remover.png') %>'' title='@lang('buttons.remove')'></button>",
+                    width: "90px"
+                }],
       });
       
       $('#customers-table tbody').on( 'click', 'button', function () {

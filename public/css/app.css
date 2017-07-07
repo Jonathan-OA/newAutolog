@@ -226,8 +226,12 @@
     }
     
     .td_grid:not(th) {
-        background-color: gray;
-        display: inline-table;
+        text-align: center;
+        background-color: white;
+    }
+    
+    .td_grid:not(th)>button {
+        padding: 0px 2px;
     }
     
     .form_fields {
@@ -251,6 +255,18 @@
         background-color: #172540;
         position: absolute;
         z-index: 2;
+    }
+    
+    .dataTables_info {
+        float: left !important;
+    }
+    
+    .dataTables_paginate {
+        float: right !important;
+    }
+    
+    .dataTables_paginate>a {
+        color: black;
     }
     /* --------------------------------------------*/
     /*                   Menu                      */

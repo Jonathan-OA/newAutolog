@@ -10,6 +10,9 @@ use Illuminate\Http\Request;
 use Flash;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Response;
+use Datatables;
+use App;
+use Lang;
 
 class SuppliersController extends AppBaseController
 {
@@ -59,7 +62,7 @@ class SuppliersController extends AppBaseController
 
         $suppliers = $this->suppliersRepository->create($input);
 
-        Flash::success('Suppliers saved successfully.');
+        Flash::success(Lang::get('validation.save_success'));
 
         return redirect(route('suppliers.index'));
     }
@@ -96,7 +99,7 @@ class SuppliersController extends AppBaseController
         $suppliers = $this->suppliersRepository->findWithoutFail($id);
 
         if (empty($suppliers)) {
-            Flash::error('Suppliers not found');
+            Flash::error(Lang::get('validation.not_found'));
 
             return redirect(route('suppliers.index'));
         }
@@ -117,14 +120,14 @@ class SuppliersController extends AppBaseController
         $suppliers = $this->suppliersRepository->findWithoutFail($id);
 
         if (empty($suppliers)) {
-            Flash::error('Suppliers not found');
+            Flash::error(Lang::get('validation.not_found'));
 
             return redirect(route('suppliers.index'));
         }
 
         $suppliers = $this->suppliersRepository->update($request->all(), $id);
 
-        Flash::success('Suppliers updated successfully.');
+        Flash::success(Lang::get('validation.update_success'));
 
         return redirect(route('suppliers.index'));
     }
@@ -141,15 +144,24 @@ class SuppliersController extends AppBaseController
         $suppliers = $this->suppliersRepository->findWithoutFail($id);
 
         if (empty($suppliers)) {
-            Flash::error('Suppliers not found');
+            Flash::error(Lang::get('validation.not_found'));
 
             return redirect(route('suppliers.index'));
         }
 
         $this->suppliersRepository->delete($id);
 
-        Flash::success('Suppliers deleted successfully.');
+        Flash::success(Lang::get('validation.delete_success'));
 
         return redirect(route('suppliers.index'));
+    }
+
+    /**
+     * Get data from model 
+     *
+     */
+    public function getData()
+    {
+        return Datatables::of(App\Models\Suppliers::query())->make(true);
     }
 }

@@ -3,26 +3,26 @@
         <div class="table-responsive" style="margin: 0 15px 0 15px">
         <table class="table table-bordered" id="suppliers-table">
             <thead>
-                <th class="th_grid">Code</th>
-        <th class="th_grid">Company Id</th>
-        <th class="th_grid">Name</th>
-        <th class="th_grid">Trading Name</th>
-        <th class="th_grid">Cnpj</th>
-        <th class="th_grid">State Registration</th>
-        <th class="th_grid">Address</th>
-        <th class="th_grid">Number</th>
-        <th class="th_grid">Neighbourhood</th>
-        <th class="th_grid">City</th>
-        <th class="th_grid">State</th>
-        <th class="th_grid">Country</th>
-        <th class="th_grid">Zip Code</th>
-        <th class="th_grid">Phone1</th>
-        <th class="th_grid">Phone2</th>
-        <th class="th_grid">Active</th>
-        <th class="th_grid">Obs1</th>
-        <th class="th_grid">Obs2</th>
-        <th class="th_grid">Obs3</th>
-                <th colspan="3">Ação</th>
+                <th class="th_grid">@lang('models.code') </th>
+        <th class="th_grid">@lang('models.company_id') </th>
+        <th class="th_grid">@lang('models.name') </th>
+        <th class="th_grid">@lang('models.trading_name') </th>
+        <th class="th_grid">@lang('models.cnpj') </th>
+        <th class="th_grid">@lang('models.state_registration') </th>
+        <th class="th_grid">@lang('models.address') </th>
+        <th class="th_grid">@lang('models.number') </th>
+        <th class="th_grid">@lang('models.neighbourhood') </th>
+        <th class="th_grid">@lang('models.city') </th>
+        <th class="th_grid">@lang('models.state') </th>
+        <th class="th_grid">@lang('models.country') </th>
+        <th class="th_grid">@lang('models.zip_code') </th>
+        <th class="th_grid">@lang('models.phone1') </th>
+        <th class="th_grid">@lang('models.phone2') </th>
+        <th class="th_grid">@lang('models.active') </th>
+        <th class="th_grid">@lang('models.obs1') </th>
+        <th class="th_grid">@lang('models.obs2') </th>
+        <th class="th_grid">@lang('models.obs3') </th>
+                <th class="th_grid">@lang('models.action')</th>
             </thead>
             <tbody>
             @foreach($suppliers as $suppliers)

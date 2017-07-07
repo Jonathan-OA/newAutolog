@@ -2,7 +2,8 @@
 var app = angular.module('grid_prod', ['ui.grid', 'ui.grid.selection',
     'ui.grid.pagination', 'ui.grid.saveState',
     'ui.grid.moveColumns', 'ui.grid.autoResize',
-    'ui.grid.resizeColumns', 'ui.grid.exporter'
+    'ui.grid.resizeColumns', 'ui.grid.exporter',
+    'ui-grid-pinnin'
 ]);
 
 //Grid de documentos

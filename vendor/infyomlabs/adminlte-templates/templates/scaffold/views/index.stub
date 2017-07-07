@@ -31,7 +31,8 @@
 <script>
     $(function() {
       var table = $("#$MODEL_NAME_PLURAL_CAMEL$-table").DataTable({
-            "scrollX": true,
+            scrollX: true,
+            scrollY: "47vh",
             ajax: '$MODEL_NAME_PLURAL_CAMEL$/datatable',
             fixedColumns:   {
                 leftColumns: 0,
@@ -40,7 +41,8 @@
             columns: [ $FIELDS_DATATABLE$
                        { data: null,
                          className: "td_grid",
-                         defaultContent: "<button id='edit'><img class='icon' src='<% asset('/icons/editar.png') %>'' title='@lang('buttons.edit')'></button><button id='remove'><img class='icon' src='<% asset('/icons/remover.png') %>'' title='@lang('buttons.remove')'></button>" 
+                         defaultContent: "<button id='edit'><img class='icon' src='<% asset('/icons/editar.png') %>'' title='@lang('buttons.edit')'></button><button id='remove'><img class='icon' src='<% asset('/icons/remover.png') %>'' title='@lang('buttons.remove')'></button>",
+                         width: "90px" 
                        }],
       });
       
