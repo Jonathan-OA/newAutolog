@@ -6,11 +6,12 @@
 
 <!-- Type Field -->
 {!! Form::label('type', Lang::get('models.type').':') !!}
-{!! Form::text('type', null, ['class' => 'form-control']) !!}
+{!! Form::select('type', ['COLETOR' => 'Coletor', 'DESKTOP' => 'Desktop'], null, ['placeholder' => Lang::get('models.sel_type'),'class' => 'form-control']) !!}
 
 <!-- Module Field -->
 {!! Form::label('module', Lang::get('models.module').':') !!}
-{!! Form::text('module', null, ['class' => 'form-control']) !!}
+{!! Form::select('module', $modules, null, ['placeholder' => Lang::get('models.sel_module'),'class' => 'form-control']) !!}
+
 
 <!-- Level Field -->
 {!! Form::label('level', Lang::get('models.level').':') !!}
@@ -31,6 +32,11 @@
 <!-- Writes Log Field -->
 {!! Form::label('writes_log', Lang::get('models.writes_log').':') !!}
 {!! Form::number('writes_log', null, ['class' => 'form-control']) !!}
+
+<!-- Enabled Field -->
+{!! Form::label('enabled', Lang::get('models.enabled').':') !!}
+{!! Form::select('enabled', ['0' => 'Inativa', '1' => 'Ativa'], null, ['class' => 'form-control']) !!}
+
 </div>
 
 <!-- Submit Field -->

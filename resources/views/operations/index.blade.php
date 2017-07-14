@@ -8,7 +8,6 @@
                    <!-- Texto baseado no arquivo de linguagem -->
                    @lang('models.operations') 
                 </div>
-                
                 <div class="panel panel-default">
                     <div class="row">
                         <div class="col-md-12">
@@ -46,6 +45,7 @@
                 { data: 'description' },
                 { data: 'local' },
                 { data: 'writes_log' },
+                { data: 'enabled' },
                
                        { data: null,
                          className: "td_grid",

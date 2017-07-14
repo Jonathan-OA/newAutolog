@@ -2,8 +2,7 @@
 var app = angular.module('grid_prod', ['ui.grid', 'ui.grid.selection',
     'ui.grid.pagination', 'ui.grid.saveState',
     'ui.grid.moveColumns', 'ui.grid.autoResize',
-    'ui.grid.resizeColumns', 'ui.grid.exporter',
-    'ui-grid-pinnin'
+    'ui.grid.resizeColumns', 'ui.grid.exporter'
 ]);
 
 //Grid de documentos
@@ -108,7 +107,11 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
             //Remove a div gerada anteriormente (caso exista)
             $('#div_buttons').remove();
             //Carrega os botões
-            $element.append(data);
+            //var tp = $('#listButtons' + id).position().top;
+            var lp = $('#listButtons' + id).position().left - 30;
+            $('#listButtons' + id).before('<span class="options" name="options" onmouseleave="" style="position: absolute;  left: ' + lp + 'px; ";>' + data + '</span>');
+
+            //console.log($('#listButtons' + id).position());
         })
     };
 }]);

@@ -10,7 +10,25 @@ use App;
 class InstallController extends Controller
 {
     public function index(){
-        $modulos = App\Module::all();
-        return view('modulos.instalador.index', ['modulos' => $modulos]);
+        $modules = App\Module::all();
+        return view('modules.install.index', ['modules' => $modules]);
+    }
+
+    //Salva modulos e encaminha para a pagina de transações
+    public function step1(Request $request){
+        $modules = $request->input('module_chk');
+        foreach($modules as $id => $value){
+           $module =  App\Module::find($id);
+           $module->enabled = $value;
+           $module->save();
+        }
+
+        $operations = App\Models\Operations::all();
+        return view('modules.install.trans', ['operations' => $operations]);
+    }
+
+    //Salva as transações e encaminha para a pagina de parâmetros
+    public function step2(Request $request){
+
     }
 }

@@ -15,20 +15,18 @@
                                 <thead>
                                 <tr>
                                     <th> </td>
-                                    <th> Módulos Disponíveis </td>
+                                    <th> Operações Disponíveis </td>
                                 </tr>
                                 </thead>
-                                @foreach ($modules as $module)
+                                @foreach ($operations as $operation)
                                     <tr>
                                         <td align="center" width="50">
-                                                <input type="hidden" name="module_chk[<% $module->id %>]" value="0" >
-                                                <input type="checkbox" name="module_chk[<% $module->id %>]" autocomplete="off" value="1" @if($module->enabled == 1) checked @endif >
+                                                <input type="hidden" name="module_chk[<% $operation->id %>]" value="0" >
+                                                <input type="checkbox" name="module_chk[<% $operation->id %>]" autocomplete="off" value="1"  >
                                         </td>   
                                         <td>
-                                            @if(!empty($module->submodule))
-                                                --- >
-                                            @endif
-                                            <% $module->name %>
+                                            
+                                            <% $operation->code %>
                                         </td>
                                     </tr>
                                 @endforeach

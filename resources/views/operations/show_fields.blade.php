@@ -64,3 +64,9 @@
     <p>{!! $operations->updated_at !!}</p>
 </div>
 
+<!-- Enabled Field -->
+<div class="col-md-12">
+    {!! Form::label('enabled', 'Enabled:') !!}
+    <p>{!! $operations->enabled !!}</p>
+</div>
+

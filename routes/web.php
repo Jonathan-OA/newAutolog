@@ -17,7 +17,7 @@ Auth::routes();
 Route::group(['middleware' => 'web'], function() {
     Route::get('/home', 'HomeController@index');
     Route::get('/', 'HomeController@index');
-    Route::get('/install', 'InstallController@index');
+    //MODULOS
     Route::get('/production', 'Modules\Production\ProductionController@index');
     Route::get('/recebimento', 'Modules\Receipt\ReceiptController@index');
     Route::get('/production/details/{document}', 'Modules\Production\ProductionController@items');
@@ -26,7 +26,7 @@ Route::group(['middleware' => 'web'], function() {
     Route::resource('customers', 'CustomerController');
     Route::resource('permissions', 'PermissionController');
 
-    //Botões
+    //BOTÕES
     Route::get('getButtons/{modulo}', 'ButtonsController@getButtons');
 
     //API
@@ -37,6 +37,10 @@ Route::group(['middleware' => 'web'], function() {
 
     //IMPORTAÇÃO
     Route::get('/import', 'ImportacaoGeralController@index');
+
+    //INSTALADOR
+    Route::get('/install', 'InstallController@index');
+    Route::post('/install/trans', 'InstallController@step1');
 });
 
 
@@ -52,6 +56,10 @@ Route::resource('customers', 'CustomersController');
 
 Route::get('suppliers/datatable', 'SuppliersController@getData');
 Route::resource('suppliers', 'SuppliersController');
+
+
+Route::get('operations/datatable', 'OperationsController@getData');
+Route::resource('operations', 'OperationsController');
 
 
 Route::get('operations/datatable', 'OperationsController@getData');

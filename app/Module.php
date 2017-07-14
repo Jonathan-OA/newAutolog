@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Module extends Model
 {
 
-    //Tabela relacionada a Model
+    //Tabela relacionada aos modulos do sistema (menu)
     protected $table = 'modules';
 
     /**
@@ -19,4 +19,8 @@ class Module extends Model
     protected $fillable = [
         'name','enabled','url','module','submodule'
     ];
+
+    
+
+
 }

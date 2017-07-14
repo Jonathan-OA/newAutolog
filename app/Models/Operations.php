@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * Class Operations
  * @package App\Models
- * @version July 7, 2017, 7:01 pm UTC
+ * @version July 14, 2017, 2:32 pm UTC
  */
 class Operations extends Model
 {
@@ -29,7 +29,8 @@ class Operations extends Model
         'action',
         'description',
         'local',
-        'writes_log'
+        'writes_log',
+        'enabled'
     ];
 
     /**

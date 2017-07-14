@@ -45,8 +45,14 @@ class OperationsController extends AppBaseController
      * @return Response
      */
     public function create()
-    {
-        return view('operations.create');
+    {   
+        //Lista de modulos disponíveis para inserção da operação
+        $modules = App\Module::where('module', 'Operações')
+                              ->where('enabled', '1')
+                              ->whereNotNull('submodule')
+                              ->pluck('name','name');
+        
+        return view('operations.create')->with('modules', $modules);
     }
 
     /**
@@ -97,14 +103,21 @@ class OperationsController extends AppBaseController
     public function edit($id)
     {
         $operations = $this->operationsRepository->findWithoutFail($id);
-
+       
         if (empty($operations)) {
             Flash::error(Lang::get('validation.not_found'));
 
             return redirect(route('operations.index'));
         }
 
-        return view('operations.edit')->with('operations', $operations);
+        //Lista de modulos disponíveis para inserção da operação
+        $modules = App\Module::where('module', 'Operações')
+                              ->where('enabled', '1')
+                              ->whereNotNull('submodule')
+                              ->pluck('name','name');
+
+        return view('operations.edit')->with('operations', $operations)
+                                      ->with('modules', $modules);
     }
 
     /**

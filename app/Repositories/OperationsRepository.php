@@ -18,7 +18,8 @@ class OperationsRepository extends BaseRepository
         'action',
         'description',
         'local',
-        'writes_log'
+        'writes_log',
+        'enabled'
     ];
 
     /**

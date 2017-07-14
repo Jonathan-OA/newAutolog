@@ -51,6 +51,11 @@ return [
     'level' => 'Nível',
     'local' => 'Local',
     'writes_log' => 'Ativa Log',
+    'enabled' => 'Habilitado',
+
+    //PlaceHolders
+    'sel_type' => 'Selecione um tipo: ',
+    'sel_module' => 'Selecione um módulo: ',
     
     
 
