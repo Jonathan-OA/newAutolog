@@ -14,11 +14,22 @@
                             <table class="table table-striped table-hover">
                                 <thead>
                                 <tr>
-                                    <th> </td>
-                                    <th> Operações Disponíveis </td>
+                                    <th> </th>
+                                    <th> Operações Disponíveis </th>
                                 </tr>
                                 </thead>
+                                @php
+                                     $module_ant = '';
+                                @endphp
                                 @foreach ($operations as $operation)
+                                    @if($module_ant <> $operation->module)
+                                        <tr>
+                                            <td> <% $operation->module %></td>
+                                        </tr>
+                                        @php
+                                            $module_ant = $operation->module;
+                                        @endphp 
+                                    @endif
                                     <tr>
                                         <td align="center" width="50">
                                                 <input type="hidden" name="module_chk[<% $operation->id %>]" value="0" >

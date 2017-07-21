@@ -23,7 +23,7 @@ class InstallController extends Controller
            $module->save();
         }
 
-        $operations = App\Models\Operations::all();
+        $operations = App\Models\Operations::orderBy('module')->get();
         return view('modules.install.trans', ['operations' => $operations]);
     }
 
