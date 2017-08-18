@@ -36,30 +36,7 @@
 
                 </div>
                  <div class="panel-body">
-                    <table id="myTable" class="display" cellspacing="0" width="100%">
-                        <thead>
-                            <tr>
-                                <th>Número</th>
-                                <th>Tipo</th>
-                                <th>Status</th>
-                                <th>Emissão</th>
-                                <th>Cliente</th>
-                                <th>Opções</th>
-                            </tr>
-                        </thead>
-                         <tfoot>
-                            <tr>
-                                <th>Número</th>
-                                <th>Tipo</th>
-                                <th>Status</th>
-                                <th>Emissão</th>
-                                <th>Cliente</th>
-                                <th>Opções</th>
-                            </tr>
-                        </tfoot>
-                    </table>
-                    <button id="save" type="button" class="btn btn-success">Save</button>
-                    <button id="restore" type="button" class="btn btn-success">Restore</button>
+                    <div id="example1" class="hot handsontable"></div>
                  </div>
             </div>
             
@@ -72,40 +49,21 @@
     <script>
     $( document ).ready(function() {
 
-        $('#myTable tfoot th').each( function () {
-            var title = $(this).text();
-            $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
-        } );
+        var data = [
+                    ["", "Ford", "Volvo", "Toyota", "Honda"],
+                    ["2014", 10, 11, 12, 13],
+                    ["2015", 20, 11, 14, 13],
+                    ["2016", 30, 15, 12, 13]
+                    ];
 
-       var table =  $('#myTable').DataTable( {
-                        colReorder: true,
-                        stateSave: true,
-                        "scrollX": true,
-                        ajax: {
-                            url: 'api/documentsProd',
-                            dataSrc: ''
-                        },
-                        columns: [
-                            {data: 'number', className: 'text-center',},
-                            {data: 'document_type_code', className: 'text-center'},
-                            {data: 'document_status_id', className: 'text-center'},
-                            {data: 'emission_date', className: 'text-center'},
-                            {data: 'customer_id', className: 'text-center'},
-                            {defaultContent: '<div class="teste"> </div>' },             
-                        ],         
-        }); 
-        //Ativa Filtros
-        table.columns().every( function () {
-            var that = this;
-    
-            $( 'input', this.footer() ).on( 'keyup change', function () {
-                if ( that.search() !== this.value ) {
-                    that
-                        .search( this.value )
-                        .draw();
-                }
-            } );
-        });
+                    var container = document.getElementById('example1');
+                    var hot = new Handsontable(container, {
+                    data: data,
+                    minSpareRows: 1,
+                    rowHeaders: true,
+                    colHeaders: true,
+                    contextMenu: true
+                    });
 
     });
     </script>

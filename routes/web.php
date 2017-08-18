@@ -21,10 +21,7 @@ Route::group(['middleware' => 'web'], function() {
     Route::get('/production', 'Modules\Production\ProductionController@index');
     Route::get('/recebimento', 'Modules\Receipt\ReceiptController@index');
     Route::get('/production/details/{document}', 'Modules\Production\ProductionController@items');
-    Route::resource('documents', 'DocumentController');
-    Route::get('customers/datatable', 'CustomersController@getData');
-    Route::resource('customers', 'CustomerController');
-    Route::resource('permissions', 'PermissionController');
+    Route::resource('documents', 'DocumentsController');
 
     //BOTÕES
     Route::get('getButtons/{modulo}', 'ButtonsController@getButtons');
@@ -34,6 +31,7 @@ Route::group(['middleware' => 'web'], function() {
     Route::get('/api/itemsProd/{document}', 'Modules\Production\ProductionController@getItems');
     Route::post('/api/grid/', 'Modules\Geral\GridController@setColumns');
     Route::get('/api/grid/{module}', 'Modules\Geral\GridController@getColumns');
+    Route::get('/api/operations/{module}', 'Modules\Geral\Operation@getOperations');
 
     //IMPORTAÇÃO
     Route::get('/import', 'ImportacaoGeralController@index');
@@ -45,26 +43,9 @@ Route::group(['middleware' => 'web'], function() {
 
 
 
-Route::resource('permissions', 'PermissionController');
-
-//
-Route::get('roles/datatable', 'RolesController@getData');
-Route::resource('roles', 'RolesController');
-
-Route::get('customers/datatable', 'CustomersController@getData');
-Route::resource('customers', 'CustomersController');
-
-Route::get('suppliers/datatable', 'SuppliersController@getData');
-Route::resource('suppliers', 'SuppliersController');
+Route::get('operations/datatable', 'OperationController@getData');
+Route::resource('operations', 'OperationController');
 
 
-Route::get('operations/datatable', 'OperationsController@getData');
-Route::resource('operations', 'OperationsController');
-
-
-Route::get('operations/datatable', 'OperationsController@getData');
-Route::resource('operations', 'OperationsController');
-
-
-Route::get('parameters/datatable', 'ParametersController@getData');
-Route::resource('parameters', 'ParametersController');
+Route::get('parameters/datatable', 'ParameterController@getData');
+Route::resource('parameters', 'ParameterController');

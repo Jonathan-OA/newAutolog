@@ -107,8 +107,9 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
             //Remove a div gerada anteriormente (caso exista)
             $('#div_buttons').remove();
             //Carrega os botões
-            //var tp = $('#listButtons' + id).position().top;
-            var lp = $('#listButtons' + id).position().left - 30;
+            var tp = $('#listButtons' + id).position().top;
+            var lp = $('#listButtons' + id).position().left - 40;
+            //alert($('#lay_header').width());
             $('#listButtons' + id).before('<span class="options" name="options" onmouseleave="" style="position: absolute;  left: ' + lp + 'px; ";>' + data + '</span>');
 
             //console.log($('#listButtons' + id).position());

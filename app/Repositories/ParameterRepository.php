@@ -2,10 +2,10 @@
 
 namespace App\Repositories;
 
-use App\Models\Parameters;
+use App\Models\Parameter;
 use InfyOm\Generator\Common\BaseRepository;
 
-class ParametersRepository extends BaseRepository
+class ParameterRepository extends BaseRepository
 {
     /**
      * @var array
@@ -25,6 +25,6 @@ class ParametersRepository extends BaseRepository
      **/
     public function model()
     {
-        return Parameters::class;
+        return Parameter::class;
     }
 }

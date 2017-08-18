@@ -6,11 +6,11 @@ use Eloquent as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- * Class Operations
+ * Class Operation
  * @package App\Models
- * @version July 14, 2017, 2:32 pm UTC
+ * @version August 3, 2017, 7:23 pm UTC
  */
-class Operations extends Model
+class Operation extends Model
 {
     public $table = 'operations';
     
@@ -56,6 +56,14 @@ class Operations extends Model
     public static $rules = [
         
     ];
+
+    //Retorna todas as operações disponíveis no módulo
+    public static function getOperations($module = ' '){
+        return Operation::where('module', $module)
+                        ->where('enabled', '1')
+                        ->where('module', '<>', ' ')
+                        ->pluck('name','name');
+    }
 
     
 }

@@ -3,9 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Models\Vehicles;
+use App\Models\Parameter;
 
-class UpdateVehiclesRequest extends FormRequest
+class UpdateParameterRequest extends FormRequest
 {
 
     /**
@@ -25,6 +25,6 @@ class UpdateVehiclesRequest extends FormRequest
      */
     public function rules()
     {
-        return Vehicles::$rules;
+        return Parameter::$rules;
     }
 }

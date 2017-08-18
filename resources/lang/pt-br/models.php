@@ -22,6 +22,7 @@ return [
     'documents' => 'Documents',
     'items' => 'Produtos',
     'operations' => 'Operações',
+    'parameters' => 'Parâmetros',
 
     //Columns
     'name' => 'Nome',
@@ -52,6 +53,10 @@ return [
     'local' => 'Local',
     'writes_log' => 'Ativa Log',
     'enabled' => 'Habilitado',
+    'value' => 'Valor',
+    'def_value' => 'Valor Padrão',
+    'module_name' => 'Módulo',
+    'operation_code' => 'Operação',
 
     //PlaceHolders
     'sel_type' => 'Selecione um tipo: ',

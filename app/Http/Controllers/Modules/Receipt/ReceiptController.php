@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Modulos\Recebimento;
+namespace App\Http\Controllers\Modules\Receipt;
 
 use Illuminate\Http\Request;
 
@@ -12,11 +12,11 @@ use App;
 class ReceiptController extends Controller
 {
     public function index(){
-        return view('modulos.recebimento.grid'); 
+        return view('modules.receipt.grid'); 
     }
 
     public function items($id){
-        return view('modulos.recebimento.gridDet')->with(['document' => $id]); 
+        return view('modules.receipt.gridDet')->with(['document' => $id]); 
     }
 
     public function getDocuments(){

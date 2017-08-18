@@ -10,7 +10,7 @@
                     <div class="panel-body" >
                         <div class="row">
                             <div class="col-md-12">
-                                {!! Form::model($parameters, ['route' => ['parameters.update', $parameters->id], 'method' => 'patch']) !!}
+                                {!! Form::model($parameter, ['route' => ['parameters.update', $parameter->id], 'method' => 'patch']) !!}
                                   @include('parameters.fields')
                                 {!! Form::close() !!}
                             </div>

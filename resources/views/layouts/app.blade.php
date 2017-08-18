@@ -18,7 +18,7 @@
 
 </head>
 <body>
-    <div class="lay_header">
+    <div class="lay_header" id="lay_header">
         <div class="lay_menu">
             <a href="#" id="button_menu"> 
                 <img class="icon" src="<% asset('/icons/menu.png') %>" alt="Menu">

@@ -3,9 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Models\Permission;
+use App\Models\Operation;
 
-class UpdatePermissionRequest extends FormRequest
+class UpdateOperationRequest extends FormRequest
 {
 
     /**
@@ -25,6 +25,6 @@ class UpdatePermissionRequest extends FormRequest
      */
     public function rules()
     {
-        return Permission::$rules;
+        return Operation::$rules;
     }
 }

@@ -20,7 +20,13 @@ class Module extends Model
         'name','enabled','url','module','submodule'
     ];
 
-    
+    //Retorna todos os módulos disponíveis
+    public static function getModules(){
+        return Module::where('module', 'Operações')
+                     ->where('enabled', '1')
+                     ->whereNotNull('submodule')
+                     ->pluck('name','name');
+    }
 
 
 }

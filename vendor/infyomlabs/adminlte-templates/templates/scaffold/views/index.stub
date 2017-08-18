@@ -45,7 +45,7 @@
                          width: "90px" 
                        }],
       });
-      
+      //Funções dos botões de editar e excluir
       $('#$MODEL_NAME_PLURAL_CAMEL$-table tbody').on( 'click', 'button', function () {
             var data = table.row( $(this).parents('tr') ).data();
             var id = $(this).attr('id');
@@ -55,6 +55,7 @@
             }else{
                 //Excluir Registro
                 if(confirm('@lang("buttons.msg_remove")')){
+                    //Token obrigatório para envio POST
                     var tk = $('meta[name="csrf-token"]').attr('content');
                     $.ajax({
                         url: '$MODEL_NAME_PLURAL_CAMEL$/'+data.id,

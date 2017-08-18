@@ -9,5 +9,4 @@
     <br>
     <a href="#" class=" glyphicon glyphicon glyphicon-tasks icon_action" onclick="alert('teste');"></a>
     <br>
-
 </div>

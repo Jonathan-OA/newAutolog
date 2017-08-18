@@ -2,18 +2,24 @@
 
 namespace App\Repositories;
 
-use App\Models\Permission;
+use App\Models\Operation;
 use InfyOm\Generator\Common\BaseRepository;
 
-class PermissionRepository extends BaseRepository
+class OperationRepository extends BaseRepository
 {
     /**
      * @var array
      */
     protected $fieldSearchable = [
-        'description',
+        'code',
+        'type',
         'module',
-        'active'
+        'level',
+        'action',
+        'description',
+        'local',
+        'writes_log',
+        'enabled'
     ];
 
     /**
@@ -21,6 +27,6 @@ class PermissionRepository extends BaseRepository
      **/
     public function model()
     {
-        return Permission::class;
+        return Operation::class;
     }
 }

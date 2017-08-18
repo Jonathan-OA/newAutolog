@@ -6,13 +6,15 @@ use Eloquent as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- * Class Parameters
+ * Class Vehicle
  * @package App\Models
- * @version July 21, 2017, 8:50 pm UTC
+ * @version April 10, 2017, 12:33 pm UTC
  */
-class Parameters extends Model
+class Vehicle extends Model
 {
-    public $table = 'parameters';
+  
+
+    public $table = 'vehicles';
     
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
@@ -23,12 +25,9 @@ class Parameters extends Model
 
     public $fillable = [
         'company_id',
-        'code',
-        'description',
-        'value',
-        'def_value',
-        'module_name',
-        'operation_code'
+        'courier_id',
+        'vehicle_type_id',
+        'number_plate'
     ];
 
     /**
@@ -39,11 +38,9 @@ class Parameters extends Model
     protected $casts = [
         'id' => 'integer',
         'company_id' => 'integer',
-        'code' => 'string',
-        'description' => 'string',
-        'value' => 'string',
-        'def_value' => 'string',
-        'module_name' => 'string'
+        'courier_id' => 'integer',
+        'vehicle_type_id' => 'integer',
+        'number_plate' => 'string'
     ];
 
     /**

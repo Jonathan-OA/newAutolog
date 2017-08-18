@@ -6,11 +6,11 @@ use Eloquent as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- * Class Customers
+ * Class Customer
  * @package App\Models
  * @version July 5, 2017, 9:15 pm UTC
  */
-class Customers extends Model
+class Customer extends Model
 {
     public $table = 'customers';
     

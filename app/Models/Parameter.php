@@ -6,13 +6,13 @@ use Eloquent as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- * Class Roles
+ * Class Parameter
  * @package App\Models
- * @version July 5, 2017, 7:57 pm UTC
+ * @version August 4, 2017, 2:20 pm UTC
  */
-class Roles extends Model
+class Parameter extends Model
 {
-    public $table = 'roles';
+    public $table = 'parameters';
     
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
@@ -22,9 +22,13 @@ class Roles extends Model
 
 
     public $fillable = [
-        'name',
-        'slug',
-        'description'
+        'company_id',
+        'code',
+        'description',
+        'value',
+        'def_value',
+        'module_name',
+        'operation_code'
     ];
 
     /**
@@ -34,9 +38,12 @@ class Roles extends Model
      */
     protected $casts = [
         'id' => 'integer',
-        'name' => 'string',
-        'slug' => 'string',
-        'description' => 'string'
+        'company_id' => 'integer',
+        'code' => 'string',
+        'description' => 'string',
+        'value' => 'string',
+        'def_value' => 'string',
+        'module_name' => 'string'
     ];
 
     /**
@@ -45,14 +52,8 @@ class Roles extends Model
      * @var array
      */
     public static $rules = [
-        'description' => 'max:10'
+        
     ];
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     **/
-    public function permissionRoles()
-    {
-        return $this->hasMany(\App\Models\PermissionRole::class);
-    }
+    
 }

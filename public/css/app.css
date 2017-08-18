@@ -219,7 +219,6 @@
     
     .th_grid {
         white-space: nowrap;
-        width: 1%;
         border: 1px solid white;
         vertical-align: middle !important;
         text-align: center;
@@ -250,7 +249,7 @@
     
     #div_buttons {
         width: auto;
-        height: 36px;
+        height: auto;
         padding: 6px 6px;
         background-color: #172540;
         position: absolute;
