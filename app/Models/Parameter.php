@@ -51,9 +51,11 @@ class Parameter extends Model
      *
      * @var array
      */
-    public static $rules = [
-        
+     public static $rules = [
+        'code' => 'required|string|max:25',
+        'operation_code' => 'required|exists:operations,code',
+        'description' => 'required|string|max:50',
+        'value' => 'required|string|max:100',
     ];
-
     
 }

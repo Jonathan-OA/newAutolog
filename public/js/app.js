@@ -11,6 +11,12 @@ $(document).ready(function() {
             //Aumenta largura do painel
             $('#ctrl_rsp').removeClass('col-md-10');
         }
+
+        //Recarrega colunas datatable, caso exista (corrigir layout)
+        if (table) {
+            table.columns.adjust().draw();
+        }
+
     })
 
 

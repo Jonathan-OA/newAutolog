@@ -13,6 +13,15 @@ return [
     |
     */
     
+    //Default
+    'show' => 'Mostrando',
+    'entries' => 'registros',
+    'search' => 'Filtro',
+    'first' => 'Primeira',
+    'last' => 'Última',
+    'previous' => '<',
+    'next' => '>',
+
     //Tables
     'roles' => 'Funções',
     'customers' => 'Clientes',

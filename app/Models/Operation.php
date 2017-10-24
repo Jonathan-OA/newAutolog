@@ -54,15 +54,25 @@ class Operation extends Model
      * @var array
      */
     public static $rules = [
-        
+        'code' => 'required|integer|max:9999',
+        'type' => 'required|alpha|max:7',
+        'description' => 'required|string|max:50',
+        'module' => 'required|string|max:20',
+        'level'  => 'digits:1', 
+        'action' => 'required|string|max:20',
+        'local'  => 'required|string|max:20',
     ];
 
-    //Retorna todas as operações disponíveis no módulo
+    /**
+     * Retorna todas as operações disponíveis no módulo
+     *
+     * Função utilizada para preencher os inputs do tipo SELECT
+     */
     public static function getOperations($module = ' '){
-        return Operation::where('module', $module)
+        return Operation::selectRaw("code,CONCAT(code,' - ',description) as description_f")
                         ->where('enabled', '1')
                         ->where('module', '<>', ' ')
-                        ->pluck('name','name');
+                        ->pluck('description_f','code');
     }
 
     

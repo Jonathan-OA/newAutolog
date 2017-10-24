@@ -2,7 +2,7 @@
 @include('adminlte-templates::common.errors')
 <!-- Code Field -->
 {!! Form::label('code', Lang::get('models.code').':') !!}
-{!! Form::number('code', null, ['class' => 'form-control']) !!}
+{!! Form::number('code', null, ['class' => 'form-control', 'min' => 0]) !!}
 
 <!-- Type Field -->
 {!! Form::label('type', Lang::get('models.type').':') !!}
@@ -14,7 +14,7 @@
 
 <!-- Level Field -->
 {!! Form::label('level', Lang::get('models.level').':') !!}
-{!! Form::number('level', null, ['class' => 'form-control']) !!}
+{!! Form::number('level', null, ['class' => 'form-control', 'min' => 0]) !!}
 
 <!-- Action Field -->
 {!! Form::label('action', Lang::get('models.action').':') !!}

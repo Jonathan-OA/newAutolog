@@ -29,14 +29,27 @@
 @endsection
 @section('scripts')
 <script>
+    var table;
     $(function() {
-      var table = $("#parameters-table").DataTable({
+        //Parâmetros para criação da datatable
+        table = $("#parameters-table").DataTable({
             scrollX: true,
             scrollY: "47vh",
             ajax: 'parameters/datatable',
             fixedColumns:   {
                 leftColumns: 0,
                 rightColumns: 1
+            },
+            "oLanguage": {
+                sLengthMenu: "@lang('models.show') _MENU_ @lang('models.entries')",
+                sSearch: "@lang('models.search'): ",
+                sInfo: " _START_ a _END_ - _TOTAL_ @lang('models.entries')",
+                "oPaginate": {
+                    sFirst: "@lang('models.first')",
+                    sLast: "@lang('models.last')", 
+                    sNext: "@lang('models.next')", 
+                    sPrevious: "@lang('models.previous')",
+                }
             },
             columns: [ { data: 'company_id' },
                 { data: 'code' },
@@ -48,7 +61,7 @@
                
                        { data: null,
                          className: "td_grid",
-                         defaultContent: "<button id='edit'><img class='icon' src='<% asset('/icons/editar.png') %>'' title='@lang('buttons.edit')'></button><button id='remove'><img class='icon' src='<% asset('/icons/remover.png') %>'' title='@lang('buttons.remove')'></button>",
+                         defaultContent: "<button id='edit' aria-label='@lang('buttons.edit')' data-microtip-position='left' role='tooltip' ><img class='icon' src='<% asset('/icons/editar.png') %>'></button><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='left' role='tooltip'><img class='icon' src='<% asset('/icons/remover.png') %>'></button>",
                          width: "90px" 
                        }],
       });

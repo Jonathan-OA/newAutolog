@@ -174,8 +174,5 @@ class OperationController extends AppBaseController
     }
 
 
-    public function getOperations($module = ' '){
-        $operations = App\Module::getModules();
 
-    }
 }

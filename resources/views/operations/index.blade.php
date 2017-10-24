@@ -29,8 +29,10 @@
 @endsection
 @section('scripts')
 <script>
+    var table;
     $(function() {
-      var table = $("#operations-table").DataTable({
+       //Parâmetros para criação da datatable
+       table = $("#operations-table").DataTable({
             scrollX: true,
             scrollY: "47vh",
             ajax: 'operations/datatable',
@@ -39,18 +41,29 @@
                 leftColumns: 0,
                 rightColumns: 1
             },
-            columns: [  { data: 'code' },
+            "oLanguage": {
+                sLengthMenu: "@lang('models.show') _MENU_ @lang('models.entries')",
+                sSearch: "@lang('models.search'): ",
+                sInfo: " _START_ a _END_ - _TOTAL_ @lang('models.entries')",
+                "oPaginate": {
+                    sFirst: "@lang('models.first')",
+                    sLast: "@lang('models.last')", 
+                    sNext: "@lang('models.next')", 
+                    sPrevious: "@lang('models.previous')",
+                }
+            },
+            columns: [  { data: 'code', className: 'dt-body-right'},
                         { data: 'type' },
                         { data: 'module' },
                         { data: 'level' },
-                        { data: 'action' , className: "th_grid" },
-                        { data: 'description' },
+                        { data: 'action' , className: "td_grid_dt" },
+                        { data: 'description', className: "td_grid_dt" },
                         { data: 'local' },
                         { data: 'writes_log' },
                         { data: 'enabled' },
                         { data: null,
                             className: "th_grid",
-                            defaultContent: "<button id='edit'><img class='icon' src='<% asset('/icons/editar.png') %>'' title='@lang('buttons.edit')'></button><button id='remove'><img class='icon' src='<% asset('/icons/remover.png') %>'' title='@lang('buttons.remove')'></button>",
+                            defaultContent: "<button id='edit' aria-label='@lang('buttons.edit')' data-microtip-position='left' role='tooltip' ><img class='icon' src='<% asset('/icons/editar.png') %>'></button><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='left' role='tooltip'><img class='icon' src='<% asset('/icons/remover.png') %>'></button>",
                             width: "90px" 
                         }],
       });   
@@ -71,8 +84,10 @@
                         url: 'operations/'+data.id,
                         type: 'post',
                         data: {_method: 'delete', _token :tk},
-                        success: function(scs){ 
+                        success: function(scs){
+                            //Atualiza o grid sem recarregar a pagina
                             table.ajax.reload( null, false );
+                            //Mostra mensagem de sucesso
                             if(!$('.alert-success').length){
                                 $('#msg_excluir').html('<div class="alert alert-success">@lang("validation.delete_success")</div>');
                             }else{

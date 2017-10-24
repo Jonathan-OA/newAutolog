@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-md-12 pad-ct">
-        <div class="table-responsive" style="margin: 0 15px 0 15px">
+        <div class="" style="margin: 0 15px 0 15px">
         <table class="table table-striped table-bordered" id="operations-table" cellspacing="0" width="100%">
             <thead>
                 <th class="th_grid">@lang('models.code') </th>
@@ -16,16 +16,17 @@
             </thead>
             <tbody>
             @foreach($operations as $operation)
-                <tr class="th_grid">
-                    <td class="th_grid">{!! $operation->code !!}</td>
-                    <td class="th_grid">{!! $operation->type !!}</td>
-                    <td class="th_grid">{!! $operation->module !!}</td>
-                    <td class="th_grid">{!! $operation->level !!}</td>
-                    <td class="th_grid">{!! $operation->action !!}</td>
-                    <td class="th_grid">{!! $operation->description !!}</td>
-                    <td class="th_grid">{!! $operation->local !!}</td>
-                    <td class="th_grid">{!! $operation->writes_log !!}</td>
-                    <td class="th_grid">{!! $operation->enabled !!}</td>
+                <tr >
+                    <td >{!! $operation->code !!}</td>
+                    <td >{!! $operation->type !!}</td>
+                    <td >{!! $operation->module !!}</td>
+                    <td >{!! $operation->level !!}</td>
+                    <td >{!! $operation->action !!}</td>
+                    <td >{!! $operation->description !!}</td>
+                    <td >{!! $operation->local !!}</td>
+                    <td >{!! $operation->writes_log !!}</td>
+                    <td >{!! $operation->enabled !!}</td>
+                    <td></td>
                 </tr>
             @endforeach
             </tbody>

@@ -48,8 +48,10 @@ class ParameterController extends AppBaseController
     {
         //Lista de modulos disponíveis para inserção do parâmetro
         $modules = App\Module::getModules();
+        $operations = App\Models\Operation::getOperations();
         
-        return view('parameters.create')->with('modules', $modules);
+        return view('parameters.create')->with('modules', $modules)
+                                        ->with('operations',$operations);
     }
 
     /**

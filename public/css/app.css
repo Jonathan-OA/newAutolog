@@ -155,7 +155,9 @@
     .ui-grid-row:hover .ui-grid-cell {
         background-color: #B6C3C6;
     }
-    /* Cores relacionadas aos status dos documentos*/
+    /* ------------------------------------------------*/
+    /*  Cores relacionadas aos status dos documentos   */
+    /* ------------------------------------------------*/
     
     .stat0 {
         background: -webkit-linear-gradient(#CECECE, #A2A2A2);
@@ -224,6 +226,11 @@
         text-align: center;
     }
     
+    .td_grid_dt {
+        white-space: nowrap;
+        vertical-align: middle !important;
+    }
+    
     .td_grid:not(th) {
         text-align: center;
         background-color: white;
@@ -266,6 +273,26 @@
     
     .dataTables_paginate>a {
         color: black;
+    }
+    
+    .dataTables_filter input,
+    .dataTables_length select {
+        padding: 2px 4px;
+        font-size: 12px;
+        line-height: 1.42857143;
+        background-color: #fff;
+        background-image: none;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+        -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+        -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+        transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s
+    }
+    
+    .dataTables_scrollBody {
+        z-index: 1 !important;
     }
     /* --------------------------------------------*/
     /*                   Menu                      */
