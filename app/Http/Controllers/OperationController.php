@@ -47,7 +47,7 @@ class OperationController extends AppBaseController
     public function create()
     {
         //Lista de modulos disponíveis para inserção da operação
-        $modules = App\Module::getModules();
+        $modules = App\Models\Module::getModules();
 
         return view('operations.create')->with('modules', $modules);
     }
@@ -108,7 +108,7 @@ class OperationController extends AppBaseController
         }
 
         //Lista de modulos disponíveis para inserção da operação
-        $modules = App\Module::getModules();
+        $modules = App\Models\Module::getModules();
 
         return view('operations.edit')->with('modules', $modules)
                                       ->with('operation', $operation);

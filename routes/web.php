@@ -49,3 +49,7 @@ Route::resource('operations', 'OperationController');
 
 Route::get('parameters/datatable', 'ParameterController@getData');
 Route::resource('parameters', 'ParameterController');
+
+
+Route::get('modules/datatable', 'ModuleController@getData');
+Route::resource('modules', 'ModuleController');

@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Middleware;
-use App\Module;
+use App\Models\Module;
 
 use Closure;
 

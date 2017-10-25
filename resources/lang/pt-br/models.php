@@ -32,6 +32,7 @@ return [
     'items' => 'Produtos',
     'operations' => 'Operações',
     'parameters' => 'Parâmetros',
+    'modules' => 'Modulos',
 
     //Columns
     'name' => 'Nome',
@@ -66,6 +67,9 @@ return [
     'def_value' => 'Valor Padrão',
     'module_name' => 'Módulo',
     'operation_code' => 'Operação',
+    'submodule' => 'Submódulo',
+    'icon' => 'Ícone',
+    'url' => 'URL',
 
     //PlaceHolders
     'sel_type' => 'Selecione um tipo: ',
