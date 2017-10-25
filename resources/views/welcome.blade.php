@@ -23,7 +23,7 @@
       {{% csrf_field() %}}
         <div class="row">
                 <div class="small-10 medium-6 small-centered columns login_page_inputs">
-                    <label>Empresa
+                    <label>Empresaaa
                         <input class="input_login form-control" type="text" placeholder="Empresa">
                     </label>
                     <label>Usuário
@@ -39,7 +39,7 @@
         </div>
     </form>
     <div class="login_page_rodape">
-        TWX 2016
+        TWX 2017
     </div>
     <script src="js/vendor/jquery.js"></script>
     <script src="js/vendor/what-input.js"></script>

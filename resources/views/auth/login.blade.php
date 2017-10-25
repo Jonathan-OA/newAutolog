@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- CSRF Token -->
-    <meta name="csrf-token" content="{{% csrf_token() %}}">
+    <meta name="csrf-token" content="<% csrf_token() %>">
 
-    <title>{{% config('app.name', 'AUTOLOG WMS') %}}</title>
+    <title><% config('app.name', 'AUTOLOG WMS') %></title>
 
     <!-- Styles -->
     
@@ -20,15 +20,15 @@
         AUTOLOG WMS
     </div>
     </br>
-    <form class="form-horizontal" role="form" method="POST" action="{{% url('/login') %}}">
-      {{% csrf_field() %}}
+    <form class="form-horizontal" role="form" method="POST" action="<% url('/login') %>">
+      <% csrf_field() %>
         <div class="row">
                 <div class="col-xs-10 col-sm-6 col-centered login_page_inputs">
                     <div class="form-group">
                         <label for="company_id">Empresa</label>
                         <select name="company_id" id="company_id" class="form-control">
                             @foreach ($companies as $company)
-                               <option value={{% $company->id %}}> {{% $company->name %}} - {{% $company->branch %}}</option>
+                               <option value=<% $company->id %>> <% $company->name %> - <% $company->branch %></option>
                             @endforeach
                         </select>
                     </div>
@@ -46,14 +46,14 @@
                     <br>
                     @if (count($errors))
                             @foreach($errors->all() as $error)
-                                <div class="alert alert-danger text-center" role="alert">{{% $error %}} </div>
+                                <div class="alert alert-danger text-center" role="alert"><% $error %> </div>
                             @endforeach
                     @endif
                 </div>
         </div>
     </form>
     <footer class="login_page_rodape">
-        TWX 2016
+        TWX 2017
     </footer>
     <script src="js/vendor/jquery.js"></script>
     <script src="js/vendor/what-input.js"></script>

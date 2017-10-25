@@ -18,7 +18,8 @@
 
 <!-- Action Field -->
 {!! Form::label('action', Lang::get('models.action').':') !!}
-{!! Form::text('action', null, ['class' => 'form-control']) !!}
+{!! Form::select('action', array('Incluir' => 'Incluir', 'Alterar' => 'Alterar', 'Excluir' => 'Excluir', 'Acessar' => 'Acessar'), null, ['class' => 'form-control']) !!}
+
 
 <!-- Description Field -->
 {!! Form::label('description', Lang::get('models.description').':') !!}
