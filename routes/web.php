@@ -53,3 +53,23 @@ Route::resource('parameters', 'ParameterController');
 
 Route::get('modules/datatable', 'ModuleController@getData');
 Route::resource('modules', 'ModuleController');
+
+
+Route::get('users/datatable', 'UserController@getData');
+Route::resource('users', 'UserController');
+
+
+Route::get('userTypes/datatable', 'UserTypeController@getData');
+Route::resource('userTypes', 'UserTypeController');
+
+
+Route::get('userPermissions/datatable', 'UserPermissionController@getData');
+Route::resource('userPermissions', 'UserPermissionController');
+
+
+Route::get('customers/datatable', 'CustomerController@getData');
+Route::resource('customers', 'CustomerController');
+
+
+Route::get('customers/datatable', 'CustomerController@getData');
+Route::resource('customers', 'CustomerController');

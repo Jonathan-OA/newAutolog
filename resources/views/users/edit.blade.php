@@ -4,14 +4,14 @@
         <div class="col-md-12 pad-ct">
             <div class="panel panel-default" >
                 <div class="panel-heading">
-                    @lang('models.customers')
+                    @lang('models.users')
                 </div>
                 <div class="panel panel-default">
                     <div class="panel-body" >
                         <div class="row">
                             <div class="col-md-12">
-                                {!! Form::model($customer, ['route' => ['customers.update', $customer->id], 'method' => 'patch']) !!}
-                                  @include('customers.fields')
+                                {!! Form::model($user, ['route' => ['users.update', $user->id], 'method' => 'patch']) !!}
+                                  @include('users.fields')
                                 {!! Form::close() !!}
                             </div>
                         </div>

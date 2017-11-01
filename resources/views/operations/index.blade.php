@@ -8,10 +8,10 @@
                    <!-- Texto baseado no arquivo de linguagem -->
                    @lang('models.operations') 
                 </div>
-                
                 <div class="panel panel-default">
                     <div class="row">
                         <div class="col-md-12">
+                            <!-- Alerta de erro / sucesso -->
                             @include('flash::message')
                             <div id="msg_excluir"></div>
                             <div class="row buttons_grid">
@@ -80,18 +80,28 @@
                 if(confirm('@lang("buttons.msg_remove")')){
                     //Token obrigatório para envio POST
                     var tk = $('meta[name="csrf-token"]').attr('content');
+                    var alertType;
                     $.ajax({
                         url: 'operations/'+data.id,
                         type: 'post',
                         data: {_method: 'delete', _token :tk},
                         success: function(scs){
+                            console.log('aeee');
                             //Atualiza o grid sem recarregar a pagina
                             table.ajax.reload( null, false );
-                            //Mostra mensagem de sucesso
-                            if(!$('.alert-success').length){
-                                $('#msg_excluir').html('<div class="alert alert-success">@lang("validation.delete_success")</div>');
+                            //Se retornou 0, foi excluído com sucesso
+                            if(scs[0] == 0){
+                                alertType = 'success';
                             }else{
-                                $('.alert-success').html('@lang("validation.delete_success")');
+                                alertType = 'danger';
+                            }
+                            //Mostra mensagem de sucesso ou erro
+                            if(!$('.alert').length){
+                                $('#msg_excluir').html('<div class="alert alert-'+alertType+'">'+scs[1]+'</div>');
+                            }else{
+                                $('.alert').toggleClass('alert-success alert-danger');
+                                $('.alert').html(scs[1]);
+
                             }
                         }
                     });

@@ -85,6 +85,7 @@ return [
     'update_success'         => 'Registro atualizado com sucesso.',
     'delete_success'         => 'Registro excluído com sucesso.',
     'not_found'              => 'Registro não encontrado.',
+    'permission'              => 'Ooopss! Você não tem permissão para acessar esta opção!',
 
     /*
     |--------------------------------------------------------------------------

@@ -3,15 +3,15 @@
 @section('content')
     <section class="content-header">
         <h1>
-            Customer
+            User Type
         </h1>
     </section>
     <div class="content">
         <div class="box box-primary">
             <div class="box-body">
                 <div class="row" style="padding-left: 20px">
-                    @include('customers.show_fields')
-                    <a href="{!! route('customers.index') !!}" class="btn btn-default">Back</a>
+                    @include('user_types.show_fields')
+                    <a href="{!! route('userTypes.index') !!}" class="btn btn-default">Back</a>
                 </div>
             </div>
         </div>

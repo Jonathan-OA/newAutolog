@@ -33,6 +33,8 @@ return [
     'operations' => 'Operações',
     'parameters' => 'Parâmetros',
     'modules' => 'Modulos',
+    'user_types' => 'Tipos de Usuários',
+    'user_permissions' => 'Permissões de Usuários',
 
     //Columns
     'name' => 'Nome',
@@ -70,6 +72,10 @@ return [
     'submodule' => 'Submódulo',
     'icon' => 'Ícone',
     'url' => 'URL',
+    'password' => 'Senha',
+    'password-confirm' => 'Confirmação da Senha',
+    'email' => 'E-mail',
+    'user_type_code' => 'Tipo de Usuário',
 
     //PlaceHolders
     'sel_type' => 'Selecione um tipo: ',

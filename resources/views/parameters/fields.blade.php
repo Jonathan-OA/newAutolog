@@ -1,5 +1,6 @@
 <div class="form_fields">
     @include('adminlte-templates::common.errors')
+    
     <!-- Company Id Field -->
     <input id="company_id" name="company_id" type="hidden" value="{!! Auth::user()->company_id !!}">
 

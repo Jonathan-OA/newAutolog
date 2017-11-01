@@ -6,6 +6,7 @@ use App\Http\Requests\CreateOperationRequest;
 use App\Http\Requests\UpdateOperationRequest;
 use App\Repositories\OperationRepository;
 use App\Http\Controllers\AppBaseController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Flash;
 use Prettus\Repository\Criteria\RequestCriteria;
@@ -46,10 +47,20 @@ class OperationController extends AppBaseController
      */
     public function create()
     {
-        //Lista de modulos disponíveis para inserção da operação
-        $modules = App\Models\Module::getModules();
+        //Valida se usuário possui permissão para acessar esta opção
+        if(App\Models\User::getPermission('operacoes_incluir',Auth::user()->user_type_code)){
+            //Lista de modulos disponíveis para inserção da operação
+            $modules = App\Models\Module::getModules();
+        
+            return view('operations.create')->with('modules', $modules);
+        }else{
+            //Sem permissão
+            Flash::error(Lang::get('validation.permission'));
+            return redirect(route('operations.index'));
+        }
 
-        return view('operations.create')->with('modules', $modules);
+        
+        
     }
 
     /**
@@ -99,19 +110,26 @@ class OperationController extends AppBaseController
      */
     public function edit($id)
     {
-        $operation = $this->operationRepository->findWithoutFail($id);
+        //Valida se usuário possui permissão para acessar esta opção
+        if(App\Models\User::getPermission('operacoes_editar',Auth::user()->user_type_code)){
+            $operation = $this->operationRepository->findWithoutFail($id);
 
-        if (empty($operation)) {
-            Flash::error(Lang::get('validation.not_found'));
+            if (empty($operation)) {
+                Flash::error(Lang::get('validation.not_found'));
 
+                return redirect(route('operations.index'));
+            }
+
+            //Lista de modulos disponíveis para inserção da operação
+            $modules = App\Models\Module::getModules();
+
+            return view('operations.edit')->with('modules', $modules)
+                                        ->with('operation', $operation);
+        }else{
+            //Sem permissão
+            Flash::error(Lang::get('validation.permission'));
             return redirect(route('operations.index'));
         }
-
-        //Lista de modulos disponíveis para inserção da operação
-        $modules = App\Models\Module::getModules();
-
-        return view('operations.edit')->with('modules', $modules)
-                                      ->with('operation', $operation);
                                       
     }
 
@@ -133,6 +151,11 @@ class OperationController extends AppBaseController
             return redirect(route('operations.index'));
         }
 
+        //Grava log
+        $requestF = $request->all();
+        $descricao = 'Alterou Operação ID: '.$id.' - '.$requestF['description'];
+        $log = App\Models\Log::wlog('operacoes_editar', $descricao);
+
         $operation = $this->operationRepository->update($request->all(), $id);
 
         Flash::success(Lang::get('validation.update_success'));
@@ -149,19 +172,31 @@ class OperationController extends AppBaseController
      */
     public function destroy($id)
     {
-        $operation = $this->operationRepository->findWithoutFail($id);
+        //Valida se usuário possui permissão para acessar esta opção
+        if(App\Models\User::getPermission('operations_remove',Auth::user()->user_type_code)){
+            $operation = $this->operationRepository->findWithoutFail($id);
 
-        if (empty($operation)) {
-            Flash::error(Lang::get('validation.not_found'));
+            if (empty($operation)) {
+                Flash::error(Lang::get('validation.not_found'));
 
-            return redirect(route('operations.index'));
-        }
+                return redirect(route('operations.index'));
+            }
 
-        $this->operationRepository->delete($id);
+            $this->operationRepository->delete($id);
 
-        Flash::success(Lang::get('validation.delete_success'));
+            //Grava log
+            $descricao = 'Excluiu Operação ID: '.$id;
+            $log = App\Models\Log::wlog('operations_remove', $descricao);
 
-        return redirect(route('operations.index'));
+            Flash::success(Lang::get('validation.delete_success'));
+            return array(0,Lang::get('validation.delete_success'));
+        }else{
+            //Sem permissão
+            Flash::error(Lang::get('validation.permission'));
+            return array(1,Lang::get('validation.permission'));
+        }    
+
+        
     }
 
     /**

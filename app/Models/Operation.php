@@ -54,7 +54,7 @@ class Operation extends Model
      * @var array
      */
     public static $rules = [
-        'code' => 'required|integer|max:9999',
+        'code' => 'required|string|max:30',
         'type' => 'required|alpha|max:7',
         'description' => 'required|string|max:50',
         'module' => 'required|string|max:20',

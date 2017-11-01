@@ -1,8 +1,9 @@
 <div class="form_fields">
 @include('adminlte-templates::common.errors')
+
 <!-- Code Field -->
 {!! Form::label('code', Lang::get('models.code').':') !!}
-{!! Form::number('code', null, ['class' => 'form-control', 'min' => 0]) !!}
+{!! Form::text('code', null, ['class' => 'form-control']) !!}
 
 <!-- Type Field -->
 {!! Form::label('type', Lang::get('models.type').':') !!}

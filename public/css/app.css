@@ -50,6 +50,11 @@
         float: none;
         margin: 0 auto;
     }
+    
+    .td_center {
+        text-align: center;
+        align-content: center;
+    }
     /* --------------------------------------------*/
     /*              Header Layout                  */
     /* --------------------------------------------*/
