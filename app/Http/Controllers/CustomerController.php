@@ -89,7 +89,7 @@ class CustomerController extends AppBaseController
         $customer = $this->customerRepository->findWithoutFail($id);
 
         if (empty($customer)) {
-            Flash::error('Customer not found');
+            Flash::error(Lang::get('validation.not_found'));
 
             return redirect(route('customers.index'));
         }

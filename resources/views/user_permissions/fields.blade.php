@@ -2,11 +2,11 @@
 @include('adminlte-templates::common.errors')
 <!-- User Type Code Field -->
 {!! Form::label('user_type_code', Lang::get('models.user_type_code').':') !!}
-{!! Form::text('user_type_code', null, ['class' => 'form-control']) !!}
-
+{!! Form::select('user_type_code', $userTypes, 'null', ['class' => 'form-control']) !!}
+   
 <!-- Operation Code Field -->
 {!! Form::label('operation_code', Lang::get('models.operation_code').':') !!}
-{!! Form::text('operation_code', null, ['class' => 'form-control']) !!}
+{!! Form::select('operation_code', $operations, 'null', ['class' => 'form-control']) !!}
 </div>
 
 <!-- Submit Field -->

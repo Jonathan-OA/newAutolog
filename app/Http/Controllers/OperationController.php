@@ -48,7 +48,7 @@ class OperationController extends AppBaseController
     public function create()
     {
         //Valida se usuário possui permissão para acessar esta opção
-        if(App\Models\User::getPermission('operacoes_incluir',Auth::user()->user_type_code)){
+        if(App\Models\User::getPermission('operations_add',Auth::user()->user_type_code)){
             //Lista de modulos disponíveis para inserção da operação
             $modules = App\Models\Module::getModules();
         
@@ -111,7 +111,7 @@ class OperationController extends AppBaseController
     public function edit($id)
     {
         //Valida se usuário possui permissão para acessar esta opção
-        if(App\Models\User::getPermission('operacoes_editar',Auth::user()->user_type_code)){
+        if(App\Models\User::getPermission('operations_edit',Auth::user()->user_type_code)){
             $operation = $this->operationRepository->findWithoutFail($id);
 
             if (empty($operation)) {
@@ -154,7 +154,7 @@ class OperationController extends AppBaseController
         //Grava log
         $requestF = $request->all();
         $descricao = 'Alterou Operação ID: '.$id.' - '.$requestF['description'];
-        $log = App\Models\Log::wlog('operacoes_editar', $descricao);
+        $log = App\Models\Log::wlog('operations_edit', $descricao);
 
         $operation = $this->operationRepository->update($request->all(), $id);
 

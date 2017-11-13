@@ -19,6 +19,7 @@ class MenuMid
         \Menu::make('MyNavBar', function($menu){
             $modulos = Module::where('enabled',1)
                              ->where('submodule', NULL)
+                             ->orwhere('submodule', '')
                              ->get();
             $cont = 1;
             foreach($modulos as $mod){
@@ -31,6 +32,7 @@ class MenuMid
                 $submodules = Module::where('enabled',1)
                              ->where('module', $mod->module)
                              ->where('submodule','<>',NULL)
+                             ->where('submodule','<>','')
                              ->get();
                 foreach($submodules as $sub){
                         $menu->$nickname->add($sub->name, array('url' => $sub->url, 'class'=> "collapse collapse".$nickname, 'aria-expanded' => 'false'));

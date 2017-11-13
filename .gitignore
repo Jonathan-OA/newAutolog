@@ -9,3 +9,4 @@ Homestead.yaml
 #Whitelist
 !*/
 !/vendor/infyomlabs
+!/vendor/flash

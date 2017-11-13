@@ -7,8 +7,8 @@
         ])
     @else
         <div class="alert
-                    alert-{{ session('flash_notification.level') }}
-                    {{ session()->has('flash_notification.important') ? 'alert-important' : '' }}"
+                    alert-{!! session('flash_notification.level') !!}
+                    {!! session()->has('flash_notification.important') ? 'alert-important' : '' !!}"
         >
             @if(session()->has('flash_notification.important'))
                 <button type="button"

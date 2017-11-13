@@ -46,7 +46,11 @@ class UserPermissionController extends AppBaseController
      */
     public function create()
     {
-        return view('user_permissions.create');
+        $userTypes = App\Models\UserType::getUserTypes();
+        $operations = App\Models\Operation::getOperations();
+        return view('user_permissions.create')
+               ->with('userTypes', $userTypes)
+               ->with('operations', $operations);
     }
 
     /**
