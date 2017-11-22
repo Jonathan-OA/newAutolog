@@ -73,3 +73,31 @@ Route::resource('customers', 'CustomerController');
 
 Route::get('customers/datatable', 'CustomerController@getData');
 Route::resource('customers', 'CustomerController');
+
+
+Route::get('customers/datatable', 'CustomerController@getData');
+Route::resource('customers', 'CustomerController');
+
+
+Route::get('suppliers/datatable', 'SupplierController@getData');
+Route::resource('suppliers', 'SupplierController');
+
+
+Route::get('packingTypes/datatable', 'PackingTypeController@getData');
+Route::resource('packingTypes', 'PackingTypeController');
+
+
+Route::get('groups/datatable', 'GroupController@getData');
+Route::resource('groups', 'GroupController');
+
+
+Route::get('itemTypes/datatable', 'ItemTypeController@getData');
+Route::resource('itemTypes', 'ItemTypeController');
+
+
+Route::get('items/datatable', 'ItemController@getData');
+Route::resource('items', 'ItemController');
+
+
+Route::get('products/datatable', 'ProductController@getData');
+Route::resource('products', 'ProductController');

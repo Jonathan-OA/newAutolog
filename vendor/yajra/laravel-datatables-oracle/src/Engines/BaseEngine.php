@@ -652,7 +652,7 @@ abstract class BaseEngine implements DataTableEngineContract
     public function render($object = false)
     {
         $output = array_merge([
-            'draw'            => (int) $this->request['draw'],
+            'draw'            => 1,
             'recordsTotal'    => $this->totalRecords,
             'recordsFiltered' => $this->filteredRecords,
         ], $this->appends);

@@ -8,7 +8,6 @@
                    <!-- Texto baseado no arquivo de linguagem -->
                    @lang('models.customers') 
                 </div>
-                
                 <div class="panel panel-default">
                     <div class="row">
                         <div class="col-md-12">
@@ -37,7 +36,6 @@
         table = $("#customers-table").DataTable({
             scrollX: true,
             scrollY: "47vh",
-            scrollCollapse: true,
             ajax: 'customers/datatable',
             autoWidth: true,
             "oLanguage": {
@@ -51,22 +49,20 @@
                     sPrevious: "@lang('models.previous')",
                 }
             },
-            columns: [ { data: 'code' },
-                { data: 'company_id' },
-                { data: 'name' },
-                { data: 'trading_name' },
-                { data: 'cnpj' },
-                { data: 'state_registration' },
-                { data: 'address' },
-                { data: 'number' },
-                { data: 'neighbourhood' },
-                { data: 'city' },
-                { data: 'state' },
-                { data: null,
-                  className: "th_grid",
-                  defaultContent: "<button id='edit' aria-label='@lang('buttons.edit')' data-microtip-position='left' role='tooltip' ><img class='icon' src='<% asset('/icons/editar.png') %>'></button><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='left' role='tooltip'><img class='icon' src='<% asset('/icons/remover.png') %>'></button>",
-                  width: "90px" 
-                }],
+            fixedColumns:   {
+                leftColumns: 0,
+                rightColumns: 1
+            },
+            columns: [  { data: 'code' },
+                        { data: 'name' ,className: "nowp" },
+                        { data: 'trading_name' ,className: "nowp"},
+                        { data: 'cnpj' },
+                        { data: null,
+                         className: "th_grid",
+                         defaultContent: "<button id='edit' aria-label='@lang('buttons.edit')' data-microtip-position='left' role='tooltip' ><img class='icon' src='<% asset('/icons/editar.png') %>'></button><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='left' role='tooltip'><img class='icon' src='<% asset('/icons/remover.png') %>'></button>",
+                         width: "90px" 
+                        }],
+            
       });
 
       //Funções dos botões de editar e excluir
@@ -98,7 +94,7 @@
                             if(!$('.alert').length){
                                 $('#msg_excluir').html('<div class="alert alert-'+alertType+'">'+scs[1]+'</div>');
                             }else{
-                                $('.alert').toggleClass('alert-success alert-danger');
+                                $('.alert').toggleClass('alert-success alert-danger', true);
                                 $('.alert').html(scs[1]);
 
                             }

@@ -47,7 +47,7 @@ class CustomerController extends AppBaseController
      */
     public function create()
     {
-        //Valida se usuário possui permissão para acessar esta opç  ão
+        //Valida se usuário possui permissão para acessar esta opção
         if(App\Models\User::getPermission('customers_add',Auth::user()->user_type_code)){
 
             return view('customers.create');

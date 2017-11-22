@@ -8,7 +8,6 @@
                    <!-- Texto baseado no arquivo de linguagem -->
                    @lang('models.$MODEL_NAME_PLURAL_CAMEL$') 
                 </div>
-                
                 <div class="panel panel-default">
                     <div class="row">
                         <div class="col-md-12">
@@ -56,9 +55,9 @@
             },
             columns: [ $FIELDS_DATATABLE$
                        { data: null,
-                            className: "th_grid",
-                            defaultContent: "<button id='edit' aria-label='@lang('buttons.edit')' data-microtip-position='left' role='tooltip' ><img class='icon' src='<% asset('/icons/editar.png') %>'></button><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='left' role='tooltip'><img class='icon' src='<% asset('/icons/remover.png') %>'></button>",
-                            width: "90px" 
+                         className: "th_grid",
+                         defaultContent: "<button id='edit' aria-label='@lang('buttons.edit')' data-microtip-position='left' role='tooltip' ><img class='icon' src='<% asset('/icons/editar.png') %>'></button><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='left' role='tooltip'><img class='icon' src='<% asset('/icons/remover.png') %>'></button>",
+                         width: "90px" 
                         }],
       });
 
@@ -91,7 +90,7 @@
                             if(!$('.alert').length){
                                 $('#msg_excluir').html('<div class="alert alert-'+alertType+'">'+scs[1]+'</div>');
                             }else{
-                                $('.alert').toggleClass('alert-success alert-danger');
+                                $('.alert').toggleClass('alert-success alert-danger', true);
                                 $('.alert').html(scs[1]);
 
                             }
