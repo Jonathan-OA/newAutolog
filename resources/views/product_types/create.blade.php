@@ -5,15 +5,15 @@
         <div class="col-md-12 pad-ct">
             <div class="panel panel-default" >
                 <div class="panel-heading">
-                    @lang('models.items')
+                    @lang('models.product_types')
                 </div>
                 <div class="panel panel-default">
                     <div class="panel-body" >
                         <div class="row">
                             <div class="col-md-12">
-                                {!! Form::open(['route' => 'items.store']) !!}
+                                {!! Form::open(['route' => 'productTypes.store']) !!}
                                 <div class="form-group">
-                                    @include('items.fields')
+                                    @include('product_types.fields')
                                 </div>
                                 {!! Form::close() !!}
                             </div>

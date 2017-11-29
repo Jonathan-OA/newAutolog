@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * Class Product
  * @package App\Models
- * @version November 22, 2017, 7:25 pm UTC
+ * @version November 29, 2017, 12:48 pm UTC
  */
 class Product extends Model
 {
@@ -26,7 +26,7 @@ class Product extends Model
         'code',
         'description',
         'status',
-        'item_type_code',
+        'product_type_code',
         'group_code',
         'subgroup_code',
         'margin_div',
@@ -55,7 +55,7 @@ class Product extends Model
         'company_id' => 'integer',
         'code' => 'string',
         'description' => 'string',
-        'item_type_code' => 'string',
+        'product_type_code' => 'string',
         'group_code' => 'string',
         'subgroup_code' => 'string',
         'phase_code' => 'string',

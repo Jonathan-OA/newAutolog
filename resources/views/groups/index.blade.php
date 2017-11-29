@@ -55,7 +55,7 @@
             },
             columns: [  { data: 'code' },
                         { data: 'description' },
-                        { data: 'item_type_code' },
+                        { data: 'product_type_code' },
                         { data: null,
                          className: "th_grid",
                          defaultContent: "<button id='edit' aria-label='@lang('buttons.edit')' data-microtip-position='left' role='tooltip' ><img class='icon' src='<% asset('/icons/editar.png') %>'></button><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='left' role='tooltip'><img class='icon' src='<% asset('/icons/remover.png') %>'></button>",

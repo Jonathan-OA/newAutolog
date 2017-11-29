@@ -200,6 +200,6 @@ class SupplierController extends AppBaseController
      */
     public function getData()
     {
-        return Datatables::of(App\Models\Supplier::query())->make(true);
+        return Datatables::of(App\Models\Supplier::where('company_id', Auth::user()->company_id))->make(true);
     }
 }

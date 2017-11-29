@@ -5,7 +5,7 @@
             <thead>
                 <th class="th_grid">@lang('models.code') </th>
                 <th class="th_grid">@lang('models.description') </th>
-                <th class="th_grid">@lang('models.item_type_code') </th>
+                <th class="th_grid">@lang('models.product_type_code') </th>
                 <th class="th_grid">@lang('models.action')</th>
             </thead>
             <tbody>
@@ -13,7 +13,7 @@
                 <tr>
                     <td>{!! $group->code !!}</td>
                     <td>{!! $group->description !!}</td>
-                    <td>{!! $group->item_type_code !!}</td>
+                    <td>{!! $group->product_type_code !!}</td>
                 </tr>
             @endforeach
             </tbody>

@@ -200,6 +200,6 @@ class $MODEL_NAME$Controller extends AppBaseController
      */
     public function getData()
     {
-        return Datatables::of(App\Models\$MODEL_NAME$::query())->make(true);
+        return Datatables::of(App\Models\$MODEL_NAME$::where('company_id', Auth::user()->company_id))->make(true);
     }
 }

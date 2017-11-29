@@ -15,7 +15,7 @@ class ProductRepository extends BaseRepository
         'code',
         'description',
         'status',
-        'item_type_code',
+        'product_type_code',
         'group_code',
         'subgroup_code',
         'margin_div',

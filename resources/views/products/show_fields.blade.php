@@ -28,10 +28,10 @@
     <p>{!! $product->status !!}</p>
 </div>
 
-<!-- Item Type Code Field -->
+<!-- Product Type Code Field -->
 <div class="col-md-12">
-    {!! Form::label('item_type_code', 'Item Type Code:') !!}
-    <p>{!! $product->item_type_code !!}</p>
+    {!! Form::label('product_type_code', 'Product Type Code:') !!}
+    <p>{!! $product->product_type_code !!}</p>
 </div>
 
 <!-- Group Code Field -->

@@ -91,13 +91,22 @@ Route::get('groups/datatable', 'GroupController@getData');
 Route::resource('groups', 'GroupController');
 
 
-Route::get('itemTypes/datatable', 'ItemTypeController@getData');
-Route::resource('itemTypes', 'ItemTypeController');
 
-
-Route::get('items/datatable', 'ItemController@getData');
-Route::resource('items', 'ItemController');
+Route::get('products/datatable', 'ProductController@getData');
+Route::resource('products', 'ProductController');
 
 
 Route::get('products/datatable', 'ProductController@getData');
 Route::resource('products', 'ProductController');
+
+
+Route::get('productTypes/datatable', 'ProductTypeController@getData');
+Route::resource('productTypes', 'ProductTypeController');
+
+
+Route::get('groups/datatable', 'GroupController@getData');
+Route::resource('groups', 'GroupController');
+
+
+Route::get('groups/datatable', 'GroupController@getData');
+Route::resource('groups', 'GroupController');

@@ -6,6 +6,7 @@ use App\Http\Requests\CreateUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Repositories\UserRepository;
 use App\Http\Controllers\AppBaseController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Flash;
 use Prettus\Repository\Criteria\RequestCriteria;
@@ -176,6 +177,6 @@ class UserController extends AppBaseController
      */
     public function getData()
     {
-        return Datatables::of(App\Models\User::query())->make(true);
+        return Datatables::of(App\Models\User::where('company_id', Auth::user()->company_id))->make(true);
     }
 }

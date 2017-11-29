@@ -2,19 +2,17 @@
 
 namespace App\Repositories;
 
-use App\Models\Group;
+use App\Models\ProductType;
 use InfyOm\Generator\Common\BaseRepository;
 
-class GroupRepository extends BaseRepository
+class ProductTypeRepository extends BaseRepository
 {
     /**
      * @var array
      */
     protected $fieldSearchable = [
-        'company_id',
         'code',
-        'description',
-        'product_type_code'
+        'description'
     ];
 
     /**
@@ -22,6 +20,6 @@ class GroupRepository extends BaseRepository
      **/
     public function model()
     {
-        return Group::class;
+        return ProductType::class;
     }
 }

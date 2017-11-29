@@ -49,8 +49,10 @@ class GroupController extends AppBaseController
     {
         //Valida se usuário possui permissão para acessar esta opção
         if(App\Models\User::getPermission('groups_add',Auth::user()->user_type_code)){
-
-            return view('groups.create');
+            //Tipos de produtos para o droplist
+            $prd_types = App\Models\ProductType::getProductTypes();
+            
+            return view('groups.create')->with('prd_types',$prd_types);
 
         }else{
             //Sem permissão
@@ -116,8 +118,11 @@ class GroupController extends AppBaseController
 
                 return redirect(route('groups.index'));
             }
+            //Tipos de produtos para o droplist
+            $prd_types = App\Models\ProductType::getProductTypes();
 
-            return view('groups.edit')->with('group', $group);
+            return view('groups.edit')->with('group', $group)
+                                      ->with('prd_types', $prd_types);
         
         }else{
             //Sem permissão
@@ -200,6 +205,6 @@ class GroupController extends AppBaseController
      */
     public function getData()
     {
-        return Datatables::of(App\Models\Group::query())->make(true);
+        return Datatables::of(App\Models\Group::where('company_id', Auth::user()->company_id))->make(true);
     }
 }

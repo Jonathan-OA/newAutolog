@@ -203,6 +203,7 @@ class ViewGenerator extends BaseGenerator
         $this->htmlFields = [];
 
         foreach ($this->commandData->fields as $field) {
+            
             if (!$field->inForm) {
                 continue;
             }
@@ -313,7 +314,7 @@ class ViewGenerator extends BaseGenerator
 //            }
 
             $fieldTemplate = HTMLFieldGenerator::generateHTML($field, $this->templateType);
-
+            
             if (!empty($fieldTemplate)) {
                 $fieldTemplate = fill_template_with_field_data(
                     $this->commandData->dynamicVars,
@@ -321,6 +322,9 @@ class ViewGenerator extends BaseGenerator
                     $fieldTemplate,
                     $field
                 );
+                if($field->name == 'company_id'){
+                    $fieldTemplate = "\n<!-- Company Id Field -->\n<input id='company_id' name='company_id' type='hidden' value='{!! Auth::user()->company_id !!}'>";   
+                }
                 $this->htmlFields[] = $fieldTemplate;
             }
         }

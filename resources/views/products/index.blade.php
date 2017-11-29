@@ -5,8 +5,13 @@
         <div class="col-md-12 pad-ct">
             <div class="panel panel-default" >
                 <div class="panel-heading">
-                   <!-- Texto baseado no arquivo de linguagem -->
-                   @lang('models.products') 
+                   <!-- Abas -->
+                   <ul class="nav nav-tabs">
+                        <!-- Textos baseados no arquivo de linguagem -->
+                        <li class="active-l"><a href="#">@lang('models.products') </a></li>
+                        <li><a href="#">@lang('models.product_types')</a></li>
+                        <li><a href="#">@lang('models.groups')</a></li>
+                    </ul>
                 </div>
                 <div class="panel panel-default">
                     <div class="row">
@@ -16,7 +21,7 @@
                             <div id="msg_excluir"></div>
                             <div class="row buttons_grid">
                                 <a class="btn btn-success"  href="{!! route('products.create') !!}">@lang('buttons.add')</a>
-                            </div>
+                                </div>
                             <div class="panel-body">
                                 @include('products.table')
                             </div>
@@ -53,17 +58,16 @@
                     sPrevious: "@lang('models.previous')",
                 }
             },
-            columns: [  { data: 'company_id' },
-                        { data: 'code' },
+            columns: [  { data: 'code' },
                         { data: 'description' },
                         { data: 'status' },
-                        { data: 'item_type_code' },
+                        { data: 'product_type_code' },
                         { data: 'group_code' },
-                        { data: 'subgroup_code' },               
+                        { data: 'subgroup_code' },
                         { data: null,
-                         className: "th_grid",
-                         defaultContent: "<button id='edit' aria-label='@lang('buttons.edit')' data-microtip-position='left' role='tooltip' ><img class='icon' src='<% asset('/icons/editar.png') %>'></button><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='left' role='tooltip'><img class='icon' src='<% asset('/icons/remover.png') %>'></button>",
-                         width: "90px" 
+                          className: "th_grid",
+                          defaultContent: "<button id='edit' aria-label='@lang('buttons.edit')' data-microtip-position='left' role='tooltip' ><img class='icon' src='<% asset('/icons/editar.png') %>'></button><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='left' role='tooltip'><img class='icon' src='<% asset('/icons/remover.png') %>'></button>",
+                          width: "90px" 
                         }],
       });
 

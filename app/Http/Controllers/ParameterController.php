@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateParameterRequest;
 use App\Repositories\ParameterRepository;
 use App\Http\Controllers\AppBaseController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Flash;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Response;
@@ -172,6 +173,6 @@ class ParameterController extends AppBaseController
      */
     public function getData()
     {
-        return Datatables::of(App\Models\Parameter::query())->make(true);
+        return Datatables::of(App\Models\Parameter::where('company_id', Auth::user()->company_id))->make(true);
     }
 }

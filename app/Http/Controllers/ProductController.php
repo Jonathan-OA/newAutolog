@@ -50,7 +50,10 @@ class ProductController extends AppBaseController
         //Valida se usuário possui permissão para acessar esta opção
         if(App\Models\User::getPermission('products_add',Auth::user()->user_type_code)){
 
-            return view('products.create');
+            $prd_types = App\Models\ProductType::getProductTypes();
+            $groups = App\Models\Group::getGroups();
+            return view('products.create')->with('prd_types', $prd_types)
+                                          ->with('groups',$groups);
 
         }else{
             //Sem permissão
@@ -117,7 +120,13 @@ class ProductController extends AppBaseController
                 return redirect(route('products.index'));
             }
 
-            return view('products.edit')->with('product', $product);
+            //Tipos de produtos e grupos para o droplist
+            $prd_types = App\Models\ProductType::getProductTypes();
+            $groups = App\Models\Group::getGroups();
+
+            return view('products.edit')->with('product', $product)
+                                        ->with('prd_types', $prd_types)
+                                        ->with('groups',$groups);
         
         }else{
             //Sem permissão
@@ -200,6 +209,6 @@ class ProductController extends AppBaseController
      */
     public function getData()
     {
-        return Datatables::of(App\Models\Product::query())->make(true);
+        return Datatables::of(App\Models\Product::where('company_id', Auth::user()->company_id))->make(true);
     }
 }

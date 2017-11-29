@@ -37,7 +37,7 @@ return [
     'user_permissions' => 'Permissões de Usuários',
     'packing_types' => 'Tipos de Embalagens',
     'groups' => 'Grupos',
-    'item_types' => 'Tipos de Produto',
+    'product_types' => 'Tipos de Produto',
     'products' => 'Produtos',
 
     //Columns
@@ -88,7 +88,7 @@ return [
     'height' => 'Altura',
     'width' => 'Largura',
     'lenght' => 'Comprimento',
-    'item_type_code' => 'Tipo de Produto',
+    'product_type_code' => 'Tipo de Produto',
     'status' => 'Status',
     'group_code' => 'Grupo',
     'subgroup_code' => 'SubGrupo',

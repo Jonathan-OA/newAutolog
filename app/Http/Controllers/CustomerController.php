@@ -200,6 +200,6 @@ class CustomerController extends AppBaseController
      */
     public function getData()
     {
-        return Datatables::of(App\Models\Customer::query())->make(true);
+        return Datatables::of(App\Models\Customer::where('company_id', Auth::user()->company_id))->make(true);
     }
 }

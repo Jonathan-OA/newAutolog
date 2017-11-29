@@ -5,8 +5,8 @@
 {!! Form::text('code', null, ['class' => 'form-control']) !!}
 
 <!-- Company Id Field -->
-{!! Form::label('company_id', Lang::get('models.company_id').':') !!}
-{!! Form::number('company_id', null, ['class' => 'form-control']) !!}
+<input id="company_id" name="company_id" type="hidden" value="{!! Auth::user()->company_id !!}">
+
 
 <!-- Name Field -->
 {!! Form::label('name', Lang::get('models.name').':') !!}

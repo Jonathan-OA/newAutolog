@@ -1,8 +1,8 @@
 <div class="form_fields">
 @include('adminlte-templates::common.errors')
+
 <!-- Company Id Field -->
-{!! Form::label('company_id', Lang::get('models.company_id').':') !!}
-{!! Form::number('company_id', null, ['class' => 'form-control']) !!}
+<input id="company_id" name="company_id" type="hidden" value="{!! Auth::user()->company_id !!}">
 
 <!-- Code Field -->
 {!! Form::label('code', Lang::get('models.code').':') !!}
@@ -14,15 +14,15 @@
 
 <!-- Status Field -->
 {!! Form::label('status', Lang::get('models.status').':') !!}
-{!! Form::number('status', null, ['class' => 'form-control']) !!}
+{!! Form::select('status', array('1' => 'Ativo', '0' => 'Inativo'), null, ['class' => 'form-control']) !!}
 
-<!-- Item Type Code Field -->
-{!! Form::label('item_type_code', Lang::get('models.item_type_code').':') !!}
-{!! Form::text('item_type_code', null, ['class' => 'form-control']) !!}
+<!-- Product Type Code Field -->
+{!! Form::label('product_type_code', Lang::get('models.product_type_code').':') !!}
+{!! Form::select('product_type_code', $prd_types, null, ['class' => 'form-control']) !!}
 
 <!-- Group Code Field -->
 {!! Form::label('group_code', Lang::get('models.group_code').':') !!}
-{!! Form::text('group_code', null, ['class' => 'form-control']) !!}
+{!! Form::select('group_code', $groups, null, ['class' => 'form-control']) !!}
 
 <!-- Subgroup Code Field -->
 {!! Form::label('subgroup_code', Lang::get('models.subgroup_code').':') !!}

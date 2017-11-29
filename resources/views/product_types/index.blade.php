@@ -6,7 +6,7 @@
             <div class="panel panel-default" >
                 <div class="panel-heading">
                    <!-- Texto baseado no arquivo de linguagem -->
-                   @lang('models.items') 
+                   @lang('models.product_types') 
                 </div>
                 <div class="panel panel-default">
                     <div class="row">
@@ -15,10 +15,10 @@
                             @include('flash::message')
                             <div id="msg_excluir"></div>
                             <div class="row buttons_grid">
-                                <a class="btn btn-success"  href="{!! route('items.create') !!}">@lang('buttons.add')</a>
+                                <a class="btn btn-success"  href="{!! route('productTypes.create') !!}">@lang('buttons.add')</a>
                             </div>
                             <div class="panel-body">
-                                @include('items.table')
+                                @include('product_types.table')
                             </div>
                         </div>
                     </div>
@@ -33,10 +33,10 @@
     $(function() {
         
         //Parâmetros para criação da datatable
-        table = $("#items-table").DataTable({
+        table = $("#productTypes-table").DataTable({
             scrollX: true,
             scrollY: "47vh",
-            ajax: 'items/datatable',
+            ajax: 'productTypes/datatable',
             autoWidth: true,
             fixedColumns:   {
                 leftColumns: 0,
@@ -53,28 +53,8 @@
                     sPrevious: "@lang('models.previous')",
                 }
             },
-            columns: [ { data: 'company_id' },
-                { data: 'code' },
+            columns: [ { data: 'code' },
                 { data: 'description' },
-                { data: 'status' },
-                { data: 'item_type_code' },
-                { data: 'group_code' },
-                { data: 'subgroup_code' },
-                { data: 'margin_div' },
-                { data: 'cost' },
-                { data: 'phase_code' },
-                { data: 'abz_code' },
-                { data: 'inventory_date' },
-                { data: 'due_date' },
-                { data: 'critical_date1' },
-                { data: 'critical_date2' },
-                { data: 'critical_date3' },
-                { data: 'ripeness_date' },
-                { data: 'obs1' },
-                { data: 'obs2' },
-                { data: 'obs3' },
-                { data: 'obs4' },
-                { data: 'obs5' },
                
                        { data: null,
                          className: "th_grid",
@@ -84,19 +64,19 @@
       });
 
       //Funções dos botões de editar e excluir
-      $('#items-table tbody').on( 'click', 'button', function () {
+      $('#productTypes-table tbody').on( 'click', 'button', function () {
             var data = table.row( $(this).parents('tr') ).data();
             var id = $(this).attr('id');
             if(id == 'edit'){
                 //Editar Registro
-                window.location.href = "{!! URL::to('items/"+data.id+"/edit') !!}";
+                window.location.href = "{!! URL::to('productTypes/"+data.id+"/edit') !!}";
             }else{
                 //Excluir Registro
                 if(confirm('@lang("buttons.msg_remove")')){
                     //Token obrigatório para envio POST
                     var tk = $('meta[name="csrf-token"]').attr('content');
                     $.ajax({
-                        url: 'items/'+data.id,
+                        url: 'productTypes/'+data.id,
                         type: 'post',
                         data: {_method: 'delete', _token :tk},
                         success: function(scs){ 

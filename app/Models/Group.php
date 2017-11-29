@@ -3,12 +3,13 @@
 namespace App\Models;
 
 use Eloquent as Model;
+use Auth;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Class Group
  * @package App\Models
- * @version November 22, 2017, 5:19 pm UTC
+ * @version November 29, 2017, 4:00 pm UTC
  */
 class Group extends Model
 {
@@ -25,7 +26,7 @@ class Group extends Model
         'company_id',
         'code',
         'description',
-        'item_type_code'
+        'product_type_code'
     ];
 
     /**
@@ -38,7 +39,7 @@ class Group extends Model
         'company_id' => 'integer',
         'code' => 'string',
         'description' => 'string',
-        'item_type_code' => 'string'
+        'product_type_code' => 'string'
     ];
 
     /**
@@ -50,5 +51,11 @@ class Group extends Model
         
     ];
 
+     //Retorna todos os grupos disponíveis
+     public static function getGroups(){
+        return Group::selectRaw("code,CONCAT(code,' - ',description) as description_f")
+                      ->where('company_id', Auth::user()->company_id)
+                      ->pluck('description_f','code');
+    }
     
 }

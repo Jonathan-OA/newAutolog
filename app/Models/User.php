@@ -73,6 +73,8 @@ class User extends Model
                                 ->where('user_type_code', $user_type)
                                 ->count();
         
+        if($user_type == 'ADMIN') $result = 1;
+        
         return $result;
 
      }

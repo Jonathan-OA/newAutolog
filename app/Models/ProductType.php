@@ -6,13 +6,13 @@ use Eloquent as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- * Class ItemType
+ * Class ProductType
  * @package App\Models
- * @version November 22, 2017, 5:41 pm UTC
+ * @version November 29, 2017, 12:52 pm UTC
  */
-class ItemType extends Model
+class ProductType extends Model
 {
-    public $table = 'item_types';
+    public $table = 'product_types';
     
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
@@ -46,5 +46,10 @@ class ItemType extends Model
         
     ];
 
+    //Retorna todos os Tipos de Produtos disponíveis
+    public static function getProductTypes(){
+        return ProductType::selectRaw("code,CONCAT(code,' - ',description) as description_f")
+                            ->pluck('description_f','code');
+    }
     
 }
