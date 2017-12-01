@@ -43,8 +43,9 @@
                
                        { data: null,
                          className: "td_grid",
-                         defaultContent: "<button id='edit'><img class='icon' src='<% asset('/icons/editar.png') %>'' title='@lang('buttons.edit')'></button><button id='remove'><img class='icon' src='<% asset('/icons/remover.png') %>'' title='@lang('buttons.remove')'></button>" 
-                       }],
+                         defaultContent: "<button id='edit' aria-label='@lang('buttons.edit')' data-microtip-position='left' role='tooltip' ><img class='icon' src='<% asset('/icons/editar.png') %>'></button><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='<% asset('/icons/remover.png') %>'></button>",
+                         width: "90px" 
+                        }],
       });
       
       $('#roles-table tbody').on( 'click', 'button', function () {

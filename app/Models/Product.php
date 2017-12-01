@@ -72,9 +72,17 @@ class Product extends Model
      *
      * @var array
      */
-    public static $rules = [
-        
-    ];
+    public static $rules = [];
+
+    /**
+     * Função que valida o código de produto lido
+     *
+     * @var array
+     */
+
+    public static function validaProduto (){
+
+    }
 
     
 }

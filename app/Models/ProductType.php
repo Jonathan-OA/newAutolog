@@ -43,7 +43,8 @@ class ProductType extends Model
      * @var array
      */
     public static $rules = [
-        
+        'code' => 'required|string|unique:product_types,code|max:10',
+        'description' => 'required|string|max:40',
     ];
 
     //Retorna todos os Tipos de Produtos disponíveis

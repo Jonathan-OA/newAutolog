@@ -36,7 +36,7 @@ class ProductTypeController extends AppBaseController
         $this->productTypeRepository->pushCriteria(new RequestCriteria($request));
         $productTypes = $this->productTypeRepository->all();
 
-        return view('product_types.index')
+        return view('products.product_types.index')
             ->with('productTypes', $productTypes);
     }
 
@@ -50,7 +50,7 @@ class ProductTypeController extends AppBaseController
         //Valida se usuário possui permissão para acessar esta opção
         if(App\Models\User::getPermission('product_types_add',Auth::user()->user_type_code)){
 
-            return view('product_types.create');
+            return view('products.product_types.create');
 
         }else{
             //Sem permissão
@@ -94,7 +94,7 @@ class ProductTypeController extends AppBaseController
             return redirect(route('productTypes.index'));
         }
 
-        return view('product_types.show')->with('productType', $productType);
+        return view('products.product_types.show')->with('productType', $productType);
     }
 
     /**
@@ -117,7 +117,7 @@ class ProductTypeController extends AppBaseController
                 return redirect(route('productTypes.index'));
             }
 
-            return view('product_types.edit')->with('productType', $productType);
+            return view('products.product_types.edit')->with('productType', $productType);
         
         }else{
             //Sem permissão

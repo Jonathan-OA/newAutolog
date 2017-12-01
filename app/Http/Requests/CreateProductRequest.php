@@ -25,6 +25,17 @@ class CreateProductRequest extends FormRequest
      */
     public function rules()
     {
-        return Product::$rules;
+        return [ 
+                'code' => 'required|string|unique:products,code,NULL,id,company_id,'.Auth::user()->company_id.'|max:40',
+                'description' => 'required|string|max:100',
+                'status' => 'required|digits:1|in:0,1',
+                'product_type_code' => 'required|exists:product_types,code',
+                'group_code' => 'required|exists:groups,code',
+                'obs1' => 'required|string|max:40',
+                'obs2' => 'required|string|max:40',
+                'obs3' => 'required|string|max:40',
+                'obs4' => 'required|string|max:40',
+                'obs5' => 'required|string|max:40',
+                ];
     }
 }

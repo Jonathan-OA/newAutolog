@@ -9,8 +9,8 @@
                    <ul class="nav nav-tabs">
                         <!-- Textos baseados no arquivo de linguagem -->
                         <li class="active-l"><a href="#">@lang('models.products') </a></li>
-                        <li><a href="#">@lang('models.product_types')</a></li>
-                        <li><a href="#">@lang('models.groups')</a></li>
+                        <li><a href="{!! route('productTypes.index') !!}">@lang('models.product_types')</a></li>
+                        <li><a href="{!! route('groups.index') !!}">@lang('models.groups')</a></li>
                     </ul>
                 </div>
                 <div class="panel panel-default">
@@ -66,7 +66,7 @@
                         { data: 'subgroup_code' },
                         { data: null,
                           className: "th_grid",
-                          defaultContent: "<button id='edit' aria-label='@lang('buttons.edit')' data-microtip-position='left' role='tooltip' ><img class='icon' src='<% asset('/icons/editar.png') %>'></button><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='left' role='tooltip'><img class='icon' src='<% asset('/icons/remover.png') %>'></button>",
+                          defaultContent: "<button id='edit' aria-label='@lang('buttons.edit')' data-microtip-position='left' role='tooltip' ><img class='icon' src='<% asset('/icons/editar.png') %>'></button><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='<% asset('/icons/remover.png') %>'></button>",
                           width: "90px" 
                         }],
       });

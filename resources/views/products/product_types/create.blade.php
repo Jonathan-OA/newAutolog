@@ -1,23 +1,27 @@
 @extends('layouts.app')
+
 @section('content')
     <div class="row">
         <div class="col-md-12 pad-ct">
             <div class="panel panel-default" >
                 <div class="panel-heading">
-                    @lang('models.itemTypes')
+                    @lang('models.product_types')
                 </div>
                 <div class="panel panel-default">
                     <div class="panel-body" >
                         <div class="row">
                             <div class="col-md-12">
-                                {!! Form::model($itemType, ['route' => ['itemTypes.update', $itemType->id], 'method' => 'patch']) !!}
-                                  @include('item_types.fields')
+                                {!! Form::open(['route' => 'productTypes.store']) !!}
+                                <div class="form-group">
+                                    @include('products.product_types.fields')
+                                </div>
                                 {!! Form::close() !!}
                             </div>
                         </div>
-                    </div>
+                    </div>   
                 </div>
             </div>
         </div>
+
     </div>
 @endsection

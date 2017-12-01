@@ -25,6 +25,11 @@ class CreateParameterRequest extends FormRequest
      */
     public function rules()
     {
-        return Parameter::$rules;
+        return [
+            'code' => 'required|string|max:25|unique:parameters,code,NULL,id,company_id,'.Auth::user()->company_id.'',
+            'operation_code' => 'required|exists:operations,code',
+            'description' => 'required|string|max:50',
+            'value' => 'required|string|max:100',
+        ];
     }
 }

@@ -25,6 +25,13 @@ class CreateCustomerRequest extends FormRequest
      */
     public function rules()
     {
-        return Customer::$rules;
+        return [ 
+            'code' => 'required|string|unique:customers,code,NULL,id,company_id,'.Auth::user()->company_id.'|max:30',
+            'name' => 'required|string|max:50',
+            'trading_name' => 'required|string|max:60',
+            'state_registration' => 'string|max:20',
+            'cnpj' => 'string|max:20',
+            'active' => 'required|in:0,1',
+         ];
     }
 }

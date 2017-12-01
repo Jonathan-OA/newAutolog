@@ -36,7 +36,7 @@ class GroupController extends AppBaseController
         $this->groupRepository->pushCriteria(new RequestCriteria($request));
         $groups = $this->groupRepository->all();
 
-        return view('groups.index')
+        return view('products.groups.index')
             ->with('groups', $groups);
     }
 
@@ -52,7 +52,7 @@ class GroupController extends AppBaseController
             //Tipos de produtos para o droplist
             $prd_types = App\Models\ProductType::getProductTypes();
             
-            return view('groups.create')->with('prd_types',$prd_types);
+            return view('products.groups.create')->with('prd_types',$prd_types);
 
         }else{
             //Sem permissão
@@ -96,7 +96,7 @@ class GroupController extends AppBaseController
             return redirect(route('groups.index'));
         }
 
-        return view('groups.show')->with('group', $group);
+        return view('products.groups.show')->with('group', $group);
     }
 
     /**
@@ -121,7 +121,7 @@ class GroupController extends AppBaseController
             //Tipos de produtos para o droplist
             $prd_types = App\Models\ProductType::getProductTypes();
 
-            return view('groups.edit')->with('group', $group)
+            return view('products.groups.edit')->with('group', $group)
                                       ->with('prd_types', $prd_types);
         
         }else{

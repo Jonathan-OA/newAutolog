@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Group;
+use Auth;
 
 class CreateGroupRequest extends FormRequest
 {
@@ -25,6 +26,9 @@ class CreateGroupRequest extends FormRequest
      */
     public function rules()
     {
-        return Group::$rules;
+        return [ 
+                 'code' => 'required|string|unique:groups,code,NULL,id,company_id,'.Auth::user()->company_id.'|max:10',
+                 'description' => 'required|string|max:40',
+              ];
     }
 }

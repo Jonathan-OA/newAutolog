@@ -91,7 +91,6 @@ Route::get('groups/datatable', 'GroupController@getData');
 Route::resource('groups', 'GroupController');
 
 
-
 Route::get('products/datatable', 'ProductController@getData');
 Route::resource('products', 'ProductController');
 

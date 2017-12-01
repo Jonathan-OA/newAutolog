@@ -5,8 +5,13 @@
         <div class="col-md-12 pad-ct">
             <div class="panel panel-default" >
                 <div class="panel-heading">
-                   <!-- Texto baseado no arquivo de linguagem -->
-                   @lang('models.groups') 
+                   <!-- Abas -->
+                   <ul class="nav nav-tabs">
+                        <!-- Textos baseados no arquivo de linguagem -->
+                        <li><a href="{!! route('products.index') !!}">@lang('models.products') </a></li>
+                        <li class="active-l"><a href="#">@lang('models.product_types')</a></li>
+                        <li><a href="{!! route('groups.index') !!}">@lang('models.groups')</a></li>
+                    </ul>
                 </div>
                 <div class="panel panel-default">
                     <div class="row">
@@ -15,10 +20,10 @@
                             @include('flash::message')
                             <div id="msg_excluir"></div>
                             <div class="row buttons_grid">
-                                <a class="btn btn-success"  href="{!! route('groups.create') !!}">@lang('buttons.add')</a>
+                                <a class="btn btn-success"  href="{!! route('productTypes.create') !!}">@lang('buttons.add')</a>
                             </div>
                             <div class="panel-body">
-                                @include('groups.table')
+                                @include('products.product_types.table')
                             </div>
                         </div>
                     </div>
@@ -33,10 +38,10 @@
     $(function() {
         
         //Parâmetros para criação da datatable
-        table = $("#groups-table").DataTable({
+        table = $("#productTypes-table").DataTable({
             scrollX: true,
             scrollY: "47vh",
-            ajax: 'groups/datatable',
+            ajax: 'productTypes/datatable',
             autoWidth: true,
             fixedColumns:   {
                 leftColumns: 0,
@@ -53,30 +58,30 @@
                     sPrevious: "@lang('models.previous')",
                 }
             },
-            columns: [  { data: 'code' },
-                        { data: 'description' },
-                        { data: 'product_type_code' },
-                        { data: null,
+            columns: [ { data: 'code' },
+                { data: 'description' },
+               
+                       { data: null,
                          className: "th_grid",
-                         defaultContent: "<button id='edit' aria-label='@lang('buttons.edit')' data-microtip-position='left' role='tooltip' ><img class='icon' src='<% asset('/icons/editar.png') %>'></button><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='left' role='tooltip'><img class='icon' src='<% asset('/icons/remover.png') %>'></button>",
+                         defaultContent: "<button id='edit' aria-label='@lang('buttons.edit')' data-microtip-position='left' role='tooltip' ><img class='icon' src='<% asset('/icons/editar.png') %>'></button><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='<% asset('/icons/remover.png') %>'></button>",
                          width: "90px" 
                         }],
       });
 
       //Funções dos botões de editar e excluir
-      $('#groups-table tbody').on( 'click', 'button', function () {
+      $('#productTypes-table tbody').on( 'click', 'button', function () {
             var data = table.row( $(this).parents('tr') ).data();
             var id = $(this).attr('id');
             if(id == 'edit'){
                 //Editar Registro
-                window.location.href = "{!! URL::to('groups/"+data.id+"/edit') !!}";
+                window.location.href = "{!! URL::to('productTypes/"+data.id+"/edit') !!}";
             }else{
                 //Excluir Registro
                 if(confirm('@lang("buttons.msg_remove")')){
                     //Token obrigatório para envio POST
                     var tk = $('meta[name="csrf-token"]').attr('content');
                     $.ajax({
-                        url: 'groups/'+data.id,
+                        url: 'productTypes/'+data.id,
                         type: 'post',
                         data: {_method: 'delete', _token :tk},
                         success: function(scs){ 

@@ -47,12 +47,11 @@ class Group extends Model
      *
      * @var array
      */
-    public static $rules = [
-        
-    ];
+    public static $rules = [];
 
-     //Retorna todos os grupos disponíveis
-     public static function getGroups(){
+
+    //Retorna todos os grupos disponíveis
+    public static function getGroups(){
         return Group::selectRaw("code,CONCAT(code,' - ',description) as description_f")
                       ->where('company_id', Auth::user()->company_id)
                       ->pluck('description_f','code');
