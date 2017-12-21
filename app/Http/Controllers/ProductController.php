@@ -73,6 +73,9 @@ class ProductController extends AppBaseController
     {
         $input = $request->all();
 
+        $input['margin_div'] = (float)$input['margin_div'];
+        $input['cost'] = (float)$input['cost'];
+
         $product = $this->productRepository->create($input);
 
         Flash::success(Lang::get('validation.save_success'));
@@ -145,6 +148,7 @@ class ProductController extends AppBaseController
      */
     public function update($id, UpdateProductRequest $request)
     {
+        
         $product = $this->productRepository->findWithoutFail($id);
 
         if (empty($product)) {
@@ -155,11 +159,14 @@ class ProductController extends AppBaseController
 
         //Grava log
         $requestF = $request->all();
+        $requestF['margin_div'] = (float)$requestF['margin_div'];
+        $requestF['cost'] = (float)$requestF['cost'];
+
         $descricao = 'Alterou Product ID: '.$id.' - '.$requestF['code'];
         $log = App\Models\Log::wlog('products_edit', $descricao);
 
 
-        $product = $this->productRepository->update($request->all(), $id);
+        $product = $this->productRepository->update($requestF, $id);
 
         Flash::success(Lang::get('validation.update_success'));
 

@@ -4,7 +4,7 @@
     <div class="row">
         <div class="col-md-12 pad-ct">
             <div class="panel panel-default" >
-                <div class="panel-heading">
+                <div class="panel-heading ptabs">
                    <!-- Abas -->
                    <ul class="nav nav-tabs">
                         <!-- Textos baseados no arquivo de linguagem -->

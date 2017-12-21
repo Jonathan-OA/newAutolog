@@ -39,6 +39,16 @@ return [
     'groups' => 'Grupos',
     'product_types' => 'Tipos de Produto',
     'products' => 'Produtos',
+    'location_functions' => 'Funções de Endereços',
+    'location_types' => 'Tipos de Endereços',
+    'deposit_types' => 'Tipos de Depositos',
+    'departments' => 'Departamentos',
+    'deposits' => 'Depósitos',
+    'sectors' => 'Setores',
+    'locations' => 'Endereços',
+    'stock_types' => 'Tipo de Estoque',
+    'stocks' => 'Saldo',
+
 
     //Columns
     'name' => 'Nome',
@@ -102,7 +112,25 @@ return [
     'critical_date2' => 'Data Crítica 2',
     'critical_date3' => 'Data Crítica 3',
     'ripeness_date' => 'Data de Maturação',
-
+    'capacity_qty' => 'Capacidade (Qde)',
+    'length' => 'Comprimento',
+    'department_code' => 'Departamento',
+    'deposit_code' => 'Depósito',
+    'deposit_type_code' => 'Tipo',
+    'sector_code' => 'Setor',
+    'location_type_code' => 'Tipo de Endereço',
+    'location_function_code' => 'Função do Endereço',
+    'abz_code' => 'Código ABZ',
+    'barcode' => 'Barcode',
+    'column' => 'Coluna',
+    'aisle' => 'Corredor',
+    'label_type_code' => 'Tipo de Etiqueta',
+    'sequence_arm' => 'Seq. Armazen.',
+    'sequence_sep' => 'Seq. Separação',
+    'sequence_inv' => 'Seq. Inventário',
+    'depth' => 'Profundidade',
+    
+    
     //PlaceHolders
     'sel_type' => 'Selecione um tipo: ',
     'sel_module' => 'Selecione um módulo: ',

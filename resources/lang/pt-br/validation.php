@@ -118,7 +118,9 @@ return [
     'attributes' => [
         'code' => 'Código',
         'description' => 'Descrição',
-        'status' => 'Status'
+        'status' => 'Status',
+        'margin_div' => 'Margem de Divergência',
+        'cost' => 'Custo',
     ],
 
 ];

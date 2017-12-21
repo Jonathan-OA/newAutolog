@@ -6,7 +6,7 @@
             <div class="panel panel-default" >
                 <div class="panel-heading">
                    <!-- Texto baseado no arquivo de linguagem -->
-                   @lang('models.$MODEL_NAME_PLURAL_CAMEL$') 
+                   @lang('models.$MODEL_NAME_PLURAL_SNAKE$') 
                 </div>
                 <div class="panel panel-default">
                     <div class="row">
@@ -18,7 +18,7 @@
                                 <a class="btn btn-success"  href="{!! route('$ROUTE_NAMED_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.create') !!}">@lang('buttons.add')</a>
                             </div>
                             <div class="panel-body">
-                                @include('$VIEW_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.table')
+                                @include('$VIEW_PREFIX$$MODEL_NAME_PLURAL_SNAKE$.table')
                             </div>
                         </div>
                     </div>

@@ -109,3 +109,39 @@ Route::resource('groups', 'GroupController');
 
 Route::get('groups/datatable', 'GroupController@getData');
 Route::resource('groups', 'GroupController');
+
+
+Route::get('locationFunctions/datatable', 'LocationFunctionController@getData');
+Route::resource('locationFunctions', 'LocationFunctionController');
+
+
+Route::get('locationTypes/datatable', 'LocationTypeController@getData');
+Route::resource('locationTypes', 'LocationTypeController');
+
+
+Route::get('locationTypes/datatable', 'LocationTypeController@getData');
+Route::resource('locationTypes', 'LocationTypeController');
+
+
+Route::get('depositTypes/datatable', 'DepositTypeController@getData');
+Route::resource('depositTypes', 'DepositTypeController');
+
+
+Route::get('departments/datatable', 'DepartmentController@getData');
+Route::resource('departments', 'DepartmentController');
+
+
+Route::get('deposits/datatable', 'DepositController@getData');
+Route::resource('deposits', 'DepositController');
+
+
+Route::get('sectors/datatable', 'SectorController@getData');
+Route::resource('sectors', 'SectorController');
+
+
+Route::get('locations/datatable', 'LocationController@getData');
+Route::resource('locations', 'LocationController');
+
+
+Route::get('stockTypes/datatable', 'StockTypeController@getData');
+Route::resource('stockTypes', 'StockTypeController');

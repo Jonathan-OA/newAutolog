@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Product;
+use Auth;
 
 class CreateProductRequest extends FormRequest
 {
@@ -31,11 +32,13 @@ class CreateProductRequest extends FormRequest
                 'status' => 'required|digits:1|in:0,1',
                 'product_type_code' => 'required|exists:product_types,code',
                 'group_code' => 'required|exists:groups,code',
-                'obs1' => 'required|string|max:40',
-                'obs2' => 'required|string|max:40',
-                'obs3' => 'required|string|max:40',
-                'obs4' => 'required|string|max:40',
-                'obs5' => 'required|string|max:40',
+                'margin_div' => 'numeric',
+                'cost' => 'numeric',
+                'obs1' => 'string|max:40',
+                'obs2' => 'string|max:40',
+                'obs3' => 'string|max:40',
+                'obs4' => 'string|max:40',
+                'obs5' => 'string|max:40',
                 ];
     }
 }
