@@ -36,7 +36,7 @@ class DepartmentController extends AppBaseController
         $this->departmentRepository->pushCriteria(new RequestCriteria($request));
         $departments = $this->departmentRepository->all();
 
-        return view('departments.index')
+        return view('locations.departments.index')
             ->with('departments', $departments);
     }
 
@@ -50,7 +50,7 @@ class DepartmentController extends AppBaseController
         //Valida se usuário possui permissão para acessar esta opção
         if(App\Models\User::getPermission('departments_add',Auth::user()->user_type_code)){
 
-            return view('departments.create');
+            return view('locations.departments.create');
 
         }else{
             //Sem permissão
@@ -94,7 +94,7 @@ class DepartmentController extends AppBaseController
             return redirect(route('departments.index'));
         }
 
-        return view('departments.show')->with('department', $department);
+        return view('locations.departments.show')->with('department', $department);
     }
 
     /**
@@ -117,7 +117,7 @@ class DepartmentController extends AppBaseController
                 return redirect(route('departments.index'));
             }
 
-            return view('departments.edit')->with('department', $department);
+            return view('locations.departments.edit')->with('department', $department);
         
         }else{
             //Sem permissão

@@ -44,5 +44,10 @@ class StockType extends Model
         
     ];
 
+    //Retorna todas os tipos de estoque
+    public static function getStockTypes(){
+        return StockType::selectRaw("code,CONCAT(code,' - ',description) as description_f")
+                           ->pluck('description_f','code');
+    }
     
 }

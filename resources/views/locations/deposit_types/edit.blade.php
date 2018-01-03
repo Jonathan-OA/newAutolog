@@ -1,27 +1,23 @@
 @extends('layouts.app')
-
 @section('content')
     <div class="row">
         <div class="col-md-12 pad-ct">
             <div class="panel panel-default" >
                 <div class="panel-heading">
-                    @lang('models.location_functions')
+                    @lang('models.deposit_types')
                 </div>
                 <div class="panel panel-default">
                     <div class="panel-body" >
                         <div class="row">
                             <div class="col-md-12">
-                                {!! Form::open(['route' => 'locationFunctions.store']) !!}
-                                <div class="form-group">
-                                    @include('location_functions.fields')
-                                </div>
+                                {!! Form::model($depositType, ['route' => ['depositTypes.update', $depositType->id], 'method' => 'patch']) !!}
+                                  @include('locations.deposit_types.fields')
                                 {!! Form::close() !!}
                             </div>
                         </div>
-                    </div>   
+                    </div>
                 </div>
             </div>
         </div>
-
     </div>
 @endsection

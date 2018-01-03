@@ -52,5 +52,11 @@ class LocationType extends Model
         
     ];
 
+     //Retorna todas os tipos de endereço disponiveis
+     public static function getLocationTypes(){
+        return LocationType::selectRaw("code,CONCAT(code,' - ',description) as description_f")
+                           ->pluck('description_f','code');
+    }
+
     
 }

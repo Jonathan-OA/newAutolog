@@ -47,8 +47,8 @@ return [
     'sectors' => 'Setores',
     'locations' => 'Endereços',
     'stock_types' => 'Tipo de Estoque',
+    'stock_type_code' => 'Tipo de Estoque',
     'stocks' => 'Saldo',
-
 
     //Columns
     'name' => 'Nome',

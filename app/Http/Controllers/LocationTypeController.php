@@ -36,7 +36,7 @@ class LocationTypeController extends AppBaseController
         $this->locationTypeRepository->pushCriteria(new RequestCriteria($request));
         $locationTypes = $this->locationTypeRepository->all();
 
-        return view('location_types.index')
+        return view('locations.location_types.index')
             ->with('locationTypes', $locationTypes);
     }
 
@@ -50,7 +50,7 @@ class LocationTypeController extends AppBaseController
         //Valida se usuário possui permissão para acessar esta opção
         if(App\Models\User::getPermission('location_types_add',Auth::user()->user_type_code)){
 
-            return view('location_types.create');
+            return view('locations.location_types.create');
 
         }else{
             //Sem permissão
@@ -94,7 +94,7 @@ class LocationTypeController extends AppBaseController
             return redirect(route('locationTypes.index'));
         }
 
-        return view('location_types.show')->with('locationType', $locationType);
+        return view('locations.location_types.show')->with('locationType', $locationType);
     }
 
     /**
@@ -117,7 +117,7 @@ class LocationTypeController extends AppBaseController
                 return redirect(route('locationTypes.index'));
             }
 
-            return view('location_types.edit')->with('locationType', $locationType);
+            return view('locations.location_types.edit')->with('locationType', $locationType);
         
         }else{
             //Sem permissão

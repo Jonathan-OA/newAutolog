@@ -87,10 +87,6 @@ Route::get('packingTypes/datatable', 'PackingTypeController@getData');
 Route::resource('packingTypes', 'PackingTypeController');
 
 
-Route::get('groups/datatable', 'GroupController@getData');
-Route::resource('groups', 'GroupController');
-
-
 Route::get('products/datatable', 'ProductController@getData');
 Route::resource('products', 'ProductController');
 
@@ -101,10 +97,6 @@ Route::resource('products', 'ProductController');
 
 Route::get('productTypes/datatable', 'ProductTypeController@getData');
 Route::resource('productTypes', 'ProductTypeController');
-
-
-Route::get('groups/datatable', 'GroupController@getData');
-Route::resource('groups', 'GroupController');
 
 
 Route::get('groups/datatable', 'GroupController@getData');

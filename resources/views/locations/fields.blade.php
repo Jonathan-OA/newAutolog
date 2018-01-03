@@ -6,15 +6,15 @@
 
 <!-- Department Code Field -->
 {!! Form::label('department_code', Lang::get('models.department_code').':') !!}
-{!! Form::select('department_code', $departments, 'null', ['class' => 'form-control']) !!}
+{!! Form::select('department_code', $departments, (!empty($location->department_code)) ? $location->department_code : 'null' , ['class' => 'form-control']) !!}
 
 <!-- Deposit Code Field -->
 {!! Form::label('deposit_code', Lang::get('models.deposit_code').':') !!}
-{!! Form::select('deposit_code', $deposits, 'null', ['class' => 'form-control']) !!}
+{!! Form::select('deposit_code', $deposits, (!empty($location->deposit_code)) ? $location->deposit_code : 'null', ['class' => 'form-control']) !!}
 
 <!-- Sector Code Field -->
 {!! Form::label('sector_code', Lang::get('models.sector_code').':') !!}
-{!! Form::select('sector_code', $sectors, 'null', ['class' => 'form-control']) !!}
+{!! Form::select('sector_code', $sectors, (!empty($location->sector_code)) ? $location->sector_code : 'null', ['class' => 'form-control']) !!}
 
 <!-- Code Field -->
 {!! Form::label('code', Lang::get('models.code').':') !!}
@@ -42,15 +42,20 @@
 
 <!-- Status Field -->
 {!! Form::label('status', Lang::get('models.status').':') !!}
-{!! Form::number('status', null, ['class' => 'form-control']) !!}
+{!! Form::select('status', array('1' => 'Ativo', '0' => 'Inativo'), null, ['class' => 'form-control']) !!}
+
 
 <!-- Location Type Code Field -->
 {!! Form::label('location_type_code', Lang::get('models.location_type_code').':') !!}
-{!! Form::text('location_type_code', null, ['class' => 'form-control']) !!}
+{!! Form::select('location_type_code', $location_types, (!empty($location->location_type_code)) ? $location->location_type_code : 'null', ['class' => 'form-control']) !!}
 
 <!-- Location Function Code Field -->
 {!! Form::label('location_function_code', Lang::get('models.location_function_code').':') !!}
-{!! Form::text('location_function_code', null, ['class' => 'form-control']) !!}
+{!! Form::select('location_function_code', $location_functions, (!empty($location->location_function_code)) ? $location->location_function_code : 'null', ['class' => 'form-control']) !!}
+
+<!-- Stock Type Field -->
+{!! Form::label('stock_type_code', Lang::get('models.stock_type_code').':') !!}
+{!! Form::select('stock_type_code', $stock_types, (!empty($location->stock_type_code)) ? $location->stock_type_code : 'null', ['class' => 'form-control']) !!}
 
 <!-- Abz Code Field -->
 {!! Form::label('abz_code', Lang::get('models.abz_code').':') !!}

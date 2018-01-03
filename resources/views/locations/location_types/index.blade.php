@@ -4,9 +4,18 @@
     <div class="row">
         <div class="col-md-12 pad-ct">
             <div class="panel panel-default" >
-                <div class="panel-heading">
-                   <!-- Texto baseado no arquivo de linguagem -->
-                   @lang('models.deposit_types') 
+                <div class="panel-heading ptabs">
+                    <!-- Abas -->
+                    <ul class="nav nav-tabs">
+                         <!-- Textos baseados no arquivo de linguagem -->
+                         <li><a href="{!! route('locations.index') !!}">@lang('models.locations') </a></li>
+                         <li><a href="{!! route('departments.index') !!}">@lang('models.departments')</a></li>
+                         <li><a href="{!! route('deposits.index') !!}">@lang('models.deposits')</a></li>
+                         <li><a href="{!! route('sectors.index') !!}">@lang('models.sectors')</a></li>
+                         <li class="active-l"><a href="#">@lang('models.location_types')</a></li>
+                         <li><a href="{!! route('locationFunctions.index') !!}">@lang('models.location_functions')</a></li>
+                         <li><a href="{!! route('depositTypes.index') !!}">@lang('models.deposit_types')</a></li>
+                    </ul>
                 </div>
                 <div class="panel panel-default">
                     <div class="row">
@@ -15,10 +24,10 @@
                             @include('flash::message')
                             <div id="msg_excluir"></div>
                             <div class="row buttons_grid">
-                                <a class="btn btn-success"  href="{!! route('depositTypes.create') !!}">@lang('buttons.add')</a>
+                                <a class="btn btn-success"  href="{!! route('locationTypes.create') !!}">@lang('buttons.add')</a>
                             </div>
                             <div class="panel-body">
-                                @include('deposit_types.table')
+                                @include('locations.location_types.table')
                             </div>
                         </div>
                     </div>
@@ -33,10 +42,10 @@
     $(function() {
         
         //Parâmetros para criação da datatable
-        table = $("#depositTypes-table").DataTable({
+        table = $("#locationTypes-table").DataTable({
             scrollX: true,
             scrollY: "47vh",
-            ajax: 'depositTypes/datatable',
+            ajax: 'locationTypes/datatable',
             autoWidth: true,
             fixedColumns:   {
                 leftColumns: 0,
@@ -55,6 +64,9 @@
             },
             columns: [  { data: 'code' },
                         { data: 'description' },
+                        { data: 'capacity_kg' },
+                        { data: 'capacity_m3' },
+                        { data: 'capacity_qty' },
                         { data: null,
                          className: "th_grid",
                          defaultContent: "<button id='edit' aria-label='@lang('buttons.edit')' data-microtip-position='left' role='tooltip' ><img class='icon' src='<% asset('/icons/editar.png') %>'></button><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='<% asset('/icons/remover.png') %>'></button>",
@@ -63,19 +75,19 @@
       });
 
       //Funções dos botões de editar e excluir
-      $('#depositTypes-table tbody').on( 'click', 'button', function () {
+      $('#locationTypes-table tbody').on( 'click', 'button', function () {
             var data = table.row( $(this).parents('tr') ).data();
             var id = $(this).attr('id');
             if(id == 'edit'){
                 //Editar Registro
-                window.location.href = "{!! URL::to('depositTypes/"+data.id+"/edit') !!}";
+                window.location.href = "{!! URL::to('locationTypes/"+data.id+"/edit') !!}";
             }else{
                 //Excluir Registro
                 if(confirm('@lang("buttons.msg_remove")')){
                     //Token obrigatório para envio POST
                     var tk = $('meta[name="csrf-token"]').attr('content');
                     $.ajax({
-                        url: 'depositTypes/'+data.id,
+                        url: 'locationTypes/'+data.id,
                         type: 'post',
                         data: {_method: 'delete', _token :tk},
                         success: function(scs){ 

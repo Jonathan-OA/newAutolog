@@ -1,5 +1,4 @@
 @extends('layouts.app')
-
 @section('content')
     <div class="row">
         <div class="col-md-12 pad-ct">
@@ -11,17 +10,14 @@
                     <div class="panel-body" >
                         <div class="row">
                             <div class="col-md-12">
-                                {!! Form::open(['route' => 'departments.store']) !!}
-                                <div class="form-group">
-                                    @include('departments.fields')
-                                </div>
+                                {!! Form::model($department, ['route' => ['departments.update', $department->id], 'method' => 'patch']) !!}
+                                  @include('locations.departments.fields')
                                 {!! Form::close() !!}
                             </div>
                         </div>
-                    </div>   
+                    </div>
                 </div>
             </div>
         </div>
-
     </div>
 @endsection

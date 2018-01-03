@@ -36,7 +36,7 @@ class DepositTypeController extends AppBaseController
         $this->depositTypeRepository->pushCriteria(new RequestCriteria($request));
         $depositTypes = $this->depositTypeRepository->all();
 
-        return view('deposit_types.index')
+        return view('locations.deposit_types.index')
             ->with('depositTypes', $depositTypes);
     }
 
@@ -50,7 +50,7 @@ class DepositTypeController extends AppBaseController
         //Valida se usuário possui permissão para acessar esta opção
         if(App\Models\User::getPermission('deposit_types_add',Auth::user()->user_type_code)){
 
-            return view('deposit_types.create');
+            return view('locations.deposit_types.create');
 
         }else{
             //Sem permissão
@@ -94,7 +94,7 @@ class DepositTypeController extends AppBaseController
             return redirect(route('depositTypes.index'));
         }
 
-        return view('deposit_types.show')->with('depositType', $depositType);
+        return view('locations.deposit_types.show')->with('depositType', $depositType);
     }
 
     /**
@@ -117,7 +117,7 @@ class DepositTypeController extends AppBaseController
                 return redirect(route('depositTypes.index'));
             }
 
-            return view('deposit_types.edit')->with('depositType', $depositType);
+            return view('locations.deposit_types.edit')->with('depositType', $depositType);
         
         }else{
             //Sem permissão

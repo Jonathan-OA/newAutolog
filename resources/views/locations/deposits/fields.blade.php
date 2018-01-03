@@ -6,7 +6,7 @@
 
 <!-- Department Code Field -->
 {!! Form::label('department_code', Lang::get('models.department_code').':') !!}
-{!! Form::select('department_code', $departments, null, ['class' => 'form-control']) !!}
+{!! Form::select('department_code', $departments, (!empty($deposit->department_code)) ? $deposit->department_code : 'null', ['class' => 'form-control']) !!}
 
 <!-- Code Field -->
 {!! Form::label('code', Lang::get('models.code').':') !!}
@@ -14,7 +14,7 @@
 
 <!-- Deposit Type Code Field -->
 {!! Form::label('deposit_type_code', Lang::get('models.deposit_type_code').':') !!}
-{!! Form::select('deposit_type_code', $dep_types, null, ['class' => 'form-control']) !!}
+{!! Form::select('deposit_type_code', $dep_types, (!empty($deposit->deposit_type_code)) ? $deposit->deposit_type_code : 'null', ['class' => 'form-control']) !!}
 
 <!-- Description Field -->
 {!! Form::label('description', Lang::get('models.description').':') !!}

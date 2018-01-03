@@ -4,9 +4,18 @@
     <div class="row">
         <div class="col-md-12 pad-ct">
             <div class="panel panel-default" >
-                <div class="panel-heading">
-                   <!-- Texto baseado no arquivo de linguagem -->
-                   @lang('models.deposits') 
+                <div class="panel-heading ptabs">
+                    <!-- Abas -->
+                    <ul class="nav nav-tabs">
+                         <!-- Textos baseados no arquivo de linguagem -->
+                         <li><a href="{!! route('locations.index') !!}">@lang('models.locations') </a></li>
+                         <li><a href="{!! route('departments.index') !!}">@lang('models.departments')</a></li>
+                         <li  class="active-l"><a href="#">@lang('models.deposits')</a></li>
+                         <li><a href="{!! route('sectors.index') !!}">@lang('models.sectors')</a></li>
+                         <li><a href="{!! route('locationTypes.index') !!}">@lang('models.location_types')</a></li>
+                         <li><a href="{!! route('locationFunctions.index') !!}">@lang('models.location_functions')</a></li>
+                         <li><a href="{!! route('depositTypes.index') !!}">@lang('models.deposit_types')</a></li>
+                    </ul>
                 </div>
                 <div class="panel panel-default">
                     <div class="row">
@@ -18,7 +27,7 @@
                                 <a class="btn btn-success"  href="{!! route('deposits.create') !!}">@lang('buttons.add')</a>
                             </div>
                             <div class="panel-body">
-                                @include('deposits.table')
+                                @include('locations.deposits.table')
                             </div>
                         </div>
                     </div>
@@ -63,6 +72,13 @@
                          defaultContent: "<button id='edit' aria-label='@lang('buttons.edit')' data-microtip-position='left' role='tooltip' ><img class='icon' src='<% asset('/icons/editar.png') %>'></button><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='<% asset('/icons/remover.png') %>'></button>",
                          width: "90px" 
                         }],
+            "rowCallback": function( row, data, index ) {
+                              if ( data.status == 1 ) {
+                                $('td:eq(4)', row).html( '<b>Ativo</b>' );
+                              }else if ( data.status == 0 ){
+                                $('td:eq(4)', row).html( 'Inativo' );
+                              }
+                            }
       });
 
       //Funções dos botões de editar e excluir

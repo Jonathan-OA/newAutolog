@@ -36,7 +36,7 @@ class LocationFunctionController extends AppBaseController
         $this->locationFunctionRepository->pushCriteria(new RequestCriteria($request));
         $locationFunctions = $this->locationFunctionRepository->all();
 
-        return view('location_functions.index')
+        return view('locations.location_functions.index')
             ->with('locationFunctions', $locationFunctions);
     }
 
@@ -50,7 +50,7 @@ class LocationFunctionController extends AppBaseController
         //Valida se usuário possui permissão para acessar esta opção
         if(App\Models\User::getPermission('location_functions_add',Auth::user()->user_type_code)){
 
-            return view('location_functions.create');
+            return view('locations.location_functions.create');
 
         }else{
             //Sem permissão
@@ -94,7 +94,7 @@ class LocationFunctionController extends AppBaseController
             return redirect(route('locationFunctions.index'));
         }
 
-        return view('location_functions.show')->with('locationFunction', $locationFunction);
+        return view('locations.location_functions.show')->with('locationFunction', $locationFunction);
     }
 
     /**
@@ -117,7 +117,7 @@ class LocationFunctionController extends AppBaseController
                 return redirect(route('locationFunctions.index'));
             }
 
-            return view('location_functions.edit')->with('locationFunction', $locationFunction);
+            return view('locations.location_functions.edit')->with('locationFunction', $locationFunction);
         
         }else{
             //Sem permissão

@@ -36,7 +36,7 @@ class SectorController extends AppBaseController
         $this->sectorRepository->pushCriteria(new RequestCriteria($request));
         $sectors = $this->sectorRepository->all();
 
-        return view('sectors.index')
+        return view('locations.sectors.index')
             ->with('sectors', $sectors);
     }
 
@@ -52,7 +52,7 @@ class SectorController extends AppBaseController
              //Lista de depositos disponiveis
              $deposits = App\Models\Deposit::getDeposits();
 
-            return view('sectors.create')->with('deposits', $deposits);
+            return view('locations.sectors.create')->with('deposits', $deposits);
 
         }else{
             //Sem permissão
@@ -96,7 +96,7 @@ class SectorController extends AppBaseController
             return redirect(route('sectors.index'));
         }
 
-        return view('sectors.show')->with('sector', $sector);
+        return view('locations.sectors.show')->with('sector', $sector);
     }
 
     /**
@@ -121,7 +121,7 @@ class SectorController extends AppBaseController
                 return redirect(route('sectors.index'));
             }
 
-            return view('sectors.edit')->with('sector', $sector)
+            return view('locations.sectors.edit')->with('sector', $sector)
                                        ->with('deposits', $deposits);
         
         }else{

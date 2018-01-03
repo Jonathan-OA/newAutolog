@@ -36,7 +36,7 @@ class DepositController extends AppBaseController
         $this->depositRepository->pushCriteria(new RequestCriteria($request));
         $deposits = $this->depositRepository->all();
 
-        return view('deposits.index')
+        return view('locations.deposits.index')
             ->with('deposits', $deposits);
     }
 
@@ -54,7 +54,7 @@ class DepositController extends AppBaseController
             //Lista tipos de depositos
             $dep_types = App\Models\DepositType::getDepTypes();
             
-            return view('deposits.create')->with('departments', $departments)
+            return view('locations.deposits.create')->with('departments', $departments)
                                           ->with('dep_types', $dep_types);
 
         }else{
@@ -99,7 +99,7 @@ class DepositController extends AppBaseController
             return redirect(route('deposits.index'));
         }
 
-        return view('deposits.show')->with('deposit', $deposit);
+        return view('locations.deposits.show')->with('deposit', $deposit);
     }
 
     /**
@@ -126,7 +126,7 @@ class DepositController extends AppBaseController
                 return redirect(route('deposits.index'));
             }
 
-            return view('deposits.edit')->with('deposit', $deposit)
+            return view('locations.deposits.edit')->with('deposit', $deposit)
                                         ->with('departments', $departments)
                                         ->with('dep_types', $dep_types);
         

@@ -37,7 +37,7 @@ class Location extends Model
         'location_function_code',
         'abz_code',
         'label_type_code',
-        'stock_type',
+        'stock_type_code',
         'sequence_arm',
         'sequence_sep',
         'sequence_inv'

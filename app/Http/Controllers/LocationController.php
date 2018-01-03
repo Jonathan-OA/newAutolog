@@ -55,10 +55,20 @@ class LocationController extends AppBaseController
             $deposits = App\Models\Deposit::getDeposits();
             //Lista de setores disponiveis
             $sectors = App\Models\Sector::getSectors();
+            //Lista tipos de endereço
+            $location_types = App\Models\LocationType::getLocationTypes();
+            //Lista funções de endereço
+            $location_functions = App\Models\LocationFunction::getLocationFunctions();
+            //Lista tipos de estoque (picking, palete, picking por prod.)
+            $stock_types = App\Models\StockType::getStockTypes();
+            
            
             return view('locations.create')->with('departments',$departments)
                                            ->with('deposits',$deposits)
-                                           ->with('sectors',$sectors);
+                                           ->with('sectors',$sectors)
+                                           ->with('location_types',$location_types)
+                                           ->with('location_functions',$location_functions)
+                                           ->with('stock_types',$stock_types);
 
         }else{
             //Sem permissão
@@ -77,6 +87,11 @@ class LocationController extends AppBaseController
     public function store(CreateLocationRequest $request)
     {
         $input = $request->all();
+        
+        $input['depth'] = (float)$input['depth'];
+        $input['sequence_arm'] = (float)$input['sequence_arm'];
+        $input['sequence_sep'] = (float)$input['sequence_sep'];
+        $input['sequence_inv'] = (float)$input['sequence_inv'];
 
         $location = $this->locationRepository->create($input);
 
@@ -114,19 +129,24 @@ class LocationController extends AppBaseController
      */
     public function edit($id)
     {
+        
         //Valida se usuário possui permissão para acessar esta opção
         if(App\Models\User::getPermission('locations_edit',Auth::user()->user_type_code)){
 
             $location = $this->locationRepository->findWithoutFail($id);
-            
-             //Lista de departamentos disponiveis
-             $departments = App\Models\Department::getDepartments();
-             //Lista de depositos disponiveis
-             $deposits = App\Models\Deposit::getDeposits();
 
-           
-             //Lista de setores disponiveis
-             $sectors = App\Models\Sector::getSectors();
+            //Lista de departamentos disponiveis
+            $departments = App\Models\Department::getDepartments();
+            //Lista de depositos disponiveis
+            $deposits = App\Models\Deposit::getDeposits();
+            //Lista de setores disponiveis
+            $sectors = App\Models\Sector::getSectors();
+            //Lista tipos de endereço
+            $location_types = App\Models\LocationType::getLocationTypes();
+            //Lista funções de endereço
+            $location_functions = App\Models\LocationFunction::getLocationFunctions();
+            //Lista tipos de estoque (picking, palete, picking por prod.)
+            $stock_types = App\Models\StockType::getStockTypes();
 
             if (empty($location)) {
                 Flash::error(Lang::get('validation.not_found'));
@@ -137,7 +157,10 @@ class LocationController extends AppBaseController
             return view('locations.edit')->with('location', $location)
                                          ->with('departments',$departments)
                                          ->with('deposits',$deposits)
-                                         ->with('sectors',$sectors);
+                                         ->with('sectors',$sectors)
+                                         ->with('location_types',$location_types)
+                                         ->with('location_functions',$location_functions)
+                                         ->with('stock_types',$stock_types);
         
         }else{
             //Sem permissão
@@ -166,11 +189,17 @@ class LocationController extends AppBaseController
 
         //Grava log
         $requestF = $request->all();
+
+        $requestF['depth'] = (float)$requestF['depth'];
+        $requestF['sequence_arm'] = (float)$requestF['sequence_arm'];
+        $requestF['sequence_sep'] = (float)$requestF['sequence_arm'];
+        $requestF['sequence_inv'] = (float)$requestF['sequence_arm'];
+
         $descricao = 'Alterou Location ID: '.$id.' - '.$requestF['code'];
         $log = App\Models\Log::wlog('locations_edit', $descricao);
 
 
-        $location = $this->locationRepository->update($request->all(), $id);
+        $location = $this->locationRepository->update($requestF, $id);
 
         Flash::success(Lang::get('validation.update_success'));
 

@@ -45,5 +45,11 @@ class LocationFunction extends Model
         
     ];
 
+    //Retorna todas as funçoes de endereço disponiveis
+    public static function getLocationFunctions(){
+        return LocationFunction::selectRaw("code,CONCAT(code,' - ',description) as description_f")
+                               ->pluck('description_f','code');
+    }
+
     
 }
