@@ -49,6 +49,7 @@ return [
     'stock_types' => 'Tipo de Estoque',
     'stock_type_code' => 'Tipo de Estoque',
     'stocks' => 'Saldo',
+    'companies' => 'Empresa',
 
     //Columns
     'name' => 'Nome',
@@ -129,6 +130,7 @@ return [
     'sequence_sep' => 'Seq. Separação',
     'sequence_inv' => 'Seq. Inventário',
     'depth' => 'Profundidade',
+    'branch' => 'Filial',
     
     
     //PlaceHolders

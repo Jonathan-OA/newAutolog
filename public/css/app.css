@@ -183,12 +183,16 @@
     }
     
     .panel-heading>.nav>li>a {
-        background-color: #d2d2d2;
+        background-color: #adadad;
         border-bottom-color: #17263d;
     }
     
     .nav-tabs {
         border-bottom-color: #17263d !important;
+    }
+    
+    .nav-tabs>li>a:hover {
+        background-color: #6f6f6f;
     }
     /* ------------------------------------------------*/
     /*  Cores relacionadas aos status dos documentos   */
@@ -362,6 +366,7 @@
     
     .lay_menu_op li a:hover {
         border-left: 10px solid #17263d;
+        background-color: #ebe8e8;
     }
     
     [aria-expanded=true] .menu_ext {

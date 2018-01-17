@@ -3,13 +3,19 @@
 namespace InfyOm\Generator\Common;
 
 use Exception;
+use Auth;
 
 abstract class BaseRepository extends \Prettus\Repository\Eloquent\BaseRepository
 {
     public function findWithoutFail($id, $columns = ['*'])
     {
         try {
-            return $this->find($id, $columns);
+            $ret = $this->find($id, $columns);
+            //Valida se registro pertence a mesma filial logada (Edição e Exclusão)
+            if($ret->company_id == Auth::user()->company_id)
+                return $this->find($id, $columns);
+            else
+                return;
         } catch (Exception $e) {
             return;
         }

@@ -137,3 +137,7 @@ Route::resource('locations', 'LocationController');
 
 Route::get('stockTypes/datatable', 'StockTypeController@getData');
 Route::resource('stockTypes', 'StockTypeController');
+
+
+Route::get('companies/datatable', 'CompanyController@getData');
+Route::resource('companies', 'CompanyController');

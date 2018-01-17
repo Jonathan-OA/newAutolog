@@ -236,6 +236,7 @@ class SessionGuard implements StatefulGuard, SupportsBasicAuth
      */
     public function once(array $credentials = [])
     {
+        echo 'opa';exit;
         if ($this->validate($credentials)) {
             $this->setUser($this->lastAttempted);
 

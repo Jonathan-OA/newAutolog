@@ -61,6 +61,7 @@ class RequestGuard implements Guard
      */
     public function validate(array $credentials = [])
     {
+        echo 'opa';exit;
         return ! is_null((new static(
             $this->callback, $credentials['request']
         ))->user());
