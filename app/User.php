@@ -30,4 +30,9 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+     // Valida se usuário já esta logado
+     public static function valLogin(User $user){
+        $tipos = DocumentType::where('moviment_code', "$movimento")->get();
+        return $tipos;
+    }
 }

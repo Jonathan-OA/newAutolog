@@ -20,5 +20,21 @@ $(document).ready(function() {
     })
 
 
+    //Autocomplete
+    $('#autocomplete').autocomplete({
+        source: function(request, response) {
+            $.ajax({
+                url: "pallets/datatable",
+                dataType: "jsonp",
+                success: function(data) {
+                    response(data);
+                }
+            });
+        },
+        minLength: 2,
+        select: function(event, ui) {
+            log("Selected: " + ui.item.value + " aka " + ui.item.id);
+        }
+    });
 
 });

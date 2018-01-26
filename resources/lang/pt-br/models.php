@@ -50,6 +50,8 @@ return [
     'stock_type_code' => 'Tipo de Estoque',
     'stocks' => 'Saldo',
     'companies' => 'Empresa',
+    'pallets' => 'Paletes',
+    'pallet_items' => 'Itens do Palete',
 
     //Columns
     'name' => 'Nome',
@@ -131,6 +133,12 @@ return [
     'sequence_inv' => 'Seq. Inventário',
     'depth' => 'Profundidade',
     'branch' => 'Filial',
+    'date' => 'Data',
+    'location_code' => 'Endereço',
+    'document_id' => 'Documento (Id)',
+    'stacking' => 'Empilhamento Máximo',
+    'packing_type_code' => 'Embalagem',
+
     
     
     //PlaceHolders

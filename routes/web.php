@@ -71,24 +71,12 @@ Route::get('customers/datatable', 'CustomerController@getData');
 Route::resource('customers', 'CustomerController');
 
 
-Route::get('customers/datatable', 'CustomerController@getData');
-Route::resource('customers', 'CustomerController');
-
-
-Route::get('customers/datatable', 'CustomerController@getData');
-Route::resource('customers', 'CustomerController');
-
-
 Route::get('suppliers/datatable', 'SupplierController@getData');
 Route::resource('suppliers', 'SupplierController');
 
 
 Route::get('packingTypes/datatable', 'PackingTypeController@getData');
 Route::resource('packingTypes', 'PackingTypeController');
-
-
-Route::get('products/datatable', 'ProductController@getData');
-Route::resource('products', 'ProductController');
 
 
 Route::get('products/datatable', 'ProductController@getData');
@@ -105,10 +93,6 @@ Route::resource('groups', 'GroupController');
 
 Route::get('locationFunctions/datatable', 'LocationFunctionController@getData');
 Route::resource('locationFunctions', 'LocationFunctionController');
-
-
-Route::get('locationTypes/datatable', 'LocationTypeController@getData');
-Route::resource('locationTypes', 'LocationTypeController');
 
 
 Route::get('locationTypes/datatable', 'LocationTypeController@getData');
@@ -141,3 +125,7 @@ Route::resource('stockTypes', 'StockTypeController');
 
 Route::get('companies/datatable', 'CompanyController@getData');
 Route::resource('companies', 'CompanyController');
+
+
+Route::get('pallets/datatable', 'PalletController@getData');
+Route::resource('pallets', 'PalletController');

@@ -52,5 +52,9 @@ class PackingType extends Model
         
     ];
 
-    
+    //Retorna todas as embalagens disponiveis
+    public static function getPackingTypes(){
+        return PackingType::selectRaw("code,CONCAT(code,' - ',description) as description_f")
+                          ->pluck('description_f','code');
+    }
 }
