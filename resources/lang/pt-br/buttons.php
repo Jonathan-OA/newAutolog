@@ -20,6 +20,7 @@ return [
     'update' => 'Atualizar',
     'exit' => 'Sair',
     'save' => 'Salvar',
+    'detail' => 'Detalhes',
     'msg_remove' => 'Deseja excluir este registro?'
 
 ];

@@ -5,7 +5,12 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Kodeine\Acl\Traits\HasRole;
-
+use App\Models\Config;
+use Carbon;
+use Session;
+use Request;
+use Auth;
+use DB;
 
 class User extends Authenticatable
 {
@@ -31,8 +36,60 @@ class User extends Authenticatable
     ];
 
      // Valida se usuário já esta logado
-     public static function valLogin(User $user){
-        $tipos = DocumentType::where('moviment_code', "$movimento")->get();
-        return $tipos;
+     public function valLogged($ip){
+
+        //Pega Data Atual
+        $dataAtual = Carbon\Carbon::now();
+        //Pega Sessão Atual
+        $session_id = Session::getId();
+        //Se a diferença for menor que 1 minutos, significa que ainda esta logado
+        $ultimo = Carbon\Carbon::parse($this->last_login); 
+
+        if($dataAtual->diffInMinutes($ultimo) <= 1 && $this->last_ip <> $ip){
+            return false;
+        }else{
+            //Atualiza data do ultimo login para a atual
+            $this->last_login = $dataAtual->toDateTimeString();
+            $this->last_ip = $ip;
+            $this->save();
+            return true;
+        }
+    }
+
+    // Valida quantidade de usuários logados
+    public function valQtyUsers(){
+        //Parâmetro com o limite de usuários desktop
+        $config = Config::where('code', 'usuarios_desktop')
+                        ->get();
+
+        //Busca quantidade de usuários logados (diferença <= 1 minuto)
+        $qdeUsers = User::where('company_id', Auth::user()->company_id)
+                        ->where(DB::raw('DATEDIFF(minute, last_login, GETDATE())'),'<=',1)
+                        ->count();
+        
+        $qdeUsers = ($qdeUsers == 0)? 3 : $qdeUsers;
+        //echo $config[0]->value;exit;
+
+        if($qdeUsers < $config[0]->value){
+            //Ok
+            return true;
+        }else{
+            //Limite excedido
+            return false;
+        }                     
+
+    }
+
+    //Função que atualiza o horário de login com o atual
+    public function updateLogin(){
+
+        //Pega Data Atual
+        $dataAtual = Carbon\Carbon::now();
+
+        //Atualiza data do ultimo login para a atual
+        $this->last_login = $dataAtual->toDateTimeString();
+        $this->save();
+         
+
     }
 }

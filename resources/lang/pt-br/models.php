@@ -52,6 +52,7 @@ return [
     'companies' => 'Empresa',
     'pallets' => 'Paletes',
     'pallet_items' => 'Itens do Palete',
+    'configs' => 'Configurações do Sistema',
 
     //Columns
     'name' => 'Nome',

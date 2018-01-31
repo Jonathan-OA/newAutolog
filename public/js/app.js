@@ -36,5 +36,12 @@ $(document).ready(function() {
             log("Selected: " + ui.item.value + " aka " + ui.item.id);
         }
     });
-
 });
+
+//Atualiza o usuário logado de 1 em 1 minuto
+setInterval(function() {
+    $.ajax("users/updTime")
+        .done(function() {
+            //
+        });
+}, 58000);

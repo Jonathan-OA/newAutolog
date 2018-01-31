@@ -56,6 +56,7 @@ Route::resource('modules', 'ModuleController');
 
 
 Route::get('users/datatable', 'UserController@getData');
+Route::get('users/updTime', 'UserController@updTime');
 Route::resource('users', 'UserController');
 
 
@@ -129,3 +130,12 @@ Route::resource('companies', 'CompanyController');
 
 Route::get('pallets/datatable', 'PalletController@getData');
 Route::resource('pallets', 'PalletController');
+
+
+Route::get('configs/datatable', 'ConfigController@getData');
+Route::resource('configs', 'ConfigController');
+
+
+Route::get('palletItems/datatable/{id}', 'PalletItemController@getData');
+Route::resource('palletItems', 'PalletItemController');
+Route::get('palletItems/ix/{id}', 'PalletItemController@index');

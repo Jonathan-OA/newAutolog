@@ -86,6 +86,8 @@ return [
     'delete_success'         => 'Registro excluído com sucesso.',
     'not_found'              => 'Registro não encontrado.',
     'permission'              => 'Ooopss! Você não tem permissão para acessar esta opção!',
+    'loged'                   => 'Usuário já esta logado!',
+    'qty_users'               => 'Limite de usuários ativos foi atingido!',
 
     /*
     |--------------------------------------------------------------------------

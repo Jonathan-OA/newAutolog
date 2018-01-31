@@ -2,8 +2,15 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use App\User;
+use Redirect;
+use Flash;
+use Lang;
+use Session;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
@@ -45,9 +52,22 @@ class LoginController extends Controller
      * @param  mixed  $user
      * @return mixed
      */
-    protected function authenticated(Request $request, $user)
+    protected function authenticated(Request $request, User $user)
     {
-        var_dump($user);
-        echo 'opaaaControl';exit;
+        //Valida se limite de usuários já foi atingido
+        if($user->valQtyUsers()){
+            //Se usuário já esta logado, da erro.
+            if(!$user->valLogged($request->ip())){
+                Auth::logout();
+                Flash::error(Lang::get('validation.loged'));
+                return redirect(route('login'));
+            }
+        }else{
+            //Limite Excedido
+            Auth::logout();
+            Flash::error(Lang::get('validation.qty_users'));
+            return redirect(route('login'));
+        }
+        
     }
 }

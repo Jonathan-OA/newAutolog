@@ -46,9 +46,10 @@
                     <br>
                     @if (count($errors))
                             @foreach($errors->all() as $error)
-                                <div class="alert alert-danger text-center" role="alert"><% $error %> </div>
+                                <div class="alert alert-danger" role="alert"><% $error %> </div>
                             @endforeach
                     @endif
+                    @include('flash::message')
                 </div>
         </div>
     </form>

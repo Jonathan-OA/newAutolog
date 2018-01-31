@@ -6,7 +6,7 @@
             <div class="panel panel-default" >
                 <div class="panel-heading">
                    <!-- Texto baseado no arquivo de linguagem -->
-                   @lang('models.pallets') 
+                   @lang('models.pallet_items') {{!! $palletId !!}}
                 </div>
                 <div class="panel panel-default">
                     <div class="row">
@@ -15,10 +15,10 @@
                             @include('flash::message')
                             <div id="msg_excluir"></div>
                             <div class="row buttons_grid">
-                                <a class="btn btn-success"  href="{!! route('pallets.create') !!}">@lang('buttons.add')</a>
+                                <a class="btn btn-success"  href="{!! route('palletItems.create') !!}">@lang('buttons.add')</a>
                             </div>
                             <div class="panel-body">
-                                @include('pallets.table')
+                                @include('pallet_items.table')
                             </div>
                         </div>
                     </div>
@@ -33,10 +33,10 @@
     $(function() {
         
         //Parâmetros para criação da datatable
-        table = $("#pallets-table").DataTable({
+        table = $("#palletItems-table").DataTable({
             scrollX: true,
             scrollY: "47vh",
-            ajax: 'pallets/datatable',
+            ajax: 'palletItems/datatable/1',
             autoWidth: true,
             fixedColumns:   {
                 leftColumns: 0,
@@ -53,34 +53,37 @@
                     sPrevious: "@lang('models.previous')",
                 }
             },
-            columns: [  { data: 'barcode' },
-                        { data: 'location_code' },
-                        { data: 'packing_type_code' },
+            columns: [  { data: 'pallet_id' },
+                        { data: 'item_code' },
+                        { data: 'qty' },
+                        { data: 'uom_code' },
+                        { data: 'prim_qty' },
+                        { data: 'prim_uom_code' },
+                        { data: 'label_id' },
+                        { data: 'activity_id' },
                         { data: 'status' },
+                        { data: 'turn' },
                         { data: null,
-                         className: "th_grid",
-                         defaultContent: "<button id='detail' aria-label='@lang('buttons.detail')' data-microtip-position='left' role='tooltip' style='margin-right: 3px' ><img class='icon' src='<% asset('/icons/detalhes2.png') %>'></button><button id='edit' aria-label='@lang('buttons.edit')' data-microtip-position='left' role='tooltip' ><img class='icon' src='<% asset('/icons/editar.png') %>'></button><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='<% asset('/icons/remover.png') %>'></button>",
-                         width: "90px" 
-                        }],
+                    className: "th_grid",
+                    defaultContent: "<button id='edit' aria-label='@lang('buttons.edit')' data-microtip-position='left' role='tooltip' ><img class='icon' src='<% asset('/icons/editar.png') %>'></button><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='<% asset('/icons/remover.png') %>'></button>",
+                    width: "90px" 
+                }],
       });
 
       //Funções dos botões de editar e excluir
-      $('#pallets-table tbody').on( 'click', 'button', function () {
+      $('#palletItems-table tbody').on( 'click', 'button', function () {
             var data = table.row( $(this).parents('tr') ).data();
             var id = $(this).attr('id');
             if(id == 'edit'){
                 //Editar Registro
-                window.location.href = "{!! URL::to('pallets/"+data.id+"/edit') !!}";
-            }else if(id == 'detail'){
-                //Detalhes
-                window.location.href = "{!! URL::to('palletItems/ix/"+data.id+"') !!}";
+                window.location.href = "{!! URL::to('palletItems/"+data.id+"/edit') !!}";
             }else{
                 //Excluir Registro
                 if(confirm('@lang("buttons.msg_remove")')){
                     //Token obrigatório para envio POST
                     var tk = $('meta[name="csrf-token"]').attr('content');
                     $.ajax({
-                        url: 'pallets/'+data.id,
+                        url: 'palletItems/'+data.id,
                         type: 'post',
                         data: {_method: 'delete', _token :tk},
                         success: function(scs){ 

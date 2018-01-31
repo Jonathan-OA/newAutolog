@@ -14,6 +14,7 @@ use Response;
 use Datatables;
 use App;
 use Lang;
+use App\User;
 
 class UserController extends AppBaseController
 {
@@ -178,5 +179,15 @@ class UserController extends AppBaseController
     public function getData()
     {
         return Datatables::of(App\Models\User::where('company_id', Auth::user()->company_id))->make(true);
+    }
+
+    /**
+     * Atualiza Horario de Login
+     *
+     */
+
+    public function updTime(){
+        $user = Auth::user();
+        $res = $user->updateLogin();
     }
 }
