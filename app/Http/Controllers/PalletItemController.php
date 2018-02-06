@@ -34,10 +34,10 @@ class PalletItemController extends AppBaseController
      */
     public function index($pallet_id)
     {
-        $palletItems = PalletItem::where('company_id', Auth::user()->company_id)
-                                 ->where('pallet_id', $pallet_id)
-                                 ->get();
-
+        
+        $palletItems = $this->palletItemRepository->findWhere(array('pallet_id' => $pallet_id,
+                                                                    'company_id' => Auth::user()->company_id));
+                                         
         return view('pallet_items.index')
                 ->with('palletItems', $palletItems)
                 ->with('palletId', $pallet_id);
@@ -48,17 +48,18 @@ class PalletItemController extends AppBaseController
      *
      * @return Response
      */
-    public function create()
+    public function create($pallet_id)
     {
         //Valida se usuário possui permissão para acessar esta opção
         if(App\Models\User::getPermission('pallet_items_add',Auth::user()->user_type_code)){
 
-            return view('pallet_items.create');
+            return view('pallet_items.create')
+                    ->with('palletId', $pallet_id);
 
         }else{
             //Sem permissão
             Flash::error(Lang::get('validation.permission'));
-            return redirect(route('pallet_items.index'));
+            return redirect(action('PalletItemController@index',[$pallet_id]));
         }
     }
 
@@ -75,9 +76,12 @@ class PalletItemController extends AppBaseController
 
         $palletItem = $this->palletItemRepository->create($input);
 
+        //Id para retornar para a pagina do palete correto
+        $pallet_id = $input['pallet_id'];
+
         Flash::success(Lang::get('validation.save_success'));
 
-        return redirect(route('palletItems.index'));
+        return redirect(action('PalletItemController@index',[$pallet_id]));
     }
 
     /**
@@ -113,14 +117,17 @@ class PalletItemController extends AppBaseController
         if(App\Models\User::getPermission('pallet_items_edit',Auth::user()->user_type_code)){
 
             $palletItem = $this->palletItemRepository->findWithoutFail($id);
-
+            $pallet_id = $palletItem['original']['pallet_id'];
+            
             if (empty($palletItem)) {
                 Flash::error(Lang::get('validation.not_found'));
 
                 return redirect(route('palletItems.index'));
             }
 
-            return view('pallet_items.edit')->with('palletItem', $palletItem);
+            return view('pallet_items.edit')
+                    ->with('palletItem', $palletItem)
+                    ->with('palletId', $pallet_id);;
         
         }else{
             //Sem permissão
@@ -149,15 +156,15 @@ class PalletItemController extends AppBaseController
 
         //Grava log
         $requestF = $request->all();
-        $descricao = 'Alterou PalletItem ID: '.$id.' - '.$requestF['code'];
+        $descricao = 'Alterou PalletItem ID: '.$id.' - Palete: '.$requestF['pallet_id'].' Etiqueta '.$requestF['label_id'];
         $log = App\Models\Log::wlog('pallet_items_edit', $descricao);
 
 
         $palletItem = $this->palletItemRepository->update($request->all(), $id);
 
         Flash::success(Lang::get('validation.update_success'));
-
-        return redirect(route('palletItems.index'));
+       
+        return redirect(action('PalletItemController@index',[$requestF['pallet_id']]));
     }
 
     /**

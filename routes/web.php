@@ -137,5 +137,6 @@ Route::resource('configs', 'ConfigController');
 
 
 Route::get('palletItems/datatable/{id}', 'PalletItemController@getData');
-Route::resource('palletItems', 'PalletItemController');
+Route::resource('palletItems', 'PalletItemController',['except' => 'create']);
 Route::get('palletItems/ix/{id}', 'PalletItemController@index');
+Route::get('palletItems/create/{id}', 'PalletItemController@create');

@@ -4,7 +4,7 @@
         <div class="col-md-12 pad-ct">
             <div class="panel panel-default" >
                 <div class="panel-heading">
-                    @lang('models.palletItems')
+                    @lang('models.pallet_items')
                 </div>
                 <div class="panel panel-default">
                     <div class="panel-body" >

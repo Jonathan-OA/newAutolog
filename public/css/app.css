@@ -130,6 +130,10 @@
         height: 85vh;
     }
     
+    .pbread {
+        height: 79vh !important;
+    }
+    
     .nav-tabs>li>a {
         line-height: 0.8 !important;
     }
@@ -193,6 +197,16 @@
     
     .nav-tabs>li>a:hover {
         background-color: #6f6f6f;
+    }
+    
+    .breadcrumb-item>a {
+        color: #17263d;
+        font-weight: bold;
+    }
+    
+    .breadcrumb {
+        margin-bottom: 0px;
+        margin-top: 5px;
     }
     /* ------------------------------------------------*/
     /*  Cores relacionadas aos status dos documentos   */

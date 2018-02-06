@@ -1,21 +1,28 @@
 @extends('layouts.app')
 
 @section('content')
+    <!-- BreadCrumb - Trilha  -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{!! route('pallets.index') !!}">@lang('models.pallets')</a></li>
+          <li class="breadcrumb-item active" aria-current="page">@lang('buttons.detail')</li>
+        </ol>
+      </nav>
     <div class="row">
         <div class="col-md-12 pad-ct">
-            <div class="panel panel-default" >
+            <div class="panel pbread panel-default" >
                 <div class="panel-heading">
                    <!-- Texto baseado no arquivo de linguagem -->
                    @lang('models.pallet_items') {{!! $palletId !!}}
                 </div>
-                <div class="panel panel-default">
+                <div class="panel pbread panel-default">
                     <div class="row">
                         <div class="col-md-12">
                             <!-- Alerta de erro / sucesso -->
                             @include('flash::message')
                             <div id="msg_excluir"></div>
                             <div class="row buttons_grid">
-                                <a class="btn btn-success"  href="{!! route('palletItems.create') !!}">@lang('buttons.add')</a>
+                                <a class="btn btn-success"  href="{!! action('PalletItemController@create',$palletId) !!}">@lang('buttons.add')</a>
                             </div>
                             <div class="panel-body">
                                 @include('pallet_items.table')
@@ -35,8 +42,8 @@
         //Parâmetros para criação da datatable
         table = $("#palletItems-table").DataTable({
             scrollX: true,
-            scrollY: "47vh",
-            ajax: 'palletItems/datatable/1',
+            scrollY: "40vh",
+            ajax: "{!! URL::to('palletItems/datatable/'.$palletId) !!}",
             autoWidth: true,
             fixedColumns:   {
                 leftColumns: 0,
@@ -83,7 +90,7 @@
                     //Token obrigatório para envio POST
                     var tk = $('meta[name="csrf-token"]').attr('content');
                     $.ajax({
-                        url: 'palletItems/'+data.id,
+                        url: "{!! URL::to('palletItems/"+data.id+"') !!}",
                         type: 'post',
                         data: {_method: 'delete', _token :tk},
                         success: function(scs){ 

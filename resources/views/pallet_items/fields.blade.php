@@ -4,9 +4,8 @@
 <!-- Company Id Field -->
 <input id='company_id' name='company_id' type='hidden' value='{!! Auth::user()->company_id !!}'>
 
-<!-- Pallet Id Field -->
-{!! Form::label('pallet_id', Lang::get('models.pallet_id').':') !!}
-{!! Form::number('pallet_id', null, ['class' => 'form-control']) !!}
+<!-- Company Id Field -->
+<input id='pallet_id' name='pallet_id' type='hidden' value='{!! $palletId !!}'>
 
 <!-- Item Code Field -->
 {!! Form::label('item_code', Lang::get('models.item_code').':') !!}
@@ -47,4 +46,4 @@
 
 <!-- Submit Field -->
 {!! Form::submit(Lang::get('buttons.save'), ['class' => 'btn btn-primary']) !!}
-<a href="{!! route('palletItems.index') !!}" class="btn btn-default">@lang('buttons.cancel')</a>
+<a href="{!! action('PalletItemController@index',[$palletId]) !!}" class="btn btn-default">@lang('buttons.cancel')</a>
