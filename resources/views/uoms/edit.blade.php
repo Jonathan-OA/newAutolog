@@ -4,14 +4,14 @@
         <div class="col-md-12 pad-ct">
             <div class="panel panel-default" >
                 <div class="panel-heading">
-                    @lang('models.pallet_items') - {!! $palletBarcode !!}
+                    @lang('models.uoms')
                 </div>
                 <div class="panel panel-default">
                     <div class="panel-body" >
                         <div class="row">
                             <div class="col-md-12">
-                                {!! Form::model($palletItem, ['route' => ['palletItems.update', $palletItem->id], 'method' => 'patch']) !!}
-                                  @include('pallet_items.fields')
+                                {!! Form::model($uom, ['route' => ['uoms.update', $uom->id], 'method' => 'patch']) !!}
+                                  @include('uoms.fields')
                                 {!! Form::close() !!}
                             </div>
                         </div>

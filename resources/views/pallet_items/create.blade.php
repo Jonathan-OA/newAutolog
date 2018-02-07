@@ -5,7 +5,7 @@
         <div class="col-md-12 pad-ct">
             <div class="panel panel-default" >
                 <div class="panel-heading">
-                    @lang('models.pallet_items')
+                    @lang('models.pallet_items') - {!! $palletBarcode !!}
                 </div>
                 <div class="panel panel-default">
                     <div class="panel-body" >

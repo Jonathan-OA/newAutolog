@@ -13,7 +13,7 @@
             <div class="panel pbread panel-default" >
                 <div class="panel-heading">
                    <!-- Texto baseado no arquivo de linguagem -->
-                   @lang('models.pallet_items') {{!! $palletId !!}}
+                   @lang('models.pallet_items')  - {!! $palletBarcode !!}
                 </div>
                 <div class="panel pbread panel-default">
                     <div class="row">
@@ -86,7 +86,7 @@
                 window.location.href = "{!! URL::to('palletItems/"+data.id+"/edit') !!}";
             }else{
                 //Excluir Registro
-                if(confirm('@lang("buttons.m sg_remove")')){
+                if(confirm('@lang("buttons.msg_remove")')){
                     //Token obrigatório para envio POST
                     var tk = $('meta[name="csrf-token"]').attr('content');
                     $.ajax({

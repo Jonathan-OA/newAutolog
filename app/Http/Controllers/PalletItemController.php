@@ -15,6 +15,8 @@ use Datatables;
 use App;
 use Lang;
 use App\Models\PalletItem;
+use App\Models\Pallet;
+use App\Models\Uom;
 
 class PalletItemController extends AppBaseController
 {
@@ -37,10 +39,12 @@ class PalletItemController extends AppBaseController
         
         $palletItems = $this->palletItemRepository->findWhere(array('pallet_id' => $pallet_id,
                                                                     'company_id' => Auth::user()->company_id));
-                                         
+        $palletBarcode = Pallet::find($pallet_id);   
+        
         return view('pallet_items.index')
                 ->with('palletItems', $palletItems)
-                ->with('palletId', $pallet_id);
+                ->with('palletId', $pallet_id)
+                ->with('palletBarcode', $palletBarcode->barcode);
     }
 
     /**
@@ -52,8 +56,11 @@ class PalletItemController extends AppBaseController
     {
         //Valida se usuário possui permissão para acessar esta opção
         if(App\Models\User::getPermission('pallet_items_add',Auth::user()->user_type_code)){
-
+            $palletBarcode = Pallet::find($pallet_id);   
+            $uoms = Uom::getUoms();
             return view('pallet_items.create')
+                    ->with('palletBarcode', $palletBarcode->barcode)
+                    ->with('uom_cads', $uoms)
                     ->with('palletId', $pallet_id);
 
         }else{
@@ -118,7 +125,9 @@ class PalletItemController extends AppBaseController
 
             $palletItem = $this->palletItemRepository->findWithoutFail($id);
             $pallet_id = $palletItem['original']['pallet_id'];
-            
+            $palletBarcode = Pallet::find($pallet_id);   
+            $uoms = Uom::getUoms();
+
             if (empty($palletItem)) {
                 Flash::error(Lang::get('validation.not_found'));
 
@@ -127,7 +136,9 @@ class PalletItemController extends AppBaseController
 
             return view('pallet_items.edit')
                     ->with('palletItem', $palletItem)
-                    ->with('palletId', $pallet_id);;
+                    ->with('palletBarcode', $palletBarcode->barcode)
+                    ->with('palletId', $pallet_id)
+                    ->with('uom_cads', $uoms);
         
         }else{
             //Sem permissão

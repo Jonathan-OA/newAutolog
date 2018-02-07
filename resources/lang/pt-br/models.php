@@ -53,6 +53,7 @@ return [
     'pallets' => 'Paletes',
     'pallet_items' => 'Itens do Palete',
     'configs' => 'Configurações do Sistema',
+    'uoms' => 'Unidades de Medida',
 
     //Columns
     'name' => 'Nome',
@@ -147,7 +148,7 @@ return [
     'prim_uom_code' => 'Un. Primária',
     'label_id' => 'Etiqueta',
     'activity_id' => 'Atividade',
-    'turn' => 'Atividade',
+    'turn' => 'Turno',
 
     
     

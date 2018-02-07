@@ -4,6 +4,7 @@ namespace InfyOm\Generator\Common;
 
 use Exception;
 use Auth;
+use Schema;
 
 abstract class BaseRepository extends \Prettus\Repository\Eloquent\BaseRepository
 {
@@ -11,8 +12,8 @@ abstract class BaseRepository extends \Prettus\Repository\Eloquent\BaseRepositor
     {
         try {
             $ret = $this->find($id, $columns);
-            //Valida se registro pertence a mesma filial logada (Edição e Exclusão)
-            if($ret->company_id == Auth::user()->company_id)
+            //Valida se registro pertence a mesma filial logada (Edição e Exclusão) - Se tabela tiver o campo
+            if($ret->company_id == Auth::user()->company_id || trim($ret->company_id) == '')
                 return $this->find($id, $columns);
             else
                 return;
