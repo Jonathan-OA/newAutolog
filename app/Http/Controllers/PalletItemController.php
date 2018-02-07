@@ -187,7 +187,7 @@ class PalletItemController extends AppBaseController
                 return redirect(route('palletItems.index'));
             }
 
-            $this->palletItemRepository->delete($id);
+            //$this->palletItemRepository->delete($id);
 
              //Grava log
             $descricao = 'Excluiu PalletItem ID: '.$id;

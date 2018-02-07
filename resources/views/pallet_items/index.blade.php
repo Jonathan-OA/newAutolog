@@ -86,7 +86,7 @@
                 window.location.href = "{!! URL::to('palletItems/"+data.id+"/edit') !!}";
             }else{
                 //Excluir Registro
-                if(confirm('@lang("buttons.msg_remove")')){
+                if(confirm('@lang("buttons.m sg_remove")')){
                     //Token obrigatório para envio POST
                     var tk = $('meta[name="csrf-token"]').attr('content');
                     $.ajax({
@@ -94,6 +94,7 @@
                         type: 'post',
                         data: {_method: 'delete', _token :tk},
                         success: function(scs){ 
+                           
                             //Recarrega grid sem atualizar a página
                             table.ajax.reload( null, false );
                             //Se retornou 0, foi excluído com sucesso

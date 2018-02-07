@@ -65,13 +65,16 @@
     <script src="<% asset('/js/jquery/jquery-ui.min.js') %>"></script>
     <script src="<% asset('/js/angular/angular-touch.min.js') %>"></script>
     <script src="<% asset('/js/angular/angular-animate.min.js') %>"></script> 
-     <script src="<% asset('/datatables/datatables.min.js') %>"></script>  
-     <script src="https://cdn.datatables.net/fixedcolumns/3.2.3/js/dataTables.fixedColumns.min.js"></script>  
+    <script src="<% asset('/datatables/datatables.min.js') %>"></script>  
+    <script src="https://cdn.datatables.net/fixedcolumns/3.2.3/js/dataTables.fixedColumns.min.js"></script>  
     <script src="<% asset('/js/vendor/what-input.js') %>"></script>
     <script src="<% asset('/js/bootstrap.min.js') %>"></script>
     <script src="<% asset('/js/app.js') %>"></script>
     <script src="<% asset('/js/release/ui-grid.min.js') %>"></script>
-
+    <script type="text/javascript">
+        // URL base - Variável pode ser acessada em qualquer arquivo
+        var APP_URL = {!! json_encode(url('/')) !!}
+    </script>
     @yield('scripts')
 
 </body>

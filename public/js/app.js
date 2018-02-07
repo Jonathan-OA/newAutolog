@@ -1,5 +1,6 @@
 //Funções Relacionadas ao Layout Base
 $(document).ready(function() {
+
     //Esconde / Mostra Menu
     $('#button_menu').click(function() {
         $('#lay_menu_op').toggle();
@@ -22,25 +23,33 @@ $(document).ready(function() {
 
     //Autocomplete
     $('#autocomplete').autocomplete({
+
         source: function(request, response) {
+            var table = $('#autocomplete').attr('table');
             $.ajax({
-                url: "pallets/datatable",
-                dataType: "jsonp",
+                url: APP_URL + "/search",
+                dataType: "json",
+                data: {
+                    term: request.term,
+                    table: table
+                },
                 success: function(data) {
                     response(data);
                 }
+
             });
         },
-        minLength: 2,
+        minLength: 1,
         select: function(event, ui) {
-            log("Selected: " + ui.item.value + " aka " + ui.item.id);
+            $(this).val(ui.item.code);
+            $('#autocomplete').val(ui.item.code);
         }
     });
 });
 
 //Atualiza o usuário logado de 1 em 1 minuto
 setInterval(function() {
-    $.ajax("users/updTime")
+    $.ajax(APP_URL + "/users/updTime")
         .done(function() {
             //
         });

@@ -4,12 +4,12 @@
 <!-- Company Id Field -->
 <input id='company_id' name='company_id' type='hidden' value='{!! Auth::user()->company_id !!}'>
 
-<!-- Company Id Field -->
+<!-- Pallet Id Field -->
 <input id='pallet_id' name='pallet_id' type='hidden' value='{!! $palletId !!}'>
 
 <!-- Item Code Field -->
 {!! Form::label('item_code', Lang::get('models.item_code').':') !!}
-{!! Form::text('item_code', null, ['class' => 'form-control']) !!}
+{!! Form::text('item_code', null, ['class' => 'form-control','id' => 'autocomplete', 'table' => 'products']) !!}
 
 <!-- Qty Field -->
 {!! Form::label('qty', Lang::get('models.qty').':') !!}

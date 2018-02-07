@@ -18,12 +18,12 @@
 
 <!-- Location Code Field -->
 {!! Form::label('location_code', Lang::get('models.location_code').':') !!}
-{!! Form::text('location_code', null, ['class' => 'form-control','id' => 'autocomplete']) !!}
+{!! Form::text('location_code', null, ['class' => 'form-control','id' => 'autocomplete', 'table' => 'locations']) !!}
 
 <!-- Document Id Field -->
 {!! Form::label('document_id', Lang::get('models.document_id').':') !!}
 {!! Form::number('document_id', null, ['class' => 'form-control']) !!}
-
+ 
 <!-- Height Field -->
 {!! Form::label('height', Lang::get('models.height').':') !!}
 {!! Form::number('height', null, ['class' => 'form-control']) !!}

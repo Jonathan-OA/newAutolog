@@ -39,6 +39,9 @@ Route::group(['middleware' => 'web'], function() {
     //INSTALADOR
     Route::get('/install', 'InstallController@index');
     Route::post('/install/trans', 'InstallController@step1');
+
+    //AUTOCOMPLETE
+    Route::get('search', 'AppBaseController@autocomplete');
 });
 
 

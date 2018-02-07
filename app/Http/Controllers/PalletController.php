@@ -111,6 +111,7 @@ class PalletController extends AppBaseController
         if(App\Models\User::getPermission('pallets_edit',Auth::user()->user_type_code)){
 
             $pallet = $this->palletRepository->findWithoutFail($id);
+            $packingTypes = App\Models\PackingType::getPackingTypes();
 
             if (empty($pallet)) {
                 Flash::error(Lang::get('validation.not_found'));
@@ -118,7 +119,9 @@ class PalletController extends AppBaseController
                 return redirect(route('pallets.index'));
             }
 
-            return view('pallets.edit')->with('pallet', $pallet);
+            return view('pallets.edit')
+                    ->with('pallet', $pallet)
+                    ->with('packing_types', $packingTypes);
         
         }else{
             //Sem permissão
