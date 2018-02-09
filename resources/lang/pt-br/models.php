@@ -54,6 +54,7 @@ return [
     'pallet_items' => 'Itens do Palete',
     'configs' => 'Configurações do Sistema',
     'uoms' => 'Unidades de Medida',
+    'labels' => 'Etiquetas',
 
     //Columns
     'name' => 'Nome',
@@ -149,6 +150,7 @@ return [
     'label_id' => 'Etiqueta',
     'activity_id' => 'Atividade',
     'turn' => 'Turno',
+    'client_id' => 'Cliente',
 
     
     

@@ -97,6 +97,11 @@
         width: 22px;
     }
     
+    .icon-s {
+        width: 22px;
+        margin-right: 1vh;
+    }
+    
     .icon_menu {
         width: 2rem;
         margin-right: 1.6rem;
@@ -264,10 +269,9 @@
     }
     
     .icon_action {
-        background-color: #128b0b;
+        background-color: inherit !important;
         padding: 3px;
         border-radius: 5px;
-        border: 1px solid #5d5d5d;
         text-decoration: none !important;
         float: none !important;
     }

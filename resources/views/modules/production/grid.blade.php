@@ -27,25 +27,30 @@
                     Módulo de Produção
                 </div>
                 <div class="row buttons_grid">
-                    <a href="production/add" id="button_menu" data-toggle="modal" > 
-                        <img class="icon_grid" src="<% asset('/icons/add.png') %>" alt="Adicionar">
-                    </a>
-                    <a href="#" id="button_menu"> 
-                        <img class="icon_grid" src="<% asset('/icons/import.png') %>" alt="Importar">
-                    </a>
-                    <a href="#" id="toggleFiltering" ng-click="toggleFiltering()"> 
-                        <img class="icon_grid" src="<% asset('/icons/filter.png') %>" alt="Filtrar">
-                    </a>
+                        <button class="icon_grid" aria-label="@lang('buttons.add')" data-microtip-position="bottom" role="tooltip">
+                            <img class='icon' src='<% asset('/icons/add.png') %>'>
+                        </button>
+                        <button class="icon_grid" aria-label="@lang('buttons.import')" data-microtip-position="bottom" role="tooltip">
+                            <img class='icon' src='<% asset('/icons/import.png') %>'>
+                        </button>
+                        <button class="icon_grid" aria-label="@lang('buttons.filter')" data-microtip-position="bottom" role="tooltip" ng-click="toggleFiltering()">
+                            <img class='icon' src='<% asset('/icons/filter.png') %>'>
+                        </button>
 
                 </div>
                  <div class="panel-body">
                     <div>
-                            <div ui-grid="gridOptions" ui-grid-auto-resize  ui-grid-resize-columns ui-grid-selection ui-grid-pagination ui-grid-move-columns ui-grid-save-state class="grid">
+                            <div style = "z-index: 1;"ui-grid="gridOptions" ui-grid-auto-resize  ui-grid-resize-columns ui-grid-selection ui-grid-pagination ui-grid-move-columns ui-grid-save-state class="grid">
                             </div>
                             <script type="text/ng-template" id="options">
                                 <div id="hhhaaa" class="ui-grid-cell-contents" ng-controller="MainCtrl">
-                                    <a href="#"  data-toggle="modal"  ng-click="showGridDet(row.entity.id, row.entity.number)" data-target="#myModal" class=" glyphicon glyphicon-zoom-in icon_action"></a>
-                                    <a href="#" id="listButtons{{row.entity.id}}" class=" glyphicon glyphicon glyphicon-tasks icon_action" ng-click="showActions('production', row.entity.id)"></a>
+                                    <button class="icon_action" aria-label="@lang('buttons.detail')" data-microtip-position="left" role="tooltip">
+                                        <img class='icon' src='<% asset('/icons/detalhes.png') %>'>
+                                    </button>
+                                    <button class="icon_action" aria-label="@lang('buttons.action')" data-microtip-position="left" role="tooltip">
+                                            <img class='icon' src='<% asset('/icons/opcoes2.png') %>'>
+                                    </button>
+                                    <!-- <a href="#" id="listButtons{{row.entity.id}}" class=" glyphicon glyphicon glyphicon-tasks icon_action" ng-click="showActions('production', row.entity.id)"></a> -->
                                 </div>
                             </script>
                     </div>

@@ -96,7 +96,7 @@ class Label extends Model
 
      //Retorna todos os labels disponíveis
      public static function getLabels(){
-        return $MODEL_NAME::selectRaw("code,CONCAT(code,' - ',description) as description_f")
+        return Label::selectRaw("code,CONCAT(code,' - ',description) as description_f")
                       ->where('company_id', Auth::user()->company_id)
                       ->pluck('description_f','code');
     }

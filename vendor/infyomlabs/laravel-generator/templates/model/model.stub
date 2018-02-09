@@ -39,7 +39,7 @@ $PRIMARY$
 
      //Retorna todos os $TABLE_NAME$ disponíveis
      public static function get$MODEL_NAME_PLURAL$(){
-        return $MODEL_NAME::selectRaw("code,CONCAT(code,' - ',description) as description_f")
+        return $MODEL_NAME$::selectRaw("code,CONCAT(code,' - ',description) as description_f")
                       ->where('company_id', Auth::user()->company_id)
                       ->pluck('description_f','code');
     }

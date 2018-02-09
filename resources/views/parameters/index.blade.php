@@ -42,7 +42,7 @@
             },
             "oLanguage": {
                 sLengthMenu: "@lang('models.show') _MENU_ @lang('models.entries')",
-                sSearch: "@lang('models.search'): ",
+                sSearch: "<img class='icon-s' src='<% asset('/icons/buscar.png') %>'>",
                 sInfo: " _START_ a _END_ - _TOTAL_ @lang('models.entries')",
                 "oPaginate": {
                     sFirst: "@lang('models.first')",

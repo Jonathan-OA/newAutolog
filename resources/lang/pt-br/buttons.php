@@ -21,6 +21,10 @@ return [
     'exit' => 'Sair',
     'save' => 'Salvar',
     'detail' => 'Detalhes',
-    'msg_remove' => 'Deseja excluir este registro?'
+    'import' => 'Importar',
+    'filter' => 'Filtrar',
+    'action' => 'Ações',
+    'msg_remove' => 'Deseja excluir este registro?',
+    
 
 ];
