@@ -39,21 +39,24 @@
 
                 </div>
                  <div class="panel-body">
-                    <div>
-                            <div style = "z-index: 1;"ui-grid="gridOptions" ui-grid-auto-resize  ui-grid-resize-columns ui-grid-selection ui-grid-pagination ui-grid-move-columns ui-grid-save-state class="grid">
-                            </div>
-                            <script type="text/ng-template" id="options">
-                                <div id="hhhaaa" class="ui-grid-cell-contents" ng-controller="MainCtrl">
-                                    <button class="icon_action" aria-label="@lang('buttons.detail')" data-microtip-position="left" role="tooltip">
-                                        <img class='icon' src='<% asset('/icons/detalhes.png') %>'>
-                                    </button>
-                                    <button class="icon_action" aria-label="@lang('buttons.action')" data-microtip-position="left" role="tooltip">
-                                            <img class='icon' src='<% asset('/icons/opcoes2.png') %>'>
-                                    </button>
-                                    <!-- <a href="#" id="listButtons{{row.entity.id}}" class=" glyphicon glyphicon glyphicon-tasks icon_action" ng-click="showActions('production', row.entity.id)"></a> -->
-                                </div>
-                            </script>
+                    <div ui-grid="gridOptions" ui-grid-auto-resize  ui-grid-resize-columns ui-grid-selection ui-grid-pagination ui-grid-move-columns ui-grid-save-state >
                     </div>
+                    <script type="text/ng-template" id="options">
+                        <!-- Botões com as opções para cada documento -->
+                        <div id="hhhaaa" class="ui-grid-cell-contents" style="overflow: visible !important;"  ng-controller="MainCtrl">
+                            <button data-toggle="modal" ng-click="showGridDet(row.entity.id, row.entity.number)" data-target="#myModal" class="icon_action" aria-label="@lang('buttons.detail')" data-microtip-position="left" role="tooltip">
+                                <img class='icon' src='<% asset('/icons/detalhes.png') %>'>
+                            </button>
+                            <!-- Só mostra botão retornar pra status <> 0 -->
+                            <button ng-if="row.entity.document_status_id != 0" class="icon_action" aria-label="@lang('buttons.return')" data-microtip-position="left" role="tooltip">
+                                    <img class='icon' src='<% asset('/icons/retornar.png') %>'>
+                            </button>
+                            <button class="icon_action" aria-label="@lang('buttons.action')" data-microtip-position="left" role="tooltip">
+                                    <img class='icon' src='<% asset('/icons/opcoes.png') %>'>
+                            </button>
+                            <!-- <a href="#" id="listButtons{{row.entity.id}}" class=" glyphicon glyphicon glyphicon-tasks icon_action" ng-click="showActions('production', row.entity.id)"></a> -->
+                        </div>
+                    </script>
                     <button id="save" type="button" class="btn btn-success" ng-click="saveState()">Save</button>
                     <button id="restore" type="button" class="btn btn-success" ng-click="restoreState()">Restore</button>
                  </div>

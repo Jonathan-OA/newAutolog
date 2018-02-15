@@ -118,6 +118,11 @@
     /*             Panel Layout + Grid             */
     /* --------------------------------------------*/
     
+    .ui-grid {
+        width: 100%;
+        height: 400px;
+    }
+    
     .pad-ct {
         padding-left: 12px;
         padding-right: 12px;
@@ -169,7 +174,8 @@
     
     .ui-grid-header-cell,
     .ui-grid-cell {
-        text-align: center !important
+        text-align: center !important;
+        overflow: visible !important;
     }
     
     .ui-grid-header-cell {
@@ -181,6 +187,10 @@
     
     .ui-grid-row:hover .ui-grid-cell {
         background-color: #B6C3C6;
+    }
+    
+    .ui-grid-filter-select {
+        color: black;
     }
     
     .panel-heading>.nav>.active-l>a {
@@ -270,7 +280,6 @@
     
     .icon_action {
         background-color: inherit !important;
-        padding: 3px;
         border-radius: 5px;
         text-decoration: none !important;
         float: none !important;

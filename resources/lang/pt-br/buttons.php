@@ -24,6 +24,7 @@ return [
     'import' => 'Importar',
     'filter' => 'Filtrar',
     'action' => 'Ações',
+    'return' => 'Retornar',
     'msg_remove' => 'Deseja excluir este registro?',
     
 

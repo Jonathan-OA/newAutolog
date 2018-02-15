@@ -177,7 +177,8 @@ app.controller('DetCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '
                 $scope.dataLoaded = true;
             })
             .error(function(data, status, headers, config) {
-                console.log("Errouuu kk");
+
+                console.log(data);
             });
     }
 
