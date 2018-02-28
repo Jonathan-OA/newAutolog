@@ -153,9 +153,13 @@ Route::get('uoms/datatable', 'UomController@getData');
 Route::resource('uoms', 'UomController');
 
 
-Route::get('uoms/datatable', 'UomController@getData');
-Route::resource('uoms', 'UomController');
-
-
 Route::get('labels/datatable', 'LabelController@getData');
 Route::resource('labels', 'LabelController');
+
+
+Route::get('stocks/datatable', 'StockController@getData');
+Route::resource('stocks', 'StockController');
+
+
+Route::get('finalities/datatable', 'FinalityController@getData');
+Route::resource('finalities', 'FinalityController');

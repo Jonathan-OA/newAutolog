@@ -13,7 +13,7 @@
     <link href="<% asset('/css/ui-grid/ui-grid.min.css') %>"  rel="stylesheet">
     <link href="<% asset('/css/bootstrap.min.css') %> " rel="stylesheet">
     <link href="<% asset('/css/jquery-ui.min.css') %> " rel="stylesheet">
-    <link href="https://unpkg.com/microtip/microtip.css" rel="stylesheet">
+    <link href="<% asset('/css/microtip.css') %>" rel="stylesheet">
     <link href="<% asset('/css/app.css') %>" rel="stylesheet">
     @yield('css')
 

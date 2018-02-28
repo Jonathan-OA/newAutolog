@@ -10,10 +10,10 @@
     <p>{!! $label->company_id !!}</p>
 </div>
 
-<!-- Client Id Field -->
+<!-- Barcode Field -->
 <div class="col-md-12">
-    {!! Form::label('client_id', 'Client Id:') !!}
-    <p>{!! $label->client_id !!}</p>
+    {!! Form::label('barcode', 'Barcode:') !!}
+    <p>{!! $label->barcode !!}</p>
 </div>
 
 <!-- Item Code Field -->
@@ -32,18 +32,6 @@
 <div class="col-md-12">
     {!! Form::label('uom_code', 'Uom Code:') !!}
     <p>{!! $label->uom_code !!}</p>
-</div>
-
-<!-- Prim Qty Field -->
-<div class="col-md-12">
-    {!! Form::label('prim_qty', 'Prim Qty:') !!}
-    <p>{!! $label->prim_qty !!}</p>
-</div>
-
-<!-- Prim Uom Code Field -->
-<div class="col-md-12">
-    {!! Form::label('prim_uom_code', 'Prim Uom Code:') !!}
-    <p>{!! $label->prim_uom_code !!}</p>
 </div>
 
 <!-- Prev Qty Field -->
@@ -68,6 +56,12 @@
 <div class="col-md-12">
     {!! Form::label('document_item_id', 'Document Item Id:') !!}
     <p>{!! $label->document_item_id !!}</p>
+</div>
+
+<!-- Origin Field -->
+<div class="col-md-12">
+    {!! Form::label('origin', 'Origin:') !!}
+    <p>{!! $label->origin !!}</p>
 </div>
 
 <!-- Date Field -->
@@ -130,10 +124,10 @@
     <p>{!! $label->critical_date3 !!}</p>
 </div>
 
-<!-- Status Field -->
+<!-- Label Status Id Field -->
 <div class="col-md-12">
-    {!! Form::label('status', 'Status:') !!}
-    <p>{!! $label->status !!}</p>
+    {!! Form::label('label_status_id', 'Label Status Id:') !!}
+    <p>{!! $label->label_status_id !!}</p>
 </div>
 
 <!-- Level Field -->

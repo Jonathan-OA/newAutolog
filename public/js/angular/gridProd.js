@@ -5,6 +5,11 @@ var app = angular.module('grid_prod', ['ui.grid', 'ui.grid.selection',
     'ui.grid.resizeColumns', 'ui.grid.exporter'
 ]);
 
+//Config pra remover erros inuteis
+app.config(['$qProvider', function($qProvider) {
+    $qProvider.errorOnUnhandledRejections(false);
+}]);
+
 //Grid de documentos
 app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '$timeout', '$element', function($rootScope, $scope, $http, uiGridConstants, $timeout, $element) {
 
@@ -13,28 +18,13 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
         multiSelect: false,
         enableFiltering: false,
         fastWatch: true,
-        exporterCsvFilename: 'myFile.csv',
-        exporterPdfDefaultStyle: { fontSize: 9 },
-        exporterPdfTableStyle: { margin: [30, 30, 30, 30] },
-        exporterPdfTableHeaderStyle: { fontSize: 10, bold: true, italics: true, color: 'red' },
-        exporterPdfHeader: { text: "My Header", style: 'headerStyle' },
-        exporterPdfFooter: function(currentPage, pageCount) {
-            return { text: currentPage.toString() + ' of ' + pageCount.toString(), style: 'footerStyle' };
-        },
-        exporterPdfCustomFormatter: function(docDefinition) {
-            docDefinition.styles.headerStyle = { fontSize: 22, bold: true };
-            docDefinition.styles.footerStyle = { fontSize: 10, bold: true };
-            return docDefinition;
-        },
-        exporterPdfOrientation: 'portrait',
-        exporterPdfPageSize: 'LETTER',
-        exporterPdfMaxGridWidth: 500,
-        exporterCsvLinkElement: angular.element(document.querySelectorAll(".custom-csv-link-location")),
         onRegisterApi: function(gridApi) {
             $scope.gridApi = gridApi;
             $timeout(function() {
                 $scope.restoreState();
             }, 50);
+            //Chama a função que preenche o grid
+            $scope.getFirstData();
         },
         enableGridMenu: true,
         columnDefs: [
@@ -65,36 +55,44 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
     $scope.saveState = function() {
         var datas = $scope.gridApi.saveState.save();
         localStorage.setItem('Autolog_GridProd', JSON.stringify(datas));
-        $http.post('api/grid', datas)
-            .success(function(data, status, headers, config) {
-                $scope.PostDataResponse = data;
-            }).error(function(data, status, header, config) {
-                console.log('Erro ao Buscar Grid Salvo');
-            });
+        $http({
+            method: 'POST',
+            url: 'api/grid'
+        }).then(function(data) {
+            $scope.PostDataResponse = data;
+        }, function(error) {
+            console.log("Erro ao buscar Grid Salvo");
+        });
     };
 
 
     $scope.restoreState = function() {
         var columns = localStorage.getItem('Autolog_GridProd');
-        //console.log(columns);
         if (columns) {
             $scope.gridApi.saveState.restore($scope, JSON.parse(columns));
         } else {
-            $http.get('api/grid/Produção')
-                .success(function(data) {
-                    $scope.gridApi.saveState.restore($scope, data);
-                })
+            $http({
+                method: 'GET',
+                url: 'api/grid/Produção'
+            }).then(function(data) {
+                $scope.gridApi.saveState.restore($scope, data);
+            });
         }
     };
-
     //Carrega grid com os 3 mil ultimos documentos
-    $http.get('api/documentsProd')
-        .success(function(data) {
-            $scope.gridOptions.data = data;
-        })
-        .error(function(data, status, headers, config) {
-            console.log("Errouuu");
+    $scope.getFirstData = function() {
+        console.log('alo');
+        $http({
+            method: 'GET',
+            url: 'api/documentsProd'
+        }).then(function(success) {
+            $scope.gridOptions.data = success.data;
+        }, function(error) {
+            console.log("Errouuu" + error);
         });
+    }
+
+
     //Esconde / Mostra os filtros
     $scope.toggleFiltering = function() {
         $scope.gridOptions.enableFiltering = !$scope.gridOptions.enableFiltering;
@@ -171,15 +169,15 @@ app.controller('DetCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '
             $scope.gridApiDet = gridApi;
         }
 
-        $http.get('api/itemsProd/' + id)
-            .success(function(data) {
-                $scope.gridDetalhes.data = data;
-                $scope.dataLoaded = true;
-            })
-            .error(function(data, status, headers, config) {
+        $http({
+            method: 'GET',
+            url: 'api/itemsProd/'
+        }).then(function(success) {
+            $scope.gridDetalhes.data = success.data;
+        }, function(error) {
+            console.log("Erro Detalhes - " + error);
+        });
 
-                console.log(data);
-            });
     }
 
     //Esconde / Mostra os filtros
@@ -189,4 +187,4 @@ app.controller('DetCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '
     };
 
 
-}]);
+}])

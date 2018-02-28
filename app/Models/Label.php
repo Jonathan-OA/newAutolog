@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * Class Label
  * @package App\Models
- * @version February 7, 2018, 6:24 pm BRST
+ * @version February 27, 2018, 10:48 am BRT
  */
 class Label extends Model
 {
@@ -25,16 +25,15 @@ class Label extends Model
 
     public $fillable = [
         'company_id',
-        'client_id',
+        'barcode',
         'item_code',
         'qty',
         'uom_code',
-        'prim_qty',
-        'prim_uom_code',
         'prev_qty',
         'prev_uom_code',
         'document_id',
         'document_item_id',
+        'origin',
         'date',
         'serial_number',
         'batch',
@@ -45,7 +44,7 @@ class Label extends Model
         'critical_date1',
         'critical_date2',
         'critical_date3',
-        'status',
+        'label_status_id',
         'level',
         'travel_id',
         'task_id',
@@ -67,10 +66,9 @@ class Label extends Model
      */
     protected $casts = [
         'company_id' => 'integer',
-        'client_id' => 'string',
+        'barcode' => 'string',
         'item_code' => 'string',
         'uom_code' => 'string',
-        'prim_uom_code' => 'string',
         'prev_uom_code' => 'string',
         'serial_number' => 'string',
         'batch' => 'string',

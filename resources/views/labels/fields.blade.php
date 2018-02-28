@@ -4,9 +4,9 @@
 <!-- Company Id Field -->
 <input id='company_id' name='company_id' type='hidden' value='{!! Auth::user()->company_id !!}'>
 
-<!-- Client Id Field -->
-{!! Form::label('client_id', Lang::get('models.client_id').':') !!}
-{!! Form::text('client_id', null, ['class' => 'form-control']) !!}
+<!-- Barcode Field -->
+{!! Form::label('barcode', Lang::get('models.barcode').':') !!}
+{!! Form::text('barcode', null, ['class' => 'form-control']) !!}
 
 <!-- Item Code Field -->
 {!! Form::label('item_code', Lang::get('models.item_code').':') !!}
@@ -19,14 +19,6 @@
 <!-- Uom Code Field -->
 {!! Form::label('uom_code', Lang::get('models.uom_code').':') !!}
 {!! Form::text('uom_code', null, ['class' => 'form-control']) !!}
-
-<!-- Prim Qty Field -->
-{!! Form::label('prim_qty', Lang::get('models.prim_qty').':') !!}
-{!! Form::number('prim_qty', null, ['class' => 'form-control']) !!}
-
-<!-- Prim Uom Code Field -->
-{!! Form::label('prim_uom_code', Lang::get('models.prim_uom_code').':') !!}
-{!! Form::text('prim_uom_code', null, ['class' => 'form-control']) !!}
 
 <!-- Prev Qty Field -->
 {!! Form::label('prev_qty', Lang::get('models.prev_qty').':') !!}
@@ -44,9 +36,9 @@
 {!! Form::label('document_item_id', Lang::get('models.document_item_id').':') !!}
 {!! Form::number('document_item_id', null, ['class' => 'form-control']) !!}
 
-<!-- Date Field -->
-{!! Form::label('date', 'Date:') !!}
-{!! Form::date('date', null, ['class' => 'form-control']) !!}
+<!-- Origin Field -->
+{!! Form::label('origin', Lang::get('models.origin').':') !!}
+{!! Form::number('origin', null, ['class' => 'form-control']) !!}
 
 <!-- Serial Number Field -->
 {!! Form::label('serial_number', Lang::get('models.serial_number').':') !!}
@@ -61,32 +53,32 @@
 {!! Form::text('batch_supplier', null, ['class' => 'form-control']) !!}
 
 <!-- Prod Date Field -->
-{!! Form::label('prod_date', 'Prod Date:') !!}
+{!! Form::label('prod_date', Lang::get('models.prod_date').':') !!}
 {!! Form::date('prod_date', null, ['class' => 'form-control']) !!}
 
 <!-- Due Date Field -->
-{!! Form::label('due_date', 'Due Date:') !!}
+{!! Form::label('due_date', Lang::get('models.due_date').':') !!}
 {!! Form::date('due_date', null, ['class' => 'form-control']) !!}
 
 <!-- Ripeness Date Field -->
-{!! Form::label('ripeness_date', 'Ripeness Date:') !!}
+{!! Form::label('ripeness_date', Lang::get('models.ripeness_date').':') !!}
 {!! Form::date('ripeness_date', null, ['class' => 'form-control']) !!}
 
 <!-- Critical Date1 Field -->
-{!! Form::label('critical_date1', 'Critical Date1:') !!}
+{!! Form::label('critical_date1', Lang::get('models.critical_date1').':') !!}
 {!! Form::date('critical_date1', null, ['class' => 'form-control']) !!}
 
 <!-- Critical Date2 Field -->
-{!! Form::label('critical_date2', 'Critical Date2:') !!}
+{!! Form::label('critical_date2', Lang::get('models.critical_date2').':') !!}
 {!! Form::date('critical_date2', null, ['class' => 'form-control']) !!}
 
 <!-- Critical Date3 Field -->
-{!! Form::label('critical_date3', 'Critical Date3:') !!}
+{!! Form::label('critical_date3', Lang::get('models.critical_date3').':') !!}
 {!! Form::date('critical_date3', null, ['class' => 'form-control']) !!}
 
-<!-- Status Field -->
-{!! Form::label('status', Lang::get('models.status').':') !!}
-{!! Form::number('status', null, ['class' => 'form-control']) !!}
+<!-- Label Status Id Field -->
+{!! Form::label('label_status_id', Lang::get('models.label_status_id').':') !!}
+{!! Form::number('label_status_id', null, ['class' => 'form-control']) !!}
 
 <!-- Level Field -->
 {!! Form::label('level', Lang::get('models.level').':') !!}
@@ -117,24 +109,24 @@
 {!! Form::number('lenght', null, ['class' => 'form-control']) !!}
 
 <!-- Text1 Field -->
-{!! Form::label('text1', Lang::get('models.text1').':') !!}
-{!! Form::text('text1', null, ['class' => 'form-control']) !!}
+{!! Form::label('obs1', Lang::get('models.obs1').':') !!}
+{!! Form::text('obs1', null, ['class' => 'form-control']) !!}
 
 <!-- Text2 Field -->
-{!! Form::label('text2', Lang::get('models.text2').':') !!}
-{!! Form::text('text2', null, ['class' => 'form-control']) !!}
+{!! Form::label('obs2', Lang::get('models.obs2').':') !!}
+{!! Form::text('obs2', null, ['class' => 'form-control']) !!}
 
 <!-- Text3 Field -->
-{!! Form::label('text3', Lang::get('models.text3').':') !!}
-{!! Form::text('text3', null, ['class' => 'form-control']) !!}
+{!! Form::label('obs3', Lang::get('models.obs3').':') !!}
+{!! Form::text('obs3', null, ['class' => 'form-control']) !!}
 
 <!-- Text4 Field -->
-{!! Form::label('text4', Lang::get('models.text4').':') !!}
-{!! Form::text('text4', null, ['class' => 'form-control']) !!}
+{!! Form::label('obs4', Lang::get('models.obs4').':') !!}
+{!! Form::text('obs4', null, ['class' => 'form-control']) !!}
 
 <!-- Text5 Field -->
-{!! Form::label('text5', Lang::get('models.text5').':') !!}
-{!! Form::text('text5', null, ['class' => 'form-control']) !!}
+{!! Form::label('obs5', Lang::get('models.obs5').':') !!}
+{!! Form::text('obs5', null, ['class' => 'form-control']) !!}
 </div>
 
 <!-- Submit Field -->

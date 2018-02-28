@@ -16,6 +16,10 @@
 {!! Form::label('status', Lang::get('models.status').':') !!}
 {!! Form::select('status', array('1' => 'Ativo', '0' => 'Inativo'), null, ['class' => 'form-control']) !!}
 
+<!-- Origin Field -->
+{!! Form::label('origin', Lang::get('models.origin_product').':') !!}
+{!! Form::text('origin', null, ['class' => 'form-control']) !!}
+
 <!-- Product Type Code Field -->
 {!! Form::label('product_type_code', Lang::get('models.product_type_code').':') !!}
 {!! Form::select('product_type_code', $prd_types, null, ['class' => 'form-control']) !!}
@@ -45,27 +49,23 @@
 {!! Form::text('abz_code', null, ['class' => 'form-control']) !!}
 
 <!-- Inventory Date Field -->
-{!! Form::label('inventory_date', 'Inventory Date:') !!}
+{!! Form::label('inventory_date', Lang::get('models.inventory_date').':') !!}
 {!! Form::date('inventory_date', null, ['class' => 'form-control']) !!}
 
-<!-- Due Date Field -->
-{!! Form::label('due_date', 'Due Date:') !!}
-{!! Form::date('due_date', null, ['class' => 'form-control']) !!}
-
 <!-- Critical Date1 Field -->
-{!! Form::label('critical_date1', 'Critical Date1:') !!}
+{!! Form::label('critical_date1', Lang::get('models.critical_date1').':') !!}
 {!! Form::date('critical_date1', null, ['class' => 'form-control']) !!}
 
 <!-- Critical Date2 Field -->
-{!! Form::label('critical_date2', 'Critical Date2:') !!}
+{!! Form::label('critical_date2', Lang::get('models.critical_date2').':') !!}
 {!! Form::date('critical_date2', null, ['class' => 'form-control']) !!}
 
 <!-- Critical Date3 Field -->
-{!! Form::label('critical_date3', 'Critical Date3:') !!}
+{!! Form::label('critical_date3', Lang::get('models.critical_date3').':') !!}
 {!! Form::date('critical_date3', null, ['class' => 'form-control']) !!}
 
 <!-- Ripeness Date Field -->
-{!! Form::label('ripeness_date', 'Ripeness Date:') !!}
+{!! Form::label('ripeness_date', Lang::get('models.ripeness_date').':') !!}
 {!! Form::date('ripeness_date', null, ['class' => 'form-control']) !!}
 
 <!-- Obs1 Field -->

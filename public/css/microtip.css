@@ -57,9 +57,7 @@
 }
 
 [aria-label][role~="tooltip"]:hover:before,
-[aria-label][role~="tooltip"]:hover:after,
-[aria-label][role~="tooltip"]:focus:before,
-[aria-label][role~="tooltip"]:focus:after {
+[aria-label][role~="tooltip"]:hover:after {
     opacity: 1;
     pointer-events: auto;
 }

@@ -37,7 +37,7 @@ return [
     'dimensions'           => 'The :attribute has invalid image dimensions.',
     'distinct'             => 'The :attribute field has a duplicate value.',
     'email'                => 'The :attribute must be a valid email address.',
-    'exists'               => 'O :attribute selecionado é inválido.',
+    'exists'               => 'O valor do campo :attribute não existe no sistema.',
     'file'                 => 'The :attribute must be a file.',
     'filled'               => 'The :attribute field is required.',
     'image'                => 'The :attribute must be an image.',
@@ -59,7 +59,7 @@ return [
         'string'  => 'The :attribute must be at least :min characters.',
         'array'   => 'The :attribute must have at least :min items.',
     ],
-    'not_in'               => 'O :attribute selecionado é inválido.',
+    'not_in'               => 'O valor selecionado no campo :attribute é inválido.',
     'numeric'              => 'The :attribute must be a number.',
     'present'              => 'The :attribute field must be present.',
     'regex'                => 'The :attribute format is invalid.',
@@ -123,6 +123,8 @@ return [
         'status' => 'Status',
         'margin_div' => 'Margem de Divergência',
         'cost' => 'Custo',
+        'product_code' => 'Produto',
+        'label_id' => 'Etiqueta'
     ],
 
 ];

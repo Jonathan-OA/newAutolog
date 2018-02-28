@@ -20,12 +20,15 @@ $(document).ready(function() {
 
     })
 
+    var id = "";
 
     //Autocomplete
-    $('#autocomplete').autocomplete({
+    //Para funcionar em mais de um campo na mesma tela deve seguir a nomenclatura autocomplete1, autocomplete2, etc.
 
+    $('[id^=autocomplete]').autocomplete({
         source: function(request, response) {
-            var table = $('#autocomplete').attr('table');
+            id = this.element.attr('id');
+            var table = $('#' + id).attr('table');
             $.ajax({
                 url: APP_URL + "/search",
                 dataType: "json",
@@ -41,8 +44,8 @@ $(document).ready(function() {
         },
         minLength: 1,
         select: function(event, ui) {
-            $(this).val(ui.item.code);
-            $('#autocomplete').val(ui.item.code);
+            $('#' + id).val(ui.item.code);
+
         }
     });
 });

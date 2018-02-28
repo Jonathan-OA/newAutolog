@@ -3,18 +3,15 @@
         <div class="" style="margin: 0 15px 0 15px">
         <table class="table table-bordered" id="labels-table" cellspacing="0" width="100%">
             <thead>
-                <th class="th_grid">@lang('models.company_id') </th>
-                <th class="th_grid">@lang('models.client_id') </th>
+                <th class="th_grid">@lang('models.barcode') </th>
                 <th class="th_grid">@lang('models.item_code') </th>
                 <th class="th_grid">@lang('models.qty') </th>
                 <th class="th_grid">@lang('models.uom_code') </th>
-                <th class="th_grid">@lang('models.prim_qty') </th>
-                <th class="th_grid">@lang('models.prim_uom_code') </th>
                 <th class="th_grid">@lang('models.prev_qty') </th>
                 <th class="th_grid">@lang('models.prev_uom_code') </th>
                 <th class="th_grid">@lang('models.document_id') </th>
                 <th class="th_grid">@lang('models.document_item_id') </th>
-                <th class="th_grid">@lang('models.date') </th>
+                <th class="th_grid">@lang('models.origin') </th>
                 <th class="th_grid">@lang('models.serial_number') </th>
                 <th class="th_grid">@lang('models.batch') </th>
                 <th class="th_grid">@lang('models.batch_supplier') </th>
@@ -24,7 +21,7 @@
                 <th class="th_grid">@lang('models.critical_date1') </th>
                 <th class="th_grid">@lang('models.critical_date2') </th>
                 <th class="th_grid">@lang('models.critical_date3') </th>
-                <th class="th_grid">@lang('models.status') </th>
+                <th class="th_grid">@lang('models.label_status_id') </th>
                 <th class="th_grid">@lang('models.level') </th>
                 <th class="th_grid">@lang('models.travel_id') </th>
                 <th class="th_grid">@lang('models.task_id') </th>
@@ -32,28 +29,25 @@
                 <th class="th_grid">@lang('models.weight') </th>
                 <th class="th_grid">@lang('models.width') </th>
                 <th class="th_grid">@lang('models.lenght') </th>
-                <th class="th_grid">@lang('models.text1') </th>
-                <th class="th_grid">@lang('models.text2') </th>
-                <th class="th_grid">@lang('models.text3') </th>
-                <th class="th_grid">@lang('models.text4') </th>
-                <th class="th_grid">@lang('models.text5') </th>
+                <th class="th_grid">@lang('models.obs1') </th>
+                <th class="th_grid">@lang('models.obs2') </th>
+                <th class="th_grid">@lang('models.obs3') </th>
+                <th class="th_grid">@lang('models.obs4') </th>
+                <th class="th_grid">@lang('models.obs5') </th>
                 <th class="th_grid">@lang('models.action')</th>
             </thead>
             <tbody>
             @foreach($labels as $label)
                 <tr>
-                    <td>{!! $label->company_id !!}</td>
-                    <td>{!! $label->client_id !!}</td>
+                    <td>{!! $label->barcode !!}</td>
                     <td>{!! $label->item_code !!}</td>
                     <td>{!! $label->qty !!}</td>
                     <td>{!! $label->uom_code !!}</td>
-                    <td>{!! $label->prim_qty !!}</td>
-                    <td>{!! $label->prim_uom_code !!}</td>
                     <td>{!! $label->prev_qty !!}</td>
                     <td>{!! $label->prev_uom_code !!}</td>
                     <td>{!! $label->document_id !!}</td>
                     <td>{!! $label->document_item_id !!}</td>
-                    <td>{!! $label->date !!}</td>
+                    <td>{!! $label->origin !!}</td>
                     <td>{!! $label->serial_number !!}</td>
                     <td>{!! $label->batch !!}</td>
                     <td>{!! $label->batch_supplier !!}</td>
@@ -63,7 +57,7 @@
                     <td>{!! $label->critical_date1 !!}</td>
                     <td>{!! $label->critical_date2 !!}</td>
                     <td>{!! $label->critical_date3 !!}</td>
-                    <td>{!! $label->status !!}</td>
+                    <td>{!! $label->label_status_id !!}</td>
                     <td>{!! $label->level !!}</td>
                     <td>{!! $label->travel_id !!}</td>
                     <td>{!! $label->task_id !!}</td>
