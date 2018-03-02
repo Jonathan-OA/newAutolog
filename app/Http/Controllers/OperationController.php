@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Flash;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Response;
-use Datatables;
+use DataTables;
 use App;
 use Lang;
 
@@ -204,7 +204,7 @@ class OperationController extends AppBaseController
      */
     public function getData()
     {
-        return Datatables::of(App\Models\Operation::query())->make(true);
+        return DataTables::of(App\Models\Operation::query())->make(true);
     }
 
 

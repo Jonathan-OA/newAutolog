@@ -124,7 +124,13 @@ return [
         'margin_div' => 'Margem de Divergência',
         'cost' => 'Custo',
         'product_code' => 'Produto',
-        'label_id' => 'Etiqueta'
+        'label_id' => 'Etiqueta',
+        'location_code' => 'Endereço',
+        'pallet_id' => 'Palete',
+        'qty' => 'Quantidade',
+        'uom' => 'Unidade',
+        'prev_qty' => 'Quantidade Anterior',
+        'prev_uom' => 'Unidade Anterior',
     ],
 
 ];

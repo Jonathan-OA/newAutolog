@@ -40,7 +40,7 @@
             autoWidth: true,
             "oLanguage": {
                 sLengthMenu: "@lang('models.show') _MENU_ @lang('models.entries')",
-                sSearch: "<img class='icon-s' src='<% asset('/icons/buscar.png') %>'>",
+                sSearch: "<img class='icon-s' src='{% asset('/icons/buscar.png') %}'>",
                 sInfo: " _START_ a _END_ - _TOTAL_ @lang('models.entries')",
                 "oPaginate": {
                     sFirst: "@lang('models.first')",
@@ -59,7 +59,7 @@
                         { data: 'cnpj' },
                         { data: null,
                          className: "th_grid",
-                         defaultContent: "<button id='edit' aria-label='@lang('buttons.edit')' data-microtip-position='left' role='tooltip' ><img class='icon' src='<% asset('/icons/editar.png') %>'></button><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='<% asset('/icons/remover.png') %>'></button>",
+                         defaultContent: "<button id='edit' aria-label='@lang('buttons.edit')' data-microtip-position='left' role='tooltip' ><img class='icon' src='{% asset('/icons/editar.png') %}'></button><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='{% asset('/icons/remover.png') %}'></button>",
                          width: "90px" 
                         }],
             

@@ -19,13 +19,14 @@ class ProductionController extends Controller
         return view('modules.production.gridDet')->with(['document' => $id]); 
     }
 
-    public function getDocuments(){
-        $documents = App\Document::all()->take(1000);
+    //Função que retorna os documentos de produção
+    public function getDocuments($qty = '10000'){
+        $documents = App\Models\Document::all()->take($qty);
         return $documents->toArray();
     }
 
     public function getItems($document_id){
-        $documents = App\DocumentItem::where('document_id',$document_id)->get();
+        $documents = App\Models\DocumentItem::where('document_id',$document_id)->get();
         return $documents->toArray();
     }
 }

@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Flash;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Response;
-use Datatables;
+use DataTables;
 use App;
 use Lang;
 
@@ -173,6 +173,6 @@ class ParameterController extends AppBaseController
      */
     public function getData()
     {
-        return Datatables::of(App\Models\Parameter::where('company_id', Auth::user()->company_id))->make(true);
+        return DataTables::of(App\Models\Parameter::where('company_id', Auth::user()->company_id))->make(true);
     }
 }

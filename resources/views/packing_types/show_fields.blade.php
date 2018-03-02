@@ -34,6 +34,12 @@
     <p>{!! $packingType->capacity_m3 !!}</p>
 </div>
 
+<!-- Capacity Un Field -->
+<div class="col-md-12">
+    {!! Form::label('capacity_un', 'Capacity Un:') !!}
+    <p>{!! $packingType->capacity_un !!}</p>
+</div>
+
 <!-- Height Field -->
 <div class="col-md-12">
     {!! Form::label('height', 'Height:') !!}
@@ -50,5 +56,17 @@
 <div class="col-md-12">
     {!! Form::label('lenght', 'Lenght:') !!}
     <p>{!! $packingType->lenght !!}</p>
+</div>
+
+<!-- Created At Field -->
+<div class="col-md-12">
+    {!! Form::label('created_at', 'Created At:') !!}
+    <p>{!! $packingType->created_at !!}</p>
+</div>
+
+<!-- Updated At Field -->
+<div class="col-md-12">
+    {!! Form::label('updated_at', 'Updated At:') !!}
+    <p>{!! $packingType->updated_at !!}</p>
 </div>
 

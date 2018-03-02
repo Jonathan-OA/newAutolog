@@ -28,13 +28,13 @@
                 </div>
                 <div class="row buttons_grid">
                         <button class="icon_grid" aria-label="@lang('buttons.add')" data-microtip-position="bottom" role="tooltip">
-                            <img class='icon' src='<% asset('/icons/add.png') %>'>
+                            <img class='icon' src='{% asset('/icons/add.png') %}'>
                         </button>
                         <button class="icon_grid" aria-label="@lang('buttons.import')" data-microtip-position="bottom" role="tooltip">
-                            <img class='icon' src='<% asset('/icons/import.png') %>'>
+                            <img class='icon' src='{% asset('/icons/import.png') %}'>
                         </button>
                         <button class="icon_grid" aria-label="@lang('buttons.filter')" data-microtip-position="bottom" role="tooltip" ng-click="toggleFiltering()">
-                            <img class='icon' src='<% asset('/icons/filter.png') %>'>
+                            <img class='icon' src='{% asset('/icons/filter.png') %}'>
                         </button>
 
                 </div>
@@ -45,14 +45,14 @@
                         <!-- Botões com as opções para cada documento -->
                         <div id="hhhaaa" class="ui-grid-cell-contents" style="overflow: visible !important;"  ng-controller="MainCtrl">
                             <button data-toggle="modal" ng-click="showGridDet(row.entity.id, row.entity.number)" data-target="#myModal" class="icon_action" aria-label="@lang('buttons.detail')" data-microtip-position="left" role="tooltip">
-                                <img class='icon' src='<% asset('/icons/detalhes.png') %>'>
+                                <img class='icon' src='{% asset('/icons/detalhes.png') %}'>
                             </button>
                             <!-- Só mostra botão retornar pra status <> 0 -->
                             <button ng-if="row.entity.document_status_id != 0" class="icon_action" aria-label="@lang('buttons.return')" data-microtip-position="left" role="tooltip">
-                                    <img class='icon' src='<% asset('/icons/retornar.png') %>'>
+                                    <img class='icon' src='{% asset('/icons/retornar.png') %}'>
                             </button>
                             <button class="icon_action" aria-label="@lang('buttons.action')" data-microtip-position="left" role="tooltip">
-                                    <img class='icon' src='<% asset('/icons/opcoes.png') %>'>
+                                    <img class='icon' src='{% asset('/icons/opcoes.png') %}'>
                             </button>
                             <!-- <a href="#" id="listButtons{{row.entity.id}}" class=" glyphicon glyphicon glyphicon-tasks icon_action" ng-click="showActions('production', row.entity.id)"></a> -->
                         </div>

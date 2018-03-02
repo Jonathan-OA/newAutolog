@@ -56,6 +56,10 @@ return [
     'uoms' => 'Unidades de Medida',
     'labels' => 'Etiquetas',
     'finalities' => 'Finalidade (Saldo)',
+    'moviments' => 'Movimentos',
+    'document_types' => 'Tipos de Documento',
+    'packings' => 'Embalagens',
+    'packings_types' => 'Tipos de Embalagens',
 
     //Columns
     'name' => 'Nome',
@@ -184,7 +188,23 @@ return [
     'user_code' => 'Usuário',
     'user_id' => 'Usuário (Id)',
     'volume_id' => 'Volume (Id)',
-    
+    'moviment_code' => 'Movimento',
+    'total_weight' => 'Peso Bruto',
+    'total_net_weight' => 'Peso Líquido',
+    'capacity_un' => 'Capacidade (UN)',
+    'conf_batch' => 'Conf. Lote',
+    'conf_batch_supplier' => 'Conf. Lote Fornecedor',
+    'conf_serial' => 'Conf. Serial',
+    'conf_weight' => 'Conf. Peso',
+    'print_label' => 'Imprime Etiqueta',
+    'prev_level' => 'Nivel Anterior',
+    'total_m3' => 'Total em M3',
+    'create_label' => 'Cria Etiqueta (GERAID)',
+    'conf_due_date' => 'Conf. Data de Validade',
+    'conf_prod_date' => 'Conf. Data de Fabricação',
+    'conf_length' => 'Conf. Comprimento',
+    'conf_width' => 'Conf. Largura',
+    'conf_height' => 'Conf. Altura',
     
     //PlaceHolders
     'sel_type' => 'Selecione um tipo: ',

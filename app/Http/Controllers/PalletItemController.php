@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Flash;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Response;
-use Datatables;
+use DataTables;
 use App;
 use Lang;
 use App\Models\PalletItem;
@@ -221,8 +221,8 @@ class PalletItemController extends AppBaseController
      */
     public function getData($pallet_id)
     {
-        return Datatables::of(App\Models\PalletItem::where('company_id', Auth::user()->company_id))
-                                                   ->where('pallet_id', $pallet_id)
+        return DataTables::of(App\Models\PalletItem::where('company_id', Auth::user()->company_id)
+                                                   ->where('pallet_id', $pallet_id))
                                                    ->make(true);
     }
 }

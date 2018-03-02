@@ -4,7 +4,7 @@
         <div class="col-md-12 pad-ct">
             <div class="panel panel-default" >
                 <div class="panel-heading">
-                    @lang('models.$MODEL_NAME_PLURAL_CAMEL$')
+                    @lang('models.$MODEL_NAME_PLURAL_SNAKE$') 
                 </div>
                 <div class="panel panel-default">
                     <div class="panel-body" >

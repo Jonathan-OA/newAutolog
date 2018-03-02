@@ -18,19 +18,19 @@
 
 <!-- Qty Field -->
 {!! Form::label('qty', Lang::get('models.qty').':') !!}
-{!! Form::number('qty', null, ['class' => 'form-control']) !!}
+{!! Form::number('qty', null, ['class' => 'form-control', 'step' => '0.000001', 'placeholder' => '0,000000']) !!}
 
 <!-- Uom Code Field -->
 {!! Form::label('uom_code', Lang::get('models.uom_code').':') !!}
-{!! Form::text('uom_code', null, ['class' => 'form-control']) !!}
+{!! Form::select('uom_code', $uoms, null, ['class' => 'form-control']) !!}
 
 <!-- Prev Qty Field -->
 {!! Form::label('prev_qty', Lang::get('models.prev_qty').':') !!}
-{!! Form::number('prev_qty', null, ['class' => 'form-control']) !!}
+{!! Form::number('prev_qty', null, ['class' => 'form-control','step' => '0.000001', 'placeholder' => '0,000000']) !!}
 
 <!-- Prev Uom Code Field -->
 {!! Form::label('prev_uom_code', Lang::get('models.prev_uom_code').':') !!}
-{!! Form::text('prev_uom_code', null, ['class' => 'form-control']) !!}
+{!! Form::select('prev_uom_code', $uoms, null, ['class' => 'form-control']) !!}
 
 <!-- Pallet Id Field -->
 {!! Form::label('pallet_id', Lang::get('models.pallet_id').':') !!}
@@ -53,8 +53,7 @@
 {!! Form::select('finality_code', $finalities, null, ['class' => 'form-control']) !!}
 
 <!-- User Id Field -->
-{!! Form::label('user_id', Lang::get('models.user_id').':') !!}
-{!! Form::number('user_id', null, ['class' => 'form-control']) !!}
+<input id='user_id' name='user_id' type='hidden' value='{!! Auth::user()->id !!}'>
 
 <!-- Operation Code Field -->
 {!! Form::label('operation_code', Lang::get('models.operation_code').':') !!}

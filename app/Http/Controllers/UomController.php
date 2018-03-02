@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Flash;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Response;
-use Datatables;
+use DataTables;
 use App;
 use Lang;
 
@@ -199,6 +199,6 @@ class UomController extends AppBaseController
      */
     public function getData()
     {
-        return Datatables::of(App\Models\Uom::all())->make(true);
+        return DataTables::of(App\Models\Uom::all())->make(true);
     }
 }

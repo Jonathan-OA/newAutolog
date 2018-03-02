@@ -4,7 +4,7 @@ namespace InfyOm\Generator\Common;
 
 use Exception;
 use Auth;
-use Schema;
+
 
 abstract class BaseRepository extends \Prettus\Repository\Eloquent\BaseRepository
 {
@@ -20,6 +20,7 @@ abstract class BaseRepository extends \Prettus\Repository\Eloquent\BaseRepositor
         } catch (Exception $e) {
             return;
         }
+
     }
 
     public function create(array $attributes)
@@ -67,7 +68,7 @@ abstract class BaseRepository extends \Prettus\Repository\Eloquent\BaseRepositor
                         $model->$key()->sync(array_values($new_values));
                         break;
                     case 'Illuminate\Database\Eloquent\Relations\BelongsTo':
-                        $model_key = $model->$key()->getForeignKey();
+                        $model_key = $model->$key()->getQualifiedForeignKey();
                         $new_value = array_get($attributes, $key, null);
                         $new_value = $new_value == '' ? null : $new_value;
                         $model->$model_key = $new_value;
@@ -82,7 +83,7 @@ abstract class BaseRepository extends \Prettus\Repository\Eloquent\BaseRepositor
                             unset($new_values[array_search('', $new_values)]);
                         }
 
-                        list($temp, $model_key) = explode('.', $model->$key($key)->getForeignKey());
+                        list($temp, $model_key) = explode('.', $model->$key($key)->getQualifiedForeignKeyName());
 
                         foreach ($model->$key as $rel) {
                             if (!in_array($rel->id, $new_values)) {

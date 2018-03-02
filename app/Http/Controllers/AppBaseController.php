@@ -48,20 +48,23 @@ class AppBaseController extends Controller
 
         $results = array();
         
-        $queries = DB::table($table)
-            ->where('code', 'LIKE', '%'.$term.'%')
-            ->where('company_id', Auth::user()->company_id)
-            ->take(10)->get();
+        //Só busca caso a tabela tenha o campo Company_Id
+        $hasComp = (Schema::hasColumn($table, 'company_id'))?1:0;
+        if($hasComp == 1){
+            $queries = DB::table($table)
+                ->where('code', 'LIKE', '%'.$term.'%')
+                ->where('company_id', Auth::user()->company_id)
+                ->take(40)->get();
 
-        //Se tiver o campo descrição na tabela, concatena na label
-        $hasDesc = (Schema::hasColumn($table, 'description'))?1:0;
-        
-        foreach ($queries as $query)
-        {
-            $desc = ($hasDesc == 1)? ' - '.$query->description : '';
-            $results[] = [ 'id' => $query->id, 'value' => $query->code, 'label' => $query->code.$desc ];
+            //Se tiver o campo descrição na tabela, concatena na label
+            $hasDesc = (Schema::hasColumn($table, 'description'))?1:0;
+            
+            foreach ($queries as $query)
+            {
+                $desc = ($hasDesc == 1)? ' - '.$query->description : '';
+                $results[] = [ 'id' => $query->id, 'value' => $query->code, 'label' => $query->code.$desc ];
+            }
         }
-
         return Response::json($results);
     }
 }

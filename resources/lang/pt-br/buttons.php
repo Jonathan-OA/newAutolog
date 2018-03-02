@@ -21,6 +21,7 @@ return [
     'exit' => 'Sair',
     'save' => 'Salvar',
     'detail' => 'Detalhes',
+    'packings' => 'Embalagens',
     'import' => 'Importar',
     'filter' => 'Filtrar',
     'action' => 'Ações',

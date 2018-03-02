@@ -3,12 +3,24 @@
 namespace App\Models;
 
 use Eloquent as Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use Auth;
+
 
 /**
  * Class PackingType
  * @package App\Models
- * @version November 22, 2017, 4:45 pm UTC
+ * @version March 2, 2018, 1:51 pm -03
+ *
+ * @property \Illuminate\Database\Eloquent\Collection permissionRole
+ * @property string code
+ * @property string description
+ * @property decimal tare
+ * @property decimal capacity_kg
+ * @property decimal capacity_m3
+ * @property decimal capacity_un
+ * @property decimal height
+ * @property decimal width
+ * @property decimal lenght
  */
 class PackingType extends Model
 {
@@ -17,16 +29,15 @@ class PackingType extends Model
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
-
-    protected $dates = ['deleted_at'];
-
-
+	
+	
     public $fillable = [
         'code',
         'description',
         'tare',
         'capacity_kg',
         'capacity_m3',
+        'capacity_un',
         'height',
         'width',
         'lenght'
@@ -52,9 +63,13 @@ class PackingType extends Model
         
     ];
 
-    //Retorna todas as embalagens disponiveis
-    public static function getPackingTypes(){
+    
+
+     //Retorna todos os packing_types disponíveis
+     public static function getPackingTypes(){
         return PackingType::selectRaw("code,CONCAT(code,' - ',description) as description_f")
-                          ->pluck('description_f','code');
+                      ->pluck('description_f','code');
     }
+
+
 }

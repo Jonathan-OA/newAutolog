@@ -25,6 +25,18 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
             }, 50);
             //Chama a função que preenche o grid
             $scope.getFirstData();
+            //Caso o filtro não retorne nenhuma informação, busca todos os documentos
+            $scope.gridApi.core.on.rowsRendered($scope, function() {
+                var qty_lines = $scope.gridApi.core.getVisibleRows($scope.gridApi.grid).length;
+
+                if (qty_lines == 0 && $scope.gridOptions.enableFiltering) {
+                    //Busca os dados novamente
+                    $http.get('api/documentsProd/')
+                        .then(function(response) {
+                            $scope.gridOptions.data = response.data;
+                        });
+                }
+            })
         },
         enableGridMenu: true,
         columnDefs: [
@@ -79,12 +91,12 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
             });
         }
     };
-    //Carrega grid com os 3 mil ultimos documentos
+    //Carrega grid com os 2 mil ultimos documentos
     $scope.getFirstData = function() {
         console.log('alo');
         $http({
             method: 'GET',
-            url: 'api/documentsProd'
+            url: 'api/documentsProd/2000'
         }).then(function(success) {
             $scope.gridOptions.data = success.data;
         }, function(error) {

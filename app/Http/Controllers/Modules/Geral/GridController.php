@@ -12,14 +12,14 @@ use App;
 class GridController extends Controller
 {
     function getColumns($module){
-        $grid = App\Grid::where('module', $module)
+        $grid = App\Models\Grid::where('module', $module)
                        ->first();
         return json_decode($grid->columns, true);
     }
 
     function setColumns(){
         $columns = Input::all();
-        $grid = App\Grid::where('module', 'Produção')
+        $grid = App\Models\Grid::where('module', 'Produção')
                        ->first();
         $grid->module = 'Produção';
         //$grid->submodule = $module;

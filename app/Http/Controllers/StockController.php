@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Flash;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Response;
-use Datatables;
+use DataTables;
 use App;
 use Lang;
 use App\Models;
@@ -50,8 +50,12 @@ class StockController extends AppBaseController
     {
         //Valida se usuário possui permissão para acessar esta opção
         if(App\Models\User::getPermission('stocks_add',Auth::user()->user_type_code)){
+            //Finalidades
             $finalities = App\Models\Finality::getFinalities();
-            return view('stocks.create')->with('finalities', $finalities);
+            //Unidades de Medida
+            $uoms = App\Models\Uom::getUoms();
+            return view('stocks.create')->with('finalities', $finalities)
+                                        ->with('uoms', $uoms);
 
         }else{
             //Sem permissão
@@ -109,9 +113,10 @@ class StockController extends AppBaseController
     {
         //Valida se usuário possui permissão para acessar esta opção
         if(App\Models\User::getPermission('stocks_edit',Auth::user()->user_type_code)){
-
+            //Finalidades
             $finalities = App\Models\Finality::getFinalities();
-
+            //Unidades de Medida
+            $uoms = App\Models\Uom::getUoms();
             $stock = $this->stockRepository->findWithoutFail($id);
 
             if (empty($stock)) {
@@ -121,7 +126,8 @@ class StockController extends AppBaseController
             }
 
             return view('stocks.edit')->with('stock', $stock)
-                                      ->with('finalities',$finalities);
+                                      ->with('finalities',$finalities)
+                                      ->with('uoms',$uoms);
         
         }else{
             //Sem permissão
@@ -141,7 +147,7 @@ class StockController extends AppBaseController
     public function update($id, UpdateStockRequest $request)
     {
         $stock = $this->stockRepository->findWithoutFail($id);
-
+        $qdeAnt = ($stock->qty*1);
         if (empty($stock)) {
             Flash::error(Lang::get('validation.not_found'));
 
@@ -150,7 +156,7 @@ class StockController extends AppBaseController
 
         //Grava log
         $requestF = $request->all();
-        $descricao = 'Alterou Stock ID: '.$id.' - '.$requestF['code'];
+        $descricao = 'Alterou Saldo ID: '.$id.' - End:'.$requestF['location_code'].' Umv: '.$requestF['label_id'].' - Prd: '.$requestF['product_code'].' Qde: '.$requestF['qty'].'('. $qdeAnt.')';
         $log = App\Models\Log::wlog('stocks_edit', $descricao);
 
 
@@ -181,12 +187,11 @@ class StockController extends AppBaseController
                 return redirect(route('stocks.index'));
             }
 
-            $this->stockRepository->delete($id);
-
-             //Grava log
-            $descricao = 'Excluiu Stock ID: '.$id;
+            //Grava log
+            $descricao = 'Excluiu Saldo ID: '.$id.' - End:'.$stock->location_code.' Umv: '.$stock->label_id.' - Prd: '.$stock->product_code;
             $log = App\Models\Log::wlog('stocks_remove', $descricao);
 
+            $this->stockRepository->delete($id);
 
             Flash::success(Lang::get('validation.delete_success'));
             return array(0,Lang::get('validation.delete_success'));
@@ -204,6 +209,6 @@ class StockController extends AppBaseController
      */
     public function getData()
     {
-        return Datatables::of(App\Models\Stock::where('company_id', Auth::user()->company_id))->make(true);
+        return DataTables::of(App\Models\Stock::where('company_id', Auth::user()->company_id))->make(true);
     }
 }

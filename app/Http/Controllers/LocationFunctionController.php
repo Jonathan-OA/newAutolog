@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Flash;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Response;
-use Datatables;
+use DataTables;
 use App;
 use Lang;
 
@@ -200,6 +200,6 @@ class LocationFunctionController extends AppBaseController
      */
     public function getData()
     {
-        return Datatables::of(App\Models\LocationFunction::all())->make(true);
+        return DataTables::of(App\Models\LocationFunction::all())->make(true);
     }
 }

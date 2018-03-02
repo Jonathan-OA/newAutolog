@@ -44,7 +44,7 @@
             },
             "oLanguage": {
                 sLengthMenu: "@lang('models.show') _MENU_ @lang('models.entries')",
-                sSearch: "<img class='icon-s' src='<% asset('/icons/buscar.png') %>'>",
+                sSearch: "<img class='icon-s' src='{% asset('/icons/buscar.png') %}'>",
                 sInfo: " _START_ a _END_ - _TOTAL_ @lang('models.entries')",
                 "oPaginate": {
                     sFirst: "@lang('models.first')",
@@ -61,16 +61,10 @@
                         { data: 'prev_qty' },
                         { data: 'prev_uom_code' },
                         { data: 'pallet_id' },
-                        { data: 'document_id' },
-                        { data: 'document_item_id' },
-                        { data: 'task_id' },
-                        { data: 'finality' },
-                        { data: 'user_id' },
-                        { data: 'operation_code' },
-                        { data: 'volume_id' },
+                        { data: 'finality_code' },
                         { data: null,
                          className: "th_grid",
-                         defaultContent: "<button id='edit' aria-label='@lang('buttons.edit')' data-microtip-position='left' role='tooltip' ><img class='icon' src='<% asset('/icons/editar.png') %>'></button><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='<% asset('/icons/remover.png') %>'></button>",
+                         defaultContent: "<button id='edit' aria-label='@lang('buttons.edit')' data-microtip-position='left' role='tooltip' ><img class='icon' src='{% asset('/icons/editar.png') %}'></button><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='{% asset('/icons/remover.png') %}'></button>",
                          width: "90px" 
                         }],
       });

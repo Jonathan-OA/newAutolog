@@ -11,8 +11,8 @@ class $MODEL_NAME$ extends Model
 {
     public $table = '$TABLE_NAME$';
     $TIMESTAMPS$
-$SOFT_DELETE_DATES$
-$PRIMARY$
+	$SOFT_DELETE_DATES$
+	$PRIMARY$
     public $fillable = [
         $FIELDS$
     ];

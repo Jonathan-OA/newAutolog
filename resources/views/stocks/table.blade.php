@@ -11,13 +11,7 @@
                 <th class="th_grid">@lang('models.prev_qty') </th>
                 <th class="th_grid">@lang('models.prev_uom_code') </th>
                 <th class="th_grid">@lang('models.pallet_id') </th>
-                <th class="th_grid">@lang('models.document_id') </th>
-                <th class="th_grid">@lang('models.document_item_id') </th>
-                <th class="th_grid">@lang('models.task_id') </th>
                 <th class="th_grid">@lang('models.finality_code') </th>
-                <th class="th_grid">@lang('models.user_id') </th>
-                <th class="th_grid">@lang('models.operation_code') </th>
-                <th class="th_grid">@lang('models.volume_id') </th>
                 <th class="th_grid">@lang('models.action')</th>
             </thead>
             <tbody>
@@ -31,13 +25,7 @@
                     <td>{!! $stock->prev_qty !!}</td>
                     <td>{!! $stock->prev_uom_code !!}</td>
                     <td>{!! $stock->pallet_id !!}</td>
-                    <td>{!! $stock->document_id !!}</td>
-                    <td>{!! $stock->document_item_id !!}</td>
-                    <td>{!! $stock->task_id !!}</td>
                     <td>{!! $stock->finality_code !!}</td>
-                    <td>{!! $stock->user_id !!}</td>
-                    <td>{!! $stock->operation_code !!}</td>
-                    <td>{!! $stock->volume_id !!}</td>
                 </tr>
             @endforeach
             </tbody>

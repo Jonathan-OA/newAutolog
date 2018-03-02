@@ -4,17 +4,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- CSRF Token -->
-    <meta name="csrf-token" content="<% csrf_token() %>">
+    <meta name="csrf-token" content="{% csrf_token() %}">
 
-    <title><% config('app.name', 'AUTOLOG WMS') %></title>
+    <title>{% config('app.name', 'AUTOLOG WMS') %}</title>
 
     <!-- Styles -->
-    <!-- <link href="<% asset('/datatables/datatables.min.css') %>"  rel="stylesheet"> -->
-    <link href="<% asset('/css/ui-grid/ui-grid.min.css') %>"  rel="stylesheet">
-    <link href="<% asset('/css/bootstrap.min.css') %> " rel="stylesheet">
-    <link href="<% asset('/css/jquery-ui.min.css') %> " rel="stylesheet">
-    <link href="<% asset('/css/microtip.css') %>" rel="stylesheet">
-    <link href="<% asset('/css/app.css') %>" rel="stylesheet">
+    <!-- <link href="{% asset('/datatables/datatables.min.css') %}"  rel="stylesheet"> -->
+    <link href="{% asset('/css/ui-grid/ui-grid.min.css') %}"  rel="stylesheet">
+    <link href="{% asset('/css/bootstrap.min.css') %} " rel="stylesheet">
+    <link href="{% asset('/css/jquery-ui.min.css') %} " rel="stylesheet">
+    <link href="{% asset('/css/microtip.css') %}" rel="stylesheet">
+    <link href="{% asset('/css/app.css') %}" rel="stylesheet">
     @yield('css')
 
 </head>
@@ -22,23 +22,23 @@
     <div class="lay_header" id="lay_header">
         <div class="lay_menu">
             <a href="#" id="button_menu"> 
-                <img class="icon" src="<% asset('/icons/menu.png') %>" alt="Menu">
+                <img class="icon" src="{% asset('/icons/menu.png') %}" alt="Menu">
             </a>
         </div>
         <div class="title"> AUTOLOG WMS </div>
         <!-- Authentication Links -->
         <div class="lay_login hidden-sm">
-                <img class="icon" src="<% asset('/icons/account.png') %>" alt="Account">
+                <img class="icon" src="{% asset('/icons/account.png') %}" alt="Account">
                 <div class="lay_logout">
-                    <a  href="<% url('/logout') %>" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
-                        <img class="icon" src="<% asset('/icons/logout.png') %>" alt="Logout">
+                    <a  href="{% url('/logout') %}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
+                        <img class="icon" src="{% asset('/icons/logout.png') %}" alt="Logout">
                     </a>
-                    <form id="logout-form" action="<% url('/logout') %>" method="POST" style="display: none;">
-                            <% csrf_field() %>
+                    <form id="logout-form" action="{% url('/logout') %}" method="POST" style="display: none;">
+                            {% csrf_field() %}
                     </form>
                 </div>
                 <div class="lay_account">
-                    <% strtoupper(Auth::user()->name) %>
+                    {% strtoupper(Auth::user()->name) %}
                     </br>
                     CHFR - 01
                 </div>
@@ -60,17 +60,17 @@
 
     <!-- Scripts -->
     
-    <script src="<% asset('/js/angular/angular.min.js') %>"></script>
-    <script src="<% asset('/js/jquery/jquery.min.js') %>"></script>
-    <script src="<% asset('/js/jquery/jquery-ui.min.js') %>"></script>
-    <script src="<% asset('/js/angular/angular-touch.min.js') %>"></script>
-    <script src="<% asset('/js/angular/angular-animate.min.js') %>"></script> 
-    <script src="<% asset('/datatables/datatables.min.js') %>"></script>  
+    <script src="{% asset('/js/angular/angular.min.js') %}"></script>
+    <script src="{% asset('/js/jquery/jquery.min.js') %}"></script>
+    <script src="{% asset('/js/jquery/jquery-ui.min.js') %}"></script>
+    <script src="{% asset('/js/angular/angular-touch.min.js') %}"></script>
+    <script src="{% asset('/js/angular/angular-animate.min.js') %}"></script> 
+    <script src="{% asset('/datatables/datatables.min.js') %}"></script>  
     <script src="https://cdn.datatables.net/fixedcolumns/3.2.3/js/dataTables.fixedColumns.min.js"></script>  
-    <script src="<% asset('/js/vendor/what-input.js') %>"></script>
-    <script src="<% asset('/js/bootstrap.min.js') %>"></script>
-    <script src="<% asset('/js/app.js') %>"></script>
-    <script src="<% asset('/js/release/ui-grid.min.js') %>"></script>
+    <script src="{% asset('/js/vendor/what-input.js') %}"></script>
+    <script src="{% asset('/js/bootstrap.min.js') %}"></script>
+    <script src="{% asset('/js/app.js') %}"></script>
+    <script src="{% asset('/js/release/ui-grid.min.js') %}"></script>
     <script type="text/javascript">
         // URL base - Variável pode ser acessada em qualquer arquivo
         var APP_URL = {!! json_encode(url('/')) !!}

@@ -4,7 +4,6 @@ namespace App;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Kodeine\Acl\Traits\HasRole;
 use App\Models\Config;
 use Carbon;
 use Session;
@@ -15,7 +14,6 @@ use DB;
 class User extends Authenticatable
 {
     use Notifiable;
-    use HasRole;
 
     /**
      * The attributes that are mass assignable.
@@ -35,8 +33,8 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-     // Valida se usuário já esta logado
-     public function valLogged($ip){
+    // Valida se usuário já esta logado
+    public function valLogged($ip){
 
         //Pega Data Atual
         $dataAtual = Carbon\Carbon::now();
@@ -92,4 +90,5 @@ class User extends Authenticatable
          
 
     }
+
 }

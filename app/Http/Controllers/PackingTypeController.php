@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Flash;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Response;
-use Datatables;
+use DataTables;
 use App;
 use Lang;
 
@@ -55,7 +55,7 @@ class PackingTypeController extends AppBaseController
         }else{
             //Sem permissão
             Flash::error(Lang::get('validation.permission'));
-            return redirect(route('packingTypes.index'));
+            return redirect(route('packing_types.index'));
         }
     }
 
@@ -122,7 +122,7 @@ class PackingTypeController extends AppBaseController
         }else{
             //Sem permissão
             Flash::error(Lang::get('validation.permission'));
-            return redirect(route('packingTypes.index'));
+            return redirect(route('packing_types.index'));
         }
     }
 
@@ -200,6 +200,6 @@ class PackingTypeController extends AppBaseController
      */
     public function getData()
     {
-        return Datatables::of(App\Models\PackingType::query())->make(true);
+        return Datatables::of(App\Models\PackingType::all())->make(true);
     }
 }

@@ -5,12 +5,11 @@
 | Web Routes
 |--------------------------------------------------------------------------
 |
-| This file is where you may define all of the routes that are handled
-| by your application. Just tell Laravel the URIs it should respond
-| to using a Closure or controller method. Build something great!
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
 |
 */
-
 
 Auth::routes();
 
@@ -27,7 +26,7 @@ Route::group(['middleware' => 'web'], function() {
     Route::get('getButtons/{modulo}', 'ButtonsController@getButtons');
 
     //API
-    Route::get('/api/documentsProd', 'Modules\Production\ProductionController@getDocuments');
+    Route::get('/api/documentsProd/{qty?}', 'Modules\Production\ProductionController@getDocuments');
     Route::get('/api/itemsProd/{document}', 'Modules\Production\ProductionController@getItems');
     Route::post('/api/grid/', 'Modules\Geral\GridController@setColumns');
     Route::get('/api/grid/{module}', 'Modules\Geral\GridController@getColumns');
@@ -43,7 +42,6 @@ Route::group(['middleware' => 'web'], function() {
     //AUTOCOMPLETE
     Route::get('search', 'AppBaseController@autocomplete');
 });
-
 
 
 Route::get('operations/datatable', 'OperationController@getData');
@@ -163,3 +161,45 @@ Route::resource('stocks', 'StockController');
 
 Route::get('finalities/datatable', 'FinalityController@getData');
 Route::resource('finalities', 'FinalityController');
+
+
+Route::get('moviments/datatable', 'MovimentController@getData');
+Route::resource('moviments', 'MovimentController');
+
+
+Route::get('moviments/datatable', 'MovimentController@getData');
+Route::resource('moviments', 'MovimentController');
+
+
+Route::get('moviments/datatable', 'MovimentController@getData');
+Route::resource('moviments', 'MovimentController');
+
+
+Route::get('moviments/datatable', 'MovimentController@getData');
+Route::resource('moviments', 'MovimentController');
+
+
+Route::get('documentTypes/datatable', 'DocumentTypeController@getData');
+Route::resource('documentTypes', 'DocumentTypeController');
+
+
+Route::get('documentTypes/datatable', 'DocumentTypeController@getData');
+Route::resource('documentTypes', 'DocumentTypeController');
+
+
+Route::get('documentTypes/datatable', 'DocumentTypeController@getData');
+Route::resource('documentTypes', 'DocumentTypeController');
+
+
+Route::get('packings/datatable', 'PackingController@getData');
+Route::resource('packings', 'PackingController');
+
+Route::get('packings/datatable/{code}', 'PackingController@getData');
+Route::resource('packings', 'PackinGController',['except' => 'create']);
+Route::get('packings/ix/{code}', 'PackingController@index');
+Route::get('packings/create/{code}', 'PackingController@create');
+
+
+
+Route::get('packingTypes/datatable', 'PackingTypeController@getData');
+Route::resource('packingTypes', 'PackingTypeController');

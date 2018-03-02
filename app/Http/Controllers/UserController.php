@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Flash;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Response;
-use Datatables;
+use DataTables;
 use App;
 use Lang;
 use App\User;
@@ -178,7 +178,7 @@ class UserController extends AppBaseController
      */
     public function getData()
     {
-        return Datatables::of(App\Models\User::where('company_id', Auth::user()->company_id))->make(true);
+        return DataTables::of(App\Models\User::where('company_id', Auth::user()->company_id))->make(true);
     }
 
     /**

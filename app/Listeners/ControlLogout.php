@@ -34,8 +34,7 @@ class ControlLogout
         $dataAtual = Carbon\Carbon::now();
         //Subtrai 1 minuto
         $dataAtual->subMinute(); 
-        $user = User::find($event->user['original']['id']);
-
+        $user = User::find($event->user->id);
         //Atualiza data do ultimo login para a calculada
         $user->last_login = $dataAtual->toDateTimeString();
         $user->save();

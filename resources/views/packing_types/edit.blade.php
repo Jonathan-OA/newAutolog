@@ -4,7 +4,7 @@
         <div class="col-md-12 pad-ct">
             <div class="panel panel-default" >
                 <div class="panel-heading">
-                    @lang('models.packing_types')
+                    @lang('models.packing_types') 
                 </div>
                 <div class="panel panel-default">
                     <div class="panel-body" >

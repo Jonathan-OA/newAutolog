@@ -36,7 +36,7 @@ class Stock extends Model
         'document_id',
         'document_item_id',
         'task_id',
-        'finality',
+        'finality_code',
         'user_id',
         'operation_code',
         'volume_id'
@@ -53,7 +53,7 @@ class Stock extends Model
         'location_code' => 'string',
         'uom_code' => 'string',
         'prev_uom_code' => 'string',
-        'finality' => 'string',
+        'finality_code' => 'string',
         'user_id' => 'integer',
         'operation_code' => 'string'
     ];

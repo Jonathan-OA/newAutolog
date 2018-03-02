@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use App\User;
 use Redirect;
@@ -28,7 +28,7 @@ class LoginController extends Controller
     use AuthenticatesUsers;
 
     /**
-     * Where to redirect users after login / registration.
+     * Where to redirect users after login.
      *
      * @var string
      */
@@ -42,10 +42,10 @@ class LoginController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest', ['except' => 'logout']);
+        $this->middleware('guest')->except('logout');
     }
 
-    /**
+     /**
      * The user has been authenticated.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -69,5 +69,11 @@ class LoginController extends Controller
             return redirect(route('login'));
         }
         
+    }
+    
+    //Define qual campo vai ser utilizado para login
+    public function username()
+    {
+        return 'code';
     }
 }

@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use Flash;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Response;
-use Datatables;
+use DataTables;
 use App;
 use Lang;
 
@@ -162,6 +162,6 @@ class UserTypeController extends AppBaseController
      */
     public function getData()
     {
-        return Datatables::of(App\Models\UserType::query())->make(true);
+        return DataTables::of(App\Models\UserType::query())->make(true);
     }
 }

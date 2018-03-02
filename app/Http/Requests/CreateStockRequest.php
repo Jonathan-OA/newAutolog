@@ -28,7 +28,22 @@ class CreateStockRequest extends FormRequest
     {
         return [ 
             'product_code' => 'required|string|exists:products,code,company_id,'.Auth::user()->company_id.'|max:40',
-            'label_id' => 'sometimes|integer|exists:labels,id,company_id,'.Auth::user()->company_id.'',
+            'label_id' => 'nullable|integer|exists:labels,id,company_id,'.Auth::user()->company_id.'',
+            'location_code' => 'required|string|exists:locations,code,company_id,'.Auth::user()->company_id.'|max:20',
+            'qty' => 'required|numeric|between:0,9999999999.999999',
+            'uom_code' => 'required|string|exists:uoms,code|max:6',
+            'prev_qty' => 'required|numeric|between:0,9999999999.999999',
+            'prev_uom_code' => 'required|string|exists:uoms,code|max:6',
+            'pallet_id' => 'nullable|integer|exists:pallets,id,company_id,'.Auth::user()->company_id.'',
+            'document_id' => 'nullable|integer|exists:documents,id,company_id,'.Auth::user()->company_id.'',
+            'document_item_id' => 'nullable|digit|exists:document_items,id,company_id,'.Auth::user()->company_id.'',
+            'task_id' => 'nullable|integer|exists:tasks,id,company_id,'.Auth::user()->company_id.'',
+            'user_id' => 'nullable|integer|exists:users,id,company_id,'.Auth::user()->company_id.'',
+            'operation_code' => 'required|string|exists:operations,code|max:30',
+            'finality_code' => 'required|string|exists:finalities,code|max:10',
+            'volume_id' => 'nullable|integer|exists:volumes,id,company_id,'.Auth::user()->company_id.'',
+            
+            
          ];
     }
 }
