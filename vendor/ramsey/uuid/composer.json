@@ -35,7 +35,7 @@
         "jakub-onderka/php-parallel-lint": "^0.9.0",
         "mockery/mockery": "^0.9.9",
         "goaop/framework": "1.0.0-alpha.2 | ^1.0 | ^2.1",
-        "doctrine/annotations": "1.5.*",
+        "doctrine/annotations": "1.4.*",
         "codeception/aspect-mock": "^1.0 | ~2.0.0",
         "php-mock/php-mock-phpunit": "^0.3|^1.1"
     },
