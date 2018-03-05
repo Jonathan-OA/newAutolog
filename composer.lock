@@ -263,7 +263,7 @@
                 "shasum": ""
             },
             "require": {
-                "doctrine/annotations": "1.*",
+                "doctrine/annotations": "1.5*",
                 "doctrine/cache": "1.*",
                 "doctrine/collections": "1.*",
                 "doctrine/inflector": "1.*",
@@ -2207,7 +2207,7 @@
             },
             "require-dev": {
                 "codeception/aspect-mock": "^1.0 | ~2.0.0",
-                "doctrine/annotations": "~1.2.0",
+                "doctrine/annotations": "1.5.*",
                 "goaop/framework": "1.0.0-alpha.2 | ^1.0 | ^2.1",
                 "ircmaxell/random-lib": "^1.1",
                 "jakub-onderka/php-parallel-lint": "^0.9.0",
@@ -3041,7 +3041,7 @@
                 "symfony/yaml": "<3.4"
             },
             "require-dev": {
-                "doctrine/annotations": "~1.0",
+                "doctrine/annotations": "1.5.*",
                 "doctrine/common": "~2.2",
                 "psr/log": "~1.0",
                 "symfony/config": "~3.4|~4.0",
