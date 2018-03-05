@@ -17,15 +17,25 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace Doctrine\DBAL\Exception;
+namespace Doctrine\Common\Cache;
 
 /**
- * Exception for a deadlock error of a transaction detected in the driver.
+ * Interface for cache drivers that allows to put many items at once.
  *
- * @author Tobias Schultze <http://tobion.de>
  * @link   www.doctrine-project.org
- * @since  2.6
+ * @since  1.7
+ * @author Benoit Burnichon <bburnichon@gmail.com>
+ *
+ * @deprecated
  */
-class DeadlockException extends ServerException implements RetryableException
+interface MultiDeleteCache
 {
+    /**
+     * Deletes several cache entries.
+     *
+     * @param string[] $keys Array of keys to delete from cache
+     *
+     * @return bool TRUE if the operation was successful, FALSE if it wasn't.
+     */
+    function deleteMultiple(array $keys);
 }

@@ -17,46 +17,15 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace Doctrine\DBAL\Platforms;
-
-use Doctrine\DBAL\Types\Type;
+namespace Doctrine\Common\Cache;
 
 /**
- * Provides the behavior, features and SQL dialect of the PostgreSQL 9.4 database platform.
+ * Interface for cache drivers that supports multiple items manipulation.
  *
- * @author Matteo Beccati <matteo@beccati.com>
  * @link   www.doctrine-project.org
- * @since  2.6
+ * @since  1.7
+ * @author Luís Cobucci <lcobucci@gmail.com>
  */
-class PostgreSQL94Platform extends PostgreSQL92Platform
+interface MultiOperationCache extends MultiGetCache, MultiDeleteCache, MultiPutCache
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getJsonTypeDeclarationSQL(array $field)
-    {
-        if (!empty($field['jsonb'])) {
-            return 'JSONB';
-        }
-
-        return 'JSON';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getReservedKeywordsClass()
-    {
-        return Keywords\PostgreSQL94Keywords::class;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function initializeDoctrineTypeMappings()
-    {
-        parent::initializeDoctrineTypeMappings();
-
-        $this->doctrineTypeMapping['jsonb'] = Type::JSON;
-    }
 }
