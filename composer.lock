@@ -263,7 +263,7 @@
                 "shasum": ""
             },
             "require": {
-                "doctrine/annotations": "1.5*",
+                "doctrine/annotations": "1.5.*",
                 "doctrine/cache": "1.*",
                 "doctrine/collections": "1.*",
                 "doctrine/inflector": "1.*",
