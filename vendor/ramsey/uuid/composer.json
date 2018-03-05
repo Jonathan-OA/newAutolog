@@ -5,8 +5,7 @@
     "keywords": ["uuid", "identifier", "guid"],
     "homepage": "https://github.com/ramsey/uuid",
     "license": "MIT",
-    "authors": [
-        {
+    "authors": [{
             "name": "Ben Ramsey",
             "email": "ben@benramsey.com",
             "homepage": "https://benramsey.com"
@@ -36,7 +35,7 @@
         "jakub-onderka/php-parallel-lint": "^0.9.0",
         "mockery/mockery": "^0.9.9",
         "goaop/framework": "1.0.0-alpha.2 | ^1.0 | ^2.1",
-        "doctrine/annotations": "~1.2.0",
+        "doctrine/annotations": "1.5.*",
         "codeception/aspect-mock": "^1.0 | ~2.0.0",
         "php-mock/php-mock-phpunit": "^0.3|^1.1"
     },
@@ -49,10 +48,10 @@
         "ramsey/uuid-console": "A console application for generating UUIDs with ramsey/uuid"
     },
     "autoload": {
-        "psr-4": {"Ramsey\\Uuid\\": "src/"}
+        "psr-4": { "Ramsey\\Uuid\\": "src/" }
     },
     "autoload-dev": {
-        "psr-4": {"Ramsey\\Uuid\\Test\\": "tests/"}
+        "psr-4": { "Ramsey\\Uuid\\Test\\": "tests/" }
     },
     "replace": {
         "rhumsaa/uuid": "self.version"
