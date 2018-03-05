@@ -195,7 +195,7 @@
                 "guzzle/stream": "self.version"
             },
             "require-dev": {
-                "doctrine/cache": "~1.3",
+                "doctrine/cache": "1.6.*",
                 "monolog/monolog": "~1.0",
                 "phpunit/phpunit": "3.7.*",
                 "psr/log": "~1.0",

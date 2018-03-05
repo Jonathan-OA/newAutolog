@@ -14,8 +14,8 @@
     ],
     "require": {
         "php": "~7.1",
-        "doctrine/inflector": "1.*",
-        "doctrine/cache": "1.*",
+        "doctrine/inflector": "1.6.*",
+        "doctrine/cache": "1.6.*",
         "doctrine/collections": "1.*",
         "doctrine/lexer": "1.*",
         "doctrine/annotations": "1.4.*"
