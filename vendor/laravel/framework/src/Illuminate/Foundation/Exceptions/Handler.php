@@ -11,7 +11,6 @@ use Illuminate\Http\Response;
 use Illuminate\Routing\Router;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\ViewErrorBag;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\RedirectResponse;
 use Whoops\Handler\PrettyPageHandler;
@@ -401,9 +400,7 @@ class Handler implements ExceptionHandlerContract
         })->push(__DIR__.'/views')->all());
 
         if (view()->exists($view = "errors::{$status}")) {
-            return response()->view($view, [
-                'exception' => $e, 'errors' => new ViewErrorBag,
-            ], $status, $e->getHeaders());
+            return response()->view($view, ['exception' => $e], $status, $e->getHeaders());
         }
 
         return $this->convertExceptionToResponse($e);

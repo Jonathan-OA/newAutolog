@@ -175,8 +175,6 @@ class RouteRegistrar
             return $this->attribute($method, $parameters[0]);
         }
 
-        throw new BadMethodCallException(sprintf(
-            'Method %s::%s does not exist.', static::class, $method
-        ));
+        throw new BadMethodCallException("Method [{$method}] does not exist.");
     }
 }

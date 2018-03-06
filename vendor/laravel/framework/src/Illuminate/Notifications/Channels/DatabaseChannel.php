@@ -16,7 +16,7 @@ class DatabaseChannel
      */
     public function send($notifiable, Notification $notification)
     {
-        return $notifiable->routeNotificationFor('database', $notification)->create([
+        return $notifiable->routeNotificationFor('database')->create([
             'id' => $notification->id,
             'type' => get_class($notification),
             'data' => $this->getData($notifiable, $notification),
@@ -44,6 +44,8 @@ class DatabaseChannel
             return $notification->toArray($notifiable);
         }
 
-        throw new RuntimeException('Notification is missing toDatabase / toArray method.');
+        throw new RuntimeException(
+            'Notification is missing toDatabase / toArray method.'
+        );
     }
 }

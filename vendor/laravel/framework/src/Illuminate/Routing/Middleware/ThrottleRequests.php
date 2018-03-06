@@ -48,7 +48,7 @@ class ThrottleRequests
 
         $maxAttempts = $this->resolveMaxAttempts($request, $maxAttempts);
 
-        if ($this->limiter->tooManyAttempts($key, $maxAttempts)) {
+        if ($this->limiter->tooManyAttempts($key, $maxAttempts, $decayMinutes)) {
             throw $this->buildException($key, $maxAttempts);
         }
 
@@ -75,10 +75,6 @@ class ThrottleRequests
             $maxAttempts = explode('|', $maxAttempts, 2)[$request->user() ? 1 : 0];
         }
 
-        if (! is_numeric($maxAttempts) && $request->user()) {
-            $maxAttempts = $request->user()->{$maxAttempts};
-        }
-
         return (int) $maxAttempts;
     }
 
@@ -99,7 +95,9 @@ class ThrottleRequests
             return sha1($route->getDomain().'|'.$request->ip());
         }
 
-        throw new RuntimeException('Unable to generate the request signature. Route unavailable.');
+        throw new RuntimeException(
+            'Unable to generate the request signature. Route unavailable.'
+        );
     }
 
     /**

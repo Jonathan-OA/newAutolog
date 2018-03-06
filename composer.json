@@ -11,9 +11,9 @@
         "infyomlabs/adminlte-templates": "5.6.x-dev",
         "infyomlabs/laravel-generator": "5.6.x-dev",
         "kodeine/laravel-acl": "~1.0@dev",
-        "laravel/framework": "5.6.*",
+        "laravel/framework": "5.5.*",
         "laravel/tinker": "~1.0",
-        "laravelcollective/html": "^5.6.0",
+        "laravelcollective/html": "^5.5.0",
         "lavary/laravel-menu": "^1.7",
         "yajra/laravel-datatables-buttons": "^3.2",
         "yajra/laravel-datatables-oracle": "^8.4"
@@ -28,12 +28,10 @@
         "phpunit/phpunit": "~7.0",
         "symfony/thanks": "^1.0",
         "doctrine/annotations": "1.4.*",
-        "doctrine/common": "2.7.*",
         "doctrine/cache": "1.6.*",
-        "doctrine/collections": "1.4.*",
+        "doctrine/common": "2.7.*",
         "doctrine/inflector": "1.2.*",
         "doctrine/instantiator": "1.0.*"
-
     },
     "autoload": {
         "classmap": [

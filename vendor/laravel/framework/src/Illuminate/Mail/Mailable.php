@@ -7,26 +7,14 @@ use ReflectionProperty;
 use BadMethodCallException;
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
-use Illuminate\Support\HtmlString;
 use Illuminate\Container\Container;
-use Illuminate\Support\Traits\Localizable;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Contracts\Queue\Factory as Queue;
-use Illuminate\Contracts\Translation\Translator;
 use Illuminate\Contracts\Mail\Mailer as MailerContract;
 use Illuminate\Contracts\Mail\Mailable as MailableContract;
 
 class Mailable implements MailableContract, Renderable
 {
-    use Localizable;
-
-    /**
-     * The locale of the message.
-     *
-     * @var string
-     */
-    public $locale;
-
     /**
      * The person the message is from.
      *
@@ -75,13 +63,6 @@ class Mailable implements MailableContract, Renderable
      * @var string
      */
     protected $markdown;
-
-    /**
-     * The HTML to use for the message.
-     *
-     * @var string
-     */
-    protected $html;
 
     /**
      * The view to use for the message.
@@ -133,18 +114,14 @@ class Mailable implements MailableContract, Renderable
      */
     public function send(MailerContract $mailer)
     {
-        $translator = Container::getInstance()->make(Translator::class);
+        Container::getInstance()->call([$this, 'build']);
 
-        $this->withLocale($this->locale, $translator, function () use ($mailer) {
-            Container::getInstance()->call([$this, 'build']);
-
-            $mailer->send($this->buildView(), $this->buildViewData(), function ($message) {
-                $this->buildFrom($message)
-                     ->buildRecipients($message)
-                     ->buildSubject($message)
-                     ->runCallbacks($message)
-                     ->buildAttachments($message);
-            });
+        $mailer->send($this->buildView(), $this->buildViewData(), function ($message) {
+            $this->buildFrom($message)
+                 ->buildRecipients($message)
+                 ->buildSubject($message)
+                 ->buildAttachments($message)
+                 ->runCallbacks($message);
         });
     }
 
@@ -208,13 +185,6 @@ class Mailable implements MailableContract, Renderable
      */
     protected function buildView()
     {
-        if (isset($this->html)) {
-            return array_filter([
-                'html' => new HtmlString($this->html),
-                'text' => isset($this->textView) ? $this->textView : null,
-            ]);
-        }
-
         if (isset($this->markdown)) {
             return $this->buildMarkdownView();
         }
@@ -361,19 +331,6 @@ class Mailable implements MailableContract, Renderable
         foreach ($this->callbacks as $callback) {
             $callback($message->getSwiftMessage());
         }
-
-        return $this;
-    }
-
-    /**
-     * Set the locale of the message.
-     *
-     * @param  string  $locale
-     * @return $this
-     */
-    public function locale($locale)
-    {
-        $this->locale = $locale;
 
         return $this;
     }
@@ -644,19 +601,6 @@ class Mailable implements MailableContract, Renderable
     }
 
     /**
-     * Set the rendered HTML content for the message.
-     *
-     * @param  string  $html
-     * @return $this
-     */
-    public function html($html)
-    {
-        $this->html = $html;
-
-        return $this;
-    }
-
-    /**
      * Set the plain text view for the message.
      *
      * @param  string  $textView
@@ -746,8 +690,6 @@ class Mailable implements MailableContract, Renderable
             return $this->with(Str::snake(substr($method, 4)), $parameters[0]);
         }
 
-        throw new BadMethodCallException(sprintf(
-            'Method %s::%s does not exist.', static::class, $method
-        ));
+        throw new BadMethodCallException("Method [$method] does not exist on mailable.");
     }
 }

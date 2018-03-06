@@ -11,7 +11,6 @@ use DateTimeInterface;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
-use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rules\Exists;
 use Illuminate\Validation\Rules\Unique;
 use Illuminate\Validation\ValidationData;
@@ -181,19 +180,7 @@ trait ValidatesAttributes
      */
     protected function getDateTimestamp($value)
     {
-        if ($value instanceof DateTimeInterface) {
-            return $value->getTimestamp();
-        }
-
-        if ($this->isTestingRelativeDateTime($value)) {
-            $date = $this->getDateTime($value);
-
-            if (! is_null($date)) {
-                return $date->getTimestamp();
-            }
-        }
-
-        return strtotime($value);
+        return $value instanceof DateTimeInterface ? $value->getTimestamp() : strtotime($value);
     }
 
     /**
@@ -227,39 +214,11 @@ trait ValidatesAttributes
             return $date;
         }
 
-        return $this->getDateTime($value);
-    }
-
-    /**
-     * Get a DateTime instance from a string with no format.
-     *
-     * @param  string $value
-     * @return \DateTime|null
-     */
-    protected function getDateTime($value)
-    {
         try {
-            if ($this->isTestingRelativeDateTime($value)) {
-                return new Carbon($value);
-            }
-
             return new DateTime($value);
         } catch (Exception $e) {
             //
         }
-    }
-
-    /**
-     * Check if the given value should be adjusted to Carbon::getTestNow().
-     *
-     * @param  mixed $value
-     * @return bool
-     */
-    protected function isTestingRelativeDateTime($value)
-    {
-        return Carbon::hasTestNow() && is_string($value) && (
-            $value === 'now' || Carbon::hasRelativeKeywords($value)
-        );
     }
 
     /**
@@ -488,10 +447,6 @@ trait ValidatesAttributes
      */
     public function validateDimensions($attribute, $value, $parameters)
     {
-        if ($this->isValidFileInstance($value) && $value->getClientMimeType() == 'image/svg+xml') {
-            return true;
-        }
-
         if (! $this->isValidFileInstance($value) || ! $sizeDetails = @getimagesize($value->getRealPath())) {
             return false;
         }
