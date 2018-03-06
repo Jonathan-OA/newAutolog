@@ -10,13 +10,6 @@ use Illuminate\Database\Query\JsonExpression;
 class MySqlGrammar extends Grammar
 {
     /**
-     * The grammar specific operators.
-     *
-     * @var array
-     */
-    protected $operators = ['sounds like'];
-
-    /**
      * The components that make up a select clause.
      *
      * @var array

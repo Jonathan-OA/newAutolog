@@ -27,7 +27,7 @@ class Event
      *
      * @var string
      */
-    public $expression = '* * * * *';
+    public $expression = '* * * * * *';
 
     /**
      * The timezone the date should be evaluated on.
@@ -63,13 +63,6 @@ class Event
      * @var bool
      */
     public $withoutOverlapping = false;
-
-    /**
-     * Indicates if the command should only be allowed to run on one server for each cron expression.
-     *
-     * @var bool
-     */
-    public $onOneServer = false;
 
     /**
      * The amount of time the mutex should be valid.
@@ -135,9 +128,9 @@ class Event
     public $description;
 
     /**
-     * The event mutex implementation.
+     * The mutex implementation.
      *
-     * @var \Illuminate\Console\Scheduling\EventMutex
+     * @var \Illuminate\Console\Scheduling\Mutex
      */
     public $mutex;
 
@@ -148,7 +141,7 @@ class Event
      * @param  string  $command
      * @return void
      */
-    public function __construct(EventMutex $mutex, $command)
+    public function __construct(Mutex $mutex, $command)
     {
         $this->mutex = $mutex;
         $this->command = $command;
@@ -540,18 +533,6 @@ class Event
     }
 
     /**
-     * Allow the event to only run on one server for each cron expression.
-     *
-     * @return $this
-     */
-    public function onOneServer()
-    {
-        $this->onOneServer = true;
-
-        return $this;
-    }
-
-    /**
      * Register a callback to further filter the schedule.
      *
      * @param  \Closure|bool  $callback
@@ -682,12 +663,12 @@ class Event
     }
 
     /**
-     * Set the event mutex implementation to be used.
+     * Set the mutex implementation to be used.
      *
-     * @param  \Illuminate\Console\Scheduling\EventMutex  $mutex
+     * @param  \Illuminate\Console\Scheduling\Mutex  $mutex
      * @return $this
      */
-    public function preventOverlapsUsing(EventMutex $mutex)
+    public function preventOverlapsUsing(Mutex $mutex)
     {
         $this->mutex = $mutex;
 

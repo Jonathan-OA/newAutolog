@@ -387,7 +387,7 @@ class HtmlBuilder
         if (is_array($value)) {
             return $this->nestedListing($key, $type, $value);
         } else {
-            return '<li>' . e($value, false) . '</li>';
+            return '<li>' . e($value) . '</li>';
         }
     }
 
@@ -456,7 +456,7 @@ class HtmlBuilder
         }
 
         if (! is_null($value)) {
-            return $key . '="' . e($value, false) . '"';
+            return $key . '="' . e($value) . '"';
         }
     }
 
