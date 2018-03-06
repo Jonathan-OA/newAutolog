@@ -1429,17 +1429,17 @@
     },
     {
         "name": "laravel/tinker",
-        "version": "v1.0.3",
-        "version_normalized": "1.0.3.0",
+        "version": "v1.0.4",
+        "version_normalized": "1.0.4.0",
         "source": {
             "type": "git",
             "url": "https://github.com/laravel/tinker.git",
-            "reference": "852c2abe0b0991555a403f1c0583e64de6acb4a6"
+            "reference": "eb8d3cfb41b7f74fb0ef4724e459d44f4cbb35b8"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/laravel/tinker/zipball/852c2abe0b0991555a403f1c0583e64de6acb4a6",
-            "reference": "852c2abe0b0991555a403f1c0583e64de6acb4a6",
+            "url": "https://api.github.com/repos/laravel/tinker/zipball/eb8d3cfb41b7f74fb0ef4724e459d44f4cbb35b8",
+            "reference": "eb8d3cfb41b7f74fb0ef4724e459d44f4cbb35b8",
             "shasum": ""
         },
         "require": {
@@ -1456,7 +1456,7 @@
         "suggest": {
             "illuminate/database": "The Illuminate Database package (~5.1)."
         },
-        "time": "2017-12-18T16:25:11+00:00",
+        "time": "2018-03-06T13:48:07+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -2126,69 +2126,6 @@
         "keywords": [
             "parser",
             "php"
-        ]
-    },
-    {
-        "name": "nunomaduro/collision",
-        "version": "v1.1.22",
-        "version_normalized": "1.1.22.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/nunomaduro/collision.git",
-            "reference": "236609bd5a067587f600bc55c5d683b840798b22"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/nunomaduro/collision/zipball/236609bd5a067587f600bc55c5d683b840798b22",
-            "reference": "236609bd5a067587f600bc55c5d683b840798b22",
-            "shasum": ""
-        },
-        "require": {
-            "filp/whoops": "^2.1.4",
-            "php": "^7.1",
-            "symfony/console": "~2.8|~3.3|~4.0"
-        },
-        "require-dev": {
-            "laravel/framework": "5.5.*",
-            "phpunit/phpunit": "~6.5"
-        },
-        "time": "2018-02-07T10:42:20+00:00",
-        "type": "library",
-        "extra": {
-            "laravel": {
-                "providers": [
-                    "NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider"
-                ]
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "NunoMaduro\\Collision\\": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Nuno Maduro",
-                "email": "enunomaduro@gmail.com"
-            }
-        ],
-        "description": "Cli error handling for console/command-line PHP applications.",
-        "keywords": [
-            "artisan",
-            "cli",
-            "command-line",
-            "console",
-            "error",
-            "handling",
-            "laravel",
-            "laravel-zero",
-            "php",
-            "symfony"
         ]
     },
     {
