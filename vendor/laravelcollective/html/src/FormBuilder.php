@@ -527,7 +527,7 @@ class FormBuilder
         // the element. Then we'll create the final textarea elements HTML for us.
         $options = $this->html->attributes($options);
 
-        return $this->toHtmlString('<textarea' . $options . '>' . e($value). '</textarea>');
+        return $this->toHtmlString('<textarea' . $options . '>' . e($value, false). '</textarea>');
     }
 
     /**
@@ -709,20 +709,23 @@ class FormBuilder
      * @param  string $selected
      * @param  array  $attributes
      * @param  array  $optionsAttributes
+     * @param  integer  $level
      *
      * @return \Illuminate\Support\HtmlString
      */
-    protected function optionGroup($list, $label, $selected, array $attributes = [], array $optionsAttributes = [])
+    protected function optionGroup($list, $label, $selected, array $attributes = [], array $optionsAttributes = [], $level = 0)
     {
         $html = [];
-
+        $space = str_repeat("&nbsp;", $level);
         foreach ($list as $value => $display) {
             $optionAttributes = $optionsAttributes[$value] ?? [];
-
-            $html[] = $this->option($display, $value, $selected, $optionAttributes);
+            if (is_array($display)) {
+                $html[] = $this->optionGroup($display, $value, $selected, $attributes, $optionAttributes, $level+5);
+            } else {
+                $html[] = $this->option($space.$display, $value, $selected, $optionAttributes);
+            }
         }
-        
-        return $this->toHtmlString('<optgroup label="' . e($label) . '"' . $this->html->attributes($attributes) . '>' . implode('', $html) . '</optgroup>');
+        return $this->toHtmlString('<optgroup label="' . e($space.$label, false) . '"' . $this->html->attributes($attributes) . '>' . implode('', $html) . '</optgroup>');
     }
 
     /**
@@ -743,7 +746,7 @@ class FormBuilder
 
         $string = '<option' . $this->html->attributes($options) . '>';
         if ($display !== null) {
-            $string .= e($display) . '</option>';
+            $string .= e($display, false) . '</option>';
         }
 
         return $this->toHtmlString($string);
@@ -766,7 +769,7 @@ class FormBuilder
             'value' => '',
         ];
 
-        return $this->toHtmlString('<option' . $this->html->attributes($options) . '>' . e($display) . '</option>');
+        return $this->toHtmlString('<option' . $this->html->attributes($options) . ' hidden="hidden">' . e($display, false) . '</option>');
     }
 
     /**
@@ -1183,7 +1186,7 @@ class FormBuilder
         }
 
         $request = $this->request($name);
-        if (! is_null($request)) {
+        if (! is_null($request) && $name != '_method') {
             return $request;
         }
 
@@ -1267,7 +1270,7 @@ class FormBuilder
      */
     public function oldInputIsEmpty()
     {
-        return (isset($this->session) && count($this->session->getOldInput()) === 0);
+        return (isset($this->session) && count((array) $this->session->getOldInput()) === 0);
     }
 
     /**
