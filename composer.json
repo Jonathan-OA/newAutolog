@@ -32,7 +32,14 @@
         "doctrine/common": "2.7.*",
         "doctrine/inflector": "1.2.*",
         "doctrine/instantiator": "1.0.*",
-        "symfony/translation": "3.4.*"
+        "symfony/translation": "3.4.*",
+        "symfony/event-dispatcher": "3.4.*",
+        "symfony/lock": "3.4.*",
+        "symfony/process": "3.4.*",
+        "symfony/config": "3.4.*",
+        "symfony/dependency-injection": "3.4.*"
+
+
     },
     "autoload": {
         "classmap": [
