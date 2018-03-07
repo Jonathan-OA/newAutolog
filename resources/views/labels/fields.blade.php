@@ -8,9 +8,9 @@
 {!! Form::label('barcode', Lang::get('models.barcode').':') !!}
 {!! Form::text('barcode', null, ['class' => 'form-control']) !!}
 
-<!-- Item Code Field -->
-{!! Form::label('item_code', Lang::get('models.item_code').':') !!}
-{!! Form::text('item_code', null, ['class' => 'form-control']) !!}
+<!-- Product Code Field -->
+{!! Form::label('product_code', Lang::get('models.product_code').':') !!}
+{!! Form::text('product_code', null, ['class' => 'form-control']) !!}
 
 <!-- Qty Field -->
 {!! Form::label('qty', Lang::get('models.qty').':') !!}

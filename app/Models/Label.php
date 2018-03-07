@@ -26,7 +26,7 @@ class Label extends Model
     public $fillable = [
         'company_id',
         'barcode',
-        'item_code',
+        'product_code',
         'qty',
         'uom_code',
         'prev_qty',
@@ -67,7 +67,7 @@ class Label extends Model
     protected $casts = [
         'company_id' => 'integer',
         'barcode' => 'string',
-        'item_code' => 'string',
+        'product_code' => 'string',
         'uom_code' => 'string',
         'prev_uom_code' => 'string',
         'serial_number' => 'string',

@@ -31,7 +31,7 @@ class ImportacaoGeralController extends Controller
                 $newItem = new App\DocumentItem();
                 $newItem->company_id = 1;
                 $newItem->document_id = $newDoc->id;
-                $newItem->item_code = $item->PRDCAD_CODIGO;
+                $newItem->product_code = $item->PRDCAD_CODIGO;
                 $newItem->qty = $item->DOCITM_QDE;
                 $newItem->uom_code = $item->UOMCAD_CODIGO;
                 $newItem->status = $item->DOCITM_STATUS;

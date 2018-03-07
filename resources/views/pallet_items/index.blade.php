@@ -61,7 +61,7 @@
                 }
             },
             columns: [  { data: 'pallet_id' },
-                        { data: 'item_code' },
+                        { data: 'product_code' },
                         { data: 'qty' },
                         { data: 'uom_code' },
                         { data: 'prim_qty' },

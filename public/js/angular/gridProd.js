@@ -138,7 +138,7 @@ app.controller('DetCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '
         fastWatch: true,
         enableGridMenu: true,
         columnDefs: [
-            { name: 'Item', field: 'item_code' },
+            { name: 'Item', field: 'product_code' },
             { name: 'Unidade', field: 'uom_code' },
             { name: 'Quantidade', field: 'qty' },
             { name: 'Status', field: 'status', cellTemplate: '<div class="ui-grid-cell-contents"><div class="grid_cell stat{{grid.getCellValue(row, col)}}">{{grid.getCellValue(row, col)}}</div></div>' },

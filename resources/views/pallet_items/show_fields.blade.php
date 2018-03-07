@@ -18,8 +18,8 @@
 
 <!-- Item Code Field -->
 <div class="col-md-12">
-    {!! Form::label('item_code', 'Item Code:') !!}
-    <p>{!! $palletItem->item_code !!}</p>
+    {!! Form::label('product_code', 'Item Code:') !!}
+    <p>{!! $palletItem->product_code !!}</p>
 </div>
 
 <!-- Qty Field -->

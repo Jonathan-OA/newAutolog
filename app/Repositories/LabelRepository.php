@@ -13,7 +13,7 @@ class LabelRepository extends BaseRepository
     protected $fieldSearchable = [
         'company_id',
         'barcode',
-        'item_code',
+        'product_code',
         'qty',
         'uom_code',
         'prev_qty',

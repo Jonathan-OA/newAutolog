@@ -26,7 +26,7 @@ class PalletItem extends Model
     public $fillable = [
         'company_id',
         'pallet_id',
-        'item_code',
+        'product_code',
         'qty',
         'uom_code',
         'prim_qty',
@@ -44,7 +44,7 @@ class PalletItem extends Model
      */
     protected $casts = [
         'company_id' => 'integer',
-        'item_code' => 'string',
+        'product_code' => 'string',
         'uom_code' => 'string',
         'prim_uom_code' => 'string'
     ];

@@ -54,7 +54,10 @@ class PackingController extends AppBaseController
     {
         //Valida se usuário possui permissão para acessar esta opção
         if(App\Models\User::getPermission('packings_add',Auth::user()->user_type_code)){
-            return view('packings.create')->with('product_code',$product_code);
+            //Unidades de Medida
+            $uoms = App\Models\Uom::getUoms();
+            return view('packings.create')->with('product_code',$product_code)
+                                          ->with('uoms',$uoms);
 
         }else{
             //Sem permissão
@@ -121,7 +124,11 @@ class PackingController extends AppBaseController
                 return redirect(route('packings.index'));
             }
 
-            return view('packings.edit')->with('packing', $packing);
+            //Unidades de Medida
+            $uoms = App\Models\Uom::getUoms();
+
+            return view('packings.edit')->with('packing', $packing)
+                                        ->with('uoms',$uoms);
         
         }else{
             //Sem permissão

@@ -147,7 +147,7 @@ return [
     'stacking' => 'Empilhamento Máximo',
     'packing_type_code' => 'Embalagem',
     'pallet_id' => 'Palete ID',
-    'item_code' => 'Item',
+    'product_code' => 'Item',
     'qty' => 'Quantidade',
     'prim_qty' => 'Qde. Primária',
     'uom_code' => 'Unidade',

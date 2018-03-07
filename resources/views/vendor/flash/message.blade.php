@@ -24,4 +24,4 @@
     @endif
 @endforeach
 
-{{ session()->forget('flash_notification') }}
+{!! session()->forget('flash_notification') !!}

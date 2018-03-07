@@ -56,8 +56,7 @@
 <input id='user_id' name='user_id' type='hidden' value='{!! Auth::user()->id !!}'>
 
 <!-- Operation Code Field -->
-{!! Form::label('operation_code', Lang::get('models.operation_code').':') !!}
-{!! Form::text('operation_code', null, ['class' => 'form-control','id' => 'autocomplete2', 'table' => 'operations']) !!}
+<input id='operation_code' name='operation_code' type='hidden' value='664'>
 
 <!-- Volume Id Field -->
 {!! Form::label('volume_id', Lang::get('models.volume_id').':') !!}

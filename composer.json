@@ -6,12 +6,12 @@
     "type": "project",
     "require": {
         "php": ">=7.0.10",
-        "doctrine/dbal": "2.5.*",
+        "doctrine/dbal": "~2.0",
         "fideloper/proxy": "~4.0",
         "infyomlabs/adminlte-templates": "5.6.x-dev",
         "infyomlabs/laravel-generator": "5.6.x-dev",
         "kodeine/laravel-acl": "~1.0@dev",
-        "laravel/framework": "5.5.*",
+        "laravel/framework": "5.6.*",
         "laravel/tinker": "~1.0",
         "laravelcollective/html": "^5.5.0",
         "lavary/laravel-menu": "^1.7",
@@ -24,17 +24,8 @@
         "filp/whoops": "~2.0",
         "fzaninotto/faker": "~1.4",
         "mockery/mockery": "~1.0",
-        "phpunit/phpunit": "6.5.*",
-        "symfony/thanks": "^1.0",
-        "doctrine/annotations": "1.4.*",
-        "doctrine/cache": "1.6.*",
-        "doctrine/common": "2.7.*",
-        "doctrine/inflector": "1.2.*",
-        "doctrine/instantiator": "1.0.*",
-        "symfony/translation": "3.4.*",
-        "symfony/event-dispatcher": "3.4.*",
-        "symfony/routing": "3.4.*",
-        "sebastian/diff": "2.0.*"
+        "phpunit/phpunit": "~6.0",
+        "symfony/thanks": "^1.0"
 
 
     },

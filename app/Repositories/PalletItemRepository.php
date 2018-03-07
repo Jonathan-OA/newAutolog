@@ -13,7 +13,7 @@ class PalletItemRepository extends BaseRepository
     protected $fieldSearchable = [
         'company_id',
         'pallet_id',
-        'item_code',
+        'product_code',
         'qty',
         'uom_code',
         'prim_qty',

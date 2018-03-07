@@ -8,8 +8,8 @@
 <input id='pallet_id' name='pallet_id' type='hidden' value='{!! $palletId !!}'>
 
 <!-- Item Code Field -->
-{!! Form::label('item_code', Lang::get('models.item_code').':') !!}
-{!! Form::text('item_code', null, ['class' => 'form-control','id' => 'autocomplete', 'table' => 'products']) !!}
+{!! Form::label('product_code', Lang::get('models.product_code').':') !!}
+{!! Form::text('product_code', null, ['class' => 'form-control','id' => 'autocomplete', 'table' => 'products']) !!}
 
 <!-- Qty Field -->
 {!! Form::label('qty', Lang::get('models.qty').':') !!}

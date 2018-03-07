@@ -6,14 +6,16 @@
 
 <!-- Level Field -->
 {!! Form::label('level', Lang::get('models.level').':') !!}
-{!! Form::number('level', null, ['class' => 'form-control']) !!}
+{!! Form::select('level', array('1' => '1', '2' => '2', '3' => '3'), null, ['class' => 'form-control']) !!}
+
+
 
 <!-- Product Code Field -->
 <input id='product_code' name='product_code' type='hidden' value='{!! $product_code !!}'>
 
 <!-- Uom Code Field -->
 {!! Form::label('uom_code', Lang::get('models.uom_code').':') !!}
-{!! Form::text('uom_code', null, ['class' => 'form-control']) !!}
+{!! Form::select('uom_code', $uoms, null, ['class' => 'form-control']) !!}
 
 <!-- Barcode Field -->
 {!! Form::label('barcode', Lang::get('models.barcode').':') !!}
@@ -21,7 +23,8 @@
 
 <!-- Prev Qty Field -->
 {!! Form::label('prev_qty', Lang::get('models.prev_qty').':') !!}
-{!! Form::number('prev_qty', null, ['class' => 'form-control']) !!}
+{!! Form::number('prev_qty', null, ['class' => 'form-control', 'step' => '0.000001', 'placeholder' => '0,000000']) !!}
+
 
 <!-- Prev Level Field -->
 {!! Form::label('prev_level', Lang::get('models.prev_level').':') !!}
@@ -65,47 +68,47 @@
 
 <!-- Print Label Field -->
 {!! Form::label('print_label', Lang::get('models.print_label').':') !!}
-{!! Form::select('print_label', array('1' => 'Ativo', '0' => 'Inativo'), null, ['class' => 'form-control']) !!}
+{!! Form::select('print_label', array('' => '','1' => 'Ativo', '0' => 'Inativo'), null, ['class' => 'form-control']) !!}
 
 <!-- Create Label Field -->
 {!! Form::label('create_label', Lang::get('models.create_label').':') !!}
-{!! Form::select('create_label', array('1' => 'Ativo', '0' => 'Inativo'), null, ['class' => 'form-control']) !!}
+{!! Form::select('create_label', array('' => '','1' => 'Ativo', '0' => 'Inativo'), null, ['class' => 'form-control']) !!}
 
 <!-- Conf Batch Field -->
 {!! Form::label('conf_batch', Lang::get('models.conf_batch').':') !!}
-{!! Form::select('conf_batch', array('1' => 'Ativo', '0' => 'Inativo'), null, ['class' => 'form-control']) !!}
+{!! Form::select('conf_batch', array('' => '', '1' => 'Ativo', '0' => 'Inativo'), null, ['class' => 'form-control']) !!}
 
 <!-- Conf Weight Field -->
 {!! Form::label('conf_weight', Lang::get('models.conf_weight').':') !!}
-{!! Form::select('conf_weight', array('1' => 'Ativo', '0' => 'Inativo'), null, ['class' => 'form-control']) !!}
+{!! Form::select('conf_weight', array('' => '','1' => 'Ativo', '0' => 'Inativo'), null, ['class' => 'form-control']) !!}
 
 <!-- Conf Serial Field -->
 {!! Form::label('conf_serial', Lang::get('models.conf_serial').':') !!}
-{!! Form::select('conf_serial', array('1' => 'Ativo', '0' => 'Inativo'), null, ['class' => 'form-control']) !!}
+{!! Form::select('conf_serial', array('' => '','1' => 'Ativo', '0' => 'Inativo'), null, ['class' => 'form-control']) !!}
 
 <!-- Conf Batch Supplier Field -->
 {!! Form::label('conf_batch_supplier', Lang::get('models.conf_batch_supplier').':') !!}
-{!! Form::select('conf_batch_supplier', array('1' => 'Ativo', '0' => 'Inativo'), null, ['class' => 'form-control']) !!}
+{!! Form::select('conf_batch_supplier', array('' => '','1' => 'Ativo', '0' => 'Inativo'), null, ['class' => 'form-control']) !!}
 
 <!-- Conf Due Date Field -->
 {!! Form::label('conf_due_date', Lang::get('models.conf_due_date').':') !!}
-{!! Form::select('conf_due_date', array('1' => 'Ativo', '0' => 'Inativo'), null, ['class' => 'form-control']) !!}
+{!! Form::select('conf_due_date', array('' => '','1' => 'Ativo', '0' => 'Inativo'), null, ['class' => 'form-control']) !!}
 
 <!-- Conf Prod Date Field -->
 {!! Form::label('conf_prod_date', Lang::get('models.conf_prod_date').':') !!}
-{!! Form::select('conf_prod_date', array('1' => 'Ativo', '0' => 'Inativo'), null, ['class' => 'form-control']) !!}
+{!! Form::select('conf_prod_date', array('' => '','1' => 'Ativo', '0' => 'Inativo'), null, ['class' => 'form-control']) !!}
 
 <!-- Conf Lenght Field -->
 {!! Form::label('conf_length', Lang::get('models.conf_length').':') !!}
-{!! Form::select('conf_length', array('1' => 'Ativo', '0' => 'Inativo'), null, ['class' => 'form-control']) !!}
+{!! Form::select('conf_length', array('' => '','1' => 'Ativo', '0' => 'Inativo'), null, ['class' => 'form-control']) !!}
 
 <!-- Conf Width Field -->
 {!! Form::label('conf_width', Lang::get('models.conf_width').':') !!}
-{!! Form::select('conf_width', array('1' => 'Ativo', '0' => 'Inativo'), null, ['class' => 'form-control']) !!}
+{!! Form::select('conf_width', array('' => '','1' => 'Ativo', '0' => 'Inativo'), null, ['class' => 'form-control']) !!}
 
 <!-- Conf Height Field -->
 {!! Form::label('conf_height', Lang::get('models.conf_height').':') !!}
-{!! Form::select('conf_height', array('1' => 'Ativo', '0' => 'Inativo'), null, ['class' => 'form-control']) !!}
+{!! Form::select('conf_height', array('' => '','1' => 'Ativo', '0' => 'Inativo'), null, ['class' => 'form-control']) !!}
 
 </div>
 

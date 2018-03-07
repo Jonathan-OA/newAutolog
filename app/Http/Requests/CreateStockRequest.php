@@ -42,8 +42,6 @@ class CreateStockRequest extends FormRequest
             'operation_code' => 'required|string|exists:operations,code|max:30',
             'finality_code' => 'required|string|exists:finalities,code|max:10',
             'volume_id' => 'nullable|integer|exists:volumes,id,company_id,'.Auth::user()->company_id.'',
-            
-            
          ];
     }
 }

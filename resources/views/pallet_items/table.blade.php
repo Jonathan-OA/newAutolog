@@ -4,7 +4,7 @@
         <table class="table table-bordered" id="palletItems-table" cellspacing="0" width="100%">
             <thead>
                 <th class="th_grid">@lang('models.pallet_id') </th>
-                <th class="th_grid">@lang('models.item_code') </th>
+                <th class="th_grid">@lang('models.product_code') </th>
                 <th class="th_grid">@lang('models.qty') </th>
                 <th class="th_grid">@lang('models.uom_code') </th>
                 <th class="th_grid">@lang('models.prim_qty') </th>
@@ -19,7 +19,7 @@
             @foreach($palletItems as $palletItem)
                 <tr>
                     <td>{!! $palletItem->pallet_id !!}</td>
-                    <td>{!! $palletItem->item_code !!}</td>
+                    <td>{!! $palletItem->product_code !!}</td>
                     <td>{!! $palletItem->qty !!}</td>
                     <td>{!! $palletItem->uom_code !!}</td>
                     <td>{!! $palletItem->prim_qty !!}</td>
