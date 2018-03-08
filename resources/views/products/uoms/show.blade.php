@@ -10,7 +10,7 @@
         <div class="box box-primary">
             <div class="box-body">
                 <div class="row" style="padding-left: 20px">
-                    @include('uoms.show_fields')
+                    @include('products.uoms.show_fields')
                     <a href="{!! route('uoms.index') !!}" class="btn btn-default">Back</a>
                 </div>
             </div>

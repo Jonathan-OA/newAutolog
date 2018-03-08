@@ -3,9 +3,10 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Models\Uom;
+use App\Models\LabelType;
+use Auth;
 
-class CreateUomRequest extends FormRequest
+class CreateLabelTypeRequest extends FormRequest
 {
 
     /**
@@ -26,7 +27,7 @@ class CreateUomRequest extends FormRequest
     public function rules()
     {
         return [ 
-            'code' => 'required|string|unique:uoms,code|max:6'
+            'code' => 'required|string|unique:label_types,code,NULL,id,company_id,'.Auth::user()->company_id.'|max:10'
             ];
     }
 }

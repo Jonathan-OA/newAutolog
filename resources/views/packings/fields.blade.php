@@ -32,7 +32,7 @@
 
 <!-- Label Type Code Field -->
 {!! Form::label('label_type_code', Lang::get('models.label_type_code').':') !!}
-{!! Form::text('label_type_code', null, ['class' => 'form-control']) !!}
+{!! Form::text('label_type_code', null, ['class' => 'form-control','id' => 'autocomplete', 'table' => 'label_types']) !!}
 
 <!-- Total Weight Field -->
 {!! Form::label('total_weight', Lang::get('models.total_weight').':') !!}
@@ -64,7 +64,7 @@
 
 <!-- Packing Type Code Field -->
 {!! Form::label('packing_type_code', Lang::get('models.packing_type_code').':') !!}
-{!! Form::text('packing_type_code', null, ['class' => 'form-control']) !!}
+{!! Form::text('packing_type_code', null, ['class' => 'form-control','id' => 'autocomplete2', 'table' => 'packing_types']) !!}
 
 <!-- Print Label Field -->
 {!! Form::label('print_label', Lang::get('models.print_label').':') !!}

@@ -79,9 +79,12 @@ class PackingController extends AppBaseController
 
         $packing = $this->packingRepository->create($input);
 
+        //Id para retornar para a pagina do produto correto
+        $product_code = $input['product_code'];
+
         Flash::success(Lang::get('validation.save_success'));
 
-        return redirect(route('packings.index'));
+        return redirect(action('PackingController@index',[$product_code]));
     }
 
     /**

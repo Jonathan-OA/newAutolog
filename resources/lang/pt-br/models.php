@@ -60,6 +60,7 @@ return [
     'document_types' => 'Tipos de Documento',
     'packings' => 'Embalagens',
     'packings_types' => 'Tipos de Embalagens',
+    'label_types' => 'Tipos de Etiqueta',
 
     //Columns
     'name' => 'Nome',

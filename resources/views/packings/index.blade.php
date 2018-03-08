@@ -88,7 +88,7 @@
                     //Token obrigatório para envio POST
                     var tk = $('meta[name="csrf-token"]').attr('content');
                     $.ajax({
-                        url: 'packings/'+data.id,
+                        url: "{!! URL::to('packings/"+data.id+"') !!}",
                         type: 'post',
                         data: {_method: 'delete', _token :tk},
                         success: function(scs){ 
@@ -113,7 +113,7 @@
                 }
             }
             
-    });
+        });
                     
     });
 

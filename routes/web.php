@@ -47,151 +47,109 @@ Route::group(['middleware' => 'web'], function() {
 Route::get('operations/datatable', 'OperationController@getData');
 Route::resource('operations', 'OperationController');
 
-
 Route::get('parameters/datatable', 'ParameterController@getData');
 Route::resource('parameters', 'ParameterController');
 
-
 Route::get('modules/datatable', 'ModuleController@getData');
 Route::resource('modules', 'ModuleController');
-
 
 Route::get('users/datatable', 'UserController@getData');
 Route::get('users/updTime', 'UserController@updTime');
 Route::resource('users', 'UserController');
 
-
 Route::get('userTypes/datatable', 'UserTypeController@getData');
 Route::resource('userTypes', 'UserTypeController');
-
 
 Route::get('userPermissions/datatable', 'UserPermissionController@getData');
 Route::resource('userPermissions', 'UserPermissionController');
 
-
 Route::get('customers/datatable', 'CustomerController@getData');
 Route::resource('customers', 'CustomerController');
-
 
 Route::get('suppliers/datatable', 'SupplierController@getData');
 Route::resource('suppliers', 'SupplierController');
 
-
 Route::get('packingTypes/datatable', 'PackingTypeController@getData');
 Route::resource('packingTypes', 'PackingTypeController');
-
 
 Route::get('products/datatable', 'ProductController@getData');
 Route::resource('products', 'ProductController');
 
-
 Route::get('productTypes/datatable', 'ProductTypeController@getData');
 Route::resource('productTypes', 'ProductTypeController');
-
 
 Route::get('groups/datatable', 'GroupController@getData');
 Route::resource('groups', 'GroupController');
 
-
 Route::get('locationFunctions/datatable', 'LocationFunctionController@getData');
 Route::resource('locationFunctions', 'LocationFunctionController');
-
 
 Route::get('locationTypes/datatable', 'LocationTypeController@getData');
 Route::resource('locationTypes', 'LocationTypeController');
 
-
 Route::get('depositTypes/datatable', 'DepositTypeController@getData');
 Route::resource('depositTypes', 'DepositTypeController');
-
 
 Route::get('departments/datatable', 'DepartmentController@getData');
 Route::resource('departments', 'DepartmentController');
 
-
 Route::get('deposits/datatable', 'DepositController@getData');
 Route::resource('deposits', 'DepositController');
-
 
 Route::get('sectors/datatable', 'SectorController@getData');
 Route::resource('sectors', 'SectorController');
 
-
 Route::get('locations/datatable', 'LocationController@getData');
 Route::resource('locations', 'LocationController');
-
 
 Route::get('stockTypes/datatable', 'StockTypeController@getData');
 Route::resource('stockTypes', 'StockTypeController');
 
-
 Route::get('companies/datatable', 'CompanyController@getData');
 Route::resource('companies', 'CompanyController');
-
 
 Route::get('pallets/datatable', 'PalletController@getData');
 Route::resource('pallets', 'PalletController');
 
-
 Route::get('configs/datatable', 'ConfigController@getData');
 Route::resource('configs', 'ConfigController');
-
 
 Route::get('palletItems/datatable/{id}', 'PalletItemController@getData');
 Route::resource('palletItems', 'PalletItemController',['except' => 'create']);
 Route::get('palletItems/ix/{id}', 'PalletItemController@index');
 Route::get('palletItems/create/{id}', 'PalletItemController@create');
 
-
 Route::get('uoms/datatable', 'UomController@getData');
 Route::resource('uoms', 'UomController');
 
-
 Route::get('uoms/datatable', 'UomController@getData');
 Route::resource('uoms', 'UomController');
-
 
 Route::get('labels/datatable', 'LabelController@getData');
 Route::resource('labels', 'LabelController');
 
-
 Route::get('stocks/datatable', 'StockController@getData');
 Route::resource('stocks', 'StockController');
-
 
 Route::get('finalities/datatable', 'FinalityController@getData');
 Route::resource('finalities', 'FinalityController');
 
+Route::get('moviments/datatable', 'MovimentController@getData');
+Route::resource('moviments', 'MovimentController');
 
 Route::get('moviments/datatable', 'MovimentController@getData');
 Route::resource('moviments', 'MovimentController');
 
-
 Route::get('moviments/datatable', 'MovimentController@getData');
 Route::resource('moviments', 'MovimentController');
 
-
 Route::get('moviments/datatable', 'MovimentController@getData');
 Route::resource('moviments', 'MovimentController');
-
-
-Route::get('moviments/datatable', 'MovimentController@getData');
-Route::resource('moviments', 'MovimentController');
-
 
 Route::get('documentTypes/datatable', 'DocumentTypeController@getData');
 Route::resource('documentTypes', 'DocumentTypeController');
 
-
-Route::get('documentTypes/datatable', 'DocumentTypeController@getData');
-Route::resource('documentTypes', 'DocumentTypeController');
-
-
-Route::get('documentTypes/datatable', 'DocumentTypeController@getData');
-Route::resource('documentTypes', 'DocumentTypeController');
-
-
-Route::get('packings/datatable', 'PackingController@getData');
+Route::get('packings/{datatable}', 'PackingController@getData');
 Route::resource('packings', 'PackingController');
 
 Route::get('packings/datatable/{code}', 'PackingController@getData');
@@ -199,7 +157,9 @@ Route::resource('packings', 'PackinGController',['except' => 'create']);
 Route::get('packings/ix/{code}', 'PackingController@index');
 Route::get('packings/create/{code}', 'PackingController@create');
 
-
-
 Route::get('packingTypes/datatable', 'PackingTypeController@getData');
 Route::resource('packingTypes', 'PackingTypeController');
+
+
+Route::get('labelTypes/datatable', 'LabelTypeController@getData');
+Route::resource('labelTypes', 'LabelTypeController');

@@ -48,6 +48,22 @@ $(document).ready(function() {
 
         }
     });
+
+    //Função que preenche
+    function ajaxInput(elemOrg, elemDest, urlDados)
+    $.ajax({
+        type: 'get',
+        url: urlDados,
+        success: function(data) {
+            console.log(data);
+            var options = "<option value='' selected>Choose breed</option>";
+            $.each(data, function(key, value) {
+                options += "<option value='" + value.id + "'>" + value.name + "</option>";
+            });
+            $(elemDest).html(options);
+        }
+    });
+
 });
 
 //Atualiza o usuário logado de 1 em 1 minuto

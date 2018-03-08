@@ -131,6 +131,15 @@ return [
         'uom' => 'Unidade',
         'prev_qty' => 'Quantidade Anterior',
         'prev_uom' => 'Unidade Anterior',
+        'label_type_code' => 'Tipo de Etiqueta',
+        'print_label' => 'Imprime Etiqueta',
+        'conf_batch' => 'Confirma Lote',
+        'conf_prod_date' => 'Confirma Data de Produção',
+        'conf_due_date' => 'Confirma Data de Validade',
+        'level' => 'Nível',
+        'uom_code' => 'Unidade de Medida',
+        'create_label' => 'Cria Etiqueta',
+        'barcode' => 'Barcode',
     ],
 
 ];

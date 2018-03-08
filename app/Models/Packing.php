@@ -104,11 +104,12 @@ class Packing extends Model
 
     
 
-     //Retorna todos os packings disponíveis
-     public static function getPackings(){
-        return Packing::selectRaw("code,CONCAT(code,' - ',description) as description_f")
-                      ->where('company_id', Auth::user()->company_id)
-                      ->pluck('description_f','code');
+     //Retorna todos as embalagens disponíveis para o produto
+     public static function getPackings($produto){
+        return Packing::selectRaw("uom_code,CONCAT(level,' - ',uom_code) as description_f")
+                        ->where('company_id', Auth::user()->company_id)
+                        ->where('product_code', $produto)
+                        ->pluck('description_f','code');
     }
 
 

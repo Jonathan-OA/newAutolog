@@ -18,11 +18,11 @@
 
 <!-- Qty Field -->
 {!! Form::label('qty', Lang::get('models.qty').':') !!}
-{!! Form::number('qty', null, ['class' => 'form-control', 'step' => '0.000001', 'placeholder' => '0,000000']) !!}
+{!! Form::number('qty', null, ['id' => 'qty', 'class' => 'form-control', 'step' => '0.000001', 'placeholder' => '0,000000']) !!}
 
 <!-- Uom Code Field -->
 {!! Form::label('uom_code', Lang::get('models.uom_code').':') !!}
-{!! Form::select('uom_code', $uoms, null, ['class' => 'form-control']) !!}
+{!! Form::select('uom_code', $uoms, null, ['id' => 'uom_code', 'class' => 'form-control']) !!}
 
 <!-- Prev Qty Field -->
 {!! Form::label('prev_qty', Lang::get('models.prev_qty').':') !!}

@@ -3,9 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Models\Uom;
+use App\Models\LabelType;
 
-class CreateUomRequest extends FormRequest
+class UpdateLabelTypeRequest extends FormRequest
 {
 
     /**
@@ -25,8 +25,6 @@ class CreateUomRequest extends FormRequest
      */
     public function rules()
     {
-        return [ 
-            'code' => 'required|string|unique:uoms,code|max:6'
-            ];
+        return LabelType::$rules;
     }
 }

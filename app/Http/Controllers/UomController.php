@@ -36,7 +36,7 @@ class UomController extends AppBaseController
         $this->uomRepository->pushCriteria(new RequestCriteria($request));
         $uoms = $this->uomRepository->all();
 
-        return view('uoms.index')
+        return view('products.uoms.index')
             ->with('uoms', $uoms);
     }
 
@@ -50,7 +50,7 @@ class UomController extends AppBaseController
         //Valida se usuário possui permissão para acessar esta opção
         if(App\Models\User::getPermission('uoms_add',Auth::user()->user_type_code)){
 
-            return view('uoms.create');
+            return view('products.uoms.create');
 
         }else{
             //Sem permissão
@@ -94,7 +94,7 @@ class UomController extends AppBaseController
             return redirect(route('uoms.index'));
         }
 
-        return view('uoms.show')->with('uom', $uom);
+        return view('products.uoms.show')->with('uom', $uom);
     }
 
     /**
@@ -116,7 +116,7 @@ class UomController extends AppBaseController
                 return redirect(route('uoms.index'));
             }
 
-            return view('uoms.edit')->with('uom', $uom);
+            return view('products.uoms.edit')->with('uom', $uom);
         
         }else{
             //Sem permissão
