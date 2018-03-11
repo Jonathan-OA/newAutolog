@@ -486,7 +486,7 @@ final class ProgressBar
 
     private function buildLine(): string
     {
-        $regex = "{%([a-z\-_]+)(?:\:([^%]+))?%}i";
+        $regex = "{{([a-z\-_]+)(?:\:([^%]+))?%}i";
         $callback = function ($matches) {
             if ($formatter = $this::getPlaceholderFormatterDefinition($matches[1])) {
                 $text = call_user_func($formatter, $this, $this->output);

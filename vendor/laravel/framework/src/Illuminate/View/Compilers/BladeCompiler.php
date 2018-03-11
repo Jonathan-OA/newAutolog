@@ -74,7 +74,7 @@ class BladeCompiler extends Compiler implements CompilerInterface
      *
      * @var array
      */
-    protected $contentTags = ['{%', '%}'];
+    protected $contentTags = ['{{', '}}'];
 
     /**
      * Array of opening and closing tags for escaped echos.

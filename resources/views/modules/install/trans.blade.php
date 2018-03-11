@@ -42,7 +42,7 @@
                                     </tr>
                                 @endforeach
                             </table>
-                            <input type="hidden" name="_token" value="{% csrf_token() %}" />
+                            <input type="hidden" name="_token" value="{{ csrf_token() }}" />
                             <button type="submit" class="btn btn-success center-block">Prosseguir</button>
                         </form>
                     </div>

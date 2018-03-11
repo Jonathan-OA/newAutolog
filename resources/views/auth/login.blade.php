@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- CSRF Token -->
-    <meta name="csrf-token" content="{% csrf_token() %}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{% config('app.name', 'AUTOLOG WMS') %}</title>
 
@@ -20,7 +20,7 @@
         AUTOLOG WMS
     </div>
     </br>
-    <form class="form-horizontal" role="form" method="POST" action="{% url('/login') %}">
+    <form class="form-horizontal" role="form" method="POST" action="{{ url('/login') }}">
       {% csrf_field() %}
         <div class="row">
                 <div class="col-xs-10 col-sm-6 col-centered login_page_inputs">

@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitee7e704ccecb65ac385e00feebaed5d3
+class ComposerStaticInit269df63c00a4b0f812daf7f4a03ac54f
 {
     public static $files = array (
         '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
@@ -3100,7 +3100,7 @@ class ComposerStaticInitee7e704ccecb65ac385e00feebaed5d3
         'PHPUnit\\Util\\TestDox\\XmlResultPrinter' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/TestDox/XmlResultPrinter.php',
         'PHPUnit\\Util\\TextTestListRenderer' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/TextTestListRenderer.php',
         'PHPUnit\\Util\\Type' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/Type.php',
-        'PHPUnit\\Util\\Xml' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/Xml.php',
+        'PHPUnit\\Util\\Xml' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/XML.php',
         'PHPUnit\\Util\\XmlTestListRenderer' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/XmlTestListRenderer.php',
         'PHPUnit_Framework_MockObject_MockObject' => __DIR__ . '/..' . '/phpunit/phpunit-mock-objects/src/MockObject.php',
         'PHP_Timer' => __DIR__ . '/..' . '/phpunit/php-timer/src/Timer.php',
@@ -4621,11 +4621,11 @@ class ComposerStaticInitee7e704ccecb65ac385e00feebaed5d3
         'Yajra\\DataTables\\Contracts\\DataTableButtons' => __DIR__ . '/..' . '/yajra/laravel-datatables-buttons/src/Contracts/DataTableButtons.php',
         'Yajra\\DataTables\\Contracts\\DataTableScope' => __DIR__ . '/..' . '/yajra/laravel-datatables-buttons/src/Contracts/DataTableScope.php',
         'Yajra\\DataTables\\DataTableAbstract' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/DataTableAbstract.php',
-        'Yajra\\DataTables\\DataTables' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/DataTables.php',
-        'Yajra\\DataTables\\DataTablesServiceProvider' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/DataTablesServiceProvider.php',
+        'Yajra\\DataTables\\DataTables' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/Datatables.php',
+        'Yajra\\DataTables\\DataTablesServiceProvider' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/DatatablesServiceProvider.php',
         'Yajra\\DataTables\\EloquentDataTable' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/EloquentDataTable.php',
         'Yajra\\DataTables\\Exceptions\\Exception' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/Exceptions/Exception.php',
-        'Yajra\\DataTables\\Facades\\DataTables' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/Facades/DataTables.php',
+        'Yajra\\DataTables\\Facades\\DataTables' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/Facades/Datatables.php',
         'Yajra\\DataTables\\Generators\\DataTablesMakeCommand' => __DIR__ . '/..' . '/yajra/laravel-datatables-buttons/src/Generators/DataTablesMakeCommand.php',
         'Yajra\\DataTables\\Generators\\DataTablesScopeCommand' => __DIR__ . '/..' . '/yajra/laravel-datatables-buttons/src/Generators/DataTablesScopeCommand.php',
         'Yajra\\DataTables\\HtmlServiceProvider' => __DIR__ . '/..' . '/yajra/laravel-datatables-html/src/HtmlServiceProvider.php',
@@ -4715,10 +4715,10 @@ class ComposerStaticInitee7e704ccecb65ac385e00feebaed5d3
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitee7e704ccecb65ac385e00feebaed5d3::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitee7e704ccecb65ac385e00feebaed5d3::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInitee7e704ccecb65ac385e00feebaed5d3::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInitee7e704ccecb65ac385e00feebaed5d3::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit269df63c00a4b0f812daf7f4a03ac54f::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit269df63c00a4b0f812daf7f4a03ac54f::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit269df63c00a4b0f812daf7f4a03ac54f::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit269df63c00a4b0f812daf7f4a03ac54f::$classMap;
 
         }, null, ClassLoader::class);
     }
