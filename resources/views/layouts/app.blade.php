@@ -6,13 +6,13 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{% config('app.name', 'AUTOLOG WMS') %}</title>
+    <title>{{config('app.name', 'AUTOLOG WMS') }}</title>
 
     <!-- Styles -->
     <!-- <link href="{{ asset('/datatables/datatables.min.css') }}"  rel="stylesheet"> -->
     <link href="{{ asset('/css/ui-grid/ui-grid.min.css') }}"  rel="stylesheet">
-    <link href="{{ asset('/css/bootstrap.min.css') %} " rel="stylesheet">
-    <link href="{{ asset('/css/jquery-ui.min.css') %} " rel="stylesheet">
+    <link href="{{ asset('/css/bootstrap.min.css') }} " rel="stylesheet">
+    <link href="{{ asset('/css/jquery-ui.min.css') }} " rel="stylesheet">
     <link href="{{ asset('/css/microtip.css') }}" rel="stylesheet">
     <link href="{{ asset('/css/app.css') }}" rel="stylesheet">
     @yield('css')
@@ -34,11 +34,11 @@
                         <img class="icon" src="{{ asset('/icons/logout.png') }}" alt="Logout">
                     </a>
                     <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
-                            {% csrf_field() %}
+                            {{csrf_field() }}
                     </form>
                 </div>
                 <div class="lay_account">
-                    {% strtoupper(Auth::user()->name) %}
+                    {{strtoupper(Auth::user()->name) }}
                     </br>
                     CHFR - 01
                 </div>

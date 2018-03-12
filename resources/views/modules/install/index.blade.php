@@ -10,7 +10,7 @@
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <form method="POST" action="install/trans">
-                            {% csrf_field() %}
+                            {{ csrf_field() }}
                             <table class="table table-striped table-hover">
                                 <thead>
                                 <tr>
@@ -21,14 +21,14 @@
                                 @foreach ($modules as $module)
                                     <tr>
                                         <td align="center" width="50">
-                                                <input type="hidden" name="module_chk[{% $module->id %}]" value="0" >
-                                                <input type="checkbox" name="module_chk[{% $module->id %}]" autocomplete="off" value="1" @if($module->enabled == 1) checked @endif >
+                                                <input type="hidden" name="module_chk[{{$module->id }}]" value="0" >
+                                                <input type="checkbox" name="module_chk[{{$module->id }}]" autocomplete="off" value="1" @if($module->enabled == 1) checked @endif >
                                         </td>   
                                         <td>
                                             @if(!empty($module->submodule))
                                                 --- >
                                             @endif
-                                            {% $module->name %}
+                                            {{$module->name }}
                                         </td>
                                     </tr>
                                 @endforeach

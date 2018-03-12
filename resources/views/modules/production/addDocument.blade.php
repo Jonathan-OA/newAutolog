@@ -14,21 +14,21 @@
                             @include('flash::message')
                             
                             <form  method="POST" action="{{ url('/documents') }}">
-                                {% csrf_field() %}
+                                {{ csrf_field() }}
                                 <div class="form-group">
                                     <label for="number">Número</label>
                                     <input type="text" class="form-control" name="number" id="number" placeholder="Número">
                                     <label for="document_type_code">Tipo de Documento</label>
                                     <select name="document_type_code" id="document_type_code" class="form-control">
                                         @foreach ($tipos as $tipo)
-                                            <option value="{{ $tipo->code }}"> {% $tipo->code %} - {% $tipo->description %} </option>
+                                            <option value="{{ $tipo->code }}"> {{ $tipo->code }} - {{ $tipo->description }} </option>
                                         @endforeach
                                     </select>
 
                                     <label for="customer_id">Cliente</label>
                                     <select name="customer_id" id="customer_id" class="form-control" required>
                                         @foreach ($tipos as $tipo)
-                                            <option value="{{ $tipo->code }}"> {% $tipo->code %} - {% $tipo->description %} </option>
+                                            <option value="{{ $tipo->code }}"> {{$tipo->code }} - {{$tipo->description }} </option>
                                         @endforeach
                                     </select>
                                  </div>

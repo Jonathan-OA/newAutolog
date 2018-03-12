@@ -6,7 +6,7 @@
         <div class="col-md-12 pad-ct">
             <!-- //NG-INIT recebe os parâmetros que vem da URL e passa para o controller definido no NG-CONTROLLER -->
             <div class="panel panel-default" ng-controller="DetCtrl"  >
-                <div class="panel-heading" ng-init="document_id={% $document }}">
+                <div class="panel-heading" ng-init="document_id={{$document }}">
                     Módulo de Produção - Itens 
                 </div>
                 <div class="row buttons_grid">
