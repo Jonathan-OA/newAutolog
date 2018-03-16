@@ -324,6 +324,20 @@ class ViewGenerator extends BaseGenerator
                 if($field->name == 'company_id'){
                     $fieldTemplate = "\n<!-- Company Id Field -->\n<input id='company_id' name='company_id' type='hidden' value='{!! Auth::user()->company_id !!}'>";   
                 }
+                if($field->name == 'code'){
+                    $fieldTemplate = "<!-- Code Field -->
+                                      {!! Form::label('code', Lang::get('models.code').':') !!}
+                                      @if(isset(\$action) && \$action == 'edit')
+                                         {!! Form::text('code', null, ['class' => 'form-control','readonly' => 'true']) !!}
+                                      @else
+                                         {!! Form::text('code', null, ['class' => 'form-control']) !!}
+                                      @endif";   
+                }
+
+
+
+
+
                 $this->htmlFields[] = $fieldTemplate;
             }
         }

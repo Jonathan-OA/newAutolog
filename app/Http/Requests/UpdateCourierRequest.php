@@ -3,9 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Models\ItemType;
+use App\Models\Courier;
 
-class CreateItemTypeRequest extends FormRequest
+class UpdateCourierRequest extends FormRequest
 {
 
     /**
@@ -25,6 +25,6 @@ class CreateItemTypeRequest extends FormRequest
      */
     public function rules()
     {
-        return ItemType::$rules;
+        return Courier::$rules;
     }
 }

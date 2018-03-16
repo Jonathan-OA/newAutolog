@@ -61,6 +61,8 @@ return [
     'packings' => 'Embalagens',
     'packings_types' => 'Tipos de Embalagens',
     'label_types' => 'Tipos de Etiqueta',
+    'couriers' => 'Transportadoras',
+    'vehicles' => 'Veículos',
 
     //Columns
     'name' => 'Nome',

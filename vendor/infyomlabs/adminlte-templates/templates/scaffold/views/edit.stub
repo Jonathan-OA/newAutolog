@@ -11,7 +11,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 {!! Form::model($$MODEL_NAME_CAMEL$, ['route' => ['$ROUTE_NAMED_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.update', $$MODEL_NAME_CAMEL$->$PRIMARY_KEY_NAME$], 'method' => 'patch']) !!}
-                                  @include('$VIEW_PREFIX$$MODEL_NAME_PLURAL_SNAKE$.fields')
+                                  @include('$VIEW_PREFIX$$MODEL_NAME_PLURAL_SNAKE$.fields',['action' => "edit"])
                                 {!! Form::close() !!}
                             </div>
                         </div>

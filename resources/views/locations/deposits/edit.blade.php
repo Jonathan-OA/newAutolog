@@ -11,7 +11,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 {!! Form::model($deposit, ['route' => ['deposits.update', $deposit->id], 'method' => 'patch']) !!}
-                                  @include('locations.deposits.fields')
+                                  @include('locations.deposits.fields',['action' => "edit"])
                                 {!! Form::close() !!}
                             </div>
                         </div>

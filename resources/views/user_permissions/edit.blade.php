@@ -11,7 +11,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 {!! Form::model($userPermission, ['route' => ['userPermissions.update', $userPermission->id], 'method' => 'patch']) !!}
-                                  @include('user_permissions.fields')
+                                  @include('user_permissions.fields',['action' => "edit"])
                                 {!! Form::close() !!}
                             </div>
                         </div>

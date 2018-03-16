@@ -8,9 +8,14 @@
 {!! Form::label('deposit_code', Lang::get('models.deposit_code').':') !!}
 {!! Form::select('deposit_code', $deposits, null, ['class' => 'form-control']) !!}
 
+
 <!-- Code Field -->
 {!! Form::label('code', Lang::get('models.code').':') !!}
-{!! Form::text('code', null, ['class' => 'form-control']) !!}
+@if(isset($action) && $action == 'edit')
+    {!! Form::text('code', null, ['class' => 'form-control','readonly' => 'true']) !!}
+@else
+    {!! Form::text('code', null, ['class' => 'form-control']) !!}  
+@endif
 
 <!-- Description Field -->
 {!! Form::label('description', Lang::get('models.description').':') !!}

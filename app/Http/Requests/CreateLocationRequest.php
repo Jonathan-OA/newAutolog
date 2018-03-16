@@ -34,9 +34,13 @@ class CreateLocationRequest extends FormRequest
             'barcode' => 'required|string|max:30',
             'location_type_code' => 'required|string|exists:location_types,code|max:10',
             'location_function_code' => 'required|string|exists:location_functions,code|max:10',
-            'depth' => 'numeric',
-            'nivel' => 'numeric'
-            
+            'label_type_code' => 'required|string|exists:label_types,code|max:10',
+            'stock_type_code' => 'required|integer|exists:stock_types,code',
+            'aisle' => 'required|string|max:10',
+            'column' => 'required|string|max:10',
+            'status' => 'required|in:0,1',
+            'depth' => 'nullable|numeric',
+            'nivel' => 'nullable|numeric'
          ];
     }
 }

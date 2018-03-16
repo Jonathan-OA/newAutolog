@@ -18,7 +18,11 @@
 
 <!-- Code Field -->
 {!! Form::label('code', Lang::get('models.code').':') !!}
-{!! Form::text('code', null, ['class' => 'form-control']) !!}
+@if(isset($action) && $action == 'edit')
+    {!! Form::text('code', null, ['class' => 'form-control','readonly' => 'true']) !!}
+@else
+    {!! Form::text('code', null, ['class' => 'form-control']) !!}  
+@endif
 
 <!-- Barcode Field -->
 {!! Form::label('barcode', Lang::get('models.barcode').':') !!}

@@ -163,3 +163,23 @@ Route::resource('packingTypes', 'PackingTypeController');
 
 Route::get('labelTypes/datatable', 'LabelTypeController@getData');
 Route::resource('labelTypes', 'LabelTypeController');
+
+
+Route::get('vehicles/datatable', 'VehicleController@getData');
+Route::resource('vehicles', 'VehicleController');
+
+
+Route::get('couriers/datatable', 'CourierController@getData');
+Route::resource('couriers', 'CourierController');
+
+
+Route::get('couriers/datatable', 'CourierController@getData');
+Route::resource('couriers', 'CourierController');
+
+
+Route::get('couriers/datatable', 'CourierController@getData');
+Route::resource('couriers', 'CourierController');
+
+
+Route::get('vehicles/datatable', 'VehicleController@getData');
+Route::resource('vehicles', 'VehicleController');

@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Product;
+use Auth;
 
 class UpdateProductRequest extends FormRequest
 {
@@ -25,6 +26,20 @@ class UpdateProductRequest extends FormRequest
      */
     public function rules()
     {
-        return Product::$rules;
+        return [ 
+            'code' => 'required|string|unique:products,code,NULL,id,company_id,'.Auth::user()->company_id.'|max:40',
+            'description' => 'required|string|max:100',
+            'status' => 'required|integer|in:0,1',
+            'product_type_code' => 'required|exists:product_types,code',
+            'group_code' => 'required|exists:groups,code',
+            'subgroup_code' => 'nullable|exists:subgroups,code',
+            'margin_div' => 'nullable|numeric',
+            'cost' => 'nullable|numeric',
+            'obs1' => 'nullable|string|max:40',
+            'obs2' => 'nullable|string|max:40',
+            'obs3' => 'nullable|string|max:40',
+            'obs4' => 'nullable|string|max:40',
+            'obs5' => 'nullable|string|max:40',
+            ];
     }
 }

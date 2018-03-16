@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Customer;
+use Auth;
 
 class CreateCustomerRequest extends FormRequest
 {
@@ -26,12 +27,12 @@ class CreateCustomerRequest extends FormRequest
     public function rules()
     {
         return [ 
-            'code' => 'required|string|unique:customers,code,NULL,id,company_id,'.Auth::user()->company_id.'|max:30',
+            'code' => 'required|string|unique:customers,code,NULL,id,company_id,'.Auth::user()->company_id.'|max:40',
             'name' => 'required|string|max:50',
             'trading_name' => 'required|string|max:60',
-            'state_registration' => 'string|max:20',
-            'cnpj' => 'string|max:20',
-            'active' => 'required|in:0,1',
+            'state_registration' => 'nullable|string|max:20',
+            'cnpj' => 'nullable|string|max:20',
+            'status' => 'required|in:0,1',
          ];
     }
 }

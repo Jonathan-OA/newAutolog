@@ -1,12 +1,16 @@
 <div class="form_fields">
 @include('adminlte-templates::common.errors')
-<!-- Code Field -->
-{!! Form::label('code', Lang::get('models.code').':') !!}
-{!! Form::text('code', null, ['class' => 'form-control']) !!}
 
 <!-- Company Id Field -->
 <input id="company_id" name="company_id" type="hidden" value="{!! Auth::user()->company_id !!}">
 
+<!-- Code Field -->
+{!! Form::label('code', Lang::get('models.code').':') !!}
+@if(isset($action) && $action == 'edit')
+    {!! Form::text('code', null, ['class' => 'form-control','readonly' => 'true']) !!}
+@else
+    {!! Form::text('code', null, ['class' => 'form-control']) !!}  
+@endif
 
 <!-- Name Field -->
 {!! Form::label('name', Lang::get('models.name').':') !!}
@@ -61,8 +65,8 @@
 {!! Form::text('phone2', null, ['class' => 'form-control']) !!}
 
 <!-- Active Field -->
-{!! Form::label('active', Lang::get('models.active').':') !!}
-{!! Form::number('active', null, ['class' => 'form-control']) !!}
+{!! Form::label('status', Lang::get('models.active').':') !!}
+{!! Form::select('status', array('1' => 'Ativo', '0' => 'Inativo'), null, ['class' => 'form-control']) !!}
 
 <!-- Obs1 Field -->
 {!! Form::label('obs1', Lang::get('models.obs1').':') !!}

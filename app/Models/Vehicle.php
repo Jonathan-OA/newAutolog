@@ -3,26 +3,29 @@
 namespace App\Models;
 
 use Eloquent as Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use Auth;
+
 
 /**
  * Class Vehicle
  * @package App\Models
- * @version April 10, 2017, 12:33 pm UTC
+ * @version March 13, 2018, 3:24 pm -03
+ *
+ * @property \Illuminate\Database\Eloquent\Collection permissionRole
+ * @property integer company_id
+ * @property integer courier_id
+ * @property integer vehicle_type_id
+ * @property string number_plate
  */
 class Vehicle extends Model
 {
-  
-
     public $table = 'vehicles';
     
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
-
-    protected $dates = ['deleted_at'];
-
-
+	
+	
     public $fillable = [
         'company_id',
         'courier_id',
@@ -53,4 +56,13 @@ class Vehicle extends Model
     ];
 
     
+
+     //Retorna todos os vehicles disponíveis
+     public static function getVehicles(){
+        return Vehicle::selectRaw("code,CONCAT(code,' - ',description) as description_f")
+                      ->where('company_id', Auth::user()->company_id)
+                      ->pluck('description_f','code');
+    }
+
+
 }

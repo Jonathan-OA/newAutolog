@@ -1,14 +1,19 @@
 //Geração dos Grids de Produção
+//Alteração das tags padrão do Angular de {{ }} para {% %}
 var app = angular.module('grid_prod', ['ui.grid', 'ui.grid.selection',
     'ui.grid.pagination', 'ui.grid.saveState',
     'ui.grid.moveColumns', 'ui.grid.autoResize',
     'ui.grid.resizeColumns', 'ui.grid.exporter'
-]);
+], function($interpolateProvider) {
+    $interpolateProvider.startSymbol('{%');
+    $interpolateProvider.endSymbol('%}');
+});
 
 //Config pra remover erros inuteis
 app.config(['$qProvider', function($qProvider) {
     $qProvider.errorOnUnhandledRejections(false);
 }]);
+
 
 //Grid de documentos
 app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '$timeout', '$element', function($rootScope, $scope, $http, uiGridConstants, $timeout, $element) {
@@ -183,7 +188,7 @@ app.controller('DetCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '
 
         $http({
             method: 'GET',
-            url: 'api/itemsProd/'
+            url: 'api/itemsProd/' + id
         }).then(function(success) {
             $scope.gridDetalhes.data = success.data;
         }, function(error) {

@@ -1,8 +1,13 @@
 <div class="form_fields">
 @include('adminlte-templates::common.errors')
+
 <!-- Code Field -->
 {!! Form::label('code', Lang::get('models.code').':') !!}
-{!! Form::text('code', null, ['class' => 'form-control']) !!}
+@if(isset($action) && $action == 'edit')
+    {!! Form::text('code', null, ['class' => 'form-control','readonly' => 'true']) !!}
+@else
+    {!! Form::text('code', null, ['class' => 'form-control']) !!}  
+@endif
 
 <!-- Branch Field -->
 {!! Form::label('branch', Lang::get('models.branch').':') !!}

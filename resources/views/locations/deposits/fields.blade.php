@@ -10,7 +10,11 @@
 
 <!-- Code Field -->
 {!! Form::label('code', Lang::get('models.code').':') !!}
-{!! Form::text('code', null, ['class' => 'form-control']) !!}
+@if(isset($action) && $action == 'edit')
+    {!! Form::text('code', null, ['class' => 'form-control','readonly' => 'true']) !!}
+@else
+    {!! Form::text('code', null, ['class' => 'form-control']) !!}  
+@endif
 
 <!-- Deposit Type Code Field -->
 {!! Form::label('deposit_type_code', Lang::get('models.deposit_type_code').':') !!}

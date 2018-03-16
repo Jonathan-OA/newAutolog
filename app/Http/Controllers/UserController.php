@@ -141,7 +141,11 @@ class UserController extends AppBaseController
             return redirect(route('users.index'));
         }
 
-        $user = $this->userRepository->update($request->all(), $id);
+        //Criptografa senha
+        $campos = $request->all();
+        $campos['password'] = bcrypt($campos['password']);
+
+        $user = $this->userRepository->update($campos, $id);
 
         Flash::success(Lang::get('validation.update_success'));
 

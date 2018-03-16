@@ -3,9 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Models\Item;
+use App\Models\Vehicle;
 
-class CreateItemRequest extends FormRequest
+class UpdateVehicleRequest extends FormRequest
 {
 
     /**
@@ -25,6 +25,6 @@ class CreateItemRequest extends FormRequest
      */
     public function rules()
     {
-        return Item::$rules;
+        return Vehicle::$rules;
     }
 }

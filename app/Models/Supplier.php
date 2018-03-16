@@ -37,7 +37,7 @@ class Supplier extends Model
         'zip_code',
         'phone1',
         'phone2',
-        'active',
+        'status',
         'obs1',
         'obs2',
         'obs3'

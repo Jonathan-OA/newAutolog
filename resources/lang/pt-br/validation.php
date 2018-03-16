@@ -140,6 +140,9 @@ return [
         'uom_code' => 'Unidade de Medida',
         'create_label' => 'Cria Etiqueta',
         'barcode' => 'Barcode',
+        'name' => 'Nome',
+        'trading_name' => 'Nome Fantasia',
+        'active' => 'Ativo'
     ],
 
 ];

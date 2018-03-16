@@ -12,7 +12,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 {!! Form::model($roles, ['route' => ['roles.update', $roles->id], 'method' => 'patch']) !!}
-                                  @include('roles.fields')
+                                  @include('roles.fields',['action' => "edit"])
                                 {!! Form::close() !!}
                             </div>
                         </div>

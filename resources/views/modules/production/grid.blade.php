@@ -10,7 +10,7 @@
                 <div class="modal-content" ng-controller="DetCtrl">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            Módulo de Produção - Documento: @{{ documentNumber }}
+                            Módulo de Produção - Documento: {% documentNumber %}
                         </div>
                         <div class="panel-body">
                             <div ui-grid="gridDetalhes" ui-grid-auto-resize ui-grid-selection ui-grid-pagination ui-grid-move-columns ui-grid-save-state class="grid" ></div>
@@ -54,7 +54,7 @@
                             <button class="icon_action" aria-label="@lang('buttons.action')" data-microtip-position="left" role="tooltip">
                                     <img class='icon' src='{{asset('/icons/opcoes.png') }}'>
                             </button>
-                            <!-- <a href="#" id="listButtons{{row.entity.id}}" class=" glyphicon glyphicon glyphicon-tasks icon_action" ng-click="showActions('production', row.entity.id)"></a> -->
+                            
                         </div>
                     </script>
                     <button id="save" type="button" class="btn btn-success" ng-click="saveState()">Save</button>

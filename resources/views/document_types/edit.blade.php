@@ -11,7 +11,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 {!! Form::model($documentType, ['route' => ['documentTypes.update', $documentType->id], 'method' => 'patch']) !!}
-                                  @include('document_types.fields')
+                                  @include('document_types.fields',['action' => "edit"])
                                 {!! Form::close() !!}
                             </div>
                         </div>

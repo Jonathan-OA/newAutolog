@@ -1,30 +1,21 @@
 <div class="row">
     <div class="col-md-12 pad-ct">
-        <div class="table-responsive" style="margin: 0 15px 0 15px">
-        <table class="table table-bordered" id="vehicles-table">
+        <div class="" style="margin: 0 15px 0 15px">
+        <table class="table table-bordered" id="vehicles-table" cellspacing="0" width="100%">
             <thead>
-                <th class="th_grid">Company Id</th>
-        <th class="th_grid">Courier Id</th>
-        <th class="th_grid">Vehicle Type Id</th>
-        <th class="th_grid">Number Plate</th>
-                <th colspan="3">Ação</th>
+                <th class="th_grid">@lang('models.company_id') </th>
+        <th class="th_grid">@lang('models.courier_id') </th>
+        <th class="th_grid">@lang('models.vehicle_type_id') </th>
+        <th class="th_grid">@lang('models.number_plate') </th>
+                <th class="th_grid">@lang('models.action')</th>
             </thead>
             <tbody>
-            @foreach($vehicles as $vehicles)
+            @foreach($vehicles as $vehicle)
                 <tr>
-                    <td>{!! $vehicles->company_id !!}</td>
-            <td>{!! $vehicles->courier_id !!}</td>
-            <td>{!! $vehicles->vehicle_type_id !!}</td>
-            <td>{!! $vehicles->number_plate !!}</td>
-                    <td>
-                        {!! Form::open(['route' => ['vehicles.destroy', $vehicles->id], 'method' => 'delete']) !!}
-                        <div class='btn-group'>
-                            <a href="{!! route('vehicles.show', [$vehicles->id]) !!}" class='btn btn-default btn-xs'><i class="glyphicon glyphicon-eye-open"></i></a>
-                            <a href="{!! route('vehicles.edit', [$vehicles->id]) !!}" class='btn btn-default btn-xs'><i class="glyphicon glyphicon-edit"></i></a>
-                            {!! Form::button('<i class="glyphicon glyphicon-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs', 'onclick' => "return confirm('Are you sure?')"]) !!}
-                        </div>
-                        {!! Form::close() !!}
-                    </td>
+                    <td>{!! $vehicle->company_id !!}</td>
+            <td>{!! $vehicle->courier_id !!}</td>
+            <td>{!! $vehicle->vehicle_type_id !!}</td>
+            <td>{!! $vehicle->number_plate !!}</td>
                 </tr>
             @endforeach
             </tbody>

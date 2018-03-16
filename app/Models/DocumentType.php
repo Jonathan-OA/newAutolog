@@ -48,7 +48,8 @@ class DocumentType extends Model
      * @var array
      */
     public static $rules = [
-        
+        'code' => 'required|string|unique:document_types,code|max:5',
+        'description' => 'required|string|max:50',
     ];
 
     

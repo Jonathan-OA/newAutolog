@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit269df63c00a4b0f812daf7f4a03ac54f
+class ComposerStaticInitee7e704ccecb65ac385e00feebaed5d3
 {
     public static $files = array (
         '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
@@ -439,6 +439,7 @@ class ComposerStaticInit269df63c00a4b0f812daf7f4a03ac54f
         'App\\Http\\Controllers\\CompanyController' => __DIR__ . '/../..' . '/app/Http/Controllers/CompanyController.php',
         'App\\Http\\Controllers\\ConfigController' => __DIR__ . '/../..' . '/app/Http/Controllers/ConfigController.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
+        'App\\Http\\Controllers\\CourierController' => __DIR__ . '/../..' . '/app/Http/Controllers/CourierController.php',
         'App\\Http\\Controllers\\CustomerController' => __DIR__ . '/../..' . '/app/Http/Controllers/CustomerController.php',
         'App\\Http\\Controllers\\DepartmentController' => __DIR__ . '/../..' . '/app/Http/Controllers/DepartmentController.php',
         'App\\Http\\Controllers\\DepositController' => __DIR__ . '/../..' . '/app/Http/Controllers/DepositController.php',
@@ -476,6 +477,7 @@ class ComposerStaticInit269df63c00a4b0f812daf7f4a03ac54f
         'App\\Http\\Controllers\\UserController' => __DIR__ . '/../..' . '/app/Http/Controllers/UserController.php',
         'App\\Http\\Controllers\\UserPermissionController' => __DIR__ . '/../..' . '/app/Http/Controllers/UserPermissionController.php',
         'App\\Http\\Controllers\\UserTypeController' => __DIR__ . '/../..' . '/app/Http/Controllers/UserTypeController.php',
+        'App\\Http\\Controllers\\VehicleController' => __DIR__ . '/../..' . '/app/Http/Controllers/VehicleController.php',
         'App\\Http\\Kernel' => __DIR__ . '/../..' . '/app/Http/Kernel.php',
         'App\\Http\\Middleware\\EncryptCookies' => __DIR__ . '/../..' . '/app/Http/Middleware/EncryptCookies.php',
         'App\\Http\\Middleware\\GenerateMenus' => __DIR__ . '/../..' . '/app/Http/Middleware/GenerateMenus.php',
@@ -486,6 +488,7 @@ class ComposerStaticInit269df63c00a4b0f812daf7f4a03ac54f
         'App\\Http\\Middleware\\VerifyCsrfToken' => __DIR__ . '/../..' . '/app/Http/Middleware/VerifyCsrfToken.php',
         'App\\Http\\Requests\\CreateCompanyRequest' => __DIR__ . '/../..' . '/app/Http/Requests/CreateCompanyRequest.php',
         'App\\Http\\Requests\\CreateConfigRequest' => __DIR__ . '/../..' . '/app/Http/Requests/CreateConfigRequest.php',
+        'App\\Http\\Requests\\CreateCourierRequest' => __DIR__ . '/../..' . '/app/Http/Requests/CreateCourierRequest.php',
         'App\\Http\\Requests\\CreateCustomerRequest' => __DIR__ . '/../..' . '/app/Http/Requests/CreateCustomerRequest.php',
         'App\\Http\\Requests\\CreateDepartmentRequest' => __DIR__ . '/../..' . '/app/Http/Requests/CreateDepartmentRequest.php',
         'App\\Http\\Requests\\CreateDepositRequest' => __DIR__ . '/../..' . '/app/Http/Requests/CreateDepositRequest.php',
@@ -493,8 +496,6 @@ class ComposerStaticInit269df63c00a4b0f812daf7f4a03ac54f
         'App\\Http\\Requests\\CreateDocumentTypeRequest' => __DIR__ . '/../..' . '/app/Http/Requests/CreateDocumentTypeRequest.php',
         'App\\Http\\Requests\\CreateFinalityRequest' => __DIR__ . '/../..' . '/app/Http/Requests/CreateFinalityRequest.php',
         'App\\Http\\Requests\\CreateGroupRequest' => __DIR__ . '/../..' . '/app/Http/Requests/CreateGroupRequest.php',
-        'App\\Http\\Requests\\CreateItemRequest' => __DIR__ . '/../..' . '/app/Http/Requests/CreateItemRequest.php',
-        'App\\Http\\Requests\\CreateItemTypeRequest' => __DIR__ . '/../..' . '/app/Http/Requests/CreateItemTypeRequest.php',
         'App\\Http\\Requests\\CreateLabelRequest' => __DIR__ . '/../..' . '/app/Http/Requests/CreateLabelRequest.php',
         'App\\Http\\Requests\\CreateLabelTypeRequest' => __DIR__ . '/../..' . '/app/Http/Requests/CreateLabelTypeRequest.php',
         'App\\Http\\Requests\\CreateLocationFunctionRequest' => __DIR__ . '/../..' . '/app/Http/Requests/CreateLocationFunctionRequest.php',
@@ -518,9 +519,11 @@ class ComposerStaticInit269df63c00a4b0f812daf7f4a03ac54f
         'App\\Http\\Requests\\CreateUserPermissionRequest' => __DIR__ . '/../..' . '/app/Http/Requests/CreateUserPermissionRequest.php',
         'App\\Http\\Requests\\CreateUserRequest' => __DIR__ . '/../..' . '/app/Http/Requests/CreateUserRequest.php',
         'App\\Http\\Requests\\CreateUserTypeRequest' => __DIR__ . '/../..' . '/app/Http/Requests/CreateUserTypeRequest.php',
+        'App\\Http\\Requests\\CreateVehicleRequest' => __DIR__ . '/../..' . '/app/Http/Requests/CreateVehicleRequest.php',
         'App\\Http\\Requests\\StoreDocument' => __DIR__ . '/../..' . '/app/Http/Requests/StoreDocument.php',
         'App\\Http\\Requests\\UpdateCompanyRequest' => __DIR__ . '/../..' . '/app/Http/Requests/UpdateCompanyRequest.php',
         'App\\Http\\Requests\\UpdateConfigRequest' => __DIR__ . '/../..' . '/app/Http/Requests/UpdateConfigRequest.php',
+        'App\\Http\\Requests\\UpdateCourierRequest' => __DIR__ . '/../..' . '/app/Http/Requests/UpdateCourierRequest.php',
         'App\\Http\\Requests\\UpdateCustomerRequest' => __DIR__ . '/../..' . '/app/Http/Requests/UpdateCustomerRequest.php',
         'App\\Http\\Requests\\UpdateDepartmentRequest' => __DIR__ . '/../..' . '/app/Http/Requests/UpdateDepartmentRequest.php',
         'App\\Http\\Requests\\UpdateDepositRequest' => __DIR__ . '/../..' . '/app/Http/Requests/UpdateDepositRequest.php',
@@ -553,10 +556,12 @@ class ComposerStaticInit269df63c00a4b0f812daf7f4a03ac54f
         'App\\Http\\Requests\\UpdateUserPermissionRequest' => __DIR__ . '/../..' . '/app/Http/Requests/UpdateUserPermissionRequest.php',
         'App\\Http\\Requests\\UpdateUserRequest' => __DIR__ . '/../..' . '/app/Http/Requests/UpdateUserRequest.php',
         'App\\Http\\Requests\\UpdateUserTypeRequest' => __DIR__ . '/../..' . '/app/Http/Requests/UpdateUserTypeRequest.php',
+        'App\\Http\\Requests\\UpdateVehicleRequest' => __DIR__ . '/../..' . '/app/Http/Requests/UpdateVehicleRequest.php',
         'App\\Listeners\\ControlLogout' => __DIR__ . '/../..' . '/app/Listeners/ControlLogout.php',
         'App\\Listeners\\EventListener' => __DIR__ . '/../..' . '/app/Listeners/EventListener.php',
         'App\\Models\\Company' => __DIR__ . '/../..' . '/app/Models/Company.php',
         'App\\Models\\Config' => __DIR__ . '/../..' . '/app/Models/Config.php',
+        'App\\Models\\Courier' => __DIR__ . '/../..' . '/app/Models/Courier.php',
         'App\\Models\\Customer' => __DIR__ . '/../..' . '/app/Models/Customer.php',
         'App\\Models\\Department' => __DIR__ . '/../..' . '/app/Models/Department.php',
         'App\\Models\\Deposit' => __DIR__ . '/../..' . '/app/Models/Deposit.php',
@@ -600,6 +605,7 @@ class ComposerStaticInit269df63c00a4b0f812daf7f4a03ac54f
         'App\\Providers\\RouteServiceProvider' => __DIR__ . '/../..' . '/app/Providers/RouteServiceProvider.php',
         'App\\Repositories\\CompanyRepository' => __DIR__ . '/../..' . '/app/Repositories/CompanyRepository.php',
         'App\\Repositories\\ConfigRepository' => __DIR__ . '/../..' . '/app/Repositories/ConfigRepository.php',
+        'App\\Repositories\\CourierRepository' => __DIR__ . '/../..' . '/app/Repositories/CourierRepository.php',
         'App\\Repositories\\CustomerRepository' => __DIR__ . '/../..' . '/app/Repositories/CustomerRepository.php',
         'App\\Repositories\\DepartmentRepository' => __DIR__ . '/../..' . '/app/Repositories/DepartmentRepository.php',
         'App\\Repositories\\DepositRepository' => __DIR__ . '/../..' . '/app/Repositories/DepositRepository.php',
@@ -633,6 +639,7 @@ class ComposerStaticInit269df63c00a4b0f812daf7f4a03ac54f
         'App\\Repositories\\UserPermissionRepository' => __DIR__ . '/../..' . '/app/Repositories/UserPermissionRepository.php',
         'App\\Repositories\\UserRepository' => __DIR__ . '/../..' . '/app/Repositories/UserRepository.php',
         'App\\Repositories\\UserTypeRepository' => __DIR__ . '/../..' . '/app/Repositories/UserTypeRepository.php',
+        'App\\Repositories\\VehicleRepository' => __DIR__ . '/../..' . '/app/Repositories/VehicleRepository.php',
         'App\\Rules\\CustomExists' => __DIR__ . '/../..' . '/app/Rules/CustomExists.php',
         'App\\User' => __DIR__ . '/../..' . '/app/User.php',
         'Carbon\\Carbon' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/Carbon.php',
@@ -3100,7 +3107,7 @@ class ComposerStaticInit269df63c00a4b0f812daf7f4a03ac54f
         'PHPUnit\\Util\\TestDox\\XmlResultPrinter' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/TestDox/XmlResultPrinter.php',
         'PHPUnit\\Util\\TextTestListRenderer' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/TextTestListRenderer.php',
         'PHPUnit\\Util\\Type' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/Type.php',
-        'PHPUnit\\Util\\Xml' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/XML.php',
+        'PHPUnit\\Util\\Xml' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/Xml.php',
         'PHPUnit\\Util\\XmlTestListRenderer' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/XmlTestListRenderer.php',
         'PHPUnit_Framework_MockObject_MockObject' => __DIR__ . '/..' . '/phpunit/phpunit-mock-objects/src/MockObject.php',
         'PHP_Timer' => __DIR__ . '/..' . '/phpunit/php-timer/src/Timer.php',
@@ -4621,11 +4628,11 @@ class ComposerStaticInit269df63c00a4b0f812daf7f4a03ac54f
         'Yajra\\DataTables\\Contracts\\DataTableButtons' => __DIR__ . '/..' . '/yajra/laravel-datatables-buttons/src/Contracts/DataTableButtons.php',
         'Yajra\\DataTables\\Contracts\\DataTableScope' => __DIR__ . '/..' . '/yajra/laravel-datatables-buttons/src/Contracts/DataTableScope.php',
         'Yajra\\DataTables\\DataTableAbstract' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/DataTableAbstract.php',
-        'Yajra\\DataTables\\DataTables' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/Datatables.php',
-        'Yajra\\DataTables\\DataTablesServiceProvider' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/DatatablesServiceProvider.php',
+        'Yajra\\DataTables\\DataTables' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/DataTables.php',
+        'Yajra\\DataTables\\DataTablesServiceProvider' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/DataTablesServiceProvider.php',
         'Yajra\\DataTables\\EloquentDataTable' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/EloquentDataTable.php',
         'Yajra\\DataTables\\Exceptions\\Exception' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/Exceptions/Exception.php',
-        'Yajra\\DataTables\\Facades\\DataTables' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/Facades/Datatables.php',
+        'Yajra\\DataTables\\Facades\\DataTables' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/Facades/DataTables.php',
         'Yajra\\DataTables\\Generators\\DataTablesMakeCommand' => __DIR__ . '/..' . '/yajra/laravel-datatables-buttons/src/Generators/DataTablesMakeCommand.php',
         'Yajra\\DataTables\\Generators\\DataTablesScopeCommand' => __DIR__ . '/..' . '/yajra/laravel-datatables-buttons/src/Generators/DataTablesScopeCommand.php',
         'Yajra\\DataTables\\HtmlServiceProvider' => __DIR__ . '/..' . '/yajra/laravel-datatables-html/src/HtmlServiceProvider.php',
@@ -4715,10 +4722,10 @@ class ComposerStaticInit269df63c00a4b0f812daf7f4a03ac54f
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit269df63c00a4b0f812daf7f4a03ac54f::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit269df63c00a4b0f812daf7f4a03ac54f::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit269df63c00a4b0f812daf7f4a03ac54f::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit269df63c00a4b0f812daf7f4a03ac54f::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitee7e704ccecb65ac385e00feebaed5d3::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitee7e704ccecb65ac385e00feebaed5d3::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInitee7e704ccecb65ac385e00feebaed5d3::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInitee7e704ccecb65ac385e00feebaed5d3::$classMap;
 
         }, null, ClassLoader::class);
     }

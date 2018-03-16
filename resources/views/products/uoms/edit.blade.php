@@ -11,7 +11,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 {!! Form::model($uom, ['route' => ['uoms.update', $uom->id], 'method' => 'patch']) !!}
-                                  @include('products.uoms.fields')
+                                  @include('products.uoms.fields',['action' => "edit"])
                                 {!! Form::close() !!}
                             </div>
                         </div>
