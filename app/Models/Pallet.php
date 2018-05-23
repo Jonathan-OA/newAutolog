@@ -26,8 +26,7 @@ class Pallet extends Model
     public $fillable = [
         'company_id',
         'barcode',
-        'date',
-        'status',
+        'pallet_status_id',
         'location_code',
         'document_id',
         'height',

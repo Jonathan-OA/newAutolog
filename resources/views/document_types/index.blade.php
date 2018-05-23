@@ -4,10 +4,14 @@
     <div class="row">
         <div class="col-md-12 pad-ct">
             <div class="panel panel-default" >
-                <div class="panel-heading">
-                   <!-- Texto baseado no arquivo de linguagem -->
-                   @lang('models.document_types') 
-                </div>
+                <div class="panel-heading ptabs">
+                    <!-- Abas -->
+                    <ul class="nav nav-tabs">
+                         <!-- Textos baseados no arquivo de linguagem -->
+                         <li class="active-l"><a href="#">@lang('models.document_types') </a></li>
+                         <li><a href="{!! route('moviments.index') !!}">@lang('models.moviments')</a></li>
+                     </ul>
+                 </div>
                 <div class="panel panel-default">
                     <div class="row">
                         <div class="col-md-12">

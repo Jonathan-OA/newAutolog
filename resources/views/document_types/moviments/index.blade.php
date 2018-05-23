@@ -1,14 +1,17 @@
-
 @extends('layouts.app')
 
 @section('content')
     <div class="row">
         <div class="col-md-12 pad-ct">
             <div class="panel panel-default" >
-                <div class="panel-heading">
-                   <!-- Texto baseado no arquivo de linguagem -->
-                   @lang('models.pallets') 
-                </div>
+                <div class="panel-heading ptabs">
+                    <!-- Abas -->
+                    <ul class="nav nav-tabs">
+                         <!-- Textos baseados no arquivo de linguagem -->
+                         <li><a href="{!! route('documentTypes.index') !!}">@lang('models.document_types') </a></li>
+                         <li class="active-l"><a href="">@lang('models.moviments')</a></li>
+                     </ul>
+                 </div>
                 <div class="panel panel-default">
                     <div class="row">
                         <div class="col-md-12">
@@ -16,10 +19,10 @@
                             @include('flash::message')
                             <div id="msg_excluir"></div>
                             <div class="row buttons_grid">
-                                <a class="btn btn-success"  href="{!! route('pallets.create') !!}">@lang('buttons.add')</a>
+                                <a class="btn btn-success"  href="{!! route('moviments.create') !!}">@lang('buttons.add')</a>
                             </div>
                             <div class="panel-body">
-                                @include('pallets.table')
+                                @include('document_types.moviments.table')
                             </div>
                         </div>
                     </div>
@@ -34,10 +37,10 @@
     $(function() {
         
         //Parâmetros para criação da datatable
-        table = $("#pallets-table").DataTable({
+        table = $("#moviments-table").DataTable({
             scrollX: true,
             scrollY: "47vh",
-            ajax: 'pallets/datatable',
+            ajax: 'moviments/datatable',
             autoWidth: true,
             fixedColumns:   {
                 leftColumns: 0,
@@ -54,34 +57,29 @@
                     sPrevious: "@lang('models.previous')",
                 }
             },
-            columns: [  { data: 'barcode' },
-                        { data: 'location_code' },
-                        { data: 'packing_type_code' },
-                        { data: 'pallet_status_id' },
+            columns: [  { data: 'code' },
+                        { data: 'description' },
                         { data: null,
                          className: "th_grid",
-                         defaultContent: "<button id='detail' aria-label='@lang('buttons.detail')' data-microtip-position='left' role='tooltip' style='margin-right: 3px' ><img class='icon' src='{{asset('/icons/detalhes2.png') }}'></button><button id='edit' aria-label='@lang('buttons.edit')' data-microtip-position='left' role='tooltip' ><img class='icon' src='{{asset('/icons/editar.png') }}'></button><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='{{asset('/icons/remover.png') }}'></button>",
+                         defaultContent: "<button id='edit' aria-label='@lang('buttons.edit')' data-microtip-position='left' role='tooltip' ><img class='icon' src='{{asset('/icons/editar.png') }}'></button><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='{{asset('/icons/remover.png') }}'></button>",
                          width: "90px" 
                         }],
       });
 
       //Funções dos botões de editar e excluir
-      $('#pallets-table tbody').on( 'click', 'button', function () {
+      $('#moviments-table tbody').on( 'click', 'button', function () {
             var data = table.row( $(this).parents('tr') ).data();
             var id = $(this).attr('id');
             if(id == 'edit'){
                 //Editar Registro
-                window.location.href = "{!! URL::to('pallets/"+data.id+"/edit') !!}";
-            }else if(id == 'detail'){
-                //Detalhes
-                window.location.href = "{!! URL::to('palletItems/ix/"+data.id+"') !!}";
+                window.location.href = "{!! URL::to('moviments/"+data.id+"/edit') !!}";
             }else{
                 //Excluir Registro
                 if(confirm('@lang("buttons.msg_remove")')){
                     //Token obrigatório para envio POST
                     var tk = $('meta[name="csrf-token"]').attr('content');
                     $.ajax({
-                        url: 'pallets/'+data.id,
+                        url: 'moviments/'+data.id,
                         type: 'post',
                         data: {_method: 'delete', _token :tk},
                         success: function(scs){ 

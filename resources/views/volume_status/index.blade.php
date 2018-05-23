@@ -6,7 +6,7 @@
             <div class="panel panel-default" >
                 <div class="panel-heading">
                    <!-- Texto baseado no arquivo de linguagem -->
-                   @lang('models.moviments') 
+                   @lang('models.volume_status') 
                 </div>
                 <div class="panel panel-default">
                     <div class="row">
@@ -15,10 +15,10 @@
                             @include('flash::message')
                             <div id="msg_excluir"></div>
                             <div class="row buttons_grid">
-                                <a class="btn btn-success"  href="{!! route('moviments.create') !!}">@lang('buttons.add')</a>
+                                <a class="btn btn-success"  href="{!! route('volumeStatus.create') !!}">@lang('buttons.add')</a>
                             </div>
                             <div class="panel-body">
-                                @include('moviments.table')
+                                @include('volume_status.table')
                             </div>
                         </div>
                     </div>
@@ -33,10 +33,10 @@
     $(function() {
         
         //Parâmetros para criação da datatable
-        table = $("#moviments-table").DataTable({
+        table = $("#volumeStatus-table").DataTable({
             scrollX: true,
             scrollY: "47vh",
-            ajax: 'moviments/datatable',
+            ajax: 'volumeStatus/datatable',
             autoWidth: true,
             fixedColumns:   {
                 leftColumns: 0,
@@ -53,9 +53,9 @@
                     sPrevious: "@lang('models.previous')",
                 }
             },
-            columns: [  { data: 'code' },
-                        { data: 'description' },
-                        { data: null,
+            columns: [ { data: 'id' },
+                       { data: 'description' },
+                       { data: null,
                          className: "th_grid",
                          defaultContent: "<button id='edit' aria-label='@lang('buttons.edit')' data-microtip-position='left' role='tooltip' ><img class='icon' src='{{asset('/icons/editar.png') }}'></button><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='{{asset('/icons/remover.png') }}'></button>",
                          width: "90px" 
@@ -63,19 +63,19 @@
       });
 
       //Funções dos botões de editar e excluir
-      $('#moviments-table tbody').on( 'click', 'button', function () {
+      $('#volumeStatus-table tbody').on( 'click', 'button', function () {
             var data = table.row( $(this).parents('tr') ).data();
             var id = $(this).attr('id');
             if(id == 'edit'){
                 //Editar Registro
-                window.location.href = "{!! URL::to('moviments/"+data.id+"/edit') !!}";
+                window.location.href = "{!! URL::to('volumeStatus/"+data.id+"/edit') !!}";
             }else{
                 //Excluir Registro
                 if(confirm('@lang("buttons.msg_remove")')){
                     //Token obrigatório para envio POST
                     var tk = $('meta[name="csrf-token"]').attr('content');
                     $.ajax({
-                        url: 'moviments/'+data.id,
+                        url: 'volumeStatus/'+data.id,
                         type: 'post',
                         data: {_method: 'delete', _token :tk},
                         success: function(scs){ 

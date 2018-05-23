@@ -63,8 +63,12 @@ return [
     'label_types' => 'Tipos de Etiqueta',
     'couriers' => 'Transportadoras',
     'vehicles' => 'Veículos',
+    'volumes' => 'Volumes',
+    'volume_status' => 'Status de Volumes',
+    'pallet_status' => 'Status de Paletes',
 
     //Columns
+    'id' => 'ID',
     'name' => 'Nome',
     'description' => 'Descrição',
     'slug' => 'Abreviação',
@@ -208,6 +212,8 @@ return [
     'conf_length' => 'Conf. Comprimento',
     'conf_width' => 'Conf. Largura',
     'conf_height' => 'Conf. Altura',
+    'volume_status_id' => 'Status',
+    'pallet_status_id' => 'Status',
     
     //PlaceHolders
     'sel_type' => 'Selecione um tipo: ',

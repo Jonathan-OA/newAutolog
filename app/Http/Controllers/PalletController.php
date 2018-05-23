@@ -49,9 +49,14 @@ class PalletController extends AppBaseController
     {
         //Valida se usuário possui permissão para acessar esta opção
         if(App\Models\User::getPermission('pallets_add',Auth::user()->user_type_code)){
+            //Pega todas as embalagens
             $packingTypes = App\Models\PackingType::getPackingTypes();
+            
+            //Pega todos os status de palete
+            $palletStatus = App\Models\PalletStatus::getPalletsStatus();
 
-            return view('pallets.create')->with('packing_types',$packingTypes);
+            return view('pallets.create')->with('packing_types',$packingTypes)                
+                                         ->with('palletStatus',$palletStatus);
 
         }else{
             //Sem permissão
@@ -111,7 +116,11 @@ class PalletController extends AppBaseController
         if(App\Models\User::getPermission('pallets_edit',Auth::user()->user_type_code)){
 
             $pallet = $this->palletRepository->findWithoutFail($id);
+            //Pega todas as embalagens
             $packingTypes = App\Models\PackingType::getPackingTypes();
+
+            //Pega todos os status de palete
+            $palletStatus = App\Models\PalletStatus::getPalletsStatus();
 
             if (empty($pallet)) {
                 Flash::error(Lang::get('validation.not_found'));
@@ -121,7 +130,8 @@ class PalletController extends AppBaseController
 
             return view('pallets.edit')
                     ->with('pallet', $pallet)
-                    ->with('packing_types', $packingTypes);
+                    ->with('packing_types', $packingTypes)
+                    ->with('palletStatus',$palletStatus);
         
         }else{
             //Sem permissão

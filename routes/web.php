@@ -183,3 +183,19 @@ Route::resource('couriers', 'CourierController');
 
 Route::get('vehicles/datatable', 'VehicleController@getData');
 Route::resource('vehicles', 'VehicleController');
+
+
+Route::get('volumes/datatable', 'VolumeController@getData');
+Route::resource('volumes', 'VolumeController');
+
+
+Route::get('volumeItems/datatable', 'VolumeItemController@getData');
+Route::resource('volumeItems', 'VolumeItemController');
+
+
+Route::get('volumeStatus/datatable', 'VolumeStatusController@getData');
+Route::resource('volumeStatus', 'VolumeStatusController');
+
+
+Route::get('palletStatus/datatable', 'PalletStatusController@getData');
+Route::resource('palletStatus', 'PalletStatusController');

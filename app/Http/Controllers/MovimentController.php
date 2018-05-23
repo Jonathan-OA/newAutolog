@@ -36,7 +36,7 @@ class MovimentController extends AppBaseController
         $this->movimentRepository->pushCriteria(new RequestCriteria($request));
         $moviments = $this->movimentRepository->all();
 
-        return view('moviments.index')
+        return view('document_types.moviments.index')
             ->with('moviments', $moviments);
     }
 
@@ -50,7 +50,7 @@ class MovimentController extends AppBaseController
         //Valida se usuário possui permissão para acessar esta opção
         if(App\Models\User::getPermission('moviments_add',Auth::user()->user_type_code)){
 
-            return view('moviments.create');
+            return view('document_types.moviments.create');
 
         }else{
             //Sem permissão
@@ -94,7 +94,7 @@ class MovimentController extends AppBaseController
             return redirect(route('moviments.index'));
         }
 
-        return view('moviments.show')->with('moviment', $moviment);
+        return view('document_types.moviments.show')->with('moviment', $moviment);
     }
 
     /**
@@ -117,7 +117,7 @@ class MovimentController extends AppBaseController
                 return redirect(route('moviments.index'));
             }
 
-            return view('moviments.edit')->with('moviment', $moviment);
+            return view('document_types.moviments.edit')->with('moviment', $moviment);
         
         }else{
             //Sem permissão
