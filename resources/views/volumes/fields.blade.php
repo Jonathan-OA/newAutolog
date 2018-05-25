@@ -6,7 +6,12 @@
 
 <!-- Barcode Field -->
 {!! Form::label('barcode', Lang::get('models.barcode').':') !!}
-{!! Form::text('barcode', null, ['class' => 'form-control']) !!}
+@if(isset($action) && $action == 'edit')
+    {!! Form::text('barcode', null, ['class' => 'form-control','readonly' => 'true']) !!}
+@else
+    {!! Form::text('barcode', null, ['class' => 'form-control']) !!}  
+@endif
+
 
 <!-- Document Id Field -->
 {!! Form::label('document_id', Lang::get('models.document_id').':') !!}

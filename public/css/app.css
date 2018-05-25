@@ -114,6 +114,14 @@
     .glyphicon {
         float: right !important;
     }
+    
+    .active {
+        border-left: 10px solid #17263d !important;
+        background-color: #ebe8e8;
+        border: black solid 0.5px 0px;
+        ;
+        ;
+    }
     /* --------------------------------------------*/
     /*             Panel Layout + Grid             */
     /* --------------------------------------------*/

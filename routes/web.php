@@ -199,3 +199,7 @@ Route::resource('volumeStatus', 'VolumeStatusController');
 
 Route::get('palletStatus/datatable', 'PalletStatusController@getData');
 Route::resource('palletStatus', 'PalletStatusController');
+
+
+Route::get('allowedTransfers/datatable', 'AllowedTransferController@getData');
+Route::resource('allowedTransfers', 'AllowedTransferController');

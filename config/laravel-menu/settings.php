@@ -8,6 +8,6 @@ return array(
         'restful' => false,
         'cascade_data' => true,
         'rest_base' => '',      // string|array
-        'active_element' => 'item',  // item|link
+        'active_element' => 'li',  // item|link
     ),
 );

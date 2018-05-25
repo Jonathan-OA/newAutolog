@@ -67,6 +67,7 @@ class User extends Model
                                 ->where('user_type_code', $user_type)
                                 ->count();
         
+        //Admin tem acesso livre
         if($user_type == 'ADMIN') $result = 1;
         
         return $result;
