@@ -131,7 +131,8 @@ class PackingController extends AppBaseController
             $uoms = App\Models\Uom::getUoms();
 
             return view('packings.edit')->with('packing', $packing)
-                                        ->with('uoms',$uoms);
+                                        ->with('uoms',$uoms)
+                                        ->with('product_code',$packing->product_code);
         
         }else{
             //Sem permissão
@@ -160,7 +161,7 @@ class PackingController extends AppBaseController
 
         //Grava log
         $requestF = $request->all();
-        $descricao = 'Alterou Packing ID: '.$id.' - '.$requestF['code'];
+        $descricao = 'Alterou Packing ID: '.$id.' - Prod:'.$requestF['product_code'].' Nivel: '.$requestF['level'].' Fat: '.$requestF['prev_qty'];
         $log = App\Models\Log::wlog('packings_edit', $descricao);
 
 
@@ -168,7 +169,7 @@ class PackingController extends AppBaseController
 
         Flash::success(Lang::get('validation.update_success'));
 
-        return redirect(route('packings.index'));
+        return redirect(action('PackingController@index',[$requestF['product_code']]));
     }
 
     /**

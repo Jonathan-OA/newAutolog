@@ -115,11 +115,10 @@
         float: right !important;
     }
     
-    .active {
+    .menu_active {
         border-left: 10px solid #17263d !important;
         background-color: #ebe8e8;
         border: black solid 0.5px 0px;
-        ;
         ;
     }
     /* --------------------------------------------*/
@@ -298,6 +297,7 @@
         border: 1px solid white;
         vertical-align: middle !important;
         text-align: center;
+        background-color: white;
     }
     
     .td_grid_dt {
@@ -322,6 +322,10 @@
     
     .table.dataTable {
         margin-bottom: 0px !important;
+    }
+    
+    .redClass {
+        background-color: #EDC1C1;
     }
     
     .table>tbody>tr>td {
@@ -513,3 +517,5 @@
     .btn.active span.glyphicon {
         opacity: 1;
     }
+    
+    ;

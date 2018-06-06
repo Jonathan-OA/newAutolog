@@ -4,46 +4,51 @@
 <!-- Company Id Field -->
 <input id='company_id' name='company_id' type='hidden' value='{!! Auth::user()->company_id !!}'>
 
-<!-- Source Department Code Field -->
-{!! Form::label('source_department_code', Lang::get('models.source_department_code').':') !!}
-{!! Form::text('source_department_code', null, ['class' => 'form-control']) !!}
+<!-- Orig Department Code Field -->
+{!! Form::label('orig_department_code', Lang::get('models.orig_department_code').':') !!}
+{!! Form::text('orig_department_code', null, ['class' => 'form-control','id' => 'autocomplete', 'table' => 'departments']) !!}
 
-<!-- Source Deposit Code Field -->
-{!! Form::label('source_deposit_code', Lang::get('models.source_deposit_code').':') !!}
-{!! Form::text('source_deposit_code', null, ['class' => 'form-control']) !!}
+<!-- Orig Deposit Code Field -->
+{!! Form::label('orig_deposit_code', Lang::get('models.orig_deposit_code').':') !!}
+{!! Form::text('orig_deposit_code', null, ['class' => 'form-control', 'id' => 'autocomplete1', 'table' => 'deposits', 'id_dep' => 'autocomplete', 'readonly']) !!}
 
 <!-- Dest Department Code Field -->
 {!! Form::label('dest_department_code', Lang::get('models.dest_department_code').':') !!}
-{!! Form::text('dest_department_code', null, ['class' => 'form-control']) !!}
+{!! Form::text('dest_department_code', null, ['class' => 'form-control','id' => 'autocomplete2', 'table' => 'departments']) !!}
 
 <!-- Dest Deposit Code Field -->
 {!! Form::label('dest_deposit_code', Lang::get('models.dest_deposit_code').':') !!}
-{!! Form::text('dest_deposit_code', null, ['class' => 'form-control']) !!}
+{!! Form::text('dest_deposit_code', null, ['class' => 'form-control', 'id' => 'autocomplete3', 'table' => 'deposits', 'id_dep' => 'autocomplete2', 'readonly']) !!}
 
 <!-- Operation Code Field -->
 {!! Form::label('operation_code', Lang::get('models.operation_code').':') !!}
-{!! Form::text('operation_code', null, ['class' => 'form-control']) !!}
+{!! Form::text('operation_code', null, ['class' => 'form-control', 'id' => 'autocomplete4', 'table' => 'operations']) !!}
 
 <!-- Document Type Code Field -->
 {!! Form::label('document_type_code', Lang::get('models.document_type_code').':') !!}
-{!! Form::text('document_type_code', null, ['class' => 'form-control']) !!}
+{!! Form::text('document_type_code', null, ['class' => 'form-control', 'id' => 'autocomplete5', 'table' => 'document_types']) !!}
 
 <!-- Reset Stock Field -->
-<div class="form-group col-sm-6">
-    {!! Form::label('reset_stock', Lang::get('models.reset_stock').':') !!}
-    <label class="checkbox-inline">
-        {!! Form::hidden('reset_stock', false) !!}
-        {!! Form::checkbox('reset_stock', '1', null) !!} 1
+{!! Form::label('reset_stock', Lang::get('models.reset_stock').':') !!}
+<div class="onoffswitch">
+    <input type="hidden" name="reset_stock"  value="0" >
+    {{ Form::checkbox('reset_stock', 1, (!empty($allowedTransfer->reset_stock)) ? $allowedTransfer->reset_stock : 0 ,['class' => 'onoffswitch-checkbox', 'id' => 'reset_stock']) }}
+    <label class="onoffswitch-label" for="reset_stock">
+        <span class="onoffswitch-inner"></span>
+        <span class="onoffswitch-switch"></span>
     </label>
 </div>
 
 <!-- Export Erp Field -->
-<div class="form-group col-sm-6">
-    {!! Form::label('export_erp', Lang::get('models.export_erp').':') !!}
-    <label class="checkbox-inline">
-        {!! Form::hidden('export_erp', false) !!}
-        {!! Form::checkbox('export_erp', '1', null) !!} 1
+{!! Form::label('export_erp', Lang::get('models.export_erp').':') !!}
+<div class="onoffswitch">
+    <input type="hidden" name="export_erp"  value="0" >
+    {{ Form::checkbox('export_erp', 1, (!empty($allowedTransfer->export_erp)) ? $allowedTransfer->export_erp : 0 ,['class' => 'onoffswitch-checkbox', 'id' => 'export_erp']) }}
+    <label class="onoffswitch-label" for="export_erp">
+        <span class="onoffswitch-inner"></span>
+        <span class="onoffswitch-switch"></span>
     </label>
+    
 </div>
 
 <!-- Operation Erp Field -->
@@ -59,13 +64,17 @@
 {!! Form::text('logical_deposit', null, ['class' => 'form-control']) !!}
 
 <!-- Enabled Field -->
-<div class="form-group col-sm-6">
-    {!! Form::label('enabled', Lang::get('models.enabled').':') !!}
-    <label class="checkbox-inline">
-        {!! Form::hidden('enabled', false) !!}
-        {!! Form::checkbox('enabled', '1', null) !!} 1
+{!! Form::label('enabled', Lang::get('models.enabled').':') !!}
+<div class="onoffswitch">
+    <input type="hidden" name="enabled"  value="0" >
+    {{ Form::checkbox('enabled', 1, (!empty($allowedTransfer->enabled)) ? $allowedTransfer->enabled : 0 ,['class' => 'onoffswitch-checkbox', 'id' => 'enabled']) }}
+    <label class="onoffswitch-label" for="enabled">
+        <span class="onoffswitch-inner"></span>
+        <span class="onoffswitch-switch"></span>
     </label>
 </div>
+
+
 </div>
 
 <!-- Submit Field -->

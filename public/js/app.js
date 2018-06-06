@@ -23,46 +23,55 @@ $(document).ready(function() {
     var id = "";
 
     //Autocomplete
-    //Para funcionar em mais de um campo na mesma tela deve seguir a nomenclatura autocomplete1, autocomplete2, etc.
-
+    //Para funcionar em mais de um campo na mesma tela deve seguir a nomenclatura de id:autocomplete1, autocomplete2, etc.
     $('[id^=autocomplete]').autocomplete({
         source: function(request, response) {
             id = this.element.attr('id');
             var table = $('#' + id).attr('table');
-            $.ajax({
-                url: APP_URL + "/search",
-                dataType: "json",
-                data: {
-                    term: request.term,
-                    table: table
-                },
-                success: function(data) {
-                    response(data);
-                }
+            //Valida se este input esta atrelado ao valor de um input anterior para buscar como filtro 
+            //Tag: id_dep (Contendo o id do input atrelado)
+            //(Ex: Depart -> Deposi)
+            try {
+                var inputDepend = $('#' + id).attr('id_dep');
+                var valDepend = $('#' + inputDepend).val();
+                var tableDep = $('#' + inputDepend).attr('table');
 
-            });
+            } catch (err) {
+                var valDepend = '';
+                var tableDep = '';
+            }
+            //Se o input esta com readonly, não lista as opções
+            var attr = $('#' + id).attr("readonly");
+            if (typeof attr == typeof undefined || attr === false) {
+                $.ajax({
+                    url: APP_URL + "/search",
+                    dataType: "json",
+                    data: {
+                        term: request.term,
+                        table: table,
+                        tableDep: tableDep,
+                        valDep: valDepend
+                    },
+                    success: function(data) {
+                        response(data);
+                    }
+
+                });
+            }
         },
-        minLength: 1,
+        minLength: 0,
         select: function(event, ui) {
             $('#' + id).val(ui.item.code);
+            $("[id_dep='" + id + "']").attr("readonly", false);
 
         }
+    }).focus(function() {
+        //Ao focar, mostra a listagem completa
+        $(this).autocomplete("search");
     });
 
-    //Função que preenche
-    function ajaxInput(elemOrg, elemDest, urlDados)
-    $.ajax({
-        type: 'get',
-        url: urlDados,
-        success: function(data) {
-            console.log(data);
-            var options = "<option value='' selected>Choose breed</option>";
-            $.each(data, function(key, value) {
-                options += "<option value='" + value.id + "'>" + value.name + "</option>";
-            });
-            $(elemDest).html(options);
-        }
-    });
+
+
 
 });
 

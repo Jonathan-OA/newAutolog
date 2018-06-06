@@ -31,7 +31,6 @@
 <script>
     var table;
     $(function() {
-        
         //Parâmetros para criação da datatable
         table = $("#allowedTransfers-table").DataTable({
             scrollX: true,
@@ -53,25 +52,36 @@
                     sPrevious: "@lang('models.previous')",
                 }
             },
-            columns: [ { data: 'company_id' },
-                { data: 'source_department_code' },
-                { data: 'source_deposit_code' },
-                { data: 'dest_department_code' },
-                { data: 'dest_deposit_code' },
-                { data: 'operation_code' },
-                { data: 'document_type_code' },
-                { data: 'reset_stock' },
-                { data: 'export_erp' },
-                { data: 'operation_erp' },
-                { data: 'cost_center' },
-                { data: 'logical_deposit' },
-                { data: 'enabled' },
-               
-                       { data: null,
+            columns: [  { data: 'orig_department_code' },
+                        { data: 'orig_deposit_code' },
+                        { data: 'dest_department_code' },
+                        { data: 'dest_deposit_code' },
+                        { data: 'operation_code' },
+                        { data: 'reset_stock', className: "td_center" },
+                        { data: 'export_erp', className: "td_center" },
+                        { data: null,
                          className: "th_grid",
                          defaultContent: "<button id='edit' aria-label='@lang('buttons.edit')' data-microtip-position='left' role='tooltip' ><img class='icon' src='{{asset('/icons/editar.png') }}'></button><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='{{asset('/icons/remover.png') }}'></button>",
                          width: "90px" 
                         }],
+            "rowCallback": function( row, data, index ) {
+                    //Se esta inativo, coloca a linha com a cor vermelha
+                    if ( data.enabled == 0 ) {
+                        $(row).addClass('redClass');
+                    }
+                    //Se ativo, coloca icone de habilitado
+                    if ( data.reset_stock == 1 ) {
+                        $('td:eq(5)', row).html( "<img class='icon' src='{{asset('/icons/checked.png') }}'>" );
+                    }else{
+                        $('td:eq(5)', row).html('');
+                    }
+                    //Se ativo, coloca icone de habilitado
+                    if ( data.export_erp == 1 ) {
+                        $('td:eq(6)', row).html( "<img class='icon' src='{{asset('/icons/checked.png') }}'>" )
+                    }else{
+                        $('td:eq(6)', row).html('');
+                    }
+            }
       });
 
       //Funções dos botões de editar e excluir
@@ -112,7 +122,11 @@
                 }
             }
             
-    });
+        });
+
+        
+
+        
                     
     });
 

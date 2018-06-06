@@ -61,7 +61,6 @@
             },
             columns: [  { data: 'code' },
                         { data: 'description' },
-                        { data: 'status' },
                         { data: 'product_type_code' },
                         { data: 'group_code' },
                         { data: 'subgroup_code' },
@@ -71,12 +70,10 @@
                           width: "90px" 
                         }],
                         "rowCallback": function( row, data, index ) {
-                              if ( data.status == 1 ) {
-                                $('td:eq(2)', row).html( '<b>Ativo</b>' );
-                              }else if ( data.status == 0 ){
-                                $('td:eq(2)', row).html( 'Inativo' );
+                              if ( data.status == 0 ) {
+                                $(row).addClass('redClass');
                               }
-                            }
+                        }
       });
 
       //Funções dos botões de editar e excluir

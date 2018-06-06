@@ -14,6 +14,7 @@
     <link href="{{ asset('/css/bootstrap.min.css') }} " rel="stylesheet">
     <link href="{{ asset('/css/jquery-ui.min.css') }} " rel="stylesheet">
     <link href="{{ asset('/css/microtip.css') }}" rel="stylesheet">
+    <link href="{{ asset('/css/toogle_switch.css') }}" rel="stylesheet">
     <link href="{{ asset('/css/app.css') }}" rel="stylesheet">
     @yield('css')
 

@@ -42,6 +42,15 @@ class HTMLFieldGenerator
                 }
                 $fieldTemplate = str_replace('$CHECKBOX_VALUE$', $checkboxValue, $fieldTemplate);
                 break;
+            case 'boolean':
+                $fieldTemplate = get_template('scaffold.fields.boolean', $templateType);
+                if (count($field->htmlValues) > 0) {
+                    $checkboxValue = $field->htmlValues[0];
+                } else {
+                    $checkboxValue = 1;
+                }
+                $fieldTemplate = str_replace('$CHECKBOX_VALUE$', $checkboxValue, $fieldTemplate);
+                break;
             case 'radio':
                 $fieldTemplate = get_template('scaffold.fields.radio_group', $templateType);
                 $radioTemplate = get_template('scaffold.fields.radio', $templateType);

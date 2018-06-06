@@ -66,6 +66,7 @@ return [
     'volumes' => 'Volumes',
     'volume_status' => 'Status de Volumes',
     'pallet_status' => 'Status de Paletes',
+    'allowed_transfers' => 'Transferências Permitidas',
 
     //Columns
     'id' => 'ID',
@@ -98,7 +99,7 @@ return [
     'level' => 'Nível',
     'local' => 'Local',
     'writes_log' => 'Ativa Log',
-    'enabled' => 'Habilitado',
+    'enabled' => 'Status',
     'value' => 'Valor',
     'def_value' => 'Valor Padrão',
     'module_name' => 'Módulo',
@@ -214,6 +215,18 @@ return [
     'conf_height' => 'Conf. Altura',
     'volume_status_id' => 'Status',
     'pallet_status_id' => 'Status',
+    'orig_department_code' => 'Dept. Origem',
+    'orig_deposit_code' => 'Dep. Origem',
+    'dest_department_code' => 'Dept. Destino',
+    'dest_deposit_code' => 'Dep. Origem',
+    'reset_stock' => 'Zera Saldo',
+    'export_erp' => 'Exportar ERP',
+    'document_type_code' => 'Tipo de Documento Gerado',
+    'operation_erp' => 'Operação de Retorno (ERP)',
+    'cost_center' => 'Centro de Custo',
+    'logical_deposit' => 'Deposito Lógico',
+    'active' => 'Ativo',
+    'inactive' => 'Inativo',
     
     //PlaceHolders
     'sel_type' => 'Selecione um tipo: ',

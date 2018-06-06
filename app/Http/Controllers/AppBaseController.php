@@ -44,9 +44,12 @@ class AppBaseController extends Controller
 
     public function autocomplete(){
 
-        //Busca na tabela $table os registros com o código $term
+        //Busca na tabela $table os registros com o código $term e o filtro $valDep (Caso seja um valor atrelado)
         $term = Input::get('term');
         $table = Input::get('table');
+        $tableDep = Input::get('tableDep');
+        $GLOBALS['valDep'] = Input::get('valDep');
+        $GLOBALS['campoDep'] = substr($tableDep,0,-1).'_code';
 
         $results = array();
         
@@ -55,11 +58,17 @@ class AppBaseController extends Controller
         $queries = DB::table($table)
             ->where('code', 'LIKE', '%'.$term.'%')
             ->where(function ($query) {
-                if($GLOBALS['hasComp'] == 1){
-                    $query->where('company_id',Auth::user()->company_id);
-                }
+                        if($GLOBALS['hasComp'] == 1){
+                            $query->where('company_id',Auth::user()->company_id);
+                        }
+                   })
+            ->where(function ($query) {
+                    //Valida se o select deve considerar campo atrelado como filtro
+                    if(trim($GLOBALS['valDep']) <> ''){
+                        $query->where($GLOBALS['campoDep'],$GLOBALS['valDep']);
+                    }
             })
-            ->take(40)->get();
+            ->take(12)->get();
 
         //Se tiver o campo descrição na tabela, concatena na label
         $hasDesc = (Schema::hasColumn($table, 'description'))?1:0;

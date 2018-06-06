@@ -5,7 +5,6 @@
             <thead>
                 <th class="th_grid">@lang('models.code') </th>
                 <th class="th_grid">@lang('models.description') </th>
-                <th class="th_grid">@lang('models.status') </th>
                 <th class="th_grid">@lang('models.product_type_code') </th>
                 <th class="th_grid">@lang('models.group_code') </th>
                 <th class="th_grid">@lang('models.subgroup_code') </th>
@@ -16,7 +15,6 @@
                 <tr>
                     <td>{!! $product->code !!}</td>
                     <td>{!! $product->description !!}</td>
-                    <td>{!! $product->status !!}</td>
                     <td>{!! $product->product_type_code !!}</td>
                     <td>{!! $product->group_code !!}</td>
                     <td>{!! $product->subgroup_code !!}</td>

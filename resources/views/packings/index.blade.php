@@ -65,14 +65,34 @@
                         { data: 'uom_code' },
                         { data: 'barcode' },
                         { data: 'prev_qty' },
-                        { data: 'conf_batch' },
-                        { data: 'conf_serial' },
-                        { data: 'conf_batch_supplier' },
+                        { data: 'conf_batch', className: 'td_center' },
+                        { data: 'conf_serial', className: 'td_center'},
+                        { data: 'conf_batch_supplier', className: 'td_center'},
                         { data: null,
                          className: "th_grid",
                          defaultContent: "<button id='edit' aria-label='@lang('buttons.edit')' data-microtip-position='left' role='tooltip' ><img class='icon' src='{{asset('/icons/editar.png') }}'></button><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='{{asset('/icons/remover.png') }}'></button>",
                          width: "90px" 
                         }],
+            "rowCallback": function( row, data, index ) {
+                    //Se ativo, coloca icone de habilitado
+                    if ( data.conf_batch == 1 ) {
+                        $('td:eq(5)', row).html( "<img class='icon' src='{{asset('/icons/checked.png') }}'>" );
+                    }else{
+                        $('td:eq(5)', row).html('');
+                    }
+                    //Se ativo, coloca icone de habilitado
+                    if ( data.conf_serial == 1 ) {
+                        $('td:eq(6)', row).html( "<img class='icon' src='{{asset('/icons/checked.png') }}'>" )
+                    }else{
+                        $('td:eq(6)', row).html('');
+                    }
+                    //Se ativo, coloca icone de habilitado
+                    if ( data.conf_batch_supplier == 1 ) {
+                        $('td:eq(7)', row).html( "<img class='icon' src='{{asset('/icons/checked.png') }}'>" )
+                    }else{
+                        $('td:eq(7)', row).html('');
+                    }
+            }
       });
 
       //Funções dos botões de editar e excluir

@@ -8,7 +8,7 @@ use InfyOm\Generator\Common\BaseRepository;
 /**
  * Class AllowedTransferRepository
  * @package App\Repositories
- * @version May 25, 2018, 3:36 pm -03
+ * @version May 30, 2018, 4:43 pm -03
  *
  * @method AllowedTransfer findWithoutFail($id, $columns = ['*'])
  * @method AllowedTransfer find($id, $columns = ['*'])
@@ -21,8 +21,8 @@ class AllowedTransferRepository extends BaseRepository
      */
     protected $fieldSearchable = [
         'company_id',
-        'source_department_code',
-        'source_deposit_code',
+        'orig_department_code',
+        'orig_deposit_code',
         'dest_department_code',
         'dest_deposit_code',
         'operation_code',

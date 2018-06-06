@@ -56,5 +56,3 @@
     });
 </script>
 @endsection
-
-luiz.tofoli

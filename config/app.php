@@ -219,6 +219,7 @@ return [
         'Flash'     => Laracasts\Flash\Flash::class,
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
         'Input' => Illuminate\Support\Facades\Input::class,
+        'ToggleSwitchButton'  => Okipa\LaravelToggleSwitchButton\Facades\ToggleSwitchButton::class,
     ],
 
 ];

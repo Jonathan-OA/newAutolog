@@ -9,12 +9,12 @@ use Auth;
 /**
  * Class AllowedTransfer
  * @package App\Models
- * @version May 25, 2018, 3:36 pm -03
+ * @version May 28, 2018, 3:12 pm -03
  *
  * @property \Illuminate\Database\Eloquent\Collection permissionRole
  * @property integer company_id
- * @property string source_department_code
- * @property string source_deposit_code
+ * @property string orig_department_code
+ * @property string orig_deposit_code
  * @property string dest_department_code
  * @property string dest_deposit_code
  * @property string operation_code
@@ -37,8 +37,8 @@ class AllowedTransfer extends Model
 	
     public $fillable = [
         'company_id',
-        'source_department_code',
-        'source_deposit_code',
+        'orig_department_code',
+        'orig_deposit_code',
         'dest_department_code',
         'dest_deposit_code',
         'operation_code',
@@ -58,8 +58,8 @@ class AllowedTransfer extends Model
      */
     protected $casts = [
         'company_id' => 'integer',
-        'source_department_code' => 'string',
-        'source_deposit_code' => 'string',
+        'orig_department_code' => 'string',
+        'orig_deposit_code' => 'string',
         'dest_department_code' => 'string',
         'dest_deposit_code' => 'string',
         'operation_code' => 'string',

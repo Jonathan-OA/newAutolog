@@ -146,7 +146,7 @@ class AllowedTransferController extends AppBaseController
 
         //Grava log
         $requestF = $request->all();
-        $descricao = 'Alterou AllowedTransfer ID: '.$id.' - '.$requestF['code'];
+        $descricao = 'Alterou AllowedTransfer ID: '.$id.' - Orig: '.$requestF['orig_deposit_code'].' => Dest: '.$requestF['dest_deposit_code'];
         $log = App\Models\Log::wlog('allowed_transfers_edit', $descricao);
 
 

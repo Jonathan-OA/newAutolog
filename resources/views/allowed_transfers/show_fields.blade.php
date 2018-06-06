@@ -10,16 +10,16 @@
     <p>{!! $allowedTransfer->company_id !!}</p>
 </div>
 
-<!-- Source Department Code Field -->
+<!-- Orig Department Code Field -->
 <div class="col-md-12">
-    {!! Form::label('source_department_code', 'Source Department Code:') !!}
-    <p>{!! $allowedTransfer->source_department_code !!}</p>
+    {!! Form::label('orig_department_code', 'Orig Department Code:') !!}
+    <p>{!! $allowedTransfer->orig_department_code !!}</p>
 </div>
 
-<!-- Source Deposit Code Field -->
+<!-- Orig Deposit Code Field -->
 <div class="col-md-12">
-    {!! Form::label('source_deposit_code', 'Source Deposit Code:') !!}
-    <p>{!! $allowedTransfer->source_deposit_code !!}</p>
+    {!! Form::label('orig_deposit_code', 'Orig Deposit Code:') !!}
+    <p>{!! $allowedTransfer->orig_deposit_code !!}</p>
 </div>
 
 <!-- Dest Department Code Field -->

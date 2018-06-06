@@ -2147,6 +2147,70 @@
         ]
     },
     {
+        "name": "okipa/laravel-toggle-switch-button",
+        "version": "1.0.10",
+        "version_normalized": "1.0.10.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/Okipa/laravel-toggle-switch-button.git",
+            "reference": "4b296883adedf0cafa92ff5809e196a843ff288f"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/Okipa/laravel-toggle-switch-button/zipball/4b296883adedf0cafa92ff5809e196a843ff288f",
+            "reference": "4b296883adedf0cafa92ff5809e196a843ff288f",
+            "shasum": ""
+        },
+        "require": {
+            "laravel/framework": "~5.0",
+            "php": ">=7.0"
+        },
+        "time": "2018-05-21T20:44:10+00:00",
+        "type": "library",
+        "extra": {
+            "laravel": {
+                "providers": [
+                    "Okipa\\LaravelToggleSwitchButton\\ToggleSwitchButtonServiceProvider"
+                ],
+                "aliases": {
+                    "ToggleSwitchButton": "Okipa\\LaravelToggleSwitchButton\\Facades\\ToggleSwitchButton"
+                }
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Okipa\\LaravelToggleSwitchButton\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Arthur LORENT",
+                "email": "arthur.lorent@gmail.com",
+                "role": "Developer"
+            }
+        ],
+        "description": "A customizable toggle switch button generator for Laravel that enables you to simply display it on your projects pages.",
+        "homepage": "https://github.com/Okipa/laravel-toggle-switch-button",
+        "keywords": [
+            "button",
+            "generate",
+            "generation",
+            "generator",
+            "html",
+            "laravel",
+            "okipa",
+            "package",
+            "php",
+            "switch",
+            "toggle"
+        ]
+    },
+    {
         "name": "paragonie/random_compat",
         "version": "v2.0.11",
         "version_normalized": "2.0.11.0",

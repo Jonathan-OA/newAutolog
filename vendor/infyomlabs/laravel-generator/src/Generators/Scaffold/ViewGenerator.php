@@ -313,8 +313,11 @@ class ViewGenerator extends BaseGenerator
             //            }
 
             $fieldTemplate = HTMLFieldGenerator::generateHTML($field, $this->templateType);
+           
+
 
             if (!empty($fieldTemplate)) {
+                echo '= Field: '.$field->htmlType;
                 $fieldTemplate = fill_template_with_field_data(
                     $this->commandData->dynamicVars,
                     $this->commandData->fieldNamesMapping,
