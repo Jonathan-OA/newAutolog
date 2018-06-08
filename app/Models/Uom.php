@@ -21,7 +21,8 @@ class Uom extends Model
 
     public $fillable = [
         'code',
-        'description'
+        'description',
+        'val_integer'
     ];
 
     /**
@@ -32,7 +33,8 @@ class Uom extends Model
     protected $casts = [
         'id' => 'integer',
         'code' => 'string',
-        'description' => 'string'
+        'description' => 'string',
+        'val_integer' => 'boolean'
     ];
 
     /**

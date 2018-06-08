@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use App\Models\AllowedTransfer;
+use Auth;
 
 class CreateAllowedTransferRequest extends FormRequest
 {
@@ -25,6 +26,13 @@ class CreateAllowedTransferRequest extends FormRequest
      */
     public function rules()
     {
-        return AllowedTransfer::$rules;
+        return [ 
+            'orig_department_code' => 'required|string|exists:departments,code,company_id,'.Auth::user()->company_id,
+            'orig_deposit_code' => 'required|string|exists:deposits,code,company_id,'.Auth::user()->company_id,
+            'dest_department_code' => 'required|string|exists:departments,code,company_id,'.Auth::user()->company_id,
+            'dest_deposit_code' => 'required|string|exists:deposits,code,company_id,'.Auth::user()->company_id,
+            'operation_code' => 'required|string',
+            'document_type_code' => 'required|string|exists:document_types,code',
+            ];
     }
 }

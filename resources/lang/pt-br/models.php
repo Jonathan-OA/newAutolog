@@ -67,6 +67,7 @@ return [
     'volume_status' => 'Status de Volumes',
     'pallet_status' => 'Status de Paletes',
     'allowed_transfers' => 'Transferências Permitidas',
+    'label_status' => 'Status de Etiquetas',
 
     //Columns
     'id' => 'ID',
@@ -218,7 +219,7 @@ return [
     'orig_department_code' => 'Dept. Origem',
     'orig_deposit_code' => 'Dep. Origem',
     'dest_department_code' => 'Dept. Destino',
-    'dest_deposit_code' => 'Dep. Origem',
+    'dest_deposit_code' => 'Dep. Destino',
     'reset_stock' => 'Zera Saldo',
     'export_erp' => 'Exportar ERP',
     'document_type_code' => 'Tipo de Documento Gerado',
@@ -227,6 +228,7 @@ return [
     'logical_deposit' => 'Deposito Lógico',
     'active' => 'Ativo',
     'inactive' => 'Inativo',
+    'val_integer' => 'Num. Inteiro',
     
     //PlaceHolders
     'sel_type' => 'Selecione um tipo: ',

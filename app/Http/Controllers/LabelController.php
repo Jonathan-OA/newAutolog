@@ -50,7 +50,9 @@ class LabelController extends AppBaseController
         //Valida se usuário possui permissão para acessar esta opção
         if(App\Models\User::getPermission('labels_add',Auth::user()->user_type_code)){
 
-            return view('labels.create');
+            //Pega os status de etiqueta
+            $status = App\Models\LabelStatus::getLabelStatus();
+            return view('labels.create')->with('statusl',$status);
 
         }else{
             //Sem permissão

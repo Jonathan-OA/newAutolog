@@ -22,11 +22,26 @@ $(document).ready(function() {
 
     var id = "";
 
+    function split(val) {
+        return val.split(/,\s*/);
+    }
+
+    function extractLast(term) {
+        return split(term).pop();
+    }
+
     //Autocomplete
     //Para funcionar em mais de um campo na mesma tela deve seguir a nomenclatura de id:autocomplete1, autocomplete2, etc.
-    $('[id^=autocomplete]').autocomplete({
+    $('[id^=autocomplete]').bind("keydown", function(event) {
+        if (event.keyCode === $.ui.keyCode.TAB &&
+            $(this).autocomplete("instance").menu.active) {
+            event.preventDefault();
+        }
+    }).autocomplete({
+        minLength: 0,
         source: function(request, response) {
             id = this.element.attr('id');
+            campo = this.element.attr('name');
             var table = $('#' + id).attr('table');
             //Valida se este input esta atrelado ao valor de um input anterior para buscar como filtro 
             //Tag: id_dep (Contendo o id do input atrelado)
@@ -40,6 +55,7 @@ $(document).ready(function() {
                 var valDepend = '';
                 var tableDep = '';
             }
+
             //Se o input esta com readonly, não lista as opções
             var attr = $('#' + id).attr("readonly");
             if (typeof attr == typeof undefined || attr === false) {
@@ -47,10 +63,11 @@ $(document).ready(function() {
                     url: APP_URL + "/search",
                     dataType: "json",
                     data: {
-                        term: request.term,
+                        term: extractLast(request.term),
                         table: table,
                         tableDep: tableDep,
-                        valDep: valDepend
+                        valDep: valDepend,
+                        field: campo
                     },
                     success: function(data) {
                         response(data);
@@ -59,14 +76,30 @@ $(document).ready(function() {
                 });
             }
         },
-        minLength: 0,
         select: function(event, ui) {
-            $('#' + id).val(ui.item.code);
+            //Se possui o  atributo multiple, permite buscar mais de uma opção
+            var mult = $('#' + id).attr("multiple");
+
+            if (typeof mult != typeof undefined || mult === true) {
+                //Faz os ajustes para multiplos valores
+                var terms = split(this.value);
+                terms.pop();
+                terms.push(ui.item.value);
+                // add placeholder to get the comma-and-space at the end
+                terms.push("");
+                this.value = terms.join(", ");
+                return false;
+            } else {
+                $('#' + id).val(ui.item.code);
+            }
             $("[id_dep='" + id + "']").attr("readonly", false);
 
         }
     }).focus(function() {
         //Ao focar, mostra a listagem completa
+        $(this).autocomplete("search");
+    }).click(function() {
+        //Ao clicar, mostra a listagem completa
         $(this).autocomplete("search");
     });
 

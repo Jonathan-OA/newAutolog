@@ -11,7 +11,6 @@
                 <th class="th_grid">@lang('models.description') </th>
                 <th class="th_grid">@lang('models.local') </th>
                 <th class="th_grid">@lang('models.writes_log') </th>
-                <th class="th_grid">@lang('models.enabled') </th>
                 <th class="th_grid">@lang('models.action')</th>
             </thead>
             <tbody>
@@ -25,7 +24,6 @@
                     <td >{!! $operation->description !!}</td>
                     <td >{!! $operation->local !!}</td>
                     <td >{!! $operation->writes_log !!}</td>
-                    <td >{!! $operation->enabled !!}</td>
                     <td></td>
                 </tr>
             @endforeach

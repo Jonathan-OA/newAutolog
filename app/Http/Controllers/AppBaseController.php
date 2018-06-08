@@ -45,9 +45,18 @@ class AppBaseController extends Controller
     public function autocomplete(){
 
         //Busca na tabela $table os registros com o código $term e o filtro $valDep (Caso seja um valor atrelado)
-        $term = Input::get('term');
-        $table = Input::get('table');
-        $tableDep = Input::get('tableDep');
+        $term = Input::get('term'); //String de pesquisa
+        $table = Input::get('table'); //Tabela Atual
+        $tableDep = Input::get('tableDep'); //Valor de um input dependente
+        $field = (trim($tableDep) == '')? 'code' : Input::get('field'); //Nome do Campo de Busca
+        
+        //Caso seja campos de Origem/Destino, considera o campo code
+        if(strpos($field,'orig') !== false || strpos($field,'dest') !== false ){
+            $field = 'code';
+        }elseif(strpos($field,'prev') !== false){
+            $field = substr($field,5);
+        }
+
         $GLOBALS['valDep'] = Input::get('valDep');
         $GLOBALS['campoDep'] = substr($tableDep,0,-1).'_code';
 
@@ -56,7 +65,7 @@ class AppBaseController extends Controller
         //Só busca caso a tabela tenha o campo Company_Id
         $GLOBALS['hasComp'] = (Schema::hasColumn($table, 'company_id'))?1:0;
         $queries = DB::table($table)
-            ->where('code', 'LIKE', '%'.$term.'%')
+            ->where($field, 'LIKE', '%'.$term.'%')
             ->where(function ($query) {
                         if($GLOBALS['hasComp'] == 1){
                             $query->where('company_id',Auth::user()->company_id);
@@ -68,6 +77,7 @@ class AppBaseController extends Controller
                         $query->where($GLOBALS['campoDep'],$GLOBALS['valDep']);
                     }
             })
+            ->orderBy($field, 'asc')
             ->take(12)->get();
 
         //Se tiver o campo descrição na tabela, concatena na label
@@ -76,7 +86,7 @@ class AppBaseController extends Controller
         foreach ($queries as $query)
         {
             $desc = ($hasDesc == 1)? ' - '.$query->description : '';
-            $results[] = [ 'id' => $query->id, 'value' => $query->code, 'label' => $query->code.$desc ];
+            $results[] = [ 'id' => $query->id, 'value' => $query->$field, 'label' => $query->$field.$desc ];
         }
         
         return Response::json($results);

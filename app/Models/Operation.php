@@ -68,10 +68,15 @@ class Operation extends Model
      *
      * Função utilizada para preencher os inputs do tipo SELECT
      */
-    public static function getOperations($module = ' '){
+    public static function getOperations($tipo = '', $module = ' '){
         return Operation::selectRaw("code,CONCAT(code,' - ',description) as description_f")
                         ->where('enabled', '1')
                         ->where('module', '<>', ' ')
+                        ->where(function ($query) {
+                            if(trim($tipo) <> ''){
+                                $query->where('type',$tipo);
+                            }
+                        })
                         ->pluck('description_f','code');
     }
 

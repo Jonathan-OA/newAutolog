@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Label;
+use Auth;
 
 class CreateLabelRequest extends FormRequest
 {
@@ -27,13 +28,17 @@ class CreateLabelRequest extends FormRequest
     {
         return [ 
             'barcode' => 'required|string|unique:labels,barcode,NULL,id,company_id,'.Auth::user()->company_id.'|max:40',
-            'company_id' => 'nullable|integer|exists:company_id,id,company_id,'.Auth::user()->company_id.'',
+            'company_id' => 'required|integer|exists:companies,id',
             'product_code' => 'required|string|exists:products,code,company_id,'.Auth::user()->company_id.'|max:40',
             'qty' => 'required|numeric|between:0,9999999999.999999',
             'uom_code' => 'required|string|exists:uoms,code|max:6',
             'prev_qty' => 'required|numeric|between:0,9999999999.999999',
             'prev_uom_code' => 'required|string|exists:uoms,code|max:6',
-            'label_status_id' => 'required|digit|exists:label_status,id|max:2',
+            'label_status_id' => 'required|integer|exists:label_status,id',
+            'document_id' => 'nullable|integer|exists:documents,id,company_id,'.Auth::user()->company_id,
+            'document_item_id' => 'nullable|integer|exists:document_items,id,company_id,'.Auth::user()->company_id,
+            'task_id' => 'nullable|integer|exists:tasks,id,company_id,'.Auth::user()->company_id,
+            'origin' => 'nullable|integer|exists:labels,id,company_id,'.Auth::user()->company_id
             ];
     }
 }

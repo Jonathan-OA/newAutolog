@@ -88,6 +88,8 @@ return [
     'permission'              => 'Ooopss! Você não tem permissão para acessar esta opção!',
     'loged'                   => 'Usuário já esta logado!',
     'qty_users'               => 'Limite de usuários ativos foi atingido!',
+    'except'                  => 'Exceto: ',
+    'val_error'    => 'Erro ao inserir registro.',
 
     /*
     |--------------------------------------------------------------------------
@@ -138,11 +140,17 @@ return [
         'conf_due_date' => 'Confirma Data de Validade',
         'level' => 'Nível',
         'uom_code' => 'Unidade de Medida',
+        'prev_uom_code' => 'Unidade de Medida',
         'create_label' => 'Cria Etiqueta',
         'barcode' => 'Barcode',
         'name' => 'Nome',
         'trading_name' => 'Nome Fantasia',
-        'active' => 'Ativo'
+        'orig_department_code' => 'Departamento Origem',
+        'orig_deposit_code' => 'Depósito Origem',
+        'dest_department_code' => 'Departamento Destino',
+        'dest_deposit_code' => 'Depósito Destino',
+        'operation_code'    => 'Operação',
+        'document_type_code'  => 'Tipo de Documento'
     ],
 
 ];

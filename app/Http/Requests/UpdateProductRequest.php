@@ -27,7 +27,7 @@ class UpdateProductRequest extends FormRequest
     public function rules()
     {
         return [ 
-            'code' => 'required|string|unique:products,code,NULL,id,company_id,'.Auth::user()->company_id.'|max:40',
+            'code' => 'required|string|exists:products,code,company_id,'.Auth::user()->company_id.'|max:40',
             'description' => 'required|string|max:100',
             'status' => 'required|integer|in:0,1',
             'product_type_code' => 'required|exists:product_types,code',

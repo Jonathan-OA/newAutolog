@@ -207,3 +207,7 @@ Route::resource('allowedTransfers', 'AllowedTransferController');
 
 Route::get('allowedTransfers/datatable', 'AllowedTransferController@getData');
 Route::resource('allowedTransfers', 'AllowedTransferController');
+
+
+Route::get('labelStatus/datatable', 'LabelStatusController@getData');
+Route::resource('labelStatus', 'LabelStatusController');

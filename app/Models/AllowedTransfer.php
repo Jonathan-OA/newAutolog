@@ -90,5 +90,19 @@ class AllowedTransfer extends Model
                       ->pluck('description_f','code');
     }
 
+    //Valida se a regra de trânsferencia já existe
+    public static function extAllowedTransfer($transf){
+        
+        $exists = AllowedTransfer::where('company_id', Auth::user()->company_id)
+                                 ->where('orig_department_code', $transf['orig_department_code'])
+                                 ->where('orig_deposit_code', $transf['orig_deposit_code'])
+                                 ->where('dest_department_code', $transf['dest_department_code'])
+                                 ->where('dest_deposit_code', $transf['dest_deposit_code'])
+                                 ->where('operation_code', $transf['operation_code'])
+                                 ->count();
+        
+        return $exists;
+
+    }
 
 }

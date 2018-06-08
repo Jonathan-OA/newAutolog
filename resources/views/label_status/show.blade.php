@@ -3,15 +3,15 @@
 @section('content')
     <section class="content-header">
         <h1>
-            Volume Status
+            Label Status
         </h1>
     </section>
     <div class="content">
         <div class="box box-primary">
             <div class="box-body">
                 <div class="row" style="padding-left: 20px">
-                    @include('volume_status.show_fields')
-                    <a href="{!! route('volumeStatus.index') !!}" class="btn btn-default">Back</a>
+                    @include('label_status.show_fields')
+                    <a href="{!! route('labelStatus.index') !!}" class="btn btn-default">Back</a>
                 </div>
             </div>
         </div>

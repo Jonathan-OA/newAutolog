@@ -19,7 +19,7 @@
 
 <!-- Level Field -->
 {!! Form::label('level', Lang::get('models.level').':') !!}
-{!! Form::number('level', null, ['class' => 'form-control', 'min' => 0]) !!}
+{!! Form::select('level', array('1' => '1 - Dirigido', '2' => '2 - Passivo'), null, ['class' => 'form-control']) !!}
 
 <!-- Action Field -->
 {!! Form::label('action', Lang::get('models.action').':') !!}
@@ -36,11 +36,25 @@
 
 <!-- Writes Log Field -->
 {!! Form::label('writes_log', Lang::get('models.writes_log').':') !!}
-{!! Form::select('writes_log', array('1' => 'Sim', '0' => 'Não'), null, ['class' => 'form-control']) !!}
+<div class="onoffswitch">
+    <input type="hidden" name="writes_log"  value="0" >
+    {{ Form::checkbox('writes_log', 1, (!empty($operation->writes_log)) ? $operation->writes_log : 0 ,['class' => 'onoffswitch-checkbox', 'id' => 'writes_log']) }}
+    <label class="onoffswitch-label" for="writes_log">
+        <span class="onoffswitch-inner"></span>
+        <span class="onoffswitch-switch"></span>
+    </label>
+</div>
 
 <!-- Enabled Field -->
 {!! Form::label('enabled', Lang::get('models.enabled').':') !!}
-{!! Form::select('enabled', array('1' => 'Sim', '0' => 'Não'), null, ['class' => 'form-control']) !!}
+<div class="onoffswitch">
+    <input type="hidden" name="enabled"  value="0" >
+    {{ Form::checkbox('enabled', 1, (!empty($operation->enabled)) ? $operation->enabled : 0 ,['class' => 'onoffswitch-checkbox', 'id' => 'enabled']) }}
+    <label class="onoffswitch-label" for="enabled">
+        <span class="onoffswitch-inner"></span>
+        <span class="onoffswitch-switch"></span>
+    </label>
+</div>
 </div>
 
 <!-- Submit Field -->

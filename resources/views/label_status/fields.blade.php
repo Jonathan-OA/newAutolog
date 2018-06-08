@@ -11,4 +11,4 @@
 
 <!-- Submit Field -->
 {!! Form::submit(Lang::get('buttons.save'), ['class' => 'btn btn-primary']) !!}
-<a href="{!! route('palletStatus.index') !!}" class="btn btn-default">@lang('buttons.cancel')</a>
+<a href="{!! route('labelStatus.index') !!}" class="btn btn-default">@lang('buttons.cancel')</a>

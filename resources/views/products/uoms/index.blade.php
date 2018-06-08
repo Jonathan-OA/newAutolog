@@ -59,13 +59,21 @@
                 }
             },
             columns: [ { data: 'code' },
-                { data: 'description' },
-               
+                       { data: 'description' },
+                       { data: 'val_integer', className: 'td_center'},
                        { data: null,
                          className: "th_grid",
                          defaultContent: "<button id='edit' aria-label='@lang('buttons.edit')' data-microtip-position='left' role='tooltip' ><img class='icon' src='{{asset('/icons/editar.png') }}'></button><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='{{asset('/icons/remover.png') }}'></button>",
                          width: "90px" 
                         }],
+            "rowCallback": function( row, data, index ) {
+                    //Se ativo, coloca icone de habilitado
+                    if ( data.val_integer == 1 ) {
+                        $('td:eq(2)', row).html( "<img class='icon' src='{{asset('/icons/checked.png') }}'>" );
+                    }else{
+                        $('td:eq(2)', row).html('');
+                    }
+            }
       });
 
       //Funções dos botões de editar e excluir

@@ -22,7 +22,13 @@
 
 <!-- Operation Code Field -->
 {!! Form::label('operation_code', Lang::get('models.operation_code').':') !!}
-{!! Form::text('operation_code', null, ['class' => 'form-control', 'id' => 'autocomplete4', 'table' => 'operations']) !!}
+
+@if(isset($action) && $action == 'edit')
+    <!-- Se ação == Editar, não permite selecionar multiplos valores no campo. Só aceita na inserção. -->
+    {!! Form::text('operation_code', null, ['class' => 'form-control', 'id' => 'autocomplete4', 'table' => 'operations']) !!}
+@else
+    {!! Form::text('operation_code', null, ['class' => 'form-control', 'id' => 'autocomplete4', 'table' => 'operations', 'multiple']) !!}
+@endif
 
 <!-- Document Type Code Field -->
 {!! Form::label('document_type_code', Lang::get('models.document_type_code').':') !!}

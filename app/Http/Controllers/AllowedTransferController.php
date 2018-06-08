@@ -69,10 +69,25 @@ class AllowedTransferController extends AppBaseController
     public function store(CreateAllowedTransferRequest $request)
     {
         $input = $request->all();
+        $msg = ' - '.Lang::get('validation.except');
+        $operations = explode(',',substr($input['operation_code'],0,-1));
+        $success = 0;
+        //Loop para inserir uma Trânsferencia para cada operação selecionada
+        foreach($operations as $oper){
+            $input['operation_code'] = $oper;
+            if(App\Models\AllowedTransfer::extAllowedTransfer($input) == 0){
+                $success = 1;
+                $allowedTransfer = $this->allowedTransferRepository->create($input);
+            }else{
+                //Concatena a mensagem de erro indicando quais Operações não foram incluídas
+                $msg.="$oper,"; 
+            }
+        }
 
-        $allowedTransfer = $this->allowedTransferRepository->create($input);
-
-        Flash::success(Lang::get('validation.save_success'));
+        if($success == 1)
+            Flash::success(Lang::get('validation.save_success').substr($msg,0,-1));
+        else
+            Flash::error(Lang::get('validation.val_error'));
 
         return redirect(route('allowedTransfers.index'));
     }

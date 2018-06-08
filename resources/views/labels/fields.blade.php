@@ -10,31 +10,27 @@
 
 <!-- Product Code Field -->
 {!! Form::label('product_code', Lang::get('models.product_code').':') !!}
-{!! Form::text('product_code', null, ['class' => 'form-control']) !!}
+{!! Form::text('product_code', null, ['class' => 'form-control', 'id' => 'autocomplete', 'table' => 'products']) !!}
 
 <!-- Qty Field -->
 {!! Form::label('qty', Lang::get('models.qty').':') !!}
-{!! Form::number('qty', null, ['class' => 'form-control']) !!}
+{!! Form::number('qty', null, ['class' => 'form-control','step' => '0.000001', 'placeholder' => '0,000000']) !!}
 
 <!-- Uom Code Field -->
 {!! Form::label('uom_code', Lang::get('models.uom_code').':') !!}
-{!! Form::text('uom_code', null, ['class' => 'form-control']) !!}
+{!! Form::text('uom_code', null, ['class' => 'form-control','id' => 'autocomplete1', 'table' => 'packings','id_dep' => 'autocomplete','readonly']) !!}
 
 <!-- Prev Qty Field -->
 {!! Form::label('prev_qty', Lang::get('models.prev_qty').':') !!}
-{!! Form::number('prev_qty', null, ['class' => 'form-control']) !!}
+{!! Form::number('prev_qty', null, ['class' => 'form-control','step' => '0.000001', 'placeholder' => '0,000000']) !!}
 
 <!-- Prev Uom Code Field -->
 {!! Form::label('prev_uom_code', Lang::get('models.prev_uom_code').':') !!}
-{!! Form::text('prev_uom_code', null, ['class' => 'form-control']) !!}
+{!! Form::text('prev_uom_code', null, ['class' => 'form-control','id' => 'autocomplete2', 'table' => 'packings','id_dep' => 'autocomplete','readonly']) !!}
 
-<!-- Document Id Field -->
-{!! Form::label('document_id', Lang::get('models.document_id').':') !!}
-{!! Form::number('document_id', null, ['class' => 'form-control']) !!}
-
-<!-- Document Item Id Field -->
-{!! Form::label('document_item_id', Lang::get('models.document_item_id').':') !!}
-{!! Form::number('document_item_id', null, ['class' => 'form-control']) !!}
+<!-- Label Status Id Field -->
+{!! Form::label('label_status_id', Lang::get('models.label_status_id').':') !!}
+{!! Form::select('label_status_id', $statusl, null, ['class' => 'form-control']) !!}
 
 <!-- Origin Field -->
 {!! Form::label('origin', Lang::get('models.origin').':') !!}
@@ -76,21 +72,9 @@
 {!! Form::label('critical_date3', Lang::get('models.critical_date3').':') !!}
 {!! Form::date('critical_date3', null, ['class' => 'form-control']) !!}
 
-<!-- Label Status Id Field -->
-{!! Form::label('label_status_id', Lang::get('models.label_status_id').':') !!}
-{!! Form::number('label_status_id', null, ['class' => 'form-control']) !!}
-
 <!-- Level Field -->
 {!! Form::label('level', Lang::get('models.level').':') !!}
 {!! Form::number('level', null, ['class' => 'form-control']) !!}
-
-<!-- Travel Id Field -->
-{!! Form::label('travel_id', Lang::get('models.travel_id').':') !!}
-{!! Form::number('travel_id', null, ['class' => 'form-control']) !!}
-
-<!-- Task Id Field -->
-{!! Form::label('task_id', Lang::get('models.task_id').':') !!}
-{!! Form::number('task_id', null, ['class' => 'form-control']) !!}
 
 <!-- Layout Code Field -->
 {!! Form::label('layout_code', Lang::get('models.layout_code').':') !!}
