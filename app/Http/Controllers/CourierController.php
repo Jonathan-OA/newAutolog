@@ -36,7 +36,7 @@ class CourierController extends AppBaseController
         $this->courierRepository->pushCriteria(new RequestCriteria($request));
         $couriers = $this->courierRepository->all();
 
-        return view('couriers.index')
+        return view('partners.couriers.index')
             ->with('couriers', $couriers);
     }
 
@@ -50,7 +50,7 @@ class CourierController extends AppBaseController
         //Valida se usuário possui permissão para acessar esta opção
         if(App\Models\User::getPermission('couriers_add',Auth::user()->user_type_code)){
 
-            return view('couriers.create');
+            return view('partners.couriers.create');
 
         }else{
             //Sem permissão
@@ -94,7 +94,7 @@ class CourierController extends AppBaseController
             return redirect(route('couriers.index'));
         }
 
-        return view('couriers.show')->with('courier', $courier);
+        return view('partners.couriers.show')->with('courier', $courier);
     }
 
     /**
@@ -117,7 +117,7 @@ class CourierController extends AppBaseController
                 return redirect(route('couriers.index'));
             }
 
-            return view('couriers.edit')->with('courier', $courier);
+            return view('partners.couriers.edit')->with('courier', $courier);
         
         }else{
             //Sem permissão

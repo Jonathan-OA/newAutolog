@@ -4,9 +4,15 @@
     <div class="row">
         <div class="col-md-12 pad-ct">
             <div class="panel panel-default" >
-                <div class="panel-heading">
-                   <!-- Texto baseado no arquivo de linguagem -->
-                   @lang('models.vehicles') 
+                <div class="panel-heading ptabs">
+                    <!-- Abas -->
+                    <ul class="nav nav-tabs">
+                        <!-- Textos baseados no arquivo de linguagem -->
+                        <li><a href="{!! route('customers.index') !!}">@lang('models.customers') </a></li>
+                        <li><a href="{!! route('suppliers.index') !!}">@lang('models.suppliers')</a></li>
+                        <li class="active-l"><a href="#">@lang('models.couriers')</a></li>
+                        <li><a href="{!! route('vehicles.index') !!}">@lang('models.vehicles')</a></li>
+                    </ul>
                 </div>
                 <div class="panel panel-default">
                     <div class="row">
@@ -15,10 +21,10 @@
                             @include('flash::message')
                             <div id="msg_excluir"></div>
                             <div class="row buttons_grid">
-                                <a class="btn btn-success"  href="{!! route('vehicles.create') !!}">@lang('buttons.add')</a>
+                                <a class="btn btn-success"  href="{!! route('couriers.create') !!}">@lang('buttons.add')</a>
                             </div>
                             <div class="panel-body">
-                                @include('vehicles.table')
+                                @include('partners.couriers.table')
                             </div>
                         </div>
                     </div>
@@ -33,10 +39,10 @@
     $(function() {
         
         //Parâmetros para criação da datatable
-        table = $("#vehicles-table").DataTable({
+        table = $("#couriers-table").DataTable({
             scrollX: true,
             scrollY: "47vh",
-            ajax: 'vehicles/datatable',
+            ajax: 'couriers/datatable',
             autoWidth: true,
             fixedColumns:   {
                 leftColumns: 0,
@@ -53,12 +59,11 @@
                     sPrevious: "@lang('models.previous')",
                 }
             },
-            columns: [ { data: 'company_id' },
-                { data: 'courier_id' },
-                { data: 'vehicle_type_id' },
-                { data: 'number_plate' },
-               
-                       { data: null,
+            columns: [  { data: 'code' },
+                        { data: 'name' },
+                        { data: 'trading_name' },
+                        { data: 'cnpj' },
+                        { data: null,
                          className: "th_grid",
                          defaultContent: "<button id='edit' aria-label='@lang('buttons.edit')' data-microtip-position='left' role='tooltip' ><img class='icon' src='{{asset('/icons/editar.png') }}'></button><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='{{asset('/icons/remover.png') }}'></button>",
                          width: "90px" 
@@ -66,19 +71,19 @@
       });
 
       //Funções dos botões de editar e excluir
-      $('#vehicles-table tbody').on( 'click', 'button', function () {
+      $('#couriers-table tbody').on( 'click', 'button', function () {
             var data = table.row( $(this).parents('tr') ).data();
             var id = $(this).attr('id');
             if(id == 'edit'){
                 //Editar Registro
-                window.location.href = "{!! URL::to('vehicles/"+data.id+"/edit') !!}";
+                window.location.href = "{!! URL::to('couriers/"+data.id+"/edit') !!}";
             }else{
                 //Excluir Registro
                 if(confirm('@lang("buttons.msg_remove")')){
                     //Token obrigatório para envio POST
                     var tk = $('meta[name="csrf-token"]').attr('content');
                     $.ajax({
-                        url: 'vehicles/'+data.id,
+                        url: 'couriers/'+data.id,
                         type: 'post',
                         data: {_method: 'delete', _token :tk},
                         success: function(scs){ 

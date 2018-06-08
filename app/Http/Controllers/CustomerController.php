@@ -36,7 +36,7 @@ class CustomerController extends AppBaseController
         $this->customerRepository->pushCriteria(new RequestCriteria($request));
         $customers = $this->customerRepository->all();
 
-        return view('customers.index')
+        return view('partners.customers.index')
             ->with('customers', $customers);
     }
 
@@ -50,7 +50,7 @@ class CustomerController extends AppBaseController
         //Valida se usuário possui permissão para acessar esta opção
         if(App\Models\User::getPermission('customers_add',Auth::user()->user_type_code)){
 
-            return view('customers.create');
+            return view('partners.customers.create');
 
         }else{
             //Sem permissão
@@ -94,7 +94,7 @@ class CustomerController extends AppBaseController
             return redirect(route('customers.index'));
         }
 
-        return view('customers.show')->with('customer', $customer);
+        return view('partners.customers.show')->with('customer', $customer);
     }
 
     /**
@@ -117,7 +117,7 @@ class CustomerController extends AppBaseController
                 return redirect(route('customers.index'));
             }
 
-            return view('customers.edit')->with('customer', $customer);
+            return view('partners.customers.edit')->with('customer', $customer);
         
         }else{
             //Sem permissão

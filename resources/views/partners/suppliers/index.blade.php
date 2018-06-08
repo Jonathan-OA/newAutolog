@@ -4,9 +4,15 @@
     <div class="row">
         <div class="col-md-12 pad-ct">
             <div class="panel panel-default" >
-                <div class="panel-heading">
-                   <!-- Texto baseado no arquivo de linguagem -->
-                   @lang('models.couriers') 
+                <div class="panel-heading ptabs">
+                    <!-- Abas -->
+                    <ul class="nav nav-tabs">
+                        <!-- Textos baseados no arquivo de linguagem -->
+                        <li><a href="{!! route('customers.index') !!}">@lang('models.customers') </a></li>
+                        <li class="active-l"><a href="#">@lang('models.suppliers')</a></li>
+                        <li><a href="{!! route('couriers.index') !!}">@lang('models.couriers')</a></li>
+                        <li><a href="{!! route('vehicles.index') !!}">@lang('models.vehicles')</a></li>
+                    </ul>
                 </div>
                 <div class="panel panel-default">
                     <div class="row">
@@ -15,10 +21,10 @@
                             @include('flash::message')
                             <div id="msg_excluir"></div>
                             <div class="row buttons_grid">
-                                <a class="btn btn-success"  href="{!! route('couriers.create') !!}">@lang('buttons.add')</a>
+                                <a class="btn btn-success"  href="{!! route('suppliers.create') !!}">@lang('buttons.add')</a>
                             </div>
                             <div class="panel-body">
-                                @include('couriers.table')
+                                @include('partners.suppliers.table')
                             </div>
                         </div>
                     </div>
@@ -33,10 +39,10 @@
     $(function() {
         
         //Parâmetros para criação da datatable
-        table = $("#couriers-table").DataTable({
+        table = $("#suppliers-table").DataTable({
             scrollX: true,
             scrollY: "47vh",
-            ajax: 'couriers/datatable',
+            ajax: 'suppliers/datatable',
             autoWidth: true,
             fixedColumns:   {
                 leftColumns: 0,
@@ -65,19 +71,19 @@
       });
 
       //Funções dos botões de editar e excluir
-      $('#couriers-table tbody').on( 'click', 'button', function () {
+      $('#suppliers-table tbody').on( 'click', 'button', function () {
             var data = table.row( $(this).parents('tr') ).data();
             var id = $(this).attr('id');
             if(id == 'edit'){
                 //Editar Registro
-                window.location.href = "{!! URL::to('couriers/"+data.id+"/edit') !!}";
+                window.location.href = "{!! URL::to('suppliers/"+data.id+"/edit') !!}";
             }else{
                 //Excluir Registro
                 if(confirm('@lang("buttons.msg_remove")')){
                     //Token obrigatório para envio POST
                     var tk = $('meta[name="csrf-token"]').attr('content');
                     $.ajax({
-                        url: 'couriers/'+data.id,
+                        url: 'suppliers/'+data.id,
                         type: 'post',
                         data: {_method: 'delete', _token :tk},
                         success: function(scs){ 

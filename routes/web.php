@@ -65,6 +65,7 @@ Route::resource('userPermissions', 'UserPermissionController');
 
 Route::get('customers/datatable', 'CustomerController@getData');
 Route::resource('customers', 'CustomerController');
+Route::resource('partners', 'CustomerController');
 
 Route::get('suppliers/datatable', 'SupplierController@getData');
 Route::resource('suppliers', 'SupplierController');

@@ -36,7 +36,7 @@ class SupplierController extends AppBaseController
         $this->supplierRepository->pushCriteria(new RequestCriteria($request));
         $suppliers = $this->supplierRepository->all();
 
-        return view('suppliers.index')
+        return view('partners.suppliers.index')
             ->with('suppliers', $suppliers);
     }
 
@@ -50,7 +50,7 @@ class SupplierController extends AppBaseController
         //Valida se usuário possui permissão para acessar esta opção
         if(App\Models\User::getPermission('suppliers_add',Auth::user()->user_type_code)){
 
-            return view('suppliers.create');
+            return view('partners.suppliers.create');
 
         }else{
             //Sem permissão
@@ -94,7 +94,7 @@ class SupplierController extends AppBaseController
             return redirect(route('suppliers.index'));
         }
 
-        return view('suppliers.show')->with('supplier', $supplier);
+        return view('partners.suppliers.show')->with('supplier', $supplier);
     }
 
     /**
@@ -117,7 +117,7 @@ class SupplierController extends AppBaseController
                 return redirect(route('suppliers.index'));
             }
 
-            return view('suppliers.edit')->with('supplier', $supplier);
+            return view('partners.suppliers.edit')->with('supplier', $supplier);
         
         }else{
             //Sem permissão
@@ -174,7 +174,7 @@ class SupplierController extends AppBaseController
             if (empty($supplier)) {
                 Flash::error(Lang::get('validation.not_found'));
 
-                return redirect(route('suppliers.index'));
+                return redirect(route('.suppliers.index'));
             }
 
             $this->supplierRepository->delete($id);

@@ -4,9 +4,15 @@
     <div class="row">
         <div class="col-md-12 pad-ct">
             <div class="panel panel-default" >
-                <div class="panel-heading">
-                   <!-- Texto baseado no arquivo de linguagem -->
-                   @lang('models.suppliers') 
+                <div class="panel-heading ptabs">
+                    <!-- Abas -->
+                    <ul class="nav nav-tabs">
+                        <!-- Textos baseados no arquivo de linguagem -->
+                        <li class="active-l"><a href="#">@lang('models.customers') </a></li>
+                        <li><a href="{!! route('suppliers.index') !!}">@lang('models.suppliers')</a></li>
+                        <li><a href="{!! route('couriers.index') !!}">@lang('models.couriers')</a></li>
+                        <li><a href="{!! route('vehicles.index') !!}">@lang('models.vehicles')</a></li>
+                    </ul>
                 </div>
                 <div class="panel panel-default">
                     <div class="row">
@@ -15,10 +21,10 @@
                             @include('flash::message')
                             <div id="msg_excluir"></div>
                             <div class="row buttons_grid">
-                                <a class="btn btn-success"  href="{!! route('suppliers.create') !!}">@lang('buttons.add')</a>
+                                <a class="btn btn-success"  href="{!! route('customers.create') !!}">@lang('buttons.add')</a>
                             </div>
                             <div class="panel-body">
-                                @include('suppliers.table')
+                                @include('partners.customers.table')
                             </div>
                         </div>
                     </div>
@@ -33,15 +39,11 @@
     $(function() {
         
         //Parâmetros para criação da datatable
-        table = $("#suppliers-table").DataTable({
+        table = $("#customers-table").DataTable({
             scrollX: true,
             scrollY: "47vh",
-            ajax: 'suppliers/datatable',
+            ajax: 'customers/datatable',
             autoWidth: true,
-            fixedColumns:   {
-                leftColumns: 0,
-                rightColumns: 1
-            },
             "oLanguage": {
                 sLengthMenu: "@lang('models.show') _MENU_ @lang('models.entries')",
                 sSearch: "<img class='icon-s' src='{{asset('/icons/buscar.png') }}'>",
@@ -53,31 +55,36 @@
                     sPrevious: "@lang('models.previous')",
                 }
             },
+            fixedColumns:   {
+                leftColumns: 0,
+                rightColumns: 1
+            },
             columns: [  { data: 'code' },
-                        { data: 'name' },
-                        { data: 'trading_name' },
+                        { data: 'name' ,className: "nowp" },
+                        { data: 'trading_name' ,className: "nowp"},
                         { data: 'cnpj' },
                         { data: null,
                          className: "th_grid",
                          defaultContent: "<button id='edit' aria-label='@lang('buttons.edit')' data-microtip-position='left' role='tooltip' ><img class='icon' src='{{asset('/icons/editar.png') }}'></button><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='{{asset('/icons/remover.png') }}'></button>",
                          width: "90px" 
                         }],
+            
       });
 
       //Funções dos botões de editar e excluir
-      $('#suppliers-table tbody').on( 'click', 'button', function () {
+      $('#customers-table tbody').on( 'click', 'button', function () {
             var data = table.row( $(this).parents('tr') ).data();
             var id = $(this).attr('id');
             if(id == 'edit'){
                 //Editar Registro
-                window.location.href = "{!! URL::to('suppliers/"+data.id+"/edit') !!}";
+                window.location.href = "{!! URL::to('customers/"+data.id+"/edit') !!}";
             }else{
                 //Excluir Registro
                 if(confirm('@lang("buttons.msg_remove")')){
                     //Token obrigatório para envio POST
                     var tk = $('meta[name="csrf-token"]').attr('content');
                     $.ajax({
-                        url: 'suppliers/'+data.id,
+                        url: 'customers/'+data.id,
                         type: 'post',
                         data: {_method: 'delete', _token :tk},
                         success: function(scs){ 

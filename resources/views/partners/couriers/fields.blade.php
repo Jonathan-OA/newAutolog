@@ -8,7 +8,6 @@
     {!! Form::text('code', null, ['class' => 'form-control']) !!}
 @endif
 
-
 <!-- Company Id Field -->
 <input id='company_id' name='company_id' type='hidden' value='{!! Auth::user()->company_id !!}'>
 

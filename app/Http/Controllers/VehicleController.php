@@ -36,7 +36,7 @@ class VehicleController extends AppBaseController
         $this->vehicleRepository->pushCriteria(new RequestCriteria($request));
         $vehicles = $this->vehicleRepository->all();
 
-        return view('vehicles.index')
+        return view('partners.vehicles.index')
             ->with('vehicles', $vehicles);
     }
 
@@ -50,7 +50,7 @@ class VehicleController extends AppBaseController
         //Valida se usuário possui permissão para acessar esta opção
         if(App\Models\User::getPermission('vehicles_add',Auth::user()->user_type_code)){
 
-            return view('vehicles.create');
+            return view('partners.vehicles.create');
 
         }else{
             //Sem permissão
@@ -94,7 +94,7 @@ class VehicleController extends AppBaseController
             return redirect(route('vehicles.index'));
         }
 
-        return view('vehicles.show')->with('vehicle', $vehicle);
+        return view('partners.vehicles.show')->with('vehicle', $vehicle);
     }
 
     /**
@@ -117,7 +117,7 @@ class VehicleController extends AppBaseController
                 return redirect(route('vehicles.index'));
             }
 
-            return view('vehicles.edit')->with('vehicle', $vehicle);
+            return view('partners.vehicles.edit')->with('vehicle', $vehicle);
         
         }else{
             //Sem permissão
