@@ -6,7 +6,7 @@
             <div class="panel panel-default" >
                 <div class="panel-heading">
                    <!-- Texto baseado no arquivo de linguagem -->
-                   @lang('models.stocks') 
+                   @lang('models.blocked_products') 
                 </div>
                 <div class="panel panel-default">
                     <div class="row">
@@ -15,11 +15,10 @@
                             @include('flash::message')
                             <div id="msg_excluir"></div>
                             <div class="row buttons_grid">
-                                <a class="btn btn-success"  href="{!! route('stocks.create') !!}">@lang('buttons.add')</a>
-                                <a class="btn btn-success"  href="entradaManual">Ent. Manual</a>
+                                <a class="btn btn-success"  href="{!! route('blockedProducts.create') !!}">@lang('buttons.add')</a>
                             </div>
                             <div class="panel-body">
-                                @include('stocks.table')
+                                @include('blocked_products.table')
                             </div>
                         </div>
                     </div>
@@ -34,10 +33,10 @@
     $(function() {
         
         //Parâmetros para criação da datatable
-        table = $("#stocks-table").DataTable({
+        table = $("#blockedProducts-table").DataTable({
             scrollX: true,
             scrollY: "47vh",
-            ajax: 'stocks/datatable',
+            ajax: 'blockedProducts/datatable',
             autoWidth: true,
             fixedColumns:   {
                 leftColumns: 0,
@@ -54,16 +53,11 @@
                     sPrevious: "@lang('models.previous')",
                 }
             },
-            columns: [  { data: 'product_code' },
-                        { data: 'label_id' },
-                        { data: 'location_code' },
-                        { data: 'qty' },
-                        { data: 'uom_code' },
-                        { data: 'prev_qty' },
-                        { data: 'prev_uom_code' },
-                        { data: 'pallet_id' },
-                        { data: 'finality_code' },
-                        { data: null,
+            columns: [ { data: 'company_id' },
+                { data: 'operation_code' },
+                { data: 'product_code' },
+               
+                       { data: null,
                          className: "th_grid",
                          defaultContent: "<button id='edit' aria-label='@lang('buttons.edit')' data-microtip-position='left' role='tooltip' ><img class='icon' src='{{asset('/icons/editar.png') }}'></button><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='{{asset('/icons/remover.png') }}'></button>",
                          width: "90px" 
@@ -71,19 +65,19 @@
       });
 
       //Funções dos botões de editar e excluir
-      $('#stocks-table tbody').on( 'click', 'button', function () {
+      $('#blockedProducts-table tbody').on( 'click', 'button', function () {
             var data = table.row( $(this).parents('tr') ).data();
             var id = $(this).attr('id');
             if(id == 'edit'){
                 //Editar Registro
-                window.location.href = "{!! URL::to('stocks/"+data.id+"/edit') !!}";
+                window.location.href = "{!! URL::to('blockedProducts/"+data.id+"/edit') !!}";
             }else{
                 //Excluir Registro
                 if(confirm('@lang("buttons.msg_remove")')){
                     //Token obrigatório para envio POST
                     var tk = $('meta[name="csrf-token"]').attr('content');
                     $.ajax({
-                        url: 'stocks/'+data.id,
+                        url: 'blockedProducts/'+data.id,
                         type: 'post',
                         data: {_method: 'delete', _token :tk},
                         success: function(scs){ 
@@ -108,7 +102,7 @@
                 }
             }
             
-        });
+    });
                     
     });
 

@@ -11,6 +11,8 @@
 |
 */
 
+use App\Models\Product;
+
 Auth::routes();
 
 Route::group(['middleware' => 'web'], function() {
@@ -74,6 +76,10 @@ Route::get('packingTypes/datatable', 'PackingTypeController@getData');
 Route::resource('packingTypes', 'PackingTypeController');
 
 Route::get('products/datatable', 'ProductController@getData');
+Route::get('products/val/{barcode}', function($barcode) {
+    return Product::valProduct($barcode);
+});
+
 Route::resource('products', 'ProductController');
 
 Route::get('productTypes/datatable', 'ProductTypeController@getData');
@@ -130,6 +136,7 @@ Route::get('labels/datatable', 'LabelController@getData');
 Route::resource('labels', 'LabelController');
 
 Route::get('stocks/datatable', 'StockController@getData');
+Route::view('entradaManual', 'stocks.entradaManual');
 Route::resource('stocks', 'StockController');
 
 Route::get('finalities/datatable', 'FinalityController@getData');
@@ -212,3 +219,7 @@ Route::resource('allowedTransfers', 'AllowedTransferController');
 
 Route::get('labelStatus/datatable', 'LabelStatusController@getData');
 Route::resource('labelStatus', 'LabelStatusController');
+
+
+Route::get('blockedProducts/datatable', 'BlockedProductController@getData');
+Route::resource('blockedProducts', 'BlockedProductController');

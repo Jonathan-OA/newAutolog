@@ -211,4 +211,16 @@ class StockController extends AppBaseController
     {
         return DataTables::of(App\Models\Stock::where('company_id', Auth::user()->company_id))->make(true);
     }
+
+    
+    public function entradaManual()
+    {
+        $result =  App\Models\Product::valProduct('PRD01');
+        if($result){
+            print_r($result);
+        }else{
+            echo 'Produto Inválido';
+        }
+        
+    }
 }

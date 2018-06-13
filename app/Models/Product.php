@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Eloquent as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Auth;
+use DB;
+
 
 /**
  * Class Product
@@ -75,12 +78,88 @@ class Product extends Model
     public static $rules = [];
 
     /**
-     * Função que valida o código de produto lido
-     *
+     * Função que valida o código de produto lido (Retorna o array com as informações ou false caso não encontre o item)
+     * Parâmetros: Barcode a ser procurado e o ID da empresa / filial logada
      * @var array
      */
 
-    public static function validaProduto (){
+    public static function valProduct( $barcode, $company_id = ''){
+        //Barcode pode ser uma etiqueta, barcode da prdemb ou código do produto
+        //Caso seja uma etiqueta, o status tem q ser diferente de 9
+        $company_id = (trim($company_id == ''))?Auth::user()->company_id: $company_id;
+        $infos = DB::table('labels')->join('products', function ($join) {
+                                        $join->on('products.code', '=', 'labels.product_code')
+                                             ->whereColumn ('products.company_id','labels.company_id');
+                                    })
+                                    ->join('packings', function ($join) {
+                                        $join->on('labels.product_code', '=', 'packings.product_code')
+                                             ->whereColumn('labels.uom_code','packings.uom_code')
+                                             ->whereColumn ('labels.company_id','packings.company_id');
+                                    })
+                                    ->where([
+                                        ['labels.company_id', $company_id],
+                                        ['labels.barcode', '=', $barcode],
+                                        ['labels.label_status_id', '<>', 9]
+                                    ])
+                                    ->orWhere('labels.id', (int)$barcode)
+                                    ->select('labels.id as label_id', 'labels.product_code','products.description','labels.qty','labels.uom_code',
+                                             'labels.prev_qty','labels.prev_uom_code','labels.batch','labels.batch_supplier',
+                                             'labels.serial_number','labels.prod_date','labels.due_date','labels.origin',
+                                             'packings.conf_batch','packings.conf_batch_supplier','packings.conf_serial',
+                                             'packings.conf_due_date','packings.conf_prod_date','labels.label_status_id as label_status',
+                                             'products.group_code', 'products.product_type_code','packings.label_type_code')
+                                    ->get();   
+                                                          
+        if(count($infos) == 0){
+            //Não achou etiqueta com esse código, busca na tabela de embalagens
+            $infos = DB::table('packings')->join('products', function ($join) {
+                                                $join->on('products.code', '=', 'packings.product_code')
+                                                     ->whereColumn ('products.company_id','packings.company_id');
+                              })
+                              ->join('packings as prevL', function ($join) {
+                                        $join->on('products.code', '=', 'prevL.product_code')
+                                             ->whereColumn ('products.company_id','prevL.company_id')
+                                             ->whereColumn ('packings.prev_level','prevL.level')
+                                             ;
+                              })
+                              ->where([
+                                    ['packings.company_id', $company_id],
+                                    ['packings.barcode', '=', $barcode]
+                              ])
+                              ->select( DB::raw('0 as label_id'), 'packings.product_code','products.description',
+                                        DB::raw('1 as qty'),'packings.uom_code','packings.prev_qty','prevL.uom_code as prev_uom_code',
+                                        'packings.conf_batch','packings.conf_batch_supplier','packings.conf_serial',
+                                        'packings.conf_due_date','packings.conf_prod_date',DB::raw("'' as batch"),DB::raw("'' as batch_supplier"),
+                                        DB::raw("'' as serial_number"),DB::raw("'' as prod_date"), DB::raw("'' as due_date"),
+                                        DB::raw("0 as label_status"),'products.group_code', 'products.product_type_code','packings.label_type_code')
+                              ->get();
+
+            if(count($infos) == 0){
+                //Não achou embalagem, procura produto
+                $infos = DB::table('products')->join('packings', function ($join) {
+                                                    $join->on('products.code', '=', 'packings.product_code')
+                                                         ->whereColumn ('products.company_id','packings.company_id')
+                                                         ->where ('packings.level','=','1');
+                                  })
+                                  ->where([
+                                        ['products.company_id', $company_id],
+                                        ['products.code', '=', $barcode]
+                                  ])
+                                  ->select( DB::raw('0 as label_id'), 'packings.product_code','products.description',
+                                         DB::raw('1 as qty'),'packings.uom_code','packings.prev_qty','packings.uom_code as prev_uom_code',
+                                        'packings.conf_batch','packings.conf_batch_supplier','packings.conf_serial',
+                                        'packings.conf_due_date','packings.conf_prod_date',DB::raw("'' as batch"),DB::raw("'' as batch_supplier"),
+                                        DB::raw("'' as serial_number"),DB::raw("'' as prod_date"), DB::raw("'' as due_date"), 
+                                        DB::raw("0 as label_status"),'products.group_code', 'products.product_type_code','packings.label_type_code')
+                                  ->get(); 
+                if(count($infos) == 0){
+                    //Não encontrou registros - Erro
+                    return '0';
+                }
+            }
+        }
+
+        return (array)$infos[0];
 
     }
 

@@ -202,4 +202,5 @@ class ProductTypeController extends AppBaseController
     {
         return DataTables::of(App\Models\ProductType::query())->make(true);
     }
+
 }

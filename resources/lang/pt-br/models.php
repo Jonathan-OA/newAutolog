@@ -233,6 +233,9 @@ return [
     //PlaceHolders
     'sel_type' => 'Selecione um tipo: ',
     'sel_module' => 'Selecione um módulo: ',
+
+    //Gerais
+    'entradaManual' => 'Entrada Manual',   
     
     
 
