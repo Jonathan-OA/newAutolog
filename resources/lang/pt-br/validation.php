@@ -89,7 +89,8 @@ return [
     'loged'                   => 'Usuário já esta logado!',
     'qty_users'               => 'Limite de usuários ativos foi atingido!',
     'except'                  => 'Exceto: ',
-    'val_error'    => 'Erro ao inserir registro.',
+    'val_error'               => 'Erro ao inserir registro.',
+    'cb_error'               => 'Barcode Inválido.',
 
     /*
     |--------------------------------------------------------------------------
