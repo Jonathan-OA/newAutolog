@@ -7,7 +7,6 @@
                 <th class="th_grid">@lang('models.department_code') </th>
                 <th class="th_grid">@lang('models.deposit_type_code') </th>
                 <th class="th_grid">@lang('models.description') </th>
-                <th class="th_grid">@lang('models.status') </th>
                 <th class="th_grid">@lang('models.action')</th>
             </thead>
             <tbody>
@@ -17,7 +16,6 @@
                     <td>{!! $deposit->department_code !!}</td>
                     <td>{!! $deposit->deposit_type_code !!}</td>
                     <td>{!! $deposit->description !!}</td>
-                    <td>{!! $deposit->status !!}</td>
                 </tr>
             @endforeach
             </tbody>

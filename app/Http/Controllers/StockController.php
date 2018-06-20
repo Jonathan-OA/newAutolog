@@ -78,7 +78,7 @@ class StockController extends AppBaseController
             $input = $request->all();
 
             //Valida endereço
-            $retEnd = App\Models\Location::valEnd($input['location_code'], $input['product_code']);
+            $retEnd = App\Models\Location::valEnd($input['location_code'], $input['product_code'], $input['prev_qty']);
             if($retEnd == 0){
                 //Sem erros ao validar o endereço
                 $stock = App\Models\Stock::atuSald($input);

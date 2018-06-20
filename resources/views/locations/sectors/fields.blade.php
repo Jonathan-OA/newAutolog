@@ -23,7 +23,14 @@
 
 <!-- Status Field -->
 {!! Form::label('status', Lang::get('models.status').':') !!}
-{!! Form::select('status', array('1' => 'Ativo', '0' => 'Inativo'), null, ['class' => 'form-control']) !!}
+<div class="onoffswitch">
+    <input type="hidden" name="status"  value="0" >
+    {{ Form::checkbox('status', 1, (!empty($sector->status)) ? $sector->status : 0 ,['class' => 'onoffswitch-checkbox', 'id' => 'status']) }}
+    <label class="onoffswitch-label" for="status">
+        <span class="onoffswitch-inner"></span>
+        <span class="onoffswitch-switch"></span>
+    </label>
+</div>
 </div>
 
 <!-- Submit Field -->

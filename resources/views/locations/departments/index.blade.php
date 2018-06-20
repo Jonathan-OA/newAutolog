@@ -64,19 +64,17 @@
             },
             columns: [  { data: 'code' },
                         { data: 'description' },
-                        { data: 'status' },
                         { data: null,
                          className: "th_grid",
                          defaultContent: "<button id='edit' aria-label='@lang('buttons.edit')' data-microtip-position='left' role='tooltip' ><img class='icon' src='{{asset('/icons/editar.png') }}'></button><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='{{asset('/icons/remover.png') }}'></button>",
                          width: "90px" 
                         }],
             "rowCallback": function( row, data, index ) {
-                              if ( data.status == 1 ) {
-                                $('td:eq(2)', row).html( '<b>Ativo</b>' );
-                              }else if ( data.status == 0 ){
-                                $('td:eq(2)', row).html( 'Inativo' );
-                              }
-                            }
+                //Se esta inativo, coloca a linha com a cor vermelha
+                if ( data.status == 0 ) {
+                    $(row).addClass('redClass');
+                }
+            }
       });
 
       //Funções dos botões de editar e excluir

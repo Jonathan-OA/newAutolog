@@ -8,7 +8,7 @@
                 <th class="th_grid">@lang('models.department_code') </th>
                 <th class="th_grid">@lang('models.deposit_code') </th>
                 <th class="th_grid">@lang('models.sector_code') </th>
-                <th class="th_grid">@lang('models.status') </th>
+                <th class="th_grid">@lang('models.location_type_code') </th>
                 <th class="th_grid">@lang('models.action')</th>
             </thead>
             <tbody>
@@ -19,7 +19,7 @@
                     <td>{!! $location->department_code !!}</td>
                     <td>{!! $location->deposit_code !!}</td>
                     <td>{!! $location->sector_code !!}</td>
-                    <td>{!! $location->status !!}</td>
+                    <td>{!! $location->location_type_code !!}</td>
                 </tr>
             @endforeach
             </tbody>

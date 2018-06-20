@@ -6,15 +6,15 @@
 
 <!-- Department Code Field -->
 {!! Form::label('department_code', Lang::get('models.department_code').':') !!}
-{!! Form::select('department_code', $departments, (!empty($location->department_code)) ? $location->department_code : 'null' , ['class' => 'form-control']) !!}
+{!! Form::text('department_code', null, ['class' => 'form-control','id' => 'autocomplete', 'table' => 'departments']) !!}  
 
 <!-- Deposit Code Field -->
 {!! Form::label('deposit_code', Lang::get('models.deposit_code').':') !!}
-{!! Form::select('deposit_code', $deposits, (!empty($location->deposit_code)) ? $location->deposit_code : 'null', ['class' => 'form-control']) !!}
+{!! Form::text('deposit_code', null, ['class' => 'form-control','id' => 'autocomplete1', 'table' => 'deposits', 'id_dep' => 'autocomplete', 'readonly']) !!}  
 
 <!-- Sector Code Field -->
 {!! Form::label('sector_code', Lang::get('models.sector_code').':') !!}
-{!! Form::select('sector_code', $sectors, (!empty($location->sector_code)) ? $location->sector_code : 'null', ['class' => 'form-control']) !!}
+{!! Form::text('sector_code', null, ['class' => 'form-control','id' => 'autocomplete2', 'table' => 'sectors', 'id_dep' => 'autocomplete1', 'readonly']) !!}  
 
 <!-- Code Field -->
 {!! Form::label('code', Lang::get('models.code').':') !!}
@@ -27,6 +27,17 @@
 <!-- Barcode Field -->
 {!! Form::label('barcode', Lang::get('models.barcode').':') !!}
 {!! Form::text('barcode', null, ['class' => 'form-control']) !!}
+
+<!-- Status Field -->
+{!! Form::label('status', Lang::get('models.status').':') !!}
+<div class="onoffswitch">
+    <input type="hidden" name="status"  value="0" >
+    {{ Form::checkbox('status', 1, (!empty($location->status)) ? $location->status : 0 ,['class' => 'onoffswitch-checkbox', 'id' => 'status']) }}
+    <label class="onoffswitch-label" for="status">
+        <span class="onoffswitch-inner"></span>
+        <span class="onoffswitch-switch"></span>
+    </label>
+</div>
 
 <!-- Aisle Field -->
 {!! Form::label('aisle', Lang::get('models.aisle').':') !!}
@@ -44,9 +55,6 @@
 {!! Form::label('depth', Lang::get('models.depth').':') !!}
 {!! Form::number('depth', null, ['class' => 'form-control']) !!}
 
-<!-- Status Field -->
-{!! Form::label('status', Lang::get('models.status').':') !!}
-{!! Form::select('status', array('1' => 'Ativo', '0' => 'Inativo'), null, ['class' => 'form-control']) !!}
 
 
 <!-- Location Type Code Field -->
@@ -67,7 +75,8 @@
 
 <!-- Label Type Code Field -->
 {!! Form::label('label_type_code', Lang::get('models.label_type_code').':') !!}
-{!! Form::text('label_type_code', null, ['class' => 'form-control']) !!}
+{!! Form::text('label_type_code', null, ['class' => 'form-control','id' => 'autocomplete3', 'table' => 'label_types']) !!}  
+
 
 <!-- Sequence Arm Field -->
 {!! Form::label('sequence_arm', Lang::get('models.sequence_arm').':') !!}
