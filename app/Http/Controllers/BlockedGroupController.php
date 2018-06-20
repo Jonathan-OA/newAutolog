@@ -36,7 +36,7 @@ class BlockedGroupController extends AppBaseController
         $this->blockedGroupRepository->pushCriteria(new RequestCriteria($request));
         $blockedGroups = $this->blockedGroupRepository->all();
 
-        return view('blocked_groups.index')
+        return view('products.blocked_groups.index')
             ->with('blockedGroups', $blockedGroups);
     }
 
@@ -50,7 +50,7 @@ class BlockedGroupController extends AppBaseController
         //Valida se usuário possui permissão para acessar esta opção
         if(App\Models\User::getPermission('blocked_groups_add',Auth::user()->user_type_code)){
 
-            return view('blocked_groups.create');
+            return view('products.blocked_groups.create');
 
         }else{
             //Sem permissão
@@ -94,7 +94,7 @@ class BlockedGroupController extends AppBaseController
             return redirect(route('blockedGroups.index'));
         }
 
-        return view('blocked_groups.show')->with('blockedGroup', $blockedGroup);
+        return view('products.blocked_groups.show')->with('blockedGroup', $blockedGroup);
     }
 
     /**
@@ -117,7 +117,7 @@ class BlockedGroupController extends AppBaseController
                 return redirect(route('blockedGroups.index'));
             }
 
-            return view('blocked_groups.edit')->with('blockedGroup', $blockedGroup);
+            return view('products.blocked_groups.edit')->with('blockedGroup', $blockedGroup);
         
         }else{
             //Sem permissão

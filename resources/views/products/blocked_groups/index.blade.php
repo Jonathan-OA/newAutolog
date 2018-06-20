@@ -4,10 +4,17 @@
     <div class="row">
         <div class="col-md-12 pad-ct">
             <div class="panel panel-default" >
-                <div class="panel-heading">
-                   <!-- Texto baseado no arquivo de linguagem -->
-                   @lang('models.blocked_groups') 
-                </div>
+                <div class="panel-heading ptabs">
+                    <!-- Abas -->
+                    <ul class="nav nav-tabs">
+                         <!-- Textos baseados no arquivo de linguagem -->
+                         <li><a href="{!! route('products.index') !!}">@lang('models.products') </a></li>
+                         <li><a href="{!! route('productTypes.index') !!}">@lang('models.product_types')</a></li>
+                         <li><a href="{!! route('groups.index') !!}">@lang('models.groups')</a></li>
+                         <li><a href="{!! route('uoms.index') !!}">@lang('models.uoms')</a></li>
+                         <li class="active-l"><a href="#">@lang('models.blocked_groups')</a></li>
+                     </ul>
+                 </div>
                 <div class="panel panel-default">
                     <div class="row">
                         <div class="col-md-12">
@@ -18,7 +25,7 @@
                                 <a class="btn btn-success"  href="{!! route('blockedGroups.create') !!}">@lang('buttons.add')</a>
                             </div>
                             <div class="panel-body">
-                                @include('blocked_groups.table')
+                                @include('products.blocked_groups.table')
                             </div>
                         </div>
                     </div>

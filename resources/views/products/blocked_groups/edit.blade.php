@@ -11,7 +11,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 {!! Form::model($blockedGroup, ['route' => ['blockedGroups.update', $blockedGroup->id], 'method' => 'patch']) !!}
-                                  @include('blocked_groups.fields',['action' => "edit"])
+                                  @include('products.blocked_groups.fields',['action' => "edit"])
                                 {!! Form::close() !!}
                             </div>
                         </div>

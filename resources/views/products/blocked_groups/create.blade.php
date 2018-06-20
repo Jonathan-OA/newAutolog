@@ -13,7 +13,7 @@
                             <div class="col-md-12">
                                 {!! Form::open(['route' => 'blockedGroups.store']) !!}
                                 <div class="form-group">
-                                    @include('blocked_groups.fields')
+                                    @include('products.blocked_groups.fields')
                                 </div>
                                 {!! Form::close() !!}
                             </div>

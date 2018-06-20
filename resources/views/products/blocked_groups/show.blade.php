@@ -10,7 +10,7 @@
         <div class="box box-primary">
             <div class="box-body">
                 <div class="row" style="padding-left: 20px">
-                    @include('blocked_groups.show_fields')
+                    @include('products.blocked_groups.show_fields')
                     <a href="{!! route('blockedGroups.index') !!}" class="btn btn-default">Back</a>
                 </div>
             </div>

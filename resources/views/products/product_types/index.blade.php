@@ -12,6 +12,7 @@
                         <li class="active-l"><a href="#">@lang('models.product_types')</a></li>
                         <li><a href="{!! route('groups.index') !!}">@lang('models.groups')</a></li>
                         <li><a href="{!! route('uoms.index') !!}">@lang('models.uoms')</a></li>
+                        <li><a href="{!! route('blockedGroups.index') !!}">@lang('models.blocked_groups')</a></li>
                     </ul>
                 </div>
                 <div class="panel panel-default">
