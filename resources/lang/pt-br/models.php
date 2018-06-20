@@ -68,6 +68,7 @@ return [
     'pallet_status' => 'Status de Paletes',
     'allowed_transfers' => 'Transferências Permitidas',
     'label_status' => 'Status de Etiquetas',
+    'blocked_groups' => 'Grupos Bloqueados por Setor',
 
     //Columns
     'id' => 'ID',

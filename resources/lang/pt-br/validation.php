@@ -91,6 +91,10 @@ return [
     'except'                  => 'Exceto: ',
     'val_error'               => 'Erro ao inserir registro.',
     'cb_error'               => 'Barcode Inválido.',
+    'dataval_error'               => 'Etiqueta vencida! Não é possível realizar a operação.',
+    'end_inativo'               => 'Endereço Inativo.',
+    'end_bloq'               => 'Endereço bloqueado para este GRUPO de produto.',
+    'end_cap'               => 'Capacidade do endereço foi excedida.',
 
     /*
     |--------------------------------------------------------------------------
@@ -151,7 +155,10 @@ return [
         'dest_department_code' => 'Departamento Destino',
         'dest_deposit_code' => 'Depósito Destino',
         'operation_code'    => 'Operação',
-        'document_type_code'  => 'Tipo de Documento'
+        'document_type_code'  => 'Tipo de Documento',
+        'deposit_code'  => 'Depósito',
+        'sector_code'  => 'Setor',
+        'group_code'  => 'Grupo de Produtos'
     ],
 
 ];

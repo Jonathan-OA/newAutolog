@@ -74,22 +74,25 @@
             if(e.which == 13) {
                 $.ajax("products/val/"+ $(this).val())
                 .done(function(data) {
-                    if(data != 0){
+                    if(data.erro == 0){
                         //Caso encontre o barcode, atualiza os inputs com os valores obtidos
-                        $("#qty").val(data.qty);
-                        $("#prev_qty").val(data.prev_qty);
-                        $("#uom_code").val(data.uom_code);
-                        $("#prev_uom_code").val(data.prev_uom_code);
-                        $("#product_code").val(data.product_code);
-                        $("#label_id").val(data.label_id);
+                        $("#qty").val(data.infos.qty);
+                        $("#prev_qty").val(data.infos.prev_qty);
+                        $("#uom_code").val(data.infos.uom_code);
+                        $("#prev_uom_code").val(data.infos.prev_uom_code);
+                        $("#product_code").val(data.infos.product_code);
+                        $("#label_id").val(data.infos.label_id);
                         //Limpa campo de msg, caso esteja preenchido
                         $('#msg_excluir').html("");
                         $('#hidden').removeClass('hidden');
                         $('.alert').remove();
                         
                     }else{
-                        //Mostra msg de barcode invalido
-                        $('#msg_excluir').html("<div class='alert alert-danger'>@lang('validation.cb_error')</div>");
+                        //Mostra msg de barcode invalido ou validade
+                        if(data.erro == 1)
+                            $('#msg_excluir').html("<div class='alert alert-danger'>@lang('validation.cb_error')</div>");
+                        else
+                            $('#msg_excluir').html("<div class='alert alert-danger'>@lang('validation.dataval_error')</div>");
                         $("#barcode").val("");
                         $("#location_code").val("");
                         $('#hidden').addClass('hidden');

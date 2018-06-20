@@ -77,7 +77,7 @@ Route::resource('packingTypes', 'PackingTypeController');
 
 Route::get('products/datatable', 'ProductController@getData');
 Route::get('products/val/{barcode}', function($barcode) {
-    return Product::valProduct($barcode);
+    return Product::valCBPD($barcode);
 });
 
 Route::resource('products', 'ProductController');
@@ -223,3 +223,7 @@ Route::resource('labelStatus', 'LabelStatusController');
 
 Route::get('blockedProducts/datatable', 'BlockedProductController@getData');
 Route::resource('blockedProducts', 'BlockedProductController');
+
+
+Route::get('blockedGroups/datatable', 'BlockedGroupController@getData');
+Route::resource('blockedGroups', 'BlockedGroupController');

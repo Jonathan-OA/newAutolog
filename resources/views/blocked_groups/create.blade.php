@@ -1,23 +1,27 @@
 @extends('layouts.app')
+
 @section('content')
     <div class="row">
         <div class="col-md-12 pad-ct">
             <div class="panel panel-default" >
                 <div class="panel-heading">
-                    @lang('models.pallet_status') 
+                    @lang('models.blocked_groups')
                 </div>
                 <div class="panel panel-default">
                     <div class="panel-body" >
                         <div class="row">
                             <div class="col-md-12">
-                                {!! Form::model($paleteStatus, ['route' => ['palletStatus.update', $paleteStatus->id], 'method' => 'patch']) !!}
-                                  @include('pallet_status.fields',['action' => "edit"])
+                                {!! Form::open(['route' => 'blockedGroups.store']) !!}
+                                <div class="form-group">
+                                    @include('blocked_groups.fields')
+                                </div>
                                 {!! Form::close() !!}
                             </div>
                         </div>
-                    </div>
+                    </div>   
                 </div>
             </div>
         </div>
+
     </div>
 @endsection

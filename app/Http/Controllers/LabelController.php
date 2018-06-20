@@ -113,13 +113,17 @@ class LabelController extends AppBaseController
 
             $label = $this->labelRepository->findWithoutFail($id);
 
+            //Pega os status de etiqueta
+            $status = App\Models\LabelStatus::getLabelStatus();
+
             if (empty($label)) {
                 Flash::error(Lang::get('validation.not_found'));
 
                 return redirect(route('labels.index'));
             }
 
-            return view('labels.edit')->with('label', $label);
+            return view('labels.edit')->with('label', $label)
+                                      ->with('statusl', $status);
         
         }else{
             //Sem permissão
@@ -148,7 +152,7 @@ class LabelController extends AppBaseController
 
         //Grava log
         $requestF = $request->all();
-        $descricao = 'Alterou Label ID: '.$id.' - '.$requestF['code'];
+        $descricao = 'Alterou Etiqueta ID: '.$id.' - Barcode: '.$requestF['barcode'].' - Fat: '.$requestF['prev_qty'].' - Sts: '.$requestF['label_status_id'];
         $log = App\Models\Log::wlog('labels_edit', $descricao);
 
 

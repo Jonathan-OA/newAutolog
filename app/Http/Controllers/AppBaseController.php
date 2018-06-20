@@ -48,7 +48,7 @@ class AppBaseController extends Controller
         $term = Input::get('term'); //String de pesquisa
         $table = Input::get('table'); //Tabela Atual
         $tableDep = Input::get('tableDep'); //Valor de um input dependente
-        $field = (trim($tableDep) == '')? 'code' : Input::get('field'); //Nome do Campo de Busca
+        $field = (trim($tableDep) == '' || Input::get('field') == substr($table,0,-1).'_code')? 'code' : Input::get('field'); //Nome do Campo de Busca
         
         //Caso seja campos de Origem/Destino, considera o campo code
         if(strpos($field,'orig') !== false || strpos($field,'dest') !== false ){
@@ -56,6 +56,8 @@ class AppBaseController extends Controller
         }elseif(strpos($field,'prev') !== false){
             $field = substr($field,5);
         }
+
+        
 
         $GLOBALS['valDep'] = Input::get('valDep');
         $GLOBALS['campoDep'] = substr($tableDep,0,-1).'_code';

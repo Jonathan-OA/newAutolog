@@ -6,7 +6,7 @@
             <div class="panel panel-default" >
                 <div class="panel-heading">
                    <!-- Texto baseado no arquivo de linguagem -->
-                   @lang('models.pallet_status') 
+                   @lang('models.blocked_groups') 
                 </div>
                 <div class="panel panel-default">
                     <div class="row">
@@ -15,10 +15,10 @@
                             @include('flash::message')
                             <div id="msg_excluir"></div>
                             <div class="row buttons_grid">
-                                <a class="btn btn-success"  href="{!! route('palletStatus.create') !!}">@lang('buttons.add')</a>
+                                <a class="btn btn-success"  href="{!! route('blockedGroups.create') !!}">@lang('buttons.add')</a>
                             </div>
                             <div class="panel-body">
-                                @include('pallet_status.table')
+                                @include('blocked_groups.table')
                             </div>
                         </div>
                     </div>
@@ -33,10 +33,10 @@
     $(function() {
         
         //Parâmetros para criação da datatable
-        table = $("#palletStatus-table").DataTable({
+        table = $("#blockedGroups-table").DataTable({
             scrollX: true,
             scrollY: "47vh",
-            ajax: 'palletStatus/datatable',
+            ajax: 'blockedGroups/datatable',
             autoWidth: true,
             fixedColumns:   {
                 leftColumns: 0,
@@ -53,8 +53,9 @@
                     sPrevious: "@lang('models.previous')",
                 }
             },
-            columns: [ { data: 'description' },
-               
+            columns: [ { data: 'deposit_code' },
+                       { data: 'sector_code' },
+                       { data: 'group_code' },
                        { data: null,
                          className: "th_grid",
                          defaultContent: "<button id='edit' aria-label='@lang('buttons.edit')' data-microtip-position='left' role='tooltip' ><img class='icon' src='{{asset('/icons/editar.png') }}'></button><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='{{asset('/icons/remover.png') }}'></button>",
@@ -63,19 +64,19 @@
       });
 
       //Funções dos botões de editar e excluir
-      $('#palletStatus-table tbody').on( 'click', 'button', function () {
+      $('#blockedGroups-table tbody').on( 'click', 'button', function () {
             var data = table.row( $(this).parents('tr') ).data();
             var id = $(this).attr('id');
             if(id == 'edit'){
                 //Editar Registro
-                window.location.href = "{!! URL::to('palletStatus/"+data.id+"/edit') !!}";
+                window.location.href = "{!! URL::to('blockedGroups/"+data.id+"/edit') !!}";
             }else{
                 //Excluir Registro
                 if(confirm('@lang("buttons.msg_remove")')){
                     //Token obrigatório para envio POST
                     var tk = $('meta[name="csrf-token"]').attr('content');
                     $.ajax({
-                        url: 'palletStatus/'+data.id,
+                        url: 'blockedGroups/'+data.id,
                         type: 'post',
                         data: {_method: 'delete', _token :tk},
                         success: function(scs){ 

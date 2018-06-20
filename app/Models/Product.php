@@ -6,6 +6,7 @@ use Eloquent as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Auth;
 use DB;
+use Carbon\Carbon;
 
 
 /**
@@ -21,7 +22,7 @@ class Product extends Model
     const UPDATED_AT = 'updated_at';
 
 
-    protected $dates = ['deleted_at'];
+    protected $dates = ['deleted_at','due_date','critical_date1','critical_date2','critical_date3','ripeness_date','inventory_date'];
 
 
     public $fillable = [
@@ -83,10 +84,12 @@ class Product extends Model
      * @var array
      */
 
-    public static function valProduct( $barcode, $company_id = ''){
+    public static function valCBPD( $barcode, $company_id = ''){
+
         //Barcode pode ser uma etiqueta, barcode da prdemb ou código do produto
         //Caso seja uma etiqueta, o status tem q ser diferente de 9
         $company_id = (trim($company_id == ''))?Auth::user()->company_id: $company_id;
+        $ret['erro'] = 0;
         $infos = DB::table('labels')->join('products', function ($join) {
                                         $join->on('products.code', '=', 'labels.product_code')
                                              ->whereColumn ('products.company_id','labels.company_id');
@@ -107,7 +110,7 @@ class Product extends Model
                                              'labels.serial_number','labels.prod_date','labels.due_date','labels.origin',
                                              'packings.conf_batch','packings.conf_batch_supplier','packings.conf_serial',
                                              'packings.conf_due_date','packings.conf_prod_date','labels.label_status_id as label_status',
-                                             'products.group_code', 'products.product_type_code','packings.label_type_code')
+                                             'products.group_code', 'products.product_type_code','packings.label_type_code', 'labels.due_date')
                                     ->get();   
                                                           
         if(count($infos) == 0){
@@ -154,12 +157,21 @@ class Product extends Model
                                   ->get(); 
                 if(count($infos) == 0){
                     //Não encontrou registros - Erro
-                    return '0';
+                    $ret['erro'] = 1;
+                    $infos[0] = '';
+                }
+            }
+        }else{
+            //Se achou a etiqueta, valida data de validade
+            if(!empty($infos[0]->due_date)){
+                if(Carbon::now() > $infos[0]->due_date){
+                    $ret['erro'] = 2;
                 }
             }
         }
 
-        return (array)$infos[0];
+        $ret['infos'] = (array)$infos[0];
+        return $ret;
 
     }
 

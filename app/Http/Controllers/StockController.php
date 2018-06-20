@@ -73,12 +73,40 @@ class StockController extends AppBaseController
      */
     public function store(CreateStockRequest $request)
     {
-        $input = $request->all();
+        //Valida se tem permissão para inserir saldo 
+        if(App\Models\User::getPermission('stocks_add',Auth::user()->user_type_code)){
+            $input = $request->all();
 
-        $stock = $this->stockRepository->create($input);
-
-        Flash::success(Lang::get('validation.save_success'));
-
+            //Valida endereço
+            $retEnd = App\Models\Location::valEnd($input['location_code'], $input['product_code']);
+            if($retEnd == 0){
+                //Sem erros ao validar o endereço
+                $stock = App\Models\Stock::atuSald($input);
+                //Grava log
+               $descricao = 'Ent. Manual -  End:'.$input['location_code'].' Umv: '.$input['label_id'].' - Prd: '.$input['product_code'].' Qde: '.$input['qty'].'('. $input['prev_qty'].')';
+               $log = App\Models\Log::wlog('stocks_add', $descricao);
+   
+               Flash::success(Lang::get('validation.save_success'));
+            }else{
+                switch($retEnd){
+                    case 1:
+                        //Endereço Inativo
+                        Flash::error(Lang::get('validation.end_inativo'));
+                    break;
+                    case 2:
+                        //Endereço Bloqueado para esse produto
+                        Flash::error(Lang::get('validation.end_bloq'));
+                    break;
+                    case 3:
+                        //Capacidade Excedida
+                        Flash::error(Lang::get('validation.end_cap'));
+                    break;
+                }
+            }
+        }else{
+            //Sem permissão
+            Flash::error(Lang::get('validation.permission'));
+        }
         return redirect(route('stocks.index'));
     }
 

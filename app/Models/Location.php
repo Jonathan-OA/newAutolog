@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Eloquent as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Auth;
+use DB;
 
 /**
  * Class Location
@@ -71,5 +73,56 @@ class Location extends Model
         
     ];
 
+    /**
+     * Função que valida o endereço e retorna se é valido ou se esta inativo / capacidade máxima
+     * Parâmetros: Código do endereço a ser validado
+     * @var array
+     */
+
+    public static function valEnd($barcode,  $product = '', $company_id  =''){
+
+        $company_id = (trim($company_id == ''))?Auth::user()->company_id: $company_id;
+        $erro = 0;
+        //Busca endereço
+        $end = DB::table('locations')->join('location_types','location_types.code','locations.location_type_code')
+                                     ->where([
+                                               ['locations.company_id', $company_id],
+                                               ['locations.code', $barcode]
+                                     ])
+                                     ->select('locations.code','locations.barcode','locations.status','locations.department_code',
+                                              'locations.deposit_code', 'locations.location_type_code', 'locations.sector_code',
+                                              'location_types.capacity_qty')
+                                     ->get();
+        if($end[0]->status <> 1){
+            //Endereço Inativo
+            $erro = 1;
+        }else{
+            //Endereço ativo 
+            //Valida se grupo do produto é bloqueado para o endereço
+            if(trim($product) <> ''){
+                $verBlock = DB::table('products')->join('blocked_groups', function ($join) {
+                                                         $join->on('products.group_code', '=', 'blocked_groups.group_code')
+                                                         ->whereColumn ('products.company_id','blocked_groups.company_id');
+                                                 })
+                                                 ->where([
+                                                            ['products.company_id', $company_id],
+                                                            ['products.code', $product],
+                                                            ['blocked_groups.deposit_code', $end[0]->deposit_code],
+                                                            ['blocked_groups.sector_code', $end[0]->sector_code]
+                                                 ])
+                                                 ->count();
+                if($verBlock > 0){
+                    //Endereço não permitido
+                    $erro = 2;
+                }
+            }
+            
+            //Valida capacidade do endereço
+            $verCap = Stock::getSald($end[0]->code);
+            echo 'Cap: '.$end[0]->capacity_qty;exit;
+        }
+        
+        return $erro;
+    }
     
 }

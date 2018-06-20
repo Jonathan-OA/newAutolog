@@ -4,6 +4,10 @@
 <!-- Company Id Field -->
 <input id='company_id' name='company_id' type='hidden' value='{!! Auth::user()->company_id !!}'>
 
+@if(isset($action) && $action == 'edit')
+    <input id='id' name='id' type='hidden' value='{!! $label->id !!}'>
+@endif
+
 <!-- Barcode Field -->
 {!! Form::label('barcode', Lang::get('models.barcode').':') !!}
 {!! Form::text('barcode', null, ['class' => 'form-control']) !!}
@@ -33,8 +37,7 @@
 {!! Form::select('label_status_id', $statusl, null, ['class' => 'form-control']) !!}
 
 <!-- Origin Field -->
-{!! Form::label('origin', Lang::get('models.origin').':') !!}
-{!! Form::number('origin', null, ['class' => 'form-control']) !!}
+<input id='origin' name='origin' type='hidden' value='{!! (!empty($label->origin)) ? $label->origin : '' !!}'>
 
 <!-- Serial Number Field -->
 {!! Form::label('serial_number', Lang::get('models.serial_number').':') !!}
@@ -50,27 +53,27 @@
 
 <!-- Prod Date Field -->
 {!! Form::label('prod_date', Lang::get('models.prod_date').':') !!}
-{!! Form::date('prod_date', null, ['class' => 'form-control']) !!}
+{!! Form::date('prod_date', (!empty($label->prod_date)) ? $label->prod_date->format('Y-m-d') : '', ['class' => 'form-control']) !!}
 
 <!-- Due Date Field -->
 {!! Form::label('due_date', Lang::get('models.due_date').':') !!}
-{!! Form::date('due_date', null, ['class' => 'form-control']) !!}
+{!! Form::date('due_date', (!empty($label->due_date)) ? $label->due_date->format('Y-m-d') : '', ['class' => 'form-control']) !!}
 
 <!-- Ripeness Date Field -->
 {!! Form::label('ripeness_date', Lang::get('models.ripeness_date').':') !!}
-{!! Form::date('ripeness_date', null, ['class' => 'form-control']) !!}
+{!! Form::date('ripeness_date', (!empty($label->ripeness_date)) ? $label->ripeness_date->format('Y-m-d') : '', ['class' => 'form-control']) !!}
 
 <!-- Critical Date1 Field -->
 {!! Form::label('critical_date1', Lang::get('models.critical_date1').':') !!}
-{!! Form::date('critical_date1', null, ['class' => 'form-control']) !!}
+{!! Form::date('critical_date1', (!empty($label->critical_date1)) ? $label->critical_date1->format('Y-m-d') : '', ['class' => 'form-control']) !!}
 
 <!-- Critical Date2 Field -->
 {!! Form::label('critical_date2', Lang::get('models.critical_date2').':') !!}
-{!! Form::date('critical_date2', null, ['class' => 'form-control']) !!}
+{!! Form::date('critical_date2',  (!empty($label->critical_date2)) ? $label->critical_date2->format('Y-m-d') : '', ['class' => 'form-control']) !!}
 
 <!-- Critical Date3 Field -->
 {!! Form::label('critical_date3', Lang::get('models.critical_date3').':') !!}
-{!! Form::date('critical_date3', null, ['class' => 'form-control']) !!}
+{!! Form::date('critical_date3', (!empty($label->critical_date3)) ? $label->critical_date3->format('Y-m-d') : '', ['class' => 'form-control']) !!}
 
 <!-- Level Field -->
 {!! Form::label('level', Lang::get('models.level').':') !!}

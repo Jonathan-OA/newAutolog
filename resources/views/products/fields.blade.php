@@ -61,23 +61,23 @@
 
 <!-- Inventory Date Field -->
 {!! Form::label('inventory_date', Lang::get('models.inventory_date').':') !!}
-{!! Form::date('inventory_date', null, ['class' => 'form-control']) !!}
+{!! Form::date('inventory_date', (!empty($product->inventory_date)) ? $product->inventory_date->format('Y-m-d') : '', ['class' => 'form-control','readonly']) !!}
 
 <!-- Critical Date1 Field -->
 {!! Form::label('critical_date1', Lang::get('models.critical_date1').':') !!}
-{!! Form::date('critical_date1', null, ['class' => 'form-control']) !!}
+{!! Form::date('critical_date1', (!empty($product->critical_date1)) ? $product->critical_date1->format('Y-m-d') : '', ['class' => 'form-control']) !!}
 
 <!-- Critical Date2 Field -->
 {!! Form::label('critical_date2', Lang::get('models.critical_date2').':') !!}
-{!! Form::date('critical_date2', null, ['class' => 'form-control']) !!}
+{!! Form::date('critical_date2', (!empty($product->critical_date2)) ? $product->critical_date2->format('Y-m-d') : '', ['class' => 'form-control']) !!}
 
 <!-- Critical Date3 Field -->
 {!! Form::label('critical_date3', Lang::get('models.critical_date3').':') !!}
-{!! Form::date('critical_date3', null, ['class' => 'form-control']) !!}
+{!! Form::date('critical_date3', (!empty($product->critical_date3)) ? $product->critical_date3->format('Y-m-d') : '', ['class' => 'form-control']) !!}
 
 <!-- Ripeness Date Field -->
 {!! Form::label('ripeness_date', Lang::get('models.ripeness_date').':') !!}
-{!! Form::date('ripeness_date', null, ['class' => 'form-control']) !!}
+{!! Form::date('ripeness_date', (!empty($product->ripeness_date)) ? $product->ripeness_date->format('Y-m-d') : '', ['class' => 'form-control']) !!}
 
 <!-- Obs1 Field -->
 {!! Form::label('obs1', Lang::get('models.obs1').':') !!}

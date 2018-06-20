@@ -20,7 +20,7 @@ class Label extends Model
     const UPDATED_AT = 'updated_at';
 
 
-    protected $dates = ['deleted_at'];
+    protected $dates = ['due_date','prod_date','deleted_at','ripeness_date','critical_date1','critical_date2','critical_date3',];
 
 
     public $fillable = [
