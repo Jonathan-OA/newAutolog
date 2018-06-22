@@ -80,14 +80,21 @@
                                 $("#pallet_id").val(data.id);
                                 $("#barcode").focus();
                             }else{
-                                $("#pallet_barcode").addClass('input_error is-invalid');
+                                $("#pallet_barcode").addClass('input_error');
                                 $("#pallet_barcode").val("");
                             }
+                            $('#msg_excluir').html("");
                         }else{
-                            $("#pallet_barcode").removeClass('input_error');
-                            $("#pallet_barcode").addClass('input_ok');
-                            $("#pallet_id").val(data.id);
-                            $("#barcode").focus();
+                            if(data.erro == 3){
+                                $('#msg_excluir').html("<div class='alert alert-danger'>@lang('validation.plt_prefixo')</div>");
+                                $("#pallet_barcode").addClass('input_error');
+                            }else{
+                                $('#msg_excluir').html("");
+                                $("#pallet_barcode").removeClass('input_error');
+                                $("#pallet_barcode").addClass('input_ok');
+                                $("#pallet_id").val(data.id);
+                                $("#barcode").focus();
+                            }
                         }
                         $("#pltbarcode").val(cbplt);
                     })

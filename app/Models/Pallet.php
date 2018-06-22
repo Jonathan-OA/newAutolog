@@ -73,24 +73,34 @@ class Pallet extends Model
         $company_id = (trim($company_id == ''))?Auth::user()->company_id: $company_id;
         $ret['erro'] = 0;
 
-        $pallet = Pallet::where([
-                                  ['company_id', $company_id],
-                                  ['barcode', $barcode]
-                                ])
-                        ->get();
-
-        if(count($pallet) == 0){
-            //Palete não existe
-            $ret['erro'] = 1;
-        }else{
-            //Status existe e esta encerrado ou cancelado.
-            if($pallet[0]->pallet_status_id > 7){
-                $ret['erro'] = 2;
-            }
-
-            $ret['id'] = $pallet[0]->id;
+        //Valida prefixo do palete informado com o  parâmetro
+        $pref = Parameter::getParam('prefixo_palete');               
+        if(trim($pref) == ''){
+            $pref = 'PLT';
         }
 
+        if(strpos($pref,substr($barcode,0,3)) === false){
+            //Prefixo de inválido
+            $ret['erro'] = 3;
+        }else{
+            $pallet = Pallet::where([
+                                    ['company_id', $company_id],
+                                    ['barcode', $barcode]
+                                    ])
+                            ->get();
+
+            if(count($pallet) == 0){
+                //Palete não existe
+                $ret['erro'] = 1;
+            }else{
+                //Status existe e esta encerrado ou cancelado.
+                if($pallet[0]->pallet_status_id > 7){
+                    $ret['erro'] = 2;
+                }
+
+                $ret['id'] = $pallet[0]->id;
+            }
+        }
         return $ret;
 
     }
