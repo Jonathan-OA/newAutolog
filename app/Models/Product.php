@@ -129,7 +129,7 @@ class Product extends Model
                                     ['packings.company_id', $company_id],
                                     ['packings.barcode', '=', $barcode]
                               ])
-                              ->select( DB::raw('0 as label_id'), 'packings.product_code','products.description',
+                              ->select( DB::raw("'' as label_id"), 'packings.product_code','products.description',
                                         DB::raw('1 as qty'),'packings.uom_code','packings.prev_qty','prevL.uom_code as prev_uom_code',
                                         'packings.conf_batch','packings.conf_batch_supplier','packings.conf_serial',
                                         'packings.conf_due_date','packings.conf_prod_date',DB::raw("'' as batch"),DB::raw("'' as batch_supplier"),
@@ -148,7 +148,7 @@ class Product extends Model
                                         ['products.company_id', $company_id],
                                         ['products.code', '=', $barcode]
                                   ])
-                                  ->select( DB::raw('0 as label_id'), 'packings.product_code','products.description',
+                                  ->select( DB::raw("'' as label_id"), 'packings.product_code','products.description',
                                          DB::raw('1 as qty'),'packings.uom_code','packings.prev_qty','packings.uom_code as prev_uom_code',
                                         'packings.conf_batch','packings.conf_batch_supplier','packings.conf_serial',
                                         'packings.conf_due_date','packings.conf_prod_date',DB::raw("'' as batch"),DB::raw("'' as batch_supplier"),

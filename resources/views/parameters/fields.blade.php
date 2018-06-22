@@ -6,16 +6,17 @@
 
     <!-- Module Name Field -->
     {!! Form::label('module_name', Lang::get('models.module_name').':') !!}
-    {!! Form::select('module_name', $modules, 'null', ['class' => 'form-control']) !!}
+    {!! Form::select('module_name', $modules, (!empty($parameter->module_name)) ? $parameter->module_name : '', ['class' => 'form-control']) !!}
 
     <!-- Operation Code Field -->
     {!! Form::label('operation_code', Lang::get('models.operation_code').':') !!}
-    {!! Form::select('operation_code', $operations, 'null', ['class' => 'form-control']) !!}
+    {!! Form::select('operation_code', $operations,(!empty($parameter->operation_code)) ? $parameter->operation_code : '', ['class' => 'form-control']) !!}
 
     <!-- Code Field -->
     {!! Form::label('code', Lang::get('models.code').':') !!}
     @if(isset($action) && $action == 'edit')
         {!! Form::text('code', null, ['class' => 'form-control','readonly' => 'true']) !!}
+        <input id='id' name='id' type='hidden' value='{!! $parameter->id !!}'>
     @else
         {!! Form::text('code', null, ['class' => 'form-control']) !!}  
     @endif

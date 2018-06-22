@@ -11,13 +11,14 @@
                 <div class="panel panel-default">
                     <div class="row">
                         <div class="col-md-12">
-                            <!-- Alerta de erro / sucesso -->
-                            @include('flash::message')
                             <div class="panel-body">
                                 <!-- Campos para preenchimento -->
                                 <div class="form_fields">
-                                    @include('adminlte-templates::common.errors')
+                                     <!-- Alerta de erro / sucesso -->
+                                    @include('flash::message')
                                     <div id="msg_excluir"></div>
+                                    {!! Form::label('pallet_barcode', Lang::get('models.pallet').':') !!}
+                                    {!! Form::text('pallet_barcode', null, ['class' => 'form-control']) !!}
                                     {!! Form::label('barcode', Lang::get('models.barcode').':') !!}
                                     {!! Form::text('barcode', null, ['class' => 'form-control']) !!}
                                     {!! Form::open(['route' => 'stocks.store', 'id' => 'entForm']) !!} 
@@ -36,13 +37,13 @@
                                             {!! Form::text('prev_uom_code', null, ['class' => 'form-control', 'readonly']) !!}
                                             {!! Form::label('location_code', Lang::get('models.location_code').':') !!}
                                             {!! Form::text('location_code', null, ['class' => 'form-control', 'id' => 'autocomplete', 'table' => 'locations']) !!}
-                                            
                                             <!-- Campos não visiveis para o usuario -->
                                             {{ Form::hidden('company_id', Auth::user()->company_id) }}
                                             {{ Form::hidden('user_id', Auth::user()->id) }}
                                             {{ Form::hidden('label_id', '', array('id' => 'label_id')) }}
-                                            {{ Form::hidden('pallet_id', '', array('id' => 'pallet_id')) }}
                                             {{ Form::hidden('task_id', '') }}
+                                            {{ Form::hidden('pltbarcode', '', array('id' => 'pltbarcode')) }}
+                                            {{ Form::hidden('pallet_id', '', array('id' => 'pallet_id')) }}
                                             {{ Form::hidden('finality_code', 'SALDO') }}
                                             {{ Form::hidden('operation_code', '664') }}
                                         </div>  
@@ -62,16 +63,42 @@
 <script>
     var table;
     $(function() {
-        //Envio do Formulário
-        var $form = $('entForm');
-        $form.submit(function(){
-            $.post($(this).attr('action'), $(this).serialize());
-            return false;
+        $("#pallet_barcode").bind('keypress change',function(e){
+             //Se apertar enter ou alterar o campo entra na função
+            if(e.which == 13 || e.type == 'change') {
+                //Valida palete informado (Se não existir vai criar)
+                var cbplt = $(this).val();
+                if(cbplt){
+                    $.ajax("pallets/val/"+ cbplt)
+                    .done(function(data) {
+                        //erro = 1: Não existe; erro = 2: status encerrado ou cancelado
+                        if(data.erro == 1 && cbplt != 0){
+                            $("#pallet_id").val("");
+                            if(confirm("Palete não existe. Deseja criar um novo?")){
+                                $("#pallet_barcode").removeClass('input_error');
+                                $("#pallet_barcode").addClass('input_ok is-valid');
+                                $("#pallet_id").val(data.id);
+                                $("#barcode").focus();
+                            }else{
+                                $("#pallet_barcode").addClass('input_error is-invalid');
+                                $("#pallet_barcode").val("");
+                            }
+                        }else{
+                            $("#pallet_barcode").removeClass('input_error');
+                            $("#pallet_barcode").addClass('input_ok');
+                            $("#pallet_id").val(data.id);
+                            $("#barcode").focus();
+                        }
+                        $("#pltbarcode").val(cbplt);
+                    })
+                }
+            }
+
         });
 
-        $("#barcode").keypress(function(e){
-            //Se apertar enter, busca informações do barcode informado
-            if(e.which == 13) {
+        $("#barcode").bind('keypress change',function(e){
+            //Se apertar enter ou alterar o campo, busca informações do barcode informado
+            if(e.which == 13 || e.type == 'change')  {
                 $.ajax("products/val/"+ $(this).val())
                 .done(function(data) {
                     if(data.erro == 0){

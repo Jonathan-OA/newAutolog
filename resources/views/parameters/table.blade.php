@@ -3,7 +3,6 @@
         <div class="" style="margin: 0 15px 0 15px">
         <table class="table table-bordered" id="parameters-table" cellspacing="0" width="100%">
             <thead>
-                <th class="th_grid">@lang('models.company_id') </th>
                 <th class="th_grid">@lang('models.code') </th>
                 <th class="th_grid">@lang('models.description') </th>
                 <th class="th_grid">@lang('models.value') </th>
@@ -15,7 +14,6 @@
             <tbody>
             @foreach($parameters as $parameter)
                 <tr>
-                    <td>{!! $parameter->company_id !!}</td>
                     <td>{!! $parameter->code !!}</td>
                     <td>{!! $parameter->description !!}</td>
                     <td>{!! $parameter->value !!}</td>

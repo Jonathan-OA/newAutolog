@@ -73,7 +73,7 @@ class Operation extends Model
                         ->where('enabled', '1')
                         ->where('module', '<>', ' ')
                         ->where(function ($query) {
-                            if(trim($tipo) <> ''){
+                            if(!empty($tipo)){
                                 $query->where('type',$tipo);
                             }
                         })

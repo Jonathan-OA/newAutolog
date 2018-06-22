@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Eloquent as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Auth;
 
 /**
  * Class Parameter
@@ -57,5 +58,25 @@ class Parameter extends Model
         'description' => 'required|string|max:50',
         'value' => 'required|string|max:100',
     ];
+
+    /**
+     * Função que retorna o valor do parâmetro indicado
+     * Parâmetros: Código do Parâmetro e o ID da empresa/filial
+     * @var array
+     */
+
+    public static function getParam($code, $company_id = ''){
+        $company_id = (trim($company_id == ''))?Auth::user()->company_id: $company_id;
+        $param = Parameter::where([
+                                    ['company_id', $company_id],
+                                    ['code',$code]
+                                ])
+                                ->get();
+        if(count($param) == 0){
+            return '';
+        }else{
+            return $param[0]->value;
+        }
+    }
     
 }

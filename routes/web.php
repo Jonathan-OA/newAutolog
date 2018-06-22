@@ -12,6 +12,7 @@
 */
 
 use App\Models\Product;
+use App\Models\Pallet;
 
 Auth::routes();
 
@@ -117,6 +118,9 @@ Route::resource('companies', 'CompanyController');
 
 Route::get('pallets/datatable', 'PalletController@getData');
 Route::resource('pallets', 'PalletController');
+Route::get('pallets/val/{barcode}', function($barcode) {
+    return Pallet::valPal($barcode);
+});
 
 Route::get('configs/datatable', 'ConfigController@getData');
 Route::resource('configs', 'ConfigController');

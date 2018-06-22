@@ -15,6 +15,7 @@ use DataTables;
 use App;
 use Lang;
 use App\Models;
+use Input;
 
 class StockController extends AppBaseController
 {
@@ -73,6 +74,7 @@ class StockController extends AppBaseController
      */
     public function store(CreateStockRequest $request)
     {
+        
         //Valida se tem permissão para inserir saldo 
         if(App\Models\User::getPermission('stocks_add',Auth::user()->user_type_code)){
             $input = $request->all();
@@ -81,7 +83,26 @@ class StockController extends AppBaseController
             $retEnd = App\Models\Location::valEnd($input['location_code'], $input['product_code'], $input['prev_qty']);
             if($retEnd == 0){
                 //Sem erros ao validar o endereço
-                $stock = App\Models\Stock::atuSald($input);
+                //Cria o palete caso não exista
+                $palcb = $request->pltbarcode;
+                if(empty($request->pallet_id) && !empty($palcb)){
+                    $retPlt = App\Models\Pallet::createPal($palcb,$input['location_code']);
+                    if($retPlt['erro'] == 0){
+                        $input['pallet_id'] = $retPlt['id'];
+                    }else{
+                        switch($retPlt['erro']){
+                            case 1:
+                                Flash::error(Lang::get('validation.plt_prefixo'));
+                            break;
+                            case 2:
+                                Flash::error(Lang::get('validation.plt_exists'));
+                            break;
+                        }
+                        return view('stocks.entradaManual');
+                    }
+                }
+
+               $stock = App\Models\Stock::atuSald($input);
                 //Grava log
                $descricao = 'Ent. Manual -  End:'.$input['location_code'].' Umv: '.$input['label_id'].' - Prd: '.$input['product_code'].' Qde: '.$input['qty'].'('. $input['prev_qty'].')';
                $log = App\Models\Log::wlog('stocks_add', $descricao);
@@ -102,6 +123,7 @@ class StockController extends AppBaseController
                         Flash::error(Lang::get('validation.end_cap'));
                     break;
                 }
+                return view('stocks.entradaManual');
             }
         }else{
             //Sem permissão

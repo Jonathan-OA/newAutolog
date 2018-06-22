@@ -517,5 +517,14 @@
     .btn.active span.glyphicon {
         opacity: 1;
     }
+    /* --------------------------------------------*/
+    /*                Formulários                  */
+    /* --------------------------------------------*/
     
-    ;
+    .input_ok {
+        border-color: #128B0B !important;
+    }
+    
+    .input_error {
+        border-color: red !important;
+    }

@@ -51,19 +51,17 @@
                     sPrevious: "@lang('models.previous')",
                 }
             },
-            columns: [ { data: 'company_id' },
-                { data: 'code' },
-                { data: 'description' },
-                { data: 'value' },
-                { data: 'def_value' },
-                { data: 'module_name' },
-                { data: 'operation_code' },
-               
-                       { data: null,
+            columns: [  { data: 'code' },
+                        { data: 'description' },
+                        { data: 'value' },
+                        { data: 'def_value' },
+                        { data: 'module_name' },
+                        { data: 'operation_code' },
+                        { data: null,
                          className: "td_grid",
                          defaultContent: "<button id='edit' aria-label='@lang('buttons.edit')' data-microtip-position='left' role='tooltip' ><img class='icon' src='{{asset('/icons/editar.png') }}'></button><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='{{asset('/icons/remover.png') }}'></button>",
                          width: "90px" 
-                       }],
+                        }],
       });
       
       $('#parameters-table tbody').on( 'click', 'button', function () {

@@ -95,6 +95,8 @@ return [
     'end_inativo'               => 'Endereço Inativo.',
     'end_bloq'               => 'Endereço bloqueado para este GRUPO de produto.',
     'end_cap'               => 'Capacidade do endereço foi excedida.',
+    'plt_prefixo'               => 'Prefixo de palete inválido.',
+    'plt_exists'               => 'Palete já existe no sistema.',
 
     /*
     |--------------------------------------------------------------------------
