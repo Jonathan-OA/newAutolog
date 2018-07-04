@@ -39,6 +39,7 @@ class Module extends Model
         'id' => 'integer',
         'module' => 'string',
         'submodule' => 'string',
+        'enabled' => 'boolean',
         'name' => 'string',
         'icon' => 'string',
         'url' => 'string'
