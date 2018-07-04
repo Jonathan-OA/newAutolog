@@ -27,7 +27,7 @@ class MenuMid
                 $menu->add($mod->name, array('class' => 'menu_ext', 'nickname' => $nickname))
                      ->link->attr(array('data-toggle' => "collapse", 'href' => ".collapse".$nickname, 'aria-expanded'=>"false", 'aria-controls'=> "collapseExample"));
                 //Icone
-                $menu->$nickname->prepend('<img class="icon_menu" src="{{ asset(\'/icons/'.$mod->icon.'.png\') }}"" alt="Operações">')
+                $menu->$nickname->prepend('<img class="icon_menu" src="{{ asset(\'/icons/'.$mod->icon.'.png\') }}" alt="Operações">')
                                 ->append('<span class="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></span>');;
                 $submodules = Module::where('enabled',1)
                              ->where('module', $mod->module)
