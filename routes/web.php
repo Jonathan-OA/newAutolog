@@ -23,7 +23,8 @@ Route::group(['middleware' => 'web'], function() {
     Route::get('/production', 'Modules\Production\ProductionController@index');
     Route::get('/recebimento', 'Modules\Receipt\ReceiptController@index');
     Route::get('/production/details/{document}', 'Modules\Production\ProductionController@items');
-    Route::resource('documents', 'DocumentsController');
+    //Route::resource('documents', 'DocumentsController');
+    Route::get('/document/liberate/{id}', 'DocumentController@liberate');
 
     //BOTÕES
     Route::get('getButtons/{modulo}', 'ButtonsController@getButtons');
@@ -231,3 +232,11 @@ Route::resource('blockedProducts', 'BlockedProductController');
 
 Route::get('blockedGroups/datatable', 'BlockedGroupController@getData');
 Route::resource('blockedGroups', 'BlockedGroupController');
+
+
+Route::get('liberationRules/datatable', 'LiberationRuleController@getData');
+Route::resource('liberationRules', 'LiberationRuleController');
+
+
+Route::get('documentTypeRules/datatable', 'DocumentTypeRuleController@getData');
+Route::resource('documentTypeRules', 'DocumentTypeRuleController');

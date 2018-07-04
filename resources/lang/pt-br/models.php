@@ -70,6 +70,8 @@ return [
     'label_status' => 'Status de Etiquetas',
     'blocked_groups' => 'Grupos Bloqueados por Setor',
     'pallet' => 'Palete',
+    'liberation_rules' => 'Regras de Liberação',
+    'document_type_rules' => 'Regras de Liberação por Documento',
 
     //Columns
     'id' => 'ID',

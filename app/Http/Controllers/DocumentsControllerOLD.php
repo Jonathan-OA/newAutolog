@@ -7,10 +7,9 @@ use Illuminate\Support\Facades\Session;
 use App\Http\Requests\StoreDocument;
 use Flash;
 use Response;
-
 use App;
 
-class DocumentController extends Controller
+class DocumentControllerOLD extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -113,4 +112,8 @@ class DocumentController extends Controller
     {
         //
     }
+
+    
+
+
 }

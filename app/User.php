@@ -69,7 +69,7 @@ class User extends Authenticatable
                         ->where('last_login','>=', $dataAtual )
                         ->count();
         
-        $qdeUsers = ($qdeUsers == 0)? 3 : $qdeUsers;
+        //$qdeUsers = ($qdeUsers == 0)? 3 : $qdeUsers;
         //echo $config[0]->value;exit;
 
         if($qdeUsers < $config[0]->value){
