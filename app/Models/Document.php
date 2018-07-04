@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Auth;
+use App;
 
 class Document extends Model
 {
@@ -26,19 +27,59 @@ class Document extends Model
 
         $doc = Document::select('documents.number',
                                 'documents.document_type_code',
-                                'document_types.moviment')
+                                'document_types.moviment_code')
                        ->join('document_types', 'documents.document_type_code', '=', 'document_types.code')
                        ->where([
-                                 ['company_id', Auth::user()->company_id],
-                                 ['document_id', $document_id]
+                                 ['documents.company_id', Auth::user()->company_id],
+                                 ['documents.id', $document_id]
                        ])
                        ->get();
-                       print_r($doc);exit;
-        switch($document_type_code){
+        //Valida se achou o documento
+        if(count($doc) > 0){
+            //Switch para definir qual classe de liberação será utilizada no documento baseado no movimento
+            switch($doc[0]->moviment_code){
+                //Recebimento
+                case '010':
+                    $class = 'App\RulesProduction';
+                    break;
 
+                //Trânsferência
+                case '020':
+                    $class = 'RulesTransf';
+                    break;
 
+                //Produção
+                case '030':
+                    $class = 'RulesProduction';
+                    break;
+
+                //Separação
+                case '070':
+                    $class = 'RulesSep';
+                    break;
+
+            }
+
+            //Busca todas as regras disponíveis para o tipo de documento
+            $rules = App\Models\DocumentTypeRule::where([
+                                                            ['company_id', Auth::user()->company_id],
+                                                            ['document_type_code', $doc[0]->document_type_code],
+                                                 ])
+                                                 ->orderBy('order', 'asc')
+                                                 ->get()
+                                                 ->toArray();
+            foreach($rules as $rule){
+                
+                $rule_code = $rule['liberation_rule_code'];
+                //Valida se existe a função com esse nome/código na classe correspondente
+                if(method_exists(new $class(),$rule_code)){
+                    $return = $class::$rule_code($document_id);
+                }else{
+                    echo 'Regra não existe no arquivo de liberação.';
+                }
+            }
+            
         }
-
 
     }
 }

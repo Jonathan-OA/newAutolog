@@ -18,8 +18,14 @@ class RulesProduction extends Model
 {
 
     //Regra que valida o saldo
-    public function prd001($document_id){
+    public static function prd001($document_id){
         echo 'opa';
+
+    }
+
+    //Regra que valida o saldo
+    public static function prd002($document_id){
+        echo 'opa2';
 
     }
 }
