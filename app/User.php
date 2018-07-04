@@ -60,9 +60,13 @@ class User extends Authenticatable
         $config = Config::where('code', 'usuarios_desktop')
                         ->get();
 
+
+        //Pega Data Atual e diminui 1 minuto para validação
+        $dataAtual = Carbon\Carbon::now()->subMinute();
+
         //Busca quantidade de usuários logados (diferença <= 1 minuto)
         $qdeUsers = User::where('company_id', Auth::user()->company_id)
-                        ->where(DB::raw('DATEDIFF(minute, last_login, GETDATE())'),'<=',1)
+                        ->where('last_login','>=', $dataAtual )
                         ->count();
         
         $qdeUsers = ($qdeUsers == 0)? 3 : $qdeUsers;

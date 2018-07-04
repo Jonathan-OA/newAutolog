@@ -50,6 +50,7 @@
                                     </div> 
                                 </div>
                                 {!! Form::submit(Lang::get('buttons.save'), ['class' => 'btn btn-primary']) !!}
+                                <a href="{!! route('stocks.index') !!}" class="btn btn-default">@lang('buttons.cancel')</a>
                                 {!! Form::close() !!}
                             </div>
                         </div>
@@ -68,7 +69,8 @@
             if(e.which == 13 || e.type == 'change') {
                 //Valida palete informado (Se não existir vai criar)
                 var cbplt = $(this).val();
-                if(cbplt){
+                if(cbplt || !$(this).hasClass('input_error') || !$(this).hasClass('input_ok')){
+                    console.log('ENTROU');
                     $.ajax("pallets/val/"+ cbplt)
                     .done(function(data) {
                         //erro = 1: Não existe; erro = 2: status encerrado ou cancelado
