@@ -72,6 +72,9 @@ return [
     'pallet' => 'Palete',
     'liberation_rules' => 'Regras de Liberação',
     'document_type_rules' => 'Regras de Liberação por Documento',
+    'liberation_items' => 'Itens de Liberação do Documento',
+    'blocked_locations' => 'Produtos Bloqueados em Endereços',
+    'blocked_operations' => 'Produtos Bloqueados em Operações',
 
     //Columns
     'id' => 'ID',
@@ -233,6 +236,10 @@ return [
     'active' => 'Ativo',
     'inactive' => 'Inativo',
     'val_integer' => 'Num. Inteiro',
+    'liberation_status_id' => 'Status',
+    'orig_location_code' => 'Endereço Origem',
+    'dest_location_code' => 'Endereço Destino',
+    'task_id' => 'Tarefa',
     
     //PlaceHolders
     'sel_type' => 'Selecione um tipo: ',

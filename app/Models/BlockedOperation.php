@@ -7,18 +7,18 @@ use Auth;
 
 
 /**
- * Class BlockedProduct
+ * Class BlockedOperation
  * @package App\Models
- * @version June 12, 2018, 10:57 am -03
+ * @version July 5, 2018, 4:17 pm -03
  *
  * @property \Illuminate\Database\Eloquent\Collection permissionRole
  * @property integer company_id
  * @property string operation_code
  * @property string product_code
  */
-class BlockedProduct extends Model
+class BlockedOperation extends Model
 {
-    public $table = 'blocked_products';
+    public $table = 'blocked_operations';
     
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
@@ -54,9 +54,9 @@ class BlockedProduct extends Model
 
     
 
-     //Retorna todos os blocked_products disponíveis
-     public static function getBlockedProducts(){
-        return BlockedProduct::selectRaw("code,CONCAT(code,' - ',description) as description_f")
+     //Retorna todos os blocked_operations disponíveis
+     public static function getBlockedOperations(){
+        return BlockedOperation::selectRaw("code,CONCAT(code,' - ',description) as description_f")
                       ->where('company_id', Auth::user()->company_id)
                       ->pluck('description_f','code');
     }

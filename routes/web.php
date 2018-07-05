@@ -240,3 +240,23 @@ Route::resource('liberationRules', 'LiberationRuleController');
 
 Route::get('documentTypeRules/datatable', 'DocumentTypeRuleController@getData');
 Route::resource('documentTypeRules', 'DocumentTypeRuleController');
+
+
+Route::get('liberationItems/datatable', 'LiberationItemController@getData');
+Route::resource('liberationItems', 'LiberationItemController');
+
+
+Route::get('liberationItems/datatable', 'LiberationItemController@getData');
+Route::resource('liberationItems', 'LiberationItemController');
+
+
+Route::get('liberationItems/datatable', 'LiberationItemController@getData');
+Route::resource('liberationItems', 'LiberationItemController');
+
+
+Route::get('blockedLocations/datatable', 'BlockedLocationController@getData');
+Route::resource('blockedLocations', 'BlockedLocationController');
+
+
+Route::get('blockedOperations/datatable', 'BlockedOperationController@getData');
+Route::resource('blockedOperations', 'BlockedOperationController');

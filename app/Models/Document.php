@@ -40,7 +40,7 @@ class Document extends Model
             switch($doc[0]->moviment_code){
                 //Recebimento
                 case '010':
-                    $class = 'App\RulesProduction';
+                    $class = 'App\Models\RulesProduction';
                     break;
 
                 //Trânsferência

@@ -6,7 +6,7 @@
             <div class="panel panel-default" >
                 <div class="panel-heading">
                    <!-- Texto baseado no arquivo de linguagem -->
-                   @lang('models.blocked_products') 
+                   @lang('models.liberation_items') 
                 </div>
                 <div class="panel panel-default">
                     <div class="row">
@@ -15,10 +15,10 @@
                             @include('flash::message')
                             <div id="msg_excluir"></div>
                             <div class="row buttons_grid">
-                                <a class="btn btn-success"  href="{!! route('blockedProducts.create') !!}">@lang('buttons.add')</a>
+                                <a class="btn btn-success"  href="{!! route('liberationItems.create') !!}">@lang('buttons.add')</a>
                             </div>
                             <div class="panel-body">
-                                @include('blocked_products.table')
+                                @include('liberation_items.table')
                             </div>
                         </div>
                     </div>
@@ -33,10 +33,10 @@
     $(function() {
         
         //Parâmetros para criação da datatable
-        table = $("#blockedProducts-table").DataTable({
+        table = $("#liberationItems-table").DataTable({
             scrollX: true,
             scrollY: "47vh",
-            ajax: 'blockedProducts/datatable',
+            ajax: 'liberationItems/datatable',
             autoWidth: true,
             fixedColumns:   {
                 leftColumns: 0,
@@ -54,8 +54,16 @@
                 }
             },
             columns: [ { data: 'company_id' },
-                { data: 'operation_code' },
+                { data: 'document_id' },
+                { data: 'document_item_id' },
                 { data: 'product_code' },
+                { data: 'pallet_id' },
+                { data: 'label_id' },
+                { data: 'qty' },
+                { data: 'liberation_status_id' },
+                { data: 'orig_location_code' },
+                { data: 'dest_location_code' },
+                { data: 'task_id' },
                
                        { data: null,
                          className: "th_grid",
@@ -65,19 +73,19 @@
       });
 
       //Funções dos botões de editar e excluir
-      $('#blockedProducts-table tbody').on( 'click', 'button', function () {
+      $('#liberationItems-table tbody').on( 'click', 'button', function () {
             var data = table.row( $(this).parents('tr') ).data();
             var id = $(this).attr('id');
             if(id == 'edit'){
                 //Editar Registro
-                window.location.href = "{!! URL::to('blockedProducts/"+data.id+"/edit') !!}";
+                window.location.href = "{!! URL::to('liberationItems/"+data.id+"/edit') !!}";
             }else{
                 //Excluir Registro
                 if(confirm('@lang("buttons.msg_remove")')){
                     //Token obrigatório para envio POST
                     var tk = $('meta[name="csrf-token"]').attr('content');
                     $.ajax({
-                        url: 'blockedProducts/'+data.id,
+                        url: 'liberationItems/'+data.id,
                         type: 'post',
                         data: {_method: 'delete', _token :tk},
                         success: function(scs){ 

@@ -119,7 +119,7 @@ class Location extends Model
             
             if(trim($qde) <> '' && $erro == 0){
                 //Pega saldo atual do endereço e compara com a capacidade do tipo
-                $capc = Stock::getSald($end[0]->code);
+                $capc = Stock::getSaldo($end[0]->code);
                 $total = $capc + $qde;
                 if($total > $end[0]->capacity_qty){
                     //Capacidade Excedida

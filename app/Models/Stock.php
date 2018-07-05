@@ -70,7 +70,7 @@ class Stock extends Model
 
     
 
-     //Retorna todos os stocks disponíveis
+     //Retorna todos os saldos disponíveis
      public static function getStocks(){
         return Stock::selectRaw("code,CONCAT(code,' - ',description) as description_f")
                       ->where('company_id', Auth::user()->company_id)
@@ -119,7 +119,7 @@ class Stock extends Model
      * Parâmetros: Endereço e Produto
      * @var array
      */
-    public static function getSald($endere, $produto = "", $company_id = ""){
+    public static function getSaldo($endere, $produto = "", $company_id = ""){
 
         $company_id = (trim($company_id == ''))?Auth::user()->company_id: $company_id;
         $GLOBALS['produto'] = $produto;
@@ -134,8 +134,48 @@ class Stock extends Model
                            }
                        })
                       ->sum('prev_qty');
-        return $saldo;
-                      
+        return $saldo;         
+
+    }
+
+    /**
+     * Função que retorna o saldo de um item por depósito (Para regras de liberação)
+     * Parâmetros: Deposito(s), Produto e Tipo de Estoque (Palete, picking ou picking por produto)
+     * @var array
+     */
+    public static function getSaldoDep($depositos, $produto, $tipoEstq = "", $company_id = ""){
+
+        $company_id = (trim($company_id == ''))?Auth::user()->company_id: $company_id;
+
+        $GLOBALS['tipoEstq'] = $tipoEstq;
+        $GLOBALS['depositos'] = explode(",",$depositos);
+        
+        //Obtem a soma do endereço
+        $saldos = DB::table('stocks')->select('stocks.product_code', 'stocks.label_id','stocks.pallet_id',
+                                              'stocks.location_code', DB::raw("SUM(prev_qty) as qty"),
+                                              'stocks.uom_code')
+                                     ->join('locations', function ($join) {
+                                        $join->on('locations.code', '=', 'stocks.location_code')
+                                             ->whereColumn('locations.company_id','stocks.company_id')
+                                             ->whereIn('locations.deposit_code',$GLOBALS['depositos'])
+                                             ->where('locations.status', 1)
+                                             ->where(function ($query) {
+                                                if(trim($GLOBALS['tipoEstq']) <> ''){
+                                                     $query->where('locations.stock_type_code',$GLOBALS['tipoEstq']);
+                                                }
+                                             });
+                                     })
+                                     ->where([
+                                                ['stocks.company_id', Auth::user()->company_id],
+                                                ['stocks.product_code', $produto],
+                                        ])
+                                    ->groupBy('stocks.product_code', 'stocks.label_id','stocks.pallet_id',
+                                              'stocks.location_code','stocks.uom_code')
+                                    ->get()
+                                    ->toArray();
+
+                                    //FAZER FIFO (VALIDADE)
+        return $saldos;         
 
     }
 
