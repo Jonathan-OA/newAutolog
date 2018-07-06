@@ -68,6 +68,21 @@ class LiberationItem extends Model
         
     ];
 
+
+    public function __construct($dadosItem, $pallet_id, $label_id, $qde, $orig_location, $dest_location){
+        $this->company_id = Auth::user()->company_id;
+        $this->document_id = $dadosItem['document_id'];
+        $this->document_item_id = $dadosItem['id'];
+        $this->product_code = $dadosItem['item_code'];
+        $this->pallet_id = $pallet_id;
+        $this->label_id = $label_id;
+        $this->liberation_status_id = 0;
+        $this->qty = $qde;
+        $this->orig_location_code = $orig_location;
+        $this->dest_location_code = $dest_location;
+        $this->save();
+    }
+
     
 
      //Retorna todos os liberation_items disponíveis
