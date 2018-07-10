@@ -11,35 +11,76 @@ class RulesProduction extends Model
     
     //Regra que valida o saldo
     public static function prd001($document_id){
-        DB::beginTransaction();
-        DB::commit();
-        $depositos = App\Models\Parameter::getParam("depositos_producao");
-        $itens = App\Models\DocumentItem::getItens($document_id);
+        
+        $erro = 0;
+        $itensSemSaldo = '';
 
+        $depositos = App\Models\Parameter::getParam("depositos_producao",'1');
+        $tarefa = App\Models\Parameter::getParam("tarefa_producao",'991');
+
+        $itens = App\Models\DocumentItem::getItens($document_id);
+        //Loop em todos os itens do documento
         foreach($itens as $item){
             $qdeItem = $item['qty'];
             $restante = $qdeItem;
-            //Loop até bater a quantidade solicitada do item
+            //Busca saldo disponível nos depositos para esse produto
             $saldos = App\Models\Stock::getSaldoDep($depositos, $item['item_code']);
+            print_r($saldos);
             foreach($saldos as $saldo){
-                print_r($saldo);
-                //$ins = new App\Models\LiberationItem($item,NULL,NULL,5,'ORG','DEST');
+                if($saldo->qty <= $restante){
+                    $qdeSaldo = $saldo->qty;
+                    $restante -= $qdeSaldo;
+                }else{
+                    $qdeSaldo = $restante;
+                    $restante = 0;
+                }
+                //Insere informações na tabela de liberações
+                $ins = new App\Models\LiberationItem($item,$saldo->pallet_id,$saldo->label_id,$qdeSaldo,$saldo->location_code,'DEST');
+                //Insere reserva do item
+                $input['product_code'] = $saldo->product_code;
+                $input['document_id'] = $item['id'];
+                $input['document_item_id'] = $document_id;
+                $input['location_code'] = $saldo->location_code;
+                $input['uom_code'] = $saldo->uom_code;
+                $input['prev_uom_code'] = $saldo->uom_code;
+                $input['label_id'] = $saldo->label_id;
+                $input['pallet_id'] = $saldo->pallet_id;
+                $input['prev_qty'] = $qdeSaldo;
+                $input['qty'] = $qdeSaldo;
+                $input['operation_code'] = '991';
 
+                $storeserck = App\Models\Stock::atuSaldo($input,'RESERVA');
 
+                //Se chegou na quantidade necessária do item, sai do loop de saldos para esse produto
+                if($restante <= 0){
+                    break;
+                }
                 
             }
+            //Buscou todos os saldos do produto e não bateu a quantidade =  erro
+            if($restante > 0){
+                $erro = 1;
+                $itensSemSaldo.= ' '.$item['item_code'].'('.$restante.')';
+            }
             
-            
-            echo ' ========== ';
         }
         
+        if($erro == 0){
+            $ret['erro'] = 0;
+            $ret['msg'] = '';
+        }else{
+            $ret['erro'] = 1;
+            $ret['msg'] = 'Os seguintes itens não possuem saldo: '.$itensSemSaldo;
+        }
+
+        return $ret;
         exit;
 
     }
 
     //Regra que valida o saldo
     public static function prd002($document_id){
-        echo 'opa2';
+        //echo 'opa2';
 
     }
 }

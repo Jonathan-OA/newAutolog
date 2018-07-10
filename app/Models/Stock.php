@@ -83,16 +83,28 @@ class Stock extends Model
      * Retorna 0 quando faz insert e 1 quando faz update
      * @var array
      */
-    public static function atuSald($input, $finalidade = "SALDO"){
+    public static function atuSaldo($input, $finalidade = "SALDO"){
+
+        $input['company_id'] = Auth::user()->company_id;
+        $input['finality_code'] = $finalidade;
+        $input['user_id'] = Auth::user()->id;
+        $input['operation_code'] = (empty($input['operation_code']))?'664':$input['operation_code'];
+
+        //Caso seja reserva, empenho ou em inventário, coloca a quantidade negativa
+        if($finalidade <> 'SALDO' && $finalidade <> 'RESSUP'){
+            $input['qty'] *= -1;
+            $input['prev_qty'] *= -1;
+        }
+
         //Valida se existe a linha para decidir se faz insert ou update
         $valExist = DB::table('stocks')->select('id')
                          ->where([
-                            ['company_id', Auth::user()->company_id],
+                            ['company_id', $input['company_id']],
                             ['product_code', $input['product_code']],
                             ['label_id', $input['label_id']],
                             ['pallet_id', $input['pallet_id']],
                             ['location_code', $input['location_code']],
-                            ['finality_code', $finalidade],
+                            ['finality_code', $input['finality_code']],
                            ])
                          ->first();
 
@@ -107,7 +119,7 @@ class Stock extends Model
             $upStock->qty = $upStock->qty + $input['qty'];
             $upStock->prev_qty = $upStock->prev_qty + $input['prev_qty'];
             $upStock->user_id = Auth::user()->id;
-            $upStock->operation_code = '664';
+            $upStock->operation_code = $input['operation_code'];
             $upStock->save();
             return 1;
         }
@@ -176,7 +188,6 @@ class Stock extends Model
 
                                     //FAZER FIFO (VALIDADE)
         return $saldos;         
-
     }
 
 

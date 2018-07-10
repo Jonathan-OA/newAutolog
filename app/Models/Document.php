@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Auth;
 use App;
+use DB;
 
 class Document extends Model
 {
@@ -60,6 +61,8 @@ class Document extends Model
 
             }
 
+            $erro = 0;
+
             //Busca todas as regras disponíveis para o tipo de documento
             $rules = App\Models\DocumentTypeRule::where([
                                                             ['company_id', Auth::user()->company_id],
@@ -68,16 +71,29 @@ class Document extends Model
                                                  ->orderBy('order', 'asc')
                                                  ->get()
                                                  ->toArray();
+            DB::beginTransaction();
             foreach($rules as $rule){
-                
                 $rule_code = $rule['liberation_rule_code'];
                 //Valida se existe a função com esse nome/código na classe correspondente
                 if(method_exists(new $class(),$rule_code)){
+                    //Chama a regra correspondente
                     $return = $class::$rule_code($document_id);
+                    if($return['erro'] <> 0){
+                        $erro = 1;
+                        //Caso dê erro, desfaz tudo que foi inserido
+                        DB::rollBack();
+                        break;
+                    }
                 }else{
-                    echo 'Regra não existe no arquivo de liberação.';
+                    echo 'Regra '.$rule_code.' não existe no arquivo de liberação.';
                 }
             }
+            if($erro == 0){
+                DB::commit();
+            }else{
+                echo $return['msg'];
+            }
+            
             
         }
 

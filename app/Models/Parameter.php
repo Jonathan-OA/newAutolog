@@ -65,7 +65,7 @@ class Parameter extends Model
      * @var array
      */
 
-    public static function getParam($code, $company_id = ''){
+    public static function getParam($code, $default = '', $company_id = ''){
         $company_id = (trim($company_id == ''))?Auth::user()->company_id: $company_id;
         $param = Parameter::where([
                                     ['company_id', $company_id],
@@ -73,7 +73,7 @@ class Parameter extends Model
                                 ])
                                 ->get();
         if(count($param) == 0){
-            return '';
+            return $default;
         }else{
             return $param[0]->value;
         }

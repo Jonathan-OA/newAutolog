@@ -102,7 +102,7 @@ class StockController extends AppBaseController
                     }
                 }
 
-               $stock = App\Models\Stock::atuSald($input);
+               $stock = App\Models\Stock::atuSaldo($input);
                 //Grava log
                $descricao = 'Ent. Manual -  End:'.$input['location_code'].' Umv: '.$input['label_id'].' - Prd: '.$input['product_code'].' Qde: '.$input['qty'].'('. $input['prev_qty'].')';
                $log = App\Models\Log::wlog('stocks_add', $descricao);
