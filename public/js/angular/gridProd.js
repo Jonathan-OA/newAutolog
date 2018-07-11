@@ -108,7 +108,7 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
     $scope.getFirstData = function() {
         $http({
             method: 'GET',
-            url: 'api/documentsProd/2000'
+            url: 'api/documents/010/2000'
         }).then(function(success) {
             $scope.gridOptions.data = success.data;
         }, function(error) {

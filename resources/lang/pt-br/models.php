@@ -240,13 +240,21 @@ return [
     'orig_location_code' => 'Endereço Origem',
     'dest_location_code' => 'Endereço Destino',
     'task_id' => 'Tarefa',
+    'courier_code' => 'Transportadora',
+    'supplier_code' => 'Fornecedor',
+    'customer_code' => 'Cliente',
+    'document_status_id' => 'Status',
+    'comments' => 'Observações',
     
     //PlaceHolders
     'sel_type' => 'Selecione um tipo: ',
     'sel_module' => 'Selecione um módulo: ',
 
     //Gerais
-    'entradaManual' => 'Entrada Manual',   
+    'entradaManual' => 'Entrada Manual',  
+    'production' => 'Módulo de Produção',  
+    'receipt' => 'Módulo de Recebimento',  
+    'separation' => 'Módulo de Separação',  
     
     
 

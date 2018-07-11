@@ -41,6 +41,7 @@ $(document).ready(function() {
         minLength: 0,
         source: function(request, response) {
             id = this.element.attr('id');
+
             campo = this.element.attr('name');
             var table = $('#' + id).attr('table');
             //Valida se este input esta atrelado ao valor de um input anterior para buscar como filtro 
@@ -90,7 +91,8 @@ $(document).ready(function() {
                 this.value = terms.join(", ");
                 return false;
             } else {
-                $('#' + id).val(ui.item.code);
+                console.log($('#' + id));
+                $('#' + id).val(ui.item.value);
             }
             $("[id_dep='" + id + "']").attr("readonly", false);
 

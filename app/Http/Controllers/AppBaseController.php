@@ -82,12 +82,18 @@ class AppBaseController extends Controller
             ->orderBy($field, 'asc')
             ->take(12)->get();
 
-        //Se tiver o campo descrição na tabela, concatena na label
+        //Se tiver o campo descrição/nome na tabela, concatena na label
         $hasDesc = (Schema::hasColumn($table, 'description'))?1:0;
+        $hasName = (Schema::hasColumn($table, 'name'))?1:0;
+
         
         foreach ($queries as $query)
         {
-            $desc = ($hasDesc == 1)? ' - '.$query->description : '';
+            if($hasDesc == 1){
+                $desc = ' - '.$query->description;
+            }elseif($hasName == 1){
+                $desc = ' - '.$query->name;
+            }
             $results[] = [ 'id' => $query->id, 'value' => $query->$field, 'label' => $query->$field.$desc ];
         }
         

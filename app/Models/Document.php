@@ -13,10 +13,32 @@ class Document extends Model
         'company_id',
         'number',
         'document_type_code', 
+        'courier_code', 
+        'supplier_code', 
+        'customer_code', 
         'emission_date',
-         'invoice', 
-         'document_status_id'
+        'invoice', 
+        'document_status_id',
+        'user_id'
     ];
+
+    /**
+     * Função que retorna todos os documentos de um tipo de movimento
+     * Parâmetros: Código do Movimento e quantidade de documentos para retornar
+     * @var array
+     */
+
+    public static function getDocuments($moviment_code, $qty){
+        $docs = Document::join('document_types', 'documents.document_type_code', '=', 'document_types.code')
+                       ->where([
+                                 ['documents.company_id', Auth::user()->company_id],
+                                 ['document_types.moviment_code', $moviment_code]                        
+                       ])
+                       ->take($qty)
+                       ->get()
+                       ->toArray();
+        return $docs;
+    }
 
     /**
      * Função que libera o documento encaminhando para as regras corretas de acordo com o tipo
@@ -43,11 +65,11 @@ class Document extends Model
             switch($doc[0]->moviment_code){
                 //Recebimento
                 case '010':
-                    $class = 'App\Models\RulesProduction';
-                    $urlRet = 'production'; //Rota para retornar após a liberação
+                    $class = 'App\Models\RulesReceipt';
+                    $urlRet = 'receipt'; //Rota para retornar após a liberação
                     break;
 
-                //Trânsferência
+                //Transferência
                 case '020':
                     $class = 'App\Models\RulesTransf';
                     $urlRet = 'transference'; //Rota para retornar após a liberação

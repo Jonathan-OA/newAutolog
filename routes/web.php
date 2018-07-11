@@ -20,9 +20,9 @@ Route::group(['middleware' => 'web'], function() {
     Route::get('/home', 'HomeController@index');
     Route::get('/', 'HomeController@index');
     //MODULOS
-    Route::get('/production', 'Modules\Production\ProductionController@index');
-    Route::get('/recebimento', 'Modules\Receipt\ReceiptController@index');
-    Route::get('/production/details/{document}', 'Modules\Production\ProductionController@items');
+    Route::resource('production', 'Modules\ProductionController');
+    Route::get('/recebimento', 'Modules\ReceiptController@index');
+    Route::get('/production/details/{document}', 'Modules\ProductionController@items');
     //Route::resource('documents', 'DocumentsController');
     Route::get('/document/liberate/{id}', 'DocumentController@liberate');
 
@@ -30,8 +30,10 @@ Route::group(['middleware' => 'web'], function() {
     Route::get('getButtons/{modulo}', 'ButtonsController@getButtons');
 
     //API
-    Route::get('/api/documentsProd/{qty?}', 'Modules\Production\ProductionController@getDocuments');
-    Route::get('/api/itemsProd/{document}', 'Modules\Production\ProductionController@getItems');
+    Route::get('/api/documents/{moviment}/{qty?}', function($moviment_code, $qty = '500') {
+        return App\Models\Document::getDocuments($moviment_code, $qty);
+    });
+    Route::get('/api/itemsProd/{document}', 'Modules\ProductionController@getItems');
     Route::post('/api/grid/', 'Modules\Geral\GridController@setColumns');
     Route::get('/api/grid/{module}', 'Modules\Geral\GridController@getColumns');
     Route::get('/api/operations/{module}', 'Modules\Geral\Operation@getOperations');

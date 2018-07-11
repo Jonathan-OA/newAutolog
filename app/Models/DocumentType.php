@@ -53,11 +53,15 @@ class DocumentType extends Model
     ];
 
     
-
-     //Retorna todos os document_types disponíveis
-     public static function getDocumentTypes(){
+     //Retorna todos os document_types disponíveis 
+     public static function getDocumentTypes($moviment_code = ''){
+         $GLOBALS['mov'] = $moviment_code;
         return DocumentType::selectRaw("code,CONCAT(code,' - ',description) as description_f")
-                      ->where('company_id', Auth::user()->company_id)
+                      ->where(function ($query) {
+                        if(!empty($GLOBALS['mov'])){
+                            $query->where('moviment_code',$GLOBALS['mov']);
+                        }
+                       })
                       ->pluck('description_f','code');
     }
 
