@@ -32,7 +32,9 @@ class Document extends Model
                        ->join('document_types', 'documents.document_type_code', '=', 'document_types.code')
                        ->where([
                                  ['documents.company_id', Auth::user()->company_id],
-                                 ['documents.id', $document_id]
+                                 ['documents.id', $document_id],
+                                 ['documents.document_status_id', 0],
+
                        ])
                        ->get();
         //Valida se achou o documento
@@ -42,21 +44,25 @@ class Document extends Model
                 //Recebimento
                 case '010':
                     $class = 'App\Models\RulesProduction';
+                    $urlRet = 'production'; //Rota para retornar após a liberação
                     break;
 
                 //Trânsferência
                 case '020':
-                    $class = 'RulesTransf';
+                    $class = 'App\Models\RulesTransf';
+                    $urlRet = 'transference'; //Rota para retornar após a liberação
                     break;
 
                 //Produção
                 case '030':
-                    $class = 'RulesProduction';
+                    $class = 'App\Models\RulesProduction';
+                    $urlRet = 'production'; //Rota para retornar após a liberação
                     break;
 
                 //Separação
                 case '070':
-                    $class = 'RulesSep';
+                    $class = 'App\Models\RulesSeparation';
+                    $urlRet = 'separation'; //Rota para retornar após a liberação
                     break;
 
             }
@@ -89,11 +95,22 @@ class Document extends Model
                 }
             }
             if($erro == 0){
+                //Deu tudo certo, da o commit
                 DB::commit();
+
+                //Grava log
+                $descricao = 'Liberou o documento: '.$doc[0]->document_type_code.' - '.$doc[0]->number.' ('.$document_id.')';
+                $log = App\Models\Log::wlog('documents_lib', $descricao);
+
+                $return['erro'] = 0;
+                $return['msg'] = 'Documento liberado com sucesso!';
+                $return['urlRet'] = $urlRet;
+
             }else{
-                echo $return['msg'];
+                $return['urlRet'] = $urlRet;
             }
             
+            return $return;
             
         }
 

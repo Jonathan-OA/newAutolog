@@ -15,6 +15,7 @@ app.config(['$qProvider', function($qProvider) {
 }]);
 
 
+
 //Grid de documentos
 app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '$timeout', '$element', function($rootScope, $scope, $http, uiGridConstants, $timeout, $element) {
 
@@ -65,10 +66,16 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
         paginationPageSize: 25
     };
 
+    //Função que chama as rotas do laravel
+    $scope.callRoute = function(route) {
+        window.location = route;
+    }
+
     $scope.showGridDet = function(id, number) {
         $rootScope.showGrid(id, number);
     }
 
+    //Salva o grid atual em uma variavel de sessão e banco (ajax)
     $scope.saveState = function() {
         var datas = $scope.gridApi.saveState.save();
         localStorage.setItem('Autolog_GridProd', JSON.stringify(datas));
@@ -82,7 +89,7 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
         });
     };
 
-
+    //Restaura o grid salvo em sessão ou banco (ajax)
     $scope.restoreState = function() {
         var columns = localStorage.getItem('Autolog_GridProd');
         if (columns) {
@@ -96,9 +103,9 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
             });
         }
     };
+
     //Carrega grid com os 2 mil ultimos documentos
     $scope.getFirstData = function() {
-        console.log('alo');
         $http({
             method: 'GET',
             url: 'api/documentsProd/2000'
@@ -137,7 +144,7 @@ app.controller('DetCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '
     $scope.gridDetalhes = {};
     $scope.gridDetalhes.data = [];
     $scope.gridDetalhes = {
-        enableFullRowSelection: true,
+        enableFullRowSelection: false,
         multiSelect: false,
         enableFiltering: false,
         fastWatch: true,
@@ -146,7 +153,7 @@ app.controller('DetCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '
             { name: 'Item', field: 'product_code' },
             { name: 'Unidade', field: 'uom_code' },
             { name: 'Quantidade', field: 'qty' },
-            { name: 'Status', field: 'status', cellTemplate: '<div class="ui-grid-cell-contents"><div class="grid_cell stat{{grid.getCellValue(row, col)}}">{{grid.getCellValue(row, col)}}</div></div>' },
+            { name: 'Status', field: 'document_status_id', cellTemplate: '<div class="ui-grid-cell-contents"><div class="grid_cell stat{{grid.getCellValue(row, col)}}">{{grid.getCellValue(row, col)}}</div></div>' },
             { name: 'Opções', cellTemplate: 'options' }
         ],
         enablePaginationControls: false,
@@ -177,6 +184,7 @@ app.controller('DetCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '
         }
     };
 
+    //Carrega a tabela quando clicar nos detalhes do documento
     $rootScope.showGrid = function(id, number) {
         $scope.documentNumber = number;
 
@@ -186,15 +194,11 @@ app.controller('DetCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '
             $scope.gridApiDet = gridApi;
         }
 
-        $http({
-            method: 'GET',
-            url: 'api/itemsProd/' + id
-        }).then(function(success) {
-            $scope.gridDetalhes.data = success.data;
-        }, function(error) {
-            console.log("Erro Detalhes - " + error);
-        });
-
+        //Busca os dados
+        $http.get('api/itemsProd/' + id)
+            .then(function(response) {
+                $scope.gridDetalhes.data = response.data;
+            });
     }
 
     //Esconde / Mostra os filtros

@@ -25,7 +25,7 @@ class RulesProduction extends Model
             $restante = $qdeItem;
             //Busca saldo disponível nos depositos para esse produto
             $saldos = App\Models\Stock::getSaldoDep($depositos, $item['item_code']);
-            print_r($saldos);
+
             foreach($saldos as $saldo){
                 if($saldo->qty <= $restante){
                     $qdeSaldo = $saldo->qty;
@@ -60,7 +60,7 @@ class RulesProduction extends Model
             //Buscou todos os saldos do produto e não bateu a quantidade =  erro
             if($restante > 0){
                 $erro = 1;
-                $itensSemSaldo.= ' '.$item['item_code'].'('.$restante.')';
+                $itensSemSaldo.= ' '.$item['item_code'].' ('.$restante.')';
             }
             
         }

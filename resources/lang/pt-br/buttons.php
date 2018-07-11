@@ -26,6 +26,7 @@ return [
     'filter' => 'Filtrar',
     'action' => 'Ações',
     'return' => 'Retornar',
+    'liberate' => 'Liberar',
     'msg_remove' => 'Deseja excluir este registro?',
     
 

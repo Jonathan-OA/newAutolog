@@ -9,7 +9,7 @@ class DocumentItem extends Model
     protected $table = 'document_items';
 
     protected $fillable = [
-        'company_id','document_id','product_code','uom_code','qty', 'status'
+        'company_id','document_id','product_code','uom_code','qty', 'document_status_id'
     ];
 
     /**
@@ -20,7 +20,7 @@ class DocumentItem extends Model
 
     public static function getItens($document_id){
         $itens = DocumentItem::where([ ['document_id', $document_id],
-                                       ['status','<>',9]
+                                       ['document_status_id','<>',9]
                                     ])
                              ->get()
                              ->toArray();
