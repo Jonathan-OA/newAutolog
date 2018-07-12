@@ -4,6 +4,9 @@
 <!-- Company Id Field -->
 <input id='company_id' name='company_id' type='hidden' value='{!! Auth::user()->company_id !!}'>
 
+<!-- User Id Field -->
+<input id='user_id' name='user_id' type='hidden' value='{!! Auth::user()->id !!}'>
+
 <!-- Document Type Code Field -->
 {!! Form::label('document_type_code', Lang::get('models.document_type_code').':') !!}
 {!! Form::select('document_type_code', $document_types,(!empty($document->document_type_code)) ? $document->document_type_code : '', ['class' => 'form-control']) !!}
@@ -14,7 +17,7 @@
 
 <!-- Customer Code Field -->
 {!! Form::label('customer_code', Lang::get('models.customer_code').':') !!}
-{!! Form::number('customer_code', null, ['class' => 'form-control', 'id' => 'autocomplete', 'table' => 'customers']) !!}
+{!! Form::text('customer_code', null, ['class' => 'form-control', 'id' => 'autocomplete', 'table' => 'customers']) !!}
 
 <!-- Supplier Code Field -->
 {!! Form::label('supplier_code', Lang::get('models.supplier_code').':') !!}

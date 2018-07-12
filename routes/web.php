@@ -262,3 +262,7 @@ Route::resource('blockedLocations', 'BlockedLocationController');
 
 Route::get('blockedOperations/datatable', 'BlockedOperationController@getData');
 Route::resource('blockedOperations', 'BlockedOperationController');
+
+
+Route::get('documentStatus/datatable', 'DocumentStatusController@getData');
+Route::resource('documentStatus', 'DocumentStatusController');

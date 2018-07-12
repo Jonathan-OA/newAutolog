@@ -2,14 +2,28 @@
 
 namespace App\Http\Controllers\Modules;
 
+use App\Http\Requests\CreateDocumentRequest;
+use App\Http\Requests\UpdateDocumentRequest;
+use App\Repositories\DocumentRepository;
+use App\Http\Controllers\AppBaseController;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App;
 use Auth;
+use Flash;
+use Lang;
 
 class ProductionController extends Controller
 {
+    
+    private $documentRepository;
+
+    public function __construct(DocumentRepository $docRepo)
+    {
+        $this->documentRepository = $docRepo;
+    }
+
     public function index(){
         return view('modules.production.grid'); 
     }
@@ -34,6 +48,24 @@ class ProductionController extends Controller
             Flash::error(Lang::get('validation.permission'));
             return redirect(url('production'));
         }
+    }
+
+    /**
+     * Grava o novo documento de produção
+     *
+     * @param CreateConfigRequest $request
+     *
+     * @return Response
+     */
+    public function store(CreateDocumentRequest $request)
+    {
+        $input = $request->all();
+
+        $document = $this->documentRepository->create($input);
+
+        Flash::success(Lang::get('validation.save_success'));
+
+        return redirect(url('production'));
     }
 
     public function items($id){

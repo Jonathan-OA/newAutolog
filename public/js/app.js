@@ -91,7 +91,7 @@ $(document).ready(function() {
                 this.value = terms.join(", ");
                 return false;
             } else {
-                console.log($('#' + id));
+                console.log(ui.item.value);
                 $('#' + id).val(ui.item.value);
             }
             $("[id_dep='" + id + "']").attr("readonly", false);

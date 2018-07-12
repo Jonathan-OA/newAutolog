@@ -160,7 +160,12 @@ return [
         'document_type_code'  => 'Tipo de Documento',
         'deposit_code'  => 'Depósito',
         'sector_code'  => 'Setor',
-        'group_code'  => 'Grupo de Produtos'
+        'group_code'  => 'Grupo de Produtos',
+        'number'  => 'Número',
+        'document_status_id'  => 'Status',
+        'customer_code'  => 'Cliente',
+        'courier_code'  => 'Transportadora',
+        'supplier_code'  => 'Fornecedor'
     ],
 
 ];

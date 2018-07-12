@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Models\Documentt;
+use App\Models\Document;
 use InfyOm\Generator\Common\BaseRepository;
 
 /**
@@ -14,7 +14,7 @@ use InfyOm\Generator\Common\BaseRepository;
  * @method Documentt find($id, $columns = ['*'])
  * @method Documentt first($columns = ['*'])
 */
-class DocumenttRepository extends BaseRepository
+class DocumentRepository extends BaseRepository
 {
     /**
      * @var array
@@ -22,9 +22,9 @@ class DocumenttRepository extends BaseRepository
     protected $fieldSearchable = [
         'company_id',
         'number',
-        'customer_id',
-        'supplier_id',
-        'courier_id',
+        'customer_code',
+        'supplier_code',
+        'courier_code',
         'invoice',
         'serial_number',
         'emission_date',
@@ -39,7 +39,8 @@ class DocumenttRepository extends BaseRepository
         'vehicle_id',
         'priority',
         'comments',
-        'document_type_code'
+        'document_type_code',
+        'user_id'
     ];
 
     /**
@@ -47,6 +48,6 @@ class DocumenttRepository extends BaseRepository
      **/
     public function model()
     {
-        return Documentt::class;
+        return Document::class;
     }
 }

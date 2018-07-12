@@ -12,16 +12,36 @@ class Document extends Model
     protected $fillable = [
         'company_id',
         'number',
-        'document_type_code', 
-        'courier_code', 
-        'supplier_code', 
-        'customer_code', 
+        'customer_code',
+        'supplier_code',
+        'courier_code',
+        'invoice',
+        'serial_number',
         'emission_date',
-        'invoice', 
+        'start_date',
+        'end_date',
+        'wave',
+        'total_volumes',
+        'total_weight',
         'document_status_id',
+        'total_net_weigth',
+        'driver_id',
+        'vehicle_id',
+        'priority',
+        'comments',
+        'document_type_code',
         'user_id'
     ];
 
+    /**
+     * Validation rules
+     *
+     * @var array
+     */
+    public static $rules = [
+        
+    ];
+    
     /**
      * Função que retorna todos os documentos de um tipo de movimento
      * Parâmetros: Código do Movimento e quantidade de documentos para retornar

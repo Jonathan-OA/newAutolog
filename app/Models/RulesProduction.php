@@ -78,9 +78,12 @@ class RulesProduction extends Model
 
     }
 
-    //Regra que valida o saldo
+    //Regra que cria tarefa de produção e atualiza status
     public static function prd002($document_id){
-        //echo 'opa2';
+        
+        $doc = App\Models\Document::find($document_id);
+        $doc->document_status_id = 1;
+        $doc->save();
 
     }
 }

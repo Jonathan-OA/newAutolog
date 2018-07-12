@@ -34,16 +34,16 @@
                             <!-- Alerta de erro / sucesso -->
                             @include('flash::message')
                             <div class="row buttons_grid">
-                                    <button class="icon_grid" aria-label="@lang('buttons.add')" data-microtip-position="bottom" role="tooltip">
+                                    <div class="icon_grid" aria-label="@lang('buttons.add')" data-microtip-position="bottom" role="tooltip">
                                         <a href="{!! route('production.create') !!}">
                                             <img class='icon' src='{{asset('/icons/add.png') }}'>
                                         </a>
-                                    </button>
-                                    <button class="icon_grid" aria-label="@lang('buttons.import')" data-microtip-position="bottom" role="tooltip">
+                                    </div>
+                                    <div class="icon_grid" aria-label="@lang('buttons.import')" data-microtip-position="bottom" role="tooltip">
                                         <a  href="{!! route('modules.create') !!}">
                                             <img class='icon' src='{{asset('/icons/import.png') }}'>
                                         </a>
-                                    </button>
+                                    </div>
                                     <button class="icon_grid" aria-label="@lang('buttons.filter')" data-microtip-position="bottom" role="tooltip" ng-click="toggleFiltering()">
                                         <img class='icon' src='{{asset('/icons/filter.png') }}'>
                                     </button>

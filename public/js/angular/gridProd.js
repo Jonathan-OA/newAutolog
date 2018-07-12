@@ -37,7 +37,7 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
 
                 if (qty_lines == 0 && $scope.gridOptions.enableFiltering) {
                     //Busca os dados novamente
-                    $http.get('api/documentsProd/')
+                    $http.get('api/documents/030')
                         .then(function(response) {
                             $scope.gridOptions.data = response.data;
                         });
@@ -108,7 +108,7 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
     $scope.getFirstData = function() {
         $http({
             method: 'GET',
-            url: 'api/documents/010/2000'
+            url: 'api/documents/030/2000'
         }).then(function(success) {
             $scope.gridOptions.data = success.data;
         }, function(error) {

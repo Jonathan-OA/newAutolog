@@ -75,6 +75,7 @@ return [
     'liberation_items' => 'Itens de Liberação do Documento',
     'blocked_locations' => 'Produtos Bloqueados em Endereços',
     'blocked_operations' => 'Produtos Bloqueados em Operações',
+    'document_status' => 'Status de Documentos',
 
     //Columns
     'id' => 'ID',

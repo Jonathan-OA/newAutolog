@@ -3,9 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Models\Documentt;
+use App\Models\DocumentStatus;
 
-class UpdateDocumenttRequest extends FormRequest
+class CreateDocumentStatusRequest extends FormRequest
 {
 
     /**
@@ -25,6 +25,6 @@ class UpdateDocumenttRequest extends FormRequest
      */
     public function rules()
     {
-        return Documentt::$rules;
+        return DocumentStatus::$rules;
     }
 }
