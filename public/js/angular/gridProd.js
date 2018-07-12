@@ -59,7 +59,7 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
                 cellTemplate: '<div class="ui-grid-cell-contents"><div class="grid_cell stat{{grid.getCellValue(row, col)}}">{{grid.getCellValue(row, col)}}</div></div>'
             },
             { name: 'Emissão', field: 'emission_date' },
-            { name: 'Cliente', field: 'customer_id' },
+            { name: 'Cliente', field: 'customer_code' },
             { name: 'Opções', cellTemplate: 'options' }
         ],
         enablePaginationControls: true,
@@ -124,6 +124,7 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
     };
 
     //Carrega botões para o documento
+    /*
     $scope.showActions = function(modulo, id) {
         $.get('getButtons/' + modulo, function(data) {
             //Remove a div gerada anteriormente (caso exista)
@@ -137,6 +138,7 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
             //console.log($('#listButtons' + id).position());
         })
     };
+    */
 }]);
 
 //Grid de detalhes dos documentos

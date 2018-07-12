@@ -40,7 +40,7 @@
                                         </a>
                                     </div>
                                     <div class="icon_grid" aria-label="@lang('buttons.import')" data-microtip-position="bottom" role="tooltip">
-                                        <a  href="{!! route('modules.create') !!}">
+                                        <a  href="#">
                                             <img class='icon' src='{{asset('/icons/import.png') }}'>
                                         </a>
                                     </div>

@@ -30,7 +30,7 @@ Route::group(['middleware' => 'web'], function() {
     Route::get('getButtons/{modulo}', 'ButtonsController@getButtons');
 
     //API
-    Route::get('/api/documents/{moviment}/{qty?}', function($moviment_code, $qty = '500') {
+    Route::get('/api/documents/{moviment}/{qty?}', function($moviment_code, $qty = '15000') {
         return App\Models\Document::getDocuments($moviment_code, $qty);
     });
     Route::get('/api/itemsProd/{document}', 'Modules\ProductionController@getItems');

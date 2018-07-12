@@ -1,41 +1,51 @@
 <div class="form_fields">
-@include('adminlte-templates::common.errors')
+    <!-- Alerta de erro / sucesso -->
+    @include('flash::message')
+    @include('adminlte-templates::common.errors')
 
-<!-- Company Id Field -->
-<input id='company_id' name='company_id' type='hidden' value='{!! Auth::user()->company_id !!}'>
+    <!-- Company Id Field -->
+    <input id='company_id' name='company_id' type='hidden' value='{!! Auth::user()->company_id !!}'>
 
-<!-- User Id Field -->
-<input id='user_id' name='user_id' type='hidden' value='{!! Auth::user()->id !!}'>
+    <!-- User Id Field -->
+    @if(!empty($action) && $action == 'edit')
+        <input id='user_id' name='user_id' type='hidden' value='{!! $document->user_id !!}'>
+    @else
+        <input id='user_id' name='user_id' type='hidden' value='{!! Auth::user()->id !!}'>
+    @endif
 
-<!-- Document Type Code Field -->
-{!! Form::label('document_type_code', Lang::get('models.document_type_code').':') !!}
-{!! Form::select('document_type_code', $document_types,(!empty($document->document_type_code)) ? $document->document_type_code : '', ['class' => 'form-control']) !!}
+    <!-- Document Type Code Field -->
+    {!! Form::label('document_type_code', Lang::get('models.document_type_code').':') !!}
+    {!! Form::select('document_type_code', $document_types,(!empty($document->document_type_code)) ? $document->document_type_code : '', ['class' => 'form-control']) !!}
 
-<!-- Number Field -->
-{!! Form::label('number', Lang::get('models.number').':') !!}
-{!! Form::text('number', null, ['class' => 'form-control']) !!}
+    <!-- Number Field -->
+    {!! Form::label('number', Lang::get('models.number').':') !!}
+    @if(!empty($action) && $action == 'edit')
+        {!! Form::text('number', null, ['class' => 'form-control', 'readonly']) !!}
+    @else
+        {!! Form::text('number', null, ['class' => 'form-control']) !!}
+    @endif
+    <!-- Customer Code Field -->
+    {!! Form::label('customer_code', Lang::get('models.customer_code').':') !!}
+    {!! Form::text('customer_code', null, ['class' => 'form-control', 'id' => 'autocomplete', 'table' => 'customers']) !!}
 
-<!-- Customer Code Field -->
-{!! Form::label('customer_code', Lang::get('models.customer_code').':') !!}
-{!! Form::text('customer_code', null, ['class' => 'form-control', 'id' => 'autocomplete', 'table' => 'customers']) !!}
+    <!-- Supplier Code Field -->
+    {!! Form::label('supplier_code', Lang::get('models.supplier_code').':') !!}
+    {!! Form::text('supplier_code', null, ['class' => 'form-control', 'id' => 'autocomplete1', 'table' => 'suppliers']) !!}
 
-<!-- Supplier Code Field -->
-{!! Form::label('supplier_code', Lang::get('models.supplier_code').':') !!}
-{!! Form::text('supplier_code', null, ['class' => 'form-control', 'id' => 'autocomplete1', 'table' => 'suppliers']) !!}
+    <!-- Courier Code Field -->
+    {!! Form::label('courier_code', Lang::get('models.courier_code').':') !!}
+    {!! Form::text('courier_code', null, ['class' => 'form-control', 'id' => 'autocomplete2', 'table' => 'couriers']) !!}
 
-<!-- Courier Code Field -->
-{!! Form::label('courier_code', Lang::get('models.courier_code').':') !!}
-{!! Form::text('courier_code', null, ['class' => 'form-control', 'id' => 'autocomplete2', 'table' => 'couriers']) !!}
+    <!-- Document Status Field -->
+    @if(!empty($action) && $action == 'edit')
+        <input id='document_status_id' name='document_status_id' type='hidden' value='{!! $document->document_status_id !!}'>
+    @else
+        <input id='document_status_id' name='document_status_id' type='hidden' value='0'>
+    @endif
 
-<!-- Document Status Id Field -->
-{!! Form::label('document_status_id', Lang::get('models.document_status_id').':') !!}
-{!! Form::text('document_status_id', null, ['class' => 'form-control', 'id' => 'autocomplete3', 'table' => 'document_status']) !!}
-
-<!-- Comments Field -->
-{!! Form::label('comments', Lang::get('models.comments').':') !!}
-{!! Form::text('comments', null, ['class' => 'form-control']) !!}
-
-
+    <!-- Comments Field -->
+    {!! Form::label('comments', Lang::get('models.comments').':') !!}
+    {!! Form::text('comments', null, ['class' => 'form-control']) !!}
 </div>
 
 <!-- Submit Field -->

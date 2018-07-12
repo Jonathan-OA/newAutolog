@@ -256,6 +256,8 @@ return [
     'production' => 'Módulo de Produção',  
     'receipt' => 'Módulo de Recebimento',  
     'separation' => 'Módulo de Separação',  
+    'document_edit' => 'Documento: ',  
+    'document_create' => 'Criação de Documento',  
     
     
 
