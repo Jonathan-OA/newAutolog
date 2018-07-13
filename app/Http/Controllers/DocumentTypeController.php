@@ -149,7 +149,7 @@ class DocumentTypeController extends AppBaseController
 
         //Grava log
         $requestF = $request->all();
-        $descricao = 'Alterou DocumentType ID: '.$id.' - '.$requestF['code'];
+        $descricao = 'Alterou Tipo de Documento ID: '.$id.' - '.$requestF['code'];
         $log = App\Models\Log::wlog('document_types_edit', $descricao);
 
 
@@ -183,7 +183,7 @@ class DocumentTypeController extends AppBaseController
             $this->documentTypeRepository->delete($id);
 
              //Grava log
-            $descricao = 'Excluiu DocumentType ID: '.$id;
+            $descricao = 'Excluiu Tipo de Documento ID: '.$id.' - '.$documentType->code ;
             $log = App\Models\Log::wlog('document_types_remove', $descricao);
 
 

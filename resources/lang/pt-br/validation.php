@@ -166,7 +166,8 @@ return [
         'document_status_id'  => 'Status',
         'customer_code'  => 'Cliente',
         'courier_code'  => 'Transportadora',
-        'supplier_code'  => 'Fornecedor'
+        'supplier_code'  => 'Fornecedor',
+        'moviment_code'  => 'Movimento'
     ],
 
 ];

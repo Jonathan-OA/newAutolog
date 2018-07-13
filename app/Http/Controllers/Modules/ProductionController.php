@@ -29,6 +29,11 @@ class ProductionController extends AppBaseController
         return view('modules.production.grid'); 
     }
 
+    //--------------------------------------------------------------------------------------------
+    //                                     Funções de Documentos
+    //--------------------------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
+
     /**
      * Mostra o formulário para criação de documento de produção.
      *
@@ -139,6 +144,32 @@ class ProductionController extends AppBaseController
     }
 
 
+
+    //--------------------------------------------------------------------------------------------
+    //                                     Funções de Itens
+    //--------------------------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
+
+    /**
+     * Mostra o formulário para criação de itens em um documento de produção
+     *
+     * @return Response
+     */
+    public function createItem($document_id)
+    {
+        $document = $this->documentRepository->findWithoutFail($document_id);
+
+        //Valida se usuário possui permissão para acessar esta opção
+        if(App\Models\User::getPermission('documents_prod_item_add',Auth::user()->user_type_code)){
+
+            return view('modules.production.createDocument')->with('document',$document);
+        }else{
+            //Sem permissão
+            Flash::error(Lang::get('validation.permission'));
+            return redirect(url('production'));
+        }
+
+    }
 
 
     public function items($id){

@@ -3,10 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Models\DocumentType;
-use Request;
+use App\Models\DocumentItem;
 
-class UpdateDocumentTypeRequest extends FormRequest
+class UpdateDocumentItemRequest extends FormRequest
 {
 
     /**
@@ -26,10 +25,6 @@ class UpdateDocumentTypeRequest extends FormRequest
      */
     public function rules()
     {
-        return [ 
-            'code' => 'required|string|unique:document_types,code,'.$this->get('id').',id|max:5',
-            'description' => 'required|string|max:50',
-            'moviment_code' => 'required|string|exists:moviments,code|max:5',
-            ];
+        return DocumentItem::$rules;
     }
 }

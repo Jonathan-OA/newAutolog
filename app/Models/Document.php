@@ -128,37 +128,20 @@ class Document extends Model
                        
         //Valida se achou o documento
         if(count($doc) > 0){
+            $erro = 0;
+
+            //Busca qual a classe e o retorno para buscar as regras de liberação
+            $rc = App\Models\Moviment::getClass($doc[0]->moviment_code);
             
-            //Switch para definir qual classe de liberação será utilizada no documento baseado no movimento
-            switch($doc[0]->moviment_code){
-                
-                //Recebimento
-                case '010':
-                    $class = 'App\Models\RulesReceipt';
-                    $urlRet = 'receipt'; //Rota para retornar após a liberação
-                    break;
-
-                //Transferência
-                case '020':
-                    $class = 'App\Models\RulesTransf';
-                    $urlRet = 'transference'; //Rota para retornar após a liberação
-                    break;
-
-                //Produção
-                case '030':
-                    $class = 'App\Models\RulesProduction';
-                    $urlRet = 'production'; //Rota para retornar após a liberação
-                    break;
-
-                //Separação
-                case '070':
-                    $class = 'App\Models\RulesSeparation';
-                    $urlRet = 'separation'; //Rota para retornar após a liberação
-                    break;
-
+            if($rc){
+                $class = $rc['class'];
+                $urlRet = $rc['urlRet'];
+            }else{
+                $return['erro'] = 1;
+                $return['msg'] = 'Não foram encontradas regras para este movimento!';
+                return $return;
             }
 
-            $erro = 0;
             
             //Busca todas as regras disponíveis para o tipo de documento
             $rules = App\Models\DocumentTypeRule::where([
@@ -220,24 +203,59 @@ class Document extends Model
      */
 
     public static function return($document_id){
+        //Busca documento
         $doc = App\Models\Document::find($document_id);
-        $doc->document_status_id = 0;
-        $doc->save();
-        //Apaga informaçoes da tabela de liberação
-        $rLb = DB::table('liberation_itens')->where([  
-                                                     ['company_id', Auth::user()->company_id],
-                                                     ['document_id', $document_id]
-                                           ])->delete();
+        //Busca o movimento
+        $moviment = App\Models\DocumentType::select('moviment_code')
+                                           ->where('code', $doc->document_type_code)
+                                           ->get()
+                                           ->toArray();      
 
-        $rSt = DB::table('stocks')->where([  
-                                                    ['company_id', Auth::user()->company_id],
-                                                    ['document_id', $document_id],
-                                                    ['finality_code', 'RESERVA']
-                                            ])->delete();                                   
+        //Busca qual o modulo / retorno desse tipo de documento
+        $rc = App\Models\Moviment::getClass($moviment[0]['moviment_code']);
         
-        $return['erro'] = 0;
-        $return['msg'] = 'Documento retornado com sucesso!';
-        $return['urlRet'] = $urlRet;
+        if($rc){
+            $class = $rc['class'];
+            $urlRet = $rc['urlRet'];
+        }else{
+            $return['erro'] = 1;
+            $return['msg'] = 'Não foram encontradas regras para este movimento!';
+            return $return;
+        }
+
+        if(count($doc) > 0){
+            $doc->document_status_id = 0;
+            $doc->save();
+            //Apaga informaçoes da tabela de liberação
+            $rLb = DB::table('liberation_items')->where([  
+                                                        ['company_id', Auth::user()->company_id],
+                                                        ['document_id', $document_id]
+                                            ])->delete();
+
+            //Apaga reservas criadas para o documento  
+            $rSt = DB::table('stocks')->where([  
+                                                        ['company_id', Auth::user()->company_id],
+                                                        ['document_id', $document_id],
+                                                        ['finality_code', 'RESERVA']
+                                                ])->delete();     
+            
+            //Apagar tarefas
+                                                                                          
+            //Grava log
+            $descricao = 'Retornou o documento: '.$doc->document_type_code.' - '.$doc->number.' ('.$document_id.')';
+            $log = App\Models\Log::wlog('documents_ret', $descricao);
+
+            $return['erro'] = 0;
+            $return['msg'] = 'Documento retornado com sucesso!';
+            $return['urlRet'] = $urlRet;
+        }else{
+            $return['erro'] = 1;
+            $return['msg'] = 'Erro ao retornar documento!';
+        }
+        
+        return $return;
         
     }
+
+    
 }

@@ -4,14 +4,10 @@
     <div class="row">
         <div class="col-md-12 pad-ct">
             <div class="panel panel-default" >
-                <div class="panel-heading ptabs">
-                    <!-- Abas -->
-                    <ul class="nav nav-tabs">
-                         <!-- Textos baseados no arquivo de linguagem -->
-                         <li class="active-l"><a href="#">@lang('models.document_types') </a></li>
-                         <li><a href="{!! route('moviments.index') !!}">@lang('models.moviments')</a></li>
-                     </ul>
-                 </div>
+                <div class="panel-heading">
+                   <!-- Texto baseado no arquivo de linguagem -->
+                   @lang('models.document_items') 
+                </div>
                 <div class="panel panel-default">
                     <div class="row">
                         <div class="col-md-12">
@@ -19,10 +15,10 @@
                             @include('flash::message')
                             <div id="msg_excluir"></div>
                             <div class="row buttons_grid">
-                                <a class="btn btn-success"  href="{!! route('documentTypes.create') !!}">@lang('buttons.add')</a>
+                                <a class="btn btn-success"  href="{!! route('documentItems.create') !!}">@lang('buttons.add')</a>
                             </div>
                             <div class="panel-body">
-                                @include('document_types.table')
+                                @include('document_items.table')
                             </div>
                         </div>
                     </div>
@@ -37,10 +33,10 @@
     $(function() {
         
         //Parâmetros para criação da datatable
-        table = $("#documentTypes-table").DataTable({
+        table = $("#documentItems-table").DataTable({
             scrollX: true,
             scrollY: "47vh",
-            ajax: 'documentTypes/datatable',
+            ajax: 'documentItems/datatable',
             autoWidth: true,
             fixedColumns:   {
                 leftColumns: 0,
@@ -57,53 +53,34 @@
                     sPrevious: "@lang('models.previous')",
                 }
             },
-            columns: [  { data: 'code' },
-                        { data: 'description' },
-                        { data: 'moviment_code' },
-                        { data: 'lib_automatic', className: 'td_center' },
-                        { data: 'lib_location', className: 'td_center' },
-                        { data: 'print_labels', className: 'td_center' },
+            columns: [  { data: 'product_code' },
+                        { data: 'qty' },
+                        { data: 'uom_code' },
+                        { data: 'document_status_id' },
+                        { data: 'batch' },
+                        { data: 'qty_conf' },
+                        { data: 'qty_ship' },
                         { data: null,
                          className: "th_grid",
                          defaultContent: "<button id='edit' aria-label='@lang('buttons.edit')' data-microtip-position='left' role='tooltip' ><img class='icon' src='{{asset('/icons/editar.png') }}'></button><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='{{asset('/icons/remover.png') }}'></button>",
                          width: "90px" 
                         }],
-            "rowCallback": function( row, data, index ) {
-                    //Se ativo, coloca icone de habilitado
-                    if ( data.lib_automatic == 1 ) {
-                        $('td:eq(3)', row).html( "<img class='icon' src='{{asset('/icons/checked.png') }}'>" );
-                    }else{
-                        $('td:eq(3)', row).html('');
-                    }
-                    //Se ativo, coloca icone de habilitado
-                    if ( data.lib_location == 1 ) {
-                        $('td:eq(4)', row).html( "<img class='icon' src='{{asset('/icons/checked.png') }}'>" )
-                    }else{
-                        $('td:eq(4)', row).html('');
-                    }
-                    //Se ativo, coloca icone de habilitado
-                    if ( data.print_labels == 1 ) {
-                        $('td:eq(5)', row).html( "<img class='icon' src='{{asset('/icons/checked.png') }}'>" )
-                    }else{
-                        $('td:eq(5)', row).html('');
-                    }
-                }
       });
 
       //Funções dos botões de editar e excluir
-      $('#documentTypes-table tbody').on( 'click', 'button', function () {
+      $('#documentItems-table tbody').on( 'click', 'button', function () {
             var data = table.row( $(this).parents('tr') ).data();
             var id = $(this).attr('id');
             if(id == 'edit'){
                 //Editar Registro
-                window.location.href = "{!! URL::to('documentTypes/"+data.id+"/edit') !!}";
+                window.location.href = "{!! URL::to('documentItems/"+data.id+"/edit') !!}";
             }else{
                 //Excluir Registro
                 if(confirm('@lang("buttons.msg_remove")')){
                     //Token obrigatório para envio POST
                     var tk = $('meta[name="csrf-token"]').attr('content');
                     $.ajax({
-                        url: 'documentTypes/'+data.id,
+                        url: 'documentItems/'+data.id,
                         type: 'post',
                         data: {_method: 'delete', _token :tk},
                         success: function(scs){ 

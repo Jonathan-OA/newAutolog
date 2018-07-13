@@ -19,12 +19,14 @@ Auth::routes();
 Route::group(['middleware' => 'web'], function() {
     Route::get('/home', 'HomeController@index');
     Route::get('/', 'HomeController@index');
-    //MODULOS
+    //Modulo de Produção
+    Route::get('production/createItem/{document_id}', 'Modules\ProductionController@createItem');
     Route::resource('production', 'Modules\ProductionController');
-    Route::get('/recebimento', 'Modules\ReceiptController@index');
-    Route::get('/production/details/{document}', 'Modules\ProductionController@items');
-    //Route::resource('documents', 'DocumentsController');
-    Route::get('/document/liberate/{id}', 'DocumentController@liberate');
+
+    //Rota que libera um documento
+    Route::get('/document/liberate/{id}', 'DocumentController@liberateDoc');
+    //Rota que retorna um documento
+    Route::get('/document/return/{id}', 'DocumentController@returnDoc');
 
     //BOTÕES
     Route::get('getButtons/{modulo}', 'ButtonsController@getButtons');
@@ -266,3 +268,11 @@ Route::resource('blockedOperations', 'BlockedOperationController');
 
 Route::get('documentStatus/datatable', 'DocumentStatusController@getData');
 Route::resource('documentStatus', 'DocumentStatusController');
+
+
+Route::get('documentTypes/datatable', 'DocumentTypeController@getData');
+Route::resource('documentTypes', 'DocumentTypeController');
+
+
+Route::get('documentItems/datatable', 'DocumentItemController@getData');
+Route::resource('documentItems', 'DocumentItemController');

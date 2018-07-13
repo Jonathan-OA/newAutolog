@@ -76,6 +76,7 @@ return [
     'blocked_locations' => 'Produtos Bloqueados em Endereços',
     'blocked_operations' => 'Produtos Bloqueados em Operações',
     'document_status' => 'Status de Documentos',
+    'document_items' => 'Itens do Documento',
 
     //Columns
     'id' => 'ID',
@@ -246,6 +247,19 @@ return [
     'customer_code' => 'Cliente',
     'document_status_id' => 'Status',
     'comments' => 'Observações',
+    'lib_automatic' => 'Lib. Automática',
+    'lib_location' => 'Lib. com End. Destino',
+    'num_automatic' => 'Numeração Automática na Criação',
+    'print_labels' => 'Tela de Impressão de Etiquetas',
+    'partial_lib' => 'Liberação de Saldo Parcial',
+    'lib_deposits' => 'Depósitos Válidos',
+    'qty_conf' => 'Quantidade Conferida',
+    'qty_ship' => 'Quantidade Embarcada',
+    'qty_reject' => 'Quantidade Rejeitada',
+    'invoice' => 'Nota Fiscal',
+    'invoice_serial_number' => ' N. Série Nota Fiscal',
+
+    
     
     //PlaceHolders
     'sel_type' => 'Selecione um tipo: ',
@@ -258,7 +272,7 @@ return [
     'separation' => 'Módulo de Separação',  
     'document_edit' => 'Documento: ',  
     'document_create' => 'Criação de Documento',  
-    
+    'item_create' => 'Criação de Item',  
     
 
 

@@ -47,6 +47,54 @@ class Moviment extends Model
         
     ];
 
+    /**
+     * Função que retorna a qual classe e modulo pertence o movimento indicado
+     * Parâmetros: Código do Movimento
+     * @var array
+     */
+
+    public static function getClass($moviment_code){
+
+        $class = '';
+
+        //Switch para definir qual classe de liberação será utilizada para manipular documentos desse movimento
+        switch($moviment_code){
+                
+            //Recebimento
+            case '010':
+                $class = 'App\Models\RulesReceipt';
+                $urlRet = 'receipt'; //Rota para retornar após a ação
+                break;
+
+            //Transferência
+            case '020':
+                $class = 'App\Models\RulesTransf';
+                $urlRet = 'transference'; //Rota para retornar após a ação
+                break;
+
+            //Produção
+            case '030':
+                $class = 'App\Models\RulesProduction';
+                $urlRet = 'production'; //Rota para retornar após a ação
+                break;
+
+            //Separação
+            case '070':
+                $class = 'App\Models\RulesSeparation';
+                $urlRet = 'separation'; //Rota para retornar após a ação
+                break;
+
+        }
+
+        if(trim($class) == ''){
+            return false;
+        }else{
+            return array('class' => $class,'urlRet' => $urlRet);
+        }
+
+    }
+
+
     //Retorna todos os $TABLE_NAME$ disponíveis
     public static function getMoviments(){
         return Moviment::selectRaw("code,CONCAT(code,' - ',description) as description_f")
