@@ -105,11 +105,13 @@ class DocumentItem extends Model
 
     
 
-     //Retorna todos os document_items disponíveis
-     public static function getDocumentItems(){
-        return DocumentItem::selectRaw("code,CONCAT(code,' - ',description) as description_f")
-                      ->where('company_id', Auth::user()->company_id)
-                      ->pluck('description_f','code');
+     //Retorna todos os itens disponíveis em um documento
+     public static function getItens($document_id){
+        return DocumentItem::where('company_id', Auth::user()->company_id)
+                            ->where('document_id', $document_id)
+                            ->where('document_status_id', '<>', 9)
+                            ->get()
+                            ->toArray();
     }
 
 

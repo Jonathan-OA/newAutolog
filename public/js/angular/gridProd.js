@@ -18,7 +18,7 @@ app.config(['$qProvider', function($qProvider) {
 
 //Grid de documentos
 app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '$timeout', '$element', function($rootScope, $scope, $http, uiGridConstants, $timeout, $element) {
-
+    $scope.hasFilter = false;
     $scope.gridOptions = {
         enableFullRowSelection: false,
         multiSelect: false,
@@ -35,12 +35,16 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
             $scope.gridApi.core.on.rowsRendered($scope, function() {
                 var qty_lines = $scope.gridApi.core.getVisibleRows($scope.gridApi.grid).length;
 
-                if (qty_lines == 0 && $scope.gridOptions.enableFiltering) {
-                    //Busca os dados novamente
+                if (qty_lines == 0 && $scope.gridOptions.enableFiltering && !$scope.hasFilter) {
+                    //Variavel de controle para buscar o filtro externo apenas uma vez
+                    $scope.hasFilter = true;
+                    //Busca os dados novamente sem filtro de quantidade
                     $http.get('api/documents/030')
                         .then(function(response) {
                             $scope.gridOptions.data = response.data;
                         });
+                } else {
+                    $scope.hasFilter = false;
                 }
             })
         },
@@ -52,9 +56,9 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
                 name: 'Status',
                 field: 'document_status_id',
                 filter: {
-                    term: '1',
+                    noTerm: true,
                     type: uiGridConstants.filter.SELECT,
-                    selectOptions: [{ value: '1', label: 'Liberado' }, { value: '2', label: 'Em execução' }, { value: '0', label: 'Pendente' }]
+                    selectOptions: [{ value: '0', label: 'Pendente' }, { value: '1', label: 'Liberado' }, { value: '2', label: 'Em execução' }]
                 },
                 cellTemplate: '<div class="ui-grid-cell-contents"><div class="grid_cell stat{{grid.getCellValue(row, col)}}">{{grid.getCellValue(row, col)}}</div></div>'
             },
@@ -119,6 +123,7 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
 
     //Esconde / Mostra os filtros
     $scope.toggleFiltering = function() {
+        $scope.hasFilter = false;
         $scope.gridOptions.enableFiltering = !$scope.gridOptions.enableFiltering;
         $scope.gridApi.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
     };
@@ -165,7 +170,7 @@ app.controller('DetCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '
     $scope.saveState = function() {
         var datas = $scope.gridApiDet.saveState.save();
         localStorage.setItem('Autolog_GridProdDet', JSON.stringify(datas));
-        $http.post('api/grid', datas)
+        $http.post('../../api/grid', datas)
             .success(function(data, status, headers, config) {
                 $scope.PostDataResponse = data;
             }).error(function(data, status, header, config) {
@@ -179,7 +184,7 @@ app.controller('DetCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '
         if (columns) {
             $scope.gridApiDet.saveState.restore($scope, JSON.parse(columns));
         } else {
-            $http.get('api/grid/Produção')
+            $http.get('../../api/grid/Produção')
                 .success(function(data) {
                     $scope.gridApiDet.saveState.restore($scope, data);
                 })
@@ -187,21 +192,22 @@ app.controller('DetCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '
     };
 
     //Carrega a tabela quando clicar nos detalhes do documento
-    $rootScope.showGrid = function(id, number) {
+    $scope.showGrid = function(id, number) {
+        console.log(id);
         $scope.documentNumber = number;
 
-        $scope.gridDetalhes.data = [];
-
-        $scope.gridDetalhes.onRegisterApi = function(gridApi) {
-            $scope.gridApiDet = gridApi;
-        }
-
         //Busca os dados
-        $http.get('api/itemsProd/' + id)
+        $http.get('../../api/itemsProd/' + id)
             .then(function(response) {
                 $scope.gridDetalhes.data = response.data;
             });
     }
+
+    //Função que chama as rotas do laravel
+    $scope.resetGrid = function() {
+        console.log('aeeee');
+    }
+
 
     //Esconde / Mostra os filtros
     $scope.toggleFiltering = function() {

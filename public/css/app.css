@@ -140,7 +140,7 @@
     .panel-heading>.nav>.active-l>a {
         color: #17263d !important;
         font-weight: bold;
-        text-decoration: underline;
+        text-decoration: none;
     }
     
     .panel {
@@ -224,6 +224,7 @@
     .breadcrumb-item>a {
         color: #17263d;
         font-weight: bold;
+        text-decoration: underline;
     }
     
     .breadcrumb {

@@ -29,7 +29,6 @@ return [
     'users' => 'Usuários',
     'permissions' => 'Permissões',
     'documents' => 'Documents',
-    'items' => 'Produtos',
     'operations' => 'Operações',
     'parameters' => 'Parâmetros',
     'modules' => 'Modulos',
@@ -77,6 +76,7 @@ return [
     'blocked_operations' => 'Produtos Bloqueados em Operações',
     'document_status' => 'Status de Documentos',
     'document_items' => 'Itens do Documento',
+    'logs' => 'Logs do Sistema',
 
     //Columns
     'id' => 'ID',
@@ -258,6 +258,7 @@ return [
     'qty_reject' => 'Quantidade Rejeitada',
     'invoice' => 'Nota Fiscal',
     'invoice_serial_number' => ' N. Série Nota Fiscal',
+    'created_at' => 'Data',
 
     
     
@@ -273,6 +274,7 @@ return [
     'document_edit' => 'Documento: ',  
     'document_create' => 'Criação de Documento',  
     'item_create' => 'Criação de Item',  
+    'items' => 'Itens',
     
 
 

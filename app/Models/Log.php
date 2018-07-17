@@ -3,13 +3,19 @@
 namespace App\Models;
 
 use Eloquent as Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Auth;
+use Auth;
+
 
 /**
  * Class Log
  * @package App\Models
- * @version November 1, 2017, 1:42 pm UTC
+ * @version July 16, 2018, 12:05 am -03
+ *
+ * @property \Illuminate\Database\Eloquent\Collection permissionRole
+ * @property integer company_id
+ * @property string description
+ * @property integer user_id
+ * @property string operation_code
  */
 class Log extends Model
 {
@@ -18,10 +24,8 @@ class Log extends Model
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
-
-    protected $dates = ['deleted_at'];
-
-
+	
+	
     public $fillable = [
         'company_id',
         'description',
@@ -50,6 +54,7 @@ class Log extends Model
         
     ];
 
+    
     /**
      * Função que insere o log de uma operação no sistema
      *
@@ -65,6 +70,13 @@ class Log extends Model
         }
 
     }
-
     
+     //Retorna todos os logs disponíveis
+     public static function getLogs(){
+        return Log::selectRaw("code,CONCAT(code,' - ',description) as description_f")
+                      ->where('company_id', Auth::user()->company_id)
+                      ->pluck('description_f','code');
+    }
+
+
 }

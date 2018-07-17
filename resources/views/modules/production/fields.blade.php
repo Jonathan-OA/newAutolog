@@ -43,6 +43,11 @@
         <input id='document_status_id' name='document_status_id' type='hidden' value='0'>
     @endif
 
+    <!-- Emission Date Field -->
+    {!! Form::label('emission_date', Lang::get('models.emission_date').':') !!}
+    {!! Form::date('emission_date', (!empty($document->emission_date)) ? $document->emission_date->format('Y-m-d') : date('Y-m-d'), ['class' => 'form-control']) !!}
+
+
     <!-- Comments Field -->
     {!! Form::label('comments', Lang::get('models.comments').':') !!}
     {!! Form::text('comments', null, ['class' => 'form-control']) !!}

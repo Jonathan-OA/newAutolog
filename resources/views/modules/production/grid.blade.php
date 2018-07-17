@@ -5,7 +5,7 @@
         <div class="col-md-12 pad-ct">
 
             <!-- Grid de Detalhes (Carrega quando clica na lupa na coluna de opções) -->  
-            <div id="myModal" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+            <div id="myModal" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" ng-blur="resetGrid()">
                 <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content" ng-controller="DetCtrl">
                         <div class="panel panel-default">

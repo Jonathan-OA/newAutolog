@@ -20,7 +20,8 @@ Route::group(['middleware' => 'web'], function() {
     Route::get('/home', 'HomeController@index');
     Route::get('/', 'HomeController@index');
     //Modulo de Produção
-    Route::get('production/createItem/{document_id}', 'Modules\ProductionController@createItem');
+    Route::get('production/{document_id}/items', 'Modules\ProductionController@showItems');
+    Route::get('production/{document_id}/items/create', 'Modules\ProductionController@createItem');
     Route::resource('production', 'Modules\ProductionController');
 
     //Rota que libera um documento
@@ -276,3 +277,7 @@ Route::resource('documentTypes', 'DocumentTypeController');
 
 Route::get('documentItems/datatable', 'DocumentItemController@getData');
 Route::resource('documentItems', 'DocumentItemController');
+
+
+Route::get('logs/datatable', 'LogController@getData');
+Route::resource('logs', 'LogController');
