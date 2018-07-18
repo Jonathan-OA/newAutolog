@@ -3,30 +3,10 @@
 @section('content')
     <div class="row" ng-app="grid_prod">
         <div class="col-md-12 pad-ct">
-
-            <!-- Grid de Detalhes (Carrega quando clica na lupa na coluna de opções) -->  
-            <div id="myModal" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" ng-blur="resetGrid()">
-                <div class="modal-dialog modal-lg" role="document">
-                    <div class="modal-content" ng-controller="DetCtrl">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                Módulo de Produção - Documento: {% documentNumber %}
-                            </div>
-                            <div class="panel-body">
-                                <div ui-grid="gridDetalhes" ui-grid-auto-resize ui-grid-selection ui-grid-pagination ui-grid-move-columns ui-grid-save-state class="grid" ></div>
-                                    <button id="save" type="button" class="btn btn-success" ng-click="saveState()">Save</button>
-                                    <button id="restore" type="button" class="btn btn-success" ng-click="restoreState()">Restore</button>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-            
             <!-- Grid Principal -->
             <div class="panel panel-default" ng-controller="MainCtrl" >
                 <div class="panel-heading">
-                    Módulo de Produção
+                    @lang('models.production')
                 </div>
                 <div class="panel panel-default">
                     <div class="row">

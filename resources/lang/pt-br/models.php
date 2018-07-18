@@ -275,6 +275,7 @@ return [
     'document_create' => 'Criação de Documento',  
     'item_create' => 'Criação de Item',  
     'items' => 'Itens',
+    'items_doc' => 'Itens do Documento',
     
 
 

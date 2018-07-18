@@ -5,12 +5,11 @@
     <input id='company_id' name='company_id' type='hidden' value='{!! Auth::user()->company_id !!}'>
     
     <!-- Document Id Field -->
-    {!! Form::label('document_id', Lang::get('models.document_id').':') !!}
-    {!! Form::number('document_id', null, ['class' => 'form-control']) !!}
+    <input id='document_id' name='document_id' type='hidden' value='{!! $document->id !!}'>
     
     <!-- Product Code Field -->
     {!! Form::label('product_code', Lang::get('models.product_code').':') !!}
-    {!! Form::text('product_code', null, ['class' => 'form-control']) !!}
+    {!! Form::text('product_code', null, ['class' => 'form-control', 'id' => 'autocomplete', 'table' => 'products']) !!}
     
     <!-- Qty Field -->
     {!! Form::label('qty', Lang::get('models.qty').':') !!}
@@ -18,11 +17,10 @@
     
     <!-- Uom Code Field -->
     {!! Form::label('uom_code', Lang::get('models.uom_code').':') !!}
-    {!! Form::text('uom_code', null, ['class' => 'form-control']) !!}
+    {!! Form::text('uom_code', null, ['class' => 'form-control', 'id' => 'autocomplete1', 'table' => 'packings', 'id_dep' => 'autocomplete', 'readonly']) !!}
     
     <!-- Document Status Id Field -->
-    {!! Form::label('document_status_id', Lang::get('models.document_status_id').':') !!}
-    {!! Form::number('document_status_id', null, ['class' => 'form-control']) !!}
+    <input id='document_status_id' name='document_status_id' type='hidden' value='0'>
     
     <!-- Batch Field -->
     {!! Form::label('batch', Lang::get('models.batch').':') !!}
@@ -60,13 +58,10 @@
     {!! Form::label('sequence_item', Lang::get('models.sequence_item').':') !!}
     {!! Form::number('sequence_item', null, ['class' => 'form-control']) !!}
     
-    <!-- Umvcad Id Field -->
-    {!! Form::label('umvcad_id', Lang::get('models.umvcad_id').':') !!}
-    {!! Form::number('umvcad_id', null, ['class' => 'form-control']) !!}
     
     <!-- Location Code Field -->
     {!! Form::label('location_code', Lang::get('models.location_code').':') !!}
-    {!! Form::text('location_code', null, ['class' => 'form-control']) !!}
+    {!! Form::text('location_code', null, ['class' => 'form-control', 'id' => 'autocomplete3', 'table' => 'locations']) !!}
     
     <!-- Source Field -->
     {!! Form::label('source', Lang::get('models.source').':') !!}

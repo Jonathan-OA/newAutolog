@@ -26,7 +26,7 @@ class ProductionController extends AppBaseController
     }
 
     public function index(){
-        return view('modules.production.grid'); 
+        return view('modules.production.gridDoc'); 
     }
 
     //--------------------------------------------------------------------------------------------
@@ -159,7 +159,7 @@ class ProductionController extends AppBaseController
     {
         $document = $this->documentRepository->findWithoutFail($document_id);
 
-        return view('modules.production.gridDet')->with('document',$document);
+        return view('modules.production.gridItem')->with('document',$document);
 
     }
 
@@ -198,7 +198,7 @@ class ProductionController extends AppBaseController
 
 
     public function items($id){
-        return view('modules.production.gridDet')->with(['document' => $id]); 
+        return view('modules.production.gridItem')->with(['document' => $id]); 
     }
 
     public function getItems($document_id){

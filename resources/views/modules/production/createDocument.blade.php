@@ -13,7 +13,7 @@
                             <div class="col-md-12">
                                 {!! Form::open(['route' => 'production.store']) !!}
                                 <div class="form-group">
-                                    @include('modules.production.fields')
+                                    @include('modules.production.fieldsDoc')
                                 </div>
                                 {!! Form::close() !!}
                             </div>

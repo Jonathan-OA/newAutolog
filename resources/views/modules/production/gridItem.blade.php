@@ -13,7 +13,7 @@
             <!-- Grid de Detalhes  -->
             <div class="panel  pbreadpanel-default" ng-controller="DetCtrl" ng-init="showGrid('{{ $document->id }}','{{ $document->number }}')">
                 <div class="panel-heading">
-                    Itens do Documento: {{ $document->document_type_code }} -  {{ $document->number }}
+                    @lang('models.items_doc'): {{ $document->document_type_code }} -  {{ $document->number }}
                 </div>
                 <div class="panel pbread panel-default">
                     <div class="row">
