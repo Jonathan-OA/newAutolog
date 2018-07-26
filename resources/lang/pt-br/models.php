@@ -257,8 +257,11 @@ return [
     'qty_ship' => 'Quantidade Embarcada',
     'qty_reject' => 'Quantidade Rejeitada',
     'invoice' => 'Nota Fiscal',
-    'invoice_serial_number' => ' N. Série Nota Fiscal',
+    'invoice_serial_number' => ' N. Série da Nota Fiscal',
     'created_at' => 'Data',
+    'emission_date' => 'Data de Emissão',
+    'source' => 'Origem',
+    'sequence_item' => 'SeqItem',
 
     
     
@@ -274,8 +277,10 @@ return [
     'document_edit' => 'Documento: ',  
     'document_create' => 'Criação de Documento',  
     'item_create' => 'Criação de Item',  
+    'item_edit' => 'Edição de Item',  
     'items' => 'Itens',
     'items_doc' => 'Itens do Documento',
+    'dashboard' => 'Dashboard',
     
 
 

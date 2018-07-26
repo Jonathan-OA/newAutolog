@@ -3,9 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Models\ItemType;
+use App\Models\Graph;
 
-class UpdateItemTypeRequest extends FormRequest
+class UpdateGraphRequest extends FormRequest
 {
 
     /**
@@ -25,6 +25,6 @@ class UpdateItemTypeRequest extends FormRequest
      */
     public function rules()
     {
-        return ItemType::$rules;
+        return Graph::$rules;
     }
 }

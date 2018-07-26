@@ -19,10 +19,16 @@ Auth::routes();
 Route::group(['middleware' => 'web'], function() {
     Route::get('/home', 'HomeController@index');
     Route::get('/', 'HomeController@index');
-    //Modulo de Produção
-    Route::get('production/{document_id}/items', 'Modules\ProductionController@showItems');
-    Route::get('production/{document_id}/items/create', 'Modules\ProductionController@createItem');
-    Route::resource('production', 'Modules\ProductionController');
+    // ----------------------------------------------------------------------------------------------
+    // Modulo de Produção
+    // ----------------------------------------------------------------------------------------------
+    Route::get('production/{document_id}/items', 'Modules\ProductionController@showItems'); //Mostra grid de itens
+    Route::get('production/{document_id}/items/create', 'Modules\ProductionController@createItem'); //Form de criação de itens
+    Route::get('production/{document_id}/items/{document_item_id}/edit', 'Modules\ProductionController@editItem'); //Form de edição de itens
+    Route::patch('production/updateItem/{document_item_id}', 'Modules\ProductionController@updateItem')->name('production.updateItem');; //Atualiza item
+    Route::post('production/storeItem', 'Modules\ProductionController@storeItem')->name('production.storeItem');; //Cria item
+    Route::resource('production', 'Modules\ProductionController'); //Ações de documentos de produção
+    // ----------------------------------------------------------------------------------------------
 
     //Rota que libera um documento
     Route::get('/document/liberate/{id}', 'DocumentController@liberateDoc');
@@ -40,6 +46,9 @@ Route::group(['middleware' => 'web'], function() {
     Route::post('/api/grid/', 'Modules\Geral\GridController@setColumns');
     Route::get('/api/grid/{module}', 'Modules\Geral\GridController@getColumns');
     Route::get('/api/operations/{module}', 'Modules\Geral\Operation@getOperations');
+
+    //Retorna informações de um gráfico cadastrado
+    Route::get('/api/graphs/{id}', 'GraphController@getDataGraph');
 
     //IMPORTAÇÃO
     Route::get('/import', 'ImportacaoGeralController@index');
@@ -281,3 +290,7 @@ Route::resource('documentItems', 'DocumentItemController');
 
 Route::get('logs/datatable', 'LogController@getData');
 Route::resource('logs', 'LogController');
+
+
+Route::get('graphs/datatable', 'GraphController@getData');
+Route::resource('graphs', 'GraphController');

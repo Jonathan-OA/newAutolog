@@ -191,6 +191,10 @@ app.controller('DetCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '
         }
     };
 
+    $scope.callRoute = function(route) {
+        window.location = route;
+    }
+
     //Carrega a tabela quando clicar nos detalhes do documento
     $scope.showGrid = function(id, number) {
         console.log(id);

@@ -127,7 +127,7 @@
     
     .ui-grid {
         width: 100%;
-        height: 400px;
+        height: 59vh;
     }
     
     .pad-ct {
@@ -317,6 +317,10 @@
         padding: 0px 2px;
     }
     
+    .form_bread {
+        height: 66vh !important;
+    }
+    
     .form_fields {
         overflow-y: auto;
         height: 72vh;
@@ -465,6 +469,10 @@
     /*                 Dashboard                   */
     /* --------------------------------------------*/
     
+    .grid-stack {
+        margin-top: 5px;
+    }
+    
     .dash_sep {
         background-color: #17263d;
         color: white;
@@ -486,12 +494,17 @@
     }
     
     .kpi {
-        padding-top: 1rem;
+        margin: auto;
         border: 1px solid #868686;
-        height: 8rem;
+        color: white;
         font-size: 2rem;
         text-align: center;
-        border-radius: 15px 50px 30px
+        border-radius: 5px;
+    }
+    
+    .trash {
+        background-color: red;
+        height: 20px;
     }
     /* --------------------------------------------*/
     /*                 Instalador                  */

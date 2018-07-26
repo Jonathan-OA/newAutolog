@@ -90,9 +90,13 @@ class AppBaseController extends Controller
         foreach ($queries as $query)
         {
             if($hasDesc == 1){
+                //Se possui o campo descrição na tabela, concatena no texto que aparece para o usuário
                 $desc = ' - '.$query->description;
             }elseif($hasName == 1){
+                //Se possui o campo name na tabela, concatena no texto que aparece para o usuário
                 $desc = ' - '.$query->name;
+            }else{
+                $desc = '';
             }
             $results[] = [ 'id' => $query->id, 'value' => $query->$field, 'label' => $query->$field.$desc ];
         }

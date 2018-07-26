@@ -32,7 +32,7 @@
                                 <div ui-grid="gridOptions" ui-grid-auto-resize  ui-grid-resize-columns ui-grid-selection ui-grid-pagination ui-grid-move-columns ui-grid-save-state >
                                 </div>
                                     <!-- Botões com as opções para cada documento -->
-                                    @include('modules.production.buttons')
+                                    @include('modules.production.buttonsDoc')
                                 <button id="save" type="button" class="btn btn-success" ng-click="saveState()">Save</button>
                                 <button id="restore" type="button" class="btn btn-success" ng-click="restoreState()">Restore</button>
                             </div>

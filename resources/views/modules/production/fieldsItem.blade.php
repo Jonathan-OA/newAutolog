@@ -1,6 +1,6 @@
-<div class="form_fields">
+<div class="form_fields form_bread">
     @include('adminlte-templates::common.errors')
-    
+
     <!-- Company Id Field -->
     <input id='company_id' name='company_id' type='hidden' value='{!! Auth::user()->company_id !!}'>
     
@@ -9,8 +9,11 @@
     
     <!-- Product Code Field -->
     {!! Form::label('product_code', Lang::get('models.product_code').':') !!}
-    {!! Form::text('product_code', null, ['class' => 'form-control', 'id' => 'autocomplete', 'table' => 'products']) !!}
-    
+    @if(!empty($action) && $action == 'edit')
+        {!! Form::text('product_code', null, ['class' => 'form-control', 'id' => 'autocomplete', 'table' => 'products', 'readonly']) !!}
+    @else
+        {!! Form::text('product_code', null, ['class' => 'form-control', 'id' => 'autocomplete', 'table' => 'products']) !!}
+    @endif
     <!-- Qty Field -->
     {!! Form::label('qty', Lang::get('models.qty').':') !!}
     {!! Form::number('qty', null, ['class' => 'form-control']) !!}
@@ -90,5 +93,5 @@
 
 <!-- Submit Field -->
 {!! Form::submit(Lang::get('buttons.save'), ['class' => 'btn btn-primary']) !!}
-<a href="{!! route('documentItems.index') !!}" class="btn btn-default">@lang('buttons.cancel')</a>
+<a href="{!! url('production/'.$document->id.'/items') !!}" class="btn btn-default">@lang('buttons.cancel')</a>
         

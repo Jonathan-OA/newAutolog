@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Modules;
 use App\Http\Requests\CreateDocumentRequest;
 use App\Http\Requests\UpdateDocumentRequest;
 use App\Repositories\DocumentRepository;
+use App\Http\Requests\CreateDocumentItemRequest;
+use App\Http\Requests\UpdateDocumentItemRequest;
+use App\Repositories\DocumentItemRepository;
 use App\Http\Controllers\AppBaseController;
 use Illuminate\Http\Request;
 use App\Http\Requests;
@@ -19,10 +22,12 @@ class ProductionController extends AppBaseController
 {
     
     private $documentRepository;
+    private $documentItemRepository;
 
-    public function __construct(DocumentRepository $docRepo)
+    public function __construct(DocumentRepository $docRepo, DocumentItemRepository $itemRepo)
     {
         $this->documentRepository = $docRepo;
+        $this->documentItemRepository = $itemRepo;
     }
 
     public function index(){
@@ -57,7 +62,7 @@ class ProductionController extends AppBaseController
     /**
      * Grava o novo documento de produção
      *
-     * @param CreateConfigRequest $request
+     * @param CreateDocumentRequest $request
      *
      * @return Response
      */
@@ -116,7 +121,7 @@ class ProductionController extends AppBaseController
      * Atualiza o documento de produção
      *
      * @param  int              $id
-     * @param UpdateBlockedGroupRequest $request
+     * @param UpdateDocumentRequest $request
      *
      * @return Response
      */
@@ -158,9 +163,7 @@ class ProductionController extends AppBaseController
     public function showItems($document_id)
     {
         $document = $this->documentRepository->findWithoutFail($document_id);
-
         return view('modules.production.gridItem')->with('document',$document);
-
     }
 
 
@@ -169,13 +172,12 @@ class ProductionController extends AppBaseController
      *
      * @return Response
      */
+
     public function createItem($document_id)
     {
-        $document = $this->documentRepository->findWithoutFail($document_id);
-
         //Valida se usuário possui permissão para acessar esta opção
         if(App\Models\User::getPermission('documents_prod_item_add',Auth::user()->user_type_code)){
-
+            $document = $this->documentRepository->findWithoutFail($document_id);
             return view('modules.production.createItem')->with('document',$document);
         }else{
             //Sem permissão
@@ -185,16 +187,80 @@ class ProductionController extends AppBaseController
 
     }
 
+
+    /**
+     * Grava o novo item de um documento de produção
+     *
+     * @param CreateDocumentItemRequest $request
+     *
+     * @return Response
+     */
+    public function storeItem(CreateDocumentItemRequest $request)
+    {
+        $input = $request->all();       
+
+        $documentItem = $this->documentItemRepository->create($input);
+        Flash::success(Lang::get('validation.save_success'));
+
+        return redirect(url('production/'.$input['document_id'].'/items'));
+
+    }
+
     /**
      * Mostra o formulário para edição de itens em um documento de produção
      *
      * @return Response
      */
-    public function editItem($document_id)
+
+    public function editItem($document_id, $document_item_id)
     {
+        //Valida se usuário possui permissão para acessar esta opção
+        if(App\Models\User::getPermission('documents_prod_item_edit',Auth::user()->user_type_code)){
+
+            $document = $this->documentRepository->findWithoutFail($document_id);
+            $document_item = $this->documentItemRepository->findWithoutFail($document_item_id);
+
+            return view('modules.production.editItem')->with('document',$document)
+                                                      ->with('documentItem',$document_item);
+        }else{
+            //Sem permissão
+            Flash::error(Lang::get('validation.permission'));
+            return redirect(url('production/'.$input['document_id'].'/items'));
+        }
 
     }
-    
+
+    /**
+     * Atualiza o item de um documento de produção
+     *
+     * @param  int              $id
+     * @param UpdateDocumentItemRequest $request
+     *
+     * @return Response
+     */
+    public function updateItem($id, UpdateDocumentItemRequest $request)
+    {
+        
+        $documentItem = $this->documentItemRepository->findWithoutFail($id);
+        
+        //Valida se item foi encontrado
+        if (empty($documentItem)) {
+            Flash::error(Lang::get('validation.not_found'));
+        }else{
+            //Grava log
+            $requestF = $request->all();
+            $descricao = 'Alterou Item ID: '.$id.' - '.$requestF['product_code'].' - '.$requestF['qty'].' '.$requestF['uom_code'].' - Lote: '.$requestF['batch'].' //Doc_ID: '.$requestF['document_id'];
+            $log = App\Models\Log::wlog('documents_prod_item_edit', $descricao);
+
+
+            $documentItem = $this->documentItemRepository->update($request->all(), $id);
+
+            Flash::success(Lang::get('validation.update_success'));
+        }
+
+        return redirect(url('production/'.$requestF['document_id'].'/items'));
+
+    }
 
 
     public function items($id){

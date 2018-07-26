@@ -15,6 +15,9 @@ class Document extends Model
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
+    protected $dates = ['created_at','updated_at','emission_date','start_date','end_date'];
+
+
     protected $fillable = [
         'id',
         'company_id',

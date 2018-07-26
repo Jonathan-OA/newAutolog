@@ -11,15 +11,15 @@
     </nav>
     <div class="row">
         <div class="col-md-12 pad-ct">
-            <div class="panel panel-default" >
+            <div class="panel pbread panel-default" >
                 <div class="panel-heading">
                     @lang('models.production') - @lang('models.item_create'): {{ $document->document_type_code }} -  {{ $document->number }}
                 </div>
-                <div class="panel panel-default">
+                <div class="panel pbread panel-default">
                     <div class="panel-body" >
                         <div class="row">
                             <div class="col-md-12">
-                                {!! Form::open(['route' => 'production.store']) !!}
+                                {!! Form::open(['route' => 'production.storeItem']) !!}
                                 <div class="form-group">
                                     @include('modules.production.fieldsItem')
                                 </div>

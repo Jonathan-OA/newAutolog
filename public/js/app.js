@@ -107,8 +107,48 @@ $(document).ready(function() {
 
 
 
-
 });
+
+//Função genérica que cria um gráfico 
+function generateGraph(ctx, url) {
+    $.ajax({
+        url: url,
+        async: true,
+        dataType: 'json',
+        type: "get",
+    }).done(function(result) {
+        var myChart = new Chart(ctx, {
+            type: result.chartType,
+            data: {
+                labels: result.labels,
+                datasets: [{
+                    label: 'Quantidade',
+                    data: result.data,
+                    backgroundColor: result.color,
+                    borderColor: result.color,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                removable: true,
+                maintainAspectRatio: false,
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                },
+                title: {
+                    display: true,
+                    text: result.title
+                }
+            }
+        });
+    });
+}
+
 
 //Atualiza o usuário logado de 1 em 1 minuto
 setInterval(function() {

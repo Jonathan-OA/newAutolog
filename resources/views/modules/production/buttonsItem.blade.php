@@ -1,9 +1,9 @@
 <script type="text/ng-template" id="options">    
-    <div id="hhhaaa" class="ui-grid-cell-contents" style="overflow: visible !important;"  ng-controller="MainCtrl">
+    <div id="hhhaaa" class="ui-grid-cell-contents" style="overflow: visible !important;"  ng-controller="DetCtrl">
         <!-- Funções para status 0 -->
         <span ng-if="row.entity.document_status_id == 0">
              <!-- Editar (Apenas status 0) -->
-             <button ng-click="callRoute('./production/'+row.entity.id+'/edit')" class="icon_action" aria-label="@lang('buttons.edit')" data-microtip-position="left" role="tooltip">
+             <button ng-click="callRoute('../../production/'+row.entity.document_id+'/items/'+row.entity.id+'/edit')" class="icon_action" aria-label="@lang('buttons.edit')" data-microtip-position="left" role="tooltip">
                 <img class='icon' src='{{ asset('/icons/editar.png') }}'> 
             </button>
         </span>
