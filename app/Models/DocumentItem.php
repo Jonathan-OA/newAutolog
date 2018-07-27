@@ -46,6 +46,7 @@ class DocumentItem extends Model
 	
 	
     public $fillable = [
+        'id',
         'company_id',
         'document_id',
         'product_code',
@@ -105,11 +106,21 @@ class DocumentItem extends Model
 
     
 
-     //Retorna todos os itens disponíveis em um documento
-     public static function getItens($document_id){
-        return DocumentItem::where('company_id', Auth::user()->company_id)
+     //Retorna todos os itens disponíveis em um documento desconsiderando o status do parâmetro
+     public static function getItens($document_id, $statusDsc = ''){
+        
+        return DocumentItem::select('document_items.id','company_id','document_id','product_code','qty','uom_code',
+                                    'document_status_id','batch','batch_supplier','serial_number','qty_conf','qty_ship',
+                                    'qty_reject','invoice','invoice_serial_number','sequence_item','umvcad_id','location_code',
+                                    'source','obs1','obs2','obs3','obs4','obs5','document_items.created_at', 'description')
+                            ->join('document_status','document_status.id','document_items.document_status_id')
+                            ->where('company_id', Auth::user()->company_id)
                             ->where('document_id', $document_id)
-                            ->where('document_status_id', '<>', 9)
+                            ->where(function ($query) {
+                                if(!empty($statusDsc)){
+                                    $query->where('document_status.id', '<>' ,$statusDsc);
+                                }
+                            })
                             ->get()
                             ->toArray();
     }

@@ -77,6 +77,7 @@ return [
     'document_status' => 'Status de Documentos',
     'document_items' => 'Itens do Documento',
     'logs' => 'Logs do Sistema',
+    'graphs' => 'Gráficos',
 
     //Columns
     'id' => 'ID',
@@ -262,6 +263,8 @@ return [
     'emission_date' => 'Data de Emissão',
     'source' => 'Origem',
     'sequence_item' => 'SeqItem',
+    'title' => 'Título',
+    'color' => 'Cor',
 
     
     

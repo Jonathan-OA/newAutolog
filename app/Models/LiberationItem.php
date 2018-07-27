@@ -73,7 +73,7 @@ class LiberationItem extends Model
         $this->company_id = Auth::user()->company_id;
         $this->document_id = $dadosItem['document_id'];
         $this->document_item_id = $dadosItem['id'];
-        $this->product_code = $dadosItem['item_code'];
+        $this->product_code = $dadosItem['product_code'];
         $this->pallet_id = $pallet_id;
         $this->label_id = $label_id;
         $this->liberation_status_id = 0;

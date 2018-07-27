@@ -42,6 +42,9 @@ Route::group(['middleware' => 'web'], function() {
     Route::get('/api/documents/{moviment}/{qty?}', function($moviment_code, $qty = '15000') {
         return App\Models\Document::getDocuments($moviment_code, $qty);
     });
+    Route::get('/api/documentItems/{doc_id}/{statusDsc?}', function($document_id, $stsDsc = '') {
+        return App\Models\DocumentItem::getItens($document_id, $stsDsc);
+    });
     Route::get('/api/itemsProd/{document}', 'Modules\ProductionController@getItems');
     Route::post('/api/grid/', 'Modules\Geral\GridController@setColumns');
     Route::get('/api/grid/{module}', 'Modules\Geral\GridController@getColumns');
@@ -294,3 +297,11 @@ Route::resource('logs', 'LogController');
 
 Route::get('graphs/datatable', 'GraphController@getData');
 Route::resource('graphs', 'GraphController');
+
+
+Route::get('graphs/datatable', 'GraphController@getData');
+Route::resource('graphs', 'GraphController');
+
+
+Route::get('grids/datatable', 'GridController@getData');
+Route::resource('grids', 'GridController');

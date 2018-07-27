@@ -10,12 +10,15 @@ use DB;
 /**
  * Class Graph
  * @package App\Models
- * @version July 25, 2018, 5:46 pm -03
+ * @version July 27, 2018, 10:17 am -03
  *
  * @property \Illuminate\Database\Eloquent\Collection permissionRole
- * @property string description
+ * @property integer company_id
+ * @property smallInteger code
+ * @property string title
  * @property string type
- * @property string qry
+ * @property string color
+ * @property boolean enabled
  */
 class Graph extends Model
 {
@@ -27,9 +30,12 @@ class Graph extends Model
 	
 	
     public $fillable = [
-        'description',
+        'company_id',
+        'code',
+        'title',
         'type',
-        'qry'
+        'color',
+        'enabled'
     ];
 
     /**
@@ -39,9 +45,11 @@ class Graph extends Model
      */
     protected $casts = [
         'id' => 'integer',
-        'description' => 'string',
+        'company_id' => 'integer',
+        'title' => 'string',
         'type' => 'string',
-        'qry' => 'string'
+        'color' => 'string',
+        'enabled' => 'boolean'
     ];
 
     /**
@@ -74,56 +82,78 @@ class Graph extends Model
 
         $ret = array();
 
-        if($id == 1){
-            $results = DB::table('documents')->join('document_status', 'document_status.id', 'documents.document_status_id')
-                                        ->select(DB::raw('count(*) as qty'), 'description')
-                                        ->where('company_id', Auth::user()->company_id)
-                                        ->groupBy('description', 'document_status.id')
-                                        ->orderBy('document_status.id')
-                                        ->get();
+        switch($id){
+            case 1:
+                $results = DB::table('documents')->join('document_status', 'document_status.id', 'documents.document_status_id')
+                                            ->select(DB::raw('count(*) as qty'), 'description')
+                                            ->where('company_id', Auth::user()->company_id)
+                                            ->groupBy('description', 'document_status.id')
+                                            ->orderBy('document_status.id')
+                                            ->get();
+                
+                foreach($results as $res){
+                    
+                    $ret['labels'][] = $res->description;
+                    $ret['data'][] = $res->qty;
+                    $ret['color'][] =  "rgba(".(new self)->getColor().",0.5)";
+                    
+
+                }        
+
+                $ret['title'] = 'Num. de Documentos por Status';
+                $ret['chartType'] = 'bar';
+            break;
             
-            foreach($results as $res){
-                
-                $ret['labels'][] = $res->description;
-                $ret['data'][] = $res->qty;
-                $ret['color'][] =  "rgba(".(new self)->getColor().",0.5)";
-                
+            case 2:
+                $results = DB::table('documents')->join('document_status', 'document_status.id', 'documents.document_status_id')
+                ->join('document_types', 'document_types.code', 'documents.document_type_code')
+                ->join('moviments', 'moviments.code', 'document_types.moviment_code')
+                ->select(DB::raw('count(*) as qty'), 'moviments.description')
+                ->where('company_id', Auth::user()->company_id)
+                ->groupBy('moviments.description')
+                ->orderBy('moviments.description')
+                ->get();
 
-            }        
+                foreach($results as $res){
 
-            $ret['title'] = 'Num. de Documentos por Status';
-            $ret['chartType'] = 'bar';
-        }else{
-            $results = DB::table('documents')->join('document_status', 'document_status.id', 'documents.document_status_id')
-            ->join('document_types', 'document_types.code', 'documents.document_type_code')
-            ->join('moviments', 'moviments.code', 'document_types.moviment_code')
-            ->select(DB::raw('count(*) as qty'), 'moviments.description')
-            ->where('company_id', Auth::user()->company_id)
-            ->groupBy('moviments.description')
-            ->orderBy('moviments.description')
-            ->get();
+                    $ret['labels'][] = $res->description;
+                    $ret['data'][] = $res->qty;
+                    $ret['color'][] =  "rgba(".(new self)->getColor().",0.5)";
+                }
+                $ret['title'] = 'Num. de Documentos por Módulo';
+                $ret['chartType'] = 'pie';
 
-            foreach($results as $res){
+            break;    
 
-            $ret['labels'][] = $res->description;
-            $ret['data'][] = $res->qty;
-            $ret['color'][] =  "rgba(".(new self)->getColor().",0.5)";
+            case 3:
+                $results = DB::table('logs')
+                ->join('users','users.id', 'logs.user_id')
+                ->select(DB::raw('count(*) as qty'), 'users.code')
+                ->where('logs.company_id', Auth::user()->company_id)
+                ->groupBy('users.code')
+                ->orderBy('qty', 'desc')
+                ->take(10)
+                ->get();
 
+                foreach($results as $res){
+                    $ret['labels'][] = $res->code;
+                    $ret['data'][] = $res->qty;
+                    $ret['color'][] =  "rgba(".(new self)->getColor().",0.5)";
+                }
+                    
 
-            }        
+                $ret['title'] = 'Num. de Atividades por Usuário';
+                $ret['chartType'] = 'bar';
+            break;
 
-            $ret['title'] = 'Num. de Documentos por Módulo';
-            $ret['chartType'] = 'pie';
+            default:
+            $ret['title'] = 'Código Inválido';
+            break;
         }
+
         return $ret;
     
-    
-    
     }
-        
-    
-
-    
 
      //Retorna todos os graphs disponíveis
      public static function getGraphs(){

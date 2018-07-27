@@ -4,10 +4,22 @@
     <p>{!! $graph->id !!}</p>
 </div>
 
-<!-- Description Field -->
+<!-- Company Id Field -->
 <div class="col-md-12">
-    {!! Form::label('description', 'Description:') !!}
-    <p>{!! $graph->description !!}</p>
+    {!! Form::label('company_id', 'Company Id:') !!}
+    <p>{!! $graph->company_id !!}</p>
+</div>
+
+<!-- Code Field -->
+<div class="col-md-12">
+    {!! Form::label('code', 'Code:') !!}
+    <p>{!! $graph->code !!}</p>
+</div>
+
+<!-- Title Field -->
+<div class="col-md-12">
+    {!! Form::label('title', 'Title:') !!}
+    <p>{!! $graph->title !!}</p>
 </div>
 
 <!-- Type Field -->
@@ -16,10 +28,16 @@
     <p>{!! $graph->type !!}</p>
 </div>
 
-<!-- Qry Field -->
+<!-- Color Field -->
 <div class="col-md-12">
-    {!! Form::label('qry', 'Qry:') !!}
-    <p>{!! $graph->qry !!}</p>
+    {!! Form::label('color', 'Color:') !!}
+    <p>{!! $graph->color !!}</p>
+</div>
+
+<!-- Enabled Field -->
+<div class="col-md-12">
+    {!! Form::label('enabled', 'Enabled:') !!}
+    <p>{!! $graph->enabled !!}</p>
 </div>
 
 <!-- Created At Field -->

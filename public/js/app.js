@@ -131,7 +131,6 @@ function generateGraph(ctx, url) {
             },
             options: {
                 responsive: true,
-                removable: true,
                 maintainAspectRatio: false,
                 scales: {
                     yAxes: [{
@@ -143,6 +142,35 @@ function generateGraph(ctx, url) {
                 title: {
                     display: true,
                     text: result.title
+                },
+                tooltips: {
+                    enabled: false
+                },
+                pieceLabel: {
+                    render: 'value' //show values
+                },
+                animation: {
+                    "duration": 1,
+                    "onComplete": function() {
+                        var chartInstance = this.chart,
+                            ctx = chartInstance.ctx;
+
+                        ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'bottom';
+
+                        this.data.datasets.forEach(function(dataset, i) {
+                            var meta = chartInstance.controller.getDatasetMeta(i);
+                            meta.data.forEach(function(bar, index) {
+                                var data = dataset.data[index];
+                                if (result.chartType == 'bar') {
+                                    ctx.fillText(data, bar._model.x, bar._model.y - 5);
+                                } else if (result.chartType == 'line') {
+                                    ctx.fillText(data, bar._model.x, bar._model.y - 10);
+                                }
+                            });
+                        });
+                    }
                 }
             }
         });

@@ -12,7 +12,7 @@ class RulesProduction extends Model
     // Regra Base - Valida se o documento possui itens
     public static function prd000($document_id){
         //Retorna itens que não estejam cancelados para o documento
-        $itens = App\Models\DocumentItem::getItens($document_id);
+        $itens = App\Models\DocumentItem::getItens($document_id, 9);
         if(count($itens) == 0){
             $ret['erro'] = 1;
             $ret['msg'] = 'Sem itens para liberar';
@@ -32,7 +32,7 @@ class RulesProduction extends Model
         $depositos = App\Models\Parameter::getParam("depositos_producao",'1');
         $tarefa = App\Models\Parameter::getParam("tarefa_producao",'991');
 
-        $itens = App\Models\DocumentItem::getItens($document_id);
+        $itens = App\Models\DocumentItem::getItens($document_id, 9);
         //Loop em todos os itens do documento
         foreach($itens as $item){
             $qdeItem = $item['qty'];

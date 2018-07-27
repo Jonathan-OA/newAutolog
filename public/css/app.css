@@ -200,6 +200,11 @@
         color: black;
     }
     
+    .grid_cell>p {
+        padding: 3px;
+        font-size: 12px;
+    }
+    
     .panel-heading>.nav>.active-l>a {
         color: #555;
         background-color: #f5f5f5;
@@ -500,11 +505,6 @@
         font-size: 2rem;
         text-align: center;
         border-radius: 5px;
-    }
-    
-    .trash {
-        background-color: red;
-        height: 20px;
     }
     /* --------------------------------------------*/
     /*                 Instalador                  */

@@ -9,10 +9,10 @@
         </span>
         
         <!-- Detalhar -->
-        <!-- <button data-toggle="modal" ng-click="showGridDet(, row.entity.number)" data-target="#myModal" class="icon_action" aria-label="@lang('buttons.detail')" data-microtip-position="left" role="tooltip"> -->
-         <button ng-click="callRoute('./production/'+row.entity.id+'/items')" class="icon_action" aria-label="@lang('buttons.detail')" data-microtip-position="left" role="tooltip"> 
+        <!-- <button ng-click="callRoute('./production/'+row.entity.id+'/items')" class="icon_action" aria-label="@lang('buttons.detail')" data-microtip-position="left" role="tooltip"> 
             <img class='icon' src='{{asset('/icons/detalhes.png') }}'>
         </button>
+        -->
         
         <!-- Opções  -->
         <button class="icon_action" aria-label="@lang('buttons.action')" data-microtip-position="left" role="tooltip">

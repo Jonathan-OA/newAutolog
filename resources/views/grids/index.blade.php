@@ -6,7 +6,7 @@
             <div class="panel panel-default" >
                 <div class="panel-heading">
                    <!-- Texto baseado no arquivo de linguagem -->
-                   @lang('models.graphs') 
+                   @lang('models.grids') 
                 </div>
                 <div class="panel panel-default">
                     <div class="row">
@@ -15,10 +15,10 @@
                             @include('flash::message')
                             <div id="msg_excluir"></div>
                             <div class="row buttons_grid">
-                                <a class="btn btn-success"  href="{!! route('graphs.create') !!}">@lang('buttons.add')</a>
+                                <a class="btn btn-success"  href="{!! route('grids.create') !!}">@lang('buttons.add')</a>
                             </div>
                             <div class="panel-body">
-                                @include('graphs.table')
+                                @include('grids.table')
                             </div>
                         </div>
                     </div>
@@ -33,10 +33,10 @@
     $(function() {
         
         //Parâmetros para criação da datatable
-        table = $("#graphs-table").DataTable({
+        table = $("#grids-table").DataTable({
             scrollX: true,
             scrollY: "47vh",
-            ajax: 'graphs/datatable',
+            ajax: 'grids/datatable',
             autoWidth: true,
             fixedColumns:   {
                 leftColumns: 0,
@@ -54,11 +54,9 @@
                 }
             },
             columns: [ { data: 'company_id' },
-                { data: 'code' },
-                { data: 'title' },
-                { data: 'type' },
-                { data: 'color' },
-                { data: 'enabled' },
+                { data: 'module' },
+                { data: 'submodule' },
+                { data: 'columns' },
                
                        { data: null,
                          className: "th_grid",
@@ -68,19 +66,19 @@
       });
 
       //Funções dos botões de editar e excluir
-      $('#graphs-table tbody').on( 'click', 'button', function () {
+      $('#grids-table tbody').on( 'click', 'button', function () {
             var data = table.row( $(this).parents('tr') ).data();
             var id = $(this).attr('id');
             if(id == 'edit'){
                 //Editar Registro
-                window.location.href = "{!! URL::to('graphs/"+data.id+"/edit') !!}";
+                window.location.href = "{!! URL::to('grids/"+data.id+"/edit') !!}";
             }else{
                 //Excluir Registro
                 if(confirm('@lang("buttons.msg_remove")')){
                     //Token obrigatório para envio POST
                     var tk = $('meta[name="csrf-token"]').attr('content');
                     $.ajax({
-                        url: 'graphs/'+data.id,
+                        url: 'grids/'+data.id,
                         type: 'post',
                         data: {_method: 'delete', _token :tk},
                         success: function(scs){ 

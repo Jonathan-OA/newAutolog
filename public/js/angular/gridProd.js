@@ -55,15 +55,21 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
             {
                 name: 'Status',
                 field: 'document_status_id',
+                display: 'description',
                 filter: {
                     noTerm: true,
                     type: uiGridConstants.filter.SELECT,
-                    selectOptions: [{ value: '0', label: 'Pendente' }, { value: '1', label: 'Liberado' }, { value: '2', label: 'Em execução' }]
+                    selectOptions: [{ value: '0', label: 'Pendente' }, { value: '1', label: 'Liberado' }, { value: '2', label: 'Em execução' },
+                        { value: '8', label: 'Encerrado' }, { value: '9', label: 'Cancelado' }
+                    ]
                 },
-                cellTemplate: '<div class="ui-grid-cell-contents"><div class="grid_cell stat{{grid.getCellValue(row, col)}}">{{grid.getCellValue(row, col)}}</div></div>'
+                cellTemplate: '<div class="ui-grid-cell-contents" ><div class="grid_cell stat{{grid.getCellValue(row, col)}}"> <p>{{row.entity.description}}</p></div></div>'
             },
-            { name: 'Emissão', field: 'emission_date' },
+            { name: 'Emissão', field: 'emission_date', type: 'date', cellFilter: "date:\'yyyy-MM-dd\'" },
             { name: 'Cliente', field: 'customer_code' },
+            { name: 'Fornecedor', field: 'supplier_code' },
+            { name: 'Transportadora', field: 'courier_code' },
+            { name: 'Data Encerramento', field: 'end_date' },
             { name: 'Opções', cellTemplate: 'options' }
         ],
         enablePaginationControls: true,
@@ -73,10 +79,6 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
     //Função que chama as rotas do laravel
     $scope.callRoute = function(route) {
         window.location = route;
-    }
-
-    $scope.showGridDet = function(id, number) {
-        $rootScope.showGrid(id, number);
     }
 
     //Salva o grid atual em uma variavel de sessão e banco (ajax)
@@ -155,39 +157,54 @@ app.controller('DetCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '
         multiSelect: false,
         enableFiltering: false,
         fastWatch: true,
+        onRegisterApi: function(gridApiDet) {
+            $scope.gridApiDet = gridApiDet;
+            $timeout(function() {
+                $scope.restoreState();
+            }, 50);
+        },
         enableGridMenu: true,
         columnDefs: [
             { name: 'Item', field: 'product_code' },
-            { name: 'Unidade', field: 'uom_code' },
             { name: 'Quantidade', field: 'qty' },
-            { name: 'Status', field: 'document_status_id', cellTemplate: '<div class="ui-grid-cell-contents"><div class="grid_cell stat{{grid.getCellValue(row, col)}}">{{grid.getCellValue(row, col)}}</div></div>' },
+            { name: 'Unidade', field: 'uom_code' },
+            { name: 'Lote', field: 'batch' },
+            { name: 'Lote Fornec', field: 'batch_supplier' },
+            { name: 'Qtd. Conf.', field: 'qty_conf' },
+            { name: 'Qtd. Embarc.', field: 'qty_ship' },
+            { name: 'Status', field: 'document_status_id', cellTemplate: '<div class="ui-grid-cell-contents"><div class="grid_cell stat{{grid.getCellValue(row, col)}}"><p>{{row.entity.description}}</p></div></div>' },
             { name: 'Opções', cellTemplate: 'options' }
         ],
         enablePaginationControls: false,
         paginationPageSize: 18
     };
 
+    //Salva o grid atual em uma variavel de sessão e banco (ajax)
     $scope.saveState = function() {
         var datas = $scope.gridApiDet.saveState.save();
-        localStorage.setItem('Autolog_GridProdDet', JSON.stringify(datas));
-        $http.post('../../api/grid', datas)
-            .success(function(data, status, headers, config) {
-                $scope.PostDataResponse = data;
-            }).error(function(data, status, header, config) {
-                console.log('Erro ao Buscar Grid Salvo');
-            });
+        localStorage.setItem('Autolog_GridProd_Det', JSON.stringify(datas));
+        $http({
+            method: 'POST',
+            url: 'api/grid'
+        }).then(function(data) {
+            $scope.PostDataResponse = data;
+        }, function(error) {
+            console.log("Erro ao buscar Grid Salvo");
+        });
     };
 
     $scope.restoreState = function() {
-        var columns = localStorage.getItem('Autolog_GridProdDet');
+        var columns = localStorage.getItem('Autolog_GridProd_Det');
         //console.log(columns);
         if (columns) {
             $scope.gridApiDet.saveState.restore($scope, JSON.parse(columns));
         } else {
-            $http.get('../../api/grid/Produção')
-                .success(function(data) {
-                    $scope.gridApiDet.saveState.restore($scope, data);
-                })
+            $http({
+                method: 'GET',
+                url: 'api/grid/ProducaoDet'
+            }).then(function(data) {
+                $scope.gridApiDet.saveState.restore($scope, data);
+            });
         }
     };
 
@@ -197,21 +214,14 @@ app.controller('DetCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '
 
     //Carrega a tabela quando clicar nos detalhes do documento
     $scope.showGrid = function(id, number) {
-        console.log(id);
         $scope.documentNumber = number;
 
-        //Busca os dados
-        $http.get('../../api/itemsProd/' + id)
+        //Busca os itens do documento
+        $http.get('../../api/documentItems/' + id)
             .then(function(response) {
                 $scope.gridDetalhes.data = response.data;
             });
     }
-
-    //Função que chama as rotas do laravel
-    $scope.resetGrid = function() {
-        console.log('aeeee');
-    }
-
 
     //Esconde / Mostra os filtros
     $scope.toggleFiltering = function() {

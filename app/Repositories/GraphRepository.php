@@ -8,7 +8,7 @@ use InfyOm\Generator\Common\BaseRepository;
 /**
  * Class GraphRepository
  * @package App\Repositories
- * @version July 25, 2018, 5:47 pm -03
+ * @version July 27, 2018, 10:17 am -03
  *
  * @method Graph findWithoutFail($id, $columns = ['*'])
  * @method Graph find($id, $columns = ['*'])
@@ -20,9 +20,12 @@ class GraphRepository extends BaseRepository
      * @var array
      */
     protected $fieldSearchable = [
-        'description',
+        'company_id',
+        'code',
+        'title',
         'type',
-        'qry'
+        'color',
+        'enabled'
     ];
 
     /**

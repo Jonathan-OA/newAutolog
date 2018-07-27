@@ -262,11 +262,6 @@ class ProductionController extends AppBaseController
 
     }
 
-
-    public function items($id){
-        return view('modules.production.gridItem')->with(['document' => $id]); 
-    }
-
     public function getItems($document_id){
         $documents = App\Models\DocumentItem::where('document_id',$document_id)->get();
         return $documents->toArray();
