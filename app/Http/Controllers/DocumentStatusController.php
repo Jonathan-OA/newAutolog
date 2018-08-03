@@ -146,7 +146,7 @@ class DocumentStatusController extends AppBaseController
 
         //Grava log
         $requestF = $request->all();
-        $descricao = 'Alterou DocumentStatus ID: '.$id.' - '.$requestF['code'];
+        $descricao = 'Alterou DocumentStatus ID: '.$id.' - '.$requestF['description'];
         $log = App\Models\Log::wlog('document_status_edit', $descricao);
 
 

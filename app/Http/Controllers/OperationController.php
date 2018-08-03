@@ -48,7 +48,7 @@ class OperationController extends AppBaseController
     public function create()
     {
         //Valida se usuário possui permissão para acessar esta opção
-        if(App\Models\User::getPermission('operations_add',Auth::user()->user_type_code) or 1==1){
+        if(App\Models\User::getPermission('operations_add',Auth::user()->user_type_code)){
             //Lista de modulos disponíveis para inserção da operação
             $modules = App\Models\Module::getModules();
         

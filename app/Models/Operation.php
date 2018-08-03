@@ -24,7 +24,7 @@ class Operation extends Model
     public $fillable = [
         'code',
         'type',
-        'module',
+        'module_name',
         'level',
         'action',
         'description',
@@ -41,7 +41,7 @@ class Operation extends Model
     protected $casts = [
         'id' => 'integer',
         'type' => 'string',
-        'module' => 'string',
+        'module_name' => 'string',
         'level' => 'integer',
         'action' => 'string',
         'description' => 'string',
@@ -57,7 +57,7 @@ class Operation extends Model
         'code' => 'required|string|max:30',
         'type' => 'required|alpha|max:7',
         'description' => 'required|string|max:50',
-        'module' => 'required|string|max:20',
+        'module_name' => 'required|string|max:20',
         'level'  => 'digits:1', 
         'action' => 'required|string|max:20',
         'local'  => 'required|string|max:20',
@@ -71,7 +71,7 @@ class Operation extends Model
     public static function getOperations($tipo = '', $module = ' '){
         return Operation::selectRaw("code,CONCAT(code,' - ',description) as description_f")
                         ->where('enabled', '1')
-                        ->where('module', '<>', ' ')
+                        ->where('module_name', '<>', ' ')
                         ->where(function ($query) {
                             if(!empty($tipo)){
                                 $query->where('type',$tipo);

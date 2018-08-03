@@ -8,7 +8,6 @@
                    <!-- Texto baseado no arquivo de linguagem -->
                    @lang('models.users') 
                 </div>
-                
                 <div class="panel panel-default">
                     <div class="row">
                         <div class="col-md-12">
@@ -82,11 +81,19 @@
                         success: function(scs){ 
                             //Recarrega grid sem atualizar a página
                             table.ajax.reload( null, false );
-                            //Mostra mensagem de sucesso
-                            if(!$('.alert-success').length){
-                                $('#msg_excluir').html('<div class="alert alert-success">@lang("validation.delete_success")</div>');
+                            //Se retornou 0, foi excluído com sucesso
+                            if(scs[0] == 0){
+                                alertType = 'success';
                             }else{
-                                $('.alert-success').html('@lang("validation.delete_success")');
+                                alertType = 'danger';
+                            }
+                            //Mostra mensagem de sucesso ou erro
+                            if(!$('.alert').length){
+                                $('#msg_excluir').html('<div class="alert alert-'+alertType+'">'+scs[1]+'</div>');
+                            }else{
+                                $('.alert').toggleClass('alert-success alert-danger', true);
+                                $('.alert').html(scs[1]);
+
                             }
                         }
                     });

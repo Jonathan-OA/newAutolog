@@ -47,13 +47,22 @@ class ParameterController extends AppBaseController
      */
     public function create()
     {
-        //Lista de modulos disponíveis para inserção do parâmetro
-        $modules = App\Models\Module::getModules();
-        //Lista de operações disponíveis para inserção do parâmetro
-        $operations = App\Models\Operation::getOperations();
+        //Valida se usuário possui permissão para acessar esta opção
+        if(App\Models\User::getPermission('parameters_add',Auth::user()->user_type_code)){
+            //Lista de modulos disponíveis para inserção do parâmetro
+            $modules = App\Models\Module::getModules();
+            //Lista de operações disponíveis para inserção do parâmetro
+            $operations = App\Models\Operation::getOperations();
+            
+            return view('parameters.create')->with('modules', $modules)
+                                            ->with('operations',$operations);
+        }else{
+            //Sem permissão
+            Flash::error(Lang::get('validation.permission'));
+            return redirect(route('parameters.index'));
+        }
+
         
-        return view('parameters.create')->with('modules', $modules)
-                                        ->with('operations',$operations);
     }
 
     /**
@@ -103,23 +112,30 @@ class ParameterController extends AppBaseController
      */
     public function edit($id)
     {
-        $parameter = $this->parameterRepository->findWithoutFail($id);
+        //Valida se usuário possui permissão para acessar esta opção
+        if(App\Models\User::getPermission('parameters_edit',Auth::user()->user_type_code)){
+            $parameter = $this->parameterRepository->findWithoutFail($id);
 
-        if (empty($parameter)) {
-            Flash::error(Lang::get('validation.not_found'));
+            if (empty($parameter)) {
+                Flash::error(Lang::get('validation.not_found'));
 
+                return redirect(route('parameters.index'));
+            }
+
+            //Lista de modulos disponíveis para inserção do parâmetro
+            $modules = App\Models\Module::getModules();
+            //Lista de operações disponíveis para inserção do parâmetro
+            $operations = App\Models\Operation::getOperations();
+
+            return view('parameters.edit')->with('parameter', $parameter)
+                                        ->with('modules', $modules)
+                                        ->with('operations', $operations);
+        }else{
+            //Sem permissão
+            Flash::error(Lang::get('validation.permission'));
             return redirect(route('parameters.index'));
         }
-
-        //Lista de modulos disponíveis para inserção do parâmetro
-        $modules = App\Models\Module::getModules();
-        //Lista de operações disponíveis para inserção do parâmetro
-        $operations = App\Models\Operation::getOperations();
-
-
-        return view('parameters.edit')->with('parameter', $parameter)
-                                      ->with('modules', $modules)
-                                      ->with('operations', $operations);
+        
     }
 
     /**
@@ -142,6 +158,12 @@ class ParameterController extends AppBaseController
 
         $parameter = $this->parameterRepository->update($request->all(), $id);
 
+
+        //Grava log
+        $requestF = $request->all();
+        $descricao = 'Alterou Parâmetro: '.$requestF['code'].' - Valor: '.$requestF['value'];
+        $log = App\Models\Log::wlog('parameters_edit', $descricao);
+
         Flash::success(Lang::get('validation.update_success'));
 
         return redirect(route('parameters.index'));
@@ -156,19 +178,30 @@ class ParameterController extends AppBaseController
      */
     public function destroy($id)
     {
-        $parameter = $this->parameterRepository->findWithoutFail($id);
 
-        if (empty($parameter)) {
-            Flash::error(Lang::get('validation.not_found'));
+        //Valida se usuário possui permissão para acessar esta opção
+        if(App\Models\User::getPermission('parameters_remove',Auth::user()->user_type_code)){
+            $parameter = $this->parameterRepository->findWithoutFail($id);
 
-            return redirect(route('parameters.index'));
-        }
+            if (empty($parameter)) {
+                Flash::error(Lang::get('validation.not_found'));
 
-        $this->parameterRepository->delete($id);
+                return redirect(route('parameters.index'));
+            }
 
-        Flash::success(Lang::get('validation.delete_success'));
+            $this->parameterRepository->delete($id);
 
-        return redirect(route('parameters.index'));
+            //Grava log
+            $descricao = 'Excluiu Parâmetro ID: '.$id.' - '.$parameter->code.' - Valor: '.$parameter->value;
+            $log = App\Models\Log::wlog('parameters_remove', $descricao);
+
+            Flash::success(Lang::get('validation.delete_success'));
+            return array(0,Lang::get('validation.delete_success'));
+        }else{
+            //Sem permissão
+            Flash::error(Lang::get('validation.permission'));
+            return array(1,Lang::get('validation.permission'));
+        }    
     }
 
     /**

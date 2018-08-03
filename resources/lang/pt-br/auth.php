@@ -15,5 +15,6 @@ return [
 
     'failed' => 'Usuário e/ou Senha Inválidos',
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
+    'branch' => 'Empresa / Filial inválidos para este usuário.'
 
 ];

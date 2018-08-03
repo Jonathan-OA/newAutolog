@@ -64,18 +64,18 @@
 
       //Funções dos botões de editar e excluir
       $('#userTypes-table tbody').on( 'click', 'button', function () {
-            var data = table.row( $(this).parents('tr') ).data();
+            var data = table.row( $(this).parents('tr')).data();
             var id = $(this).attr('id');
             if(id == 'edit'){
                 //Editar Registro
-                window.location.href = "{!! URL::to('userTypes/"+data.id+"/edit') !!}";
+                window.location.href = "{!! URL::to('userTypes/"+data.code+"/edit') !!}";
             }else{
                 //Excluir Registro
                 if(confirm('@lang("buttons.msg_remove")')){
                     //Token obrigatório para envio POST
                     var tk = $('meta[name="csrf-token"]').attr('content');
                     $.ajax({
-                        url: 'userTypes/'+data.id,
+                        url: 'userTypes/'+data.code,
                         type: 'post',
                         data: {_method: 'delete', _token :tk},
                         success: function(scs){ 

@@ -48,9 +48,18 @@ class UserController extends AppBaseController
      */
     public function create()
     {
-        //Lista usuários disponíveis
-        $user_types = App\Models\UserType::getUserTypes();
-        return view('users.create')->with('user_types', $user_types);
+        //Valida se usuário possui permissão para acessar esta opção
+        if(App\Models\User::getPermission('users_add',Auth::user()->user_type_code)){
+            //Lista usuários disponíveis
+            $user_types = App\Models\UserType::getUserTypes();
+            return view('users.create')->with('user_types', $user_types);
+        }else{
+            //Sem permissão
+            Flash::error(Lang::get('validation.permission'));
+            return redirect(route('users.index'));
+        }
+
+        
     }
 
     /**
@@ -71,6 +80,7 @@ class UserController extends AppBaseController
             'email' => $input['email'],
             'user_type_code' => $input['user_type_code'],
             'password' => bcrypt($input['password']),
+            'last_login' => null
             
         ]);
         
@@ -109,18 +119,27 @@ class UserController extends AppBaseController
      */
     public function edit($id)
     {
-        $user = $this->userRepository->findWithoutFail($id);
-        //Lista usuários disponíveis
-        $user_types = App\Models\UserType::getUserTypes();
-
-        if (empty($user)) {
-            Flash::error(Lang::get('validation.not_found'));
-
+        //Valida se usuário possui permissão para acessar esta opção
+        if(App\Models\User::getPermission('users_edit',Auth::user()->user_type_code)){
+            $user = $this->userRepository->findWithoutFail($id);
+            //Lista usuários disponíveis
+            $user_types = App\Models\UserType::getUserTypes();
+    
+            if (empty($user)) {
+                Flash::error(Lang::get('validation.not_found'));
+    
+                return redirect(route('users.index'));
+            }
+    
+            return view('users.edit')->with('user', $user)
+                                     ->with('user_types', $user_types);
+        }else{
+            //Sem permissão
+            Flash::error(Lang::get('validation.permission'));
             return redirect(route('users.index'));
         }
 
-        return view('users.edit')->with('user', $user)
-                                 ->with('user_types', $user_types);
+       
     }
 
     /**
@@ -147,6 +166,11 @@ class UserController extends AppBaseController
 
         $user = $this->userRepository->update($campos, $id);
 
+        //Grava log
+        $requestF = $request->all();
+        $descricao = 'Alterou Usuário: '.$requestF['code'].' - Email: '.$requestF['email'].' - Tipo:'.$requestF['user_type_code'];
+        $log = App\Models\Log::wlog('users_edit', $descricao);
+
         Flash::success(Lang::get('validation.update_success'));
 
         return redirect(route('users.index'));
@@ -161,19 +185,29 @@ class UserController extends AppBaseController
      */
     public function destroy($id)
     {
-        $user = $this->userRepository->findWithoutFail($id);
+        //Valida se usuário possui permissão para acessar esta opção
+        if(App\Models\User::getPermission('users_remove',Auth::user()->user_type_code)){
+            $user = $this->userRepository->findWithoutFail($id);
 
-        if (empty($user)) {
-            Flash::error(Lang::get('validation.not_found'));
+            if (empty($user)) {
+                Flash::error(Lang::get('validation.not_found'));
 
-            return redirect(route('users.index'));
-        }
+                return redirect(route('users.index'));
+            }
 
-        $this->userRepository->delete($id);
+            $this->userRepository->delete($id);
 
-        Flash::success(Lang::get('validation.delete_success'));
+            //Grava log
+            $descricao = 'Excluiu Usuário ID: '.$id.' - Código: '.$user->code;
+            $log = App\Models\Log::wlog('users_remove', $descricao);
 
-        return redirect(route('users.index'));
+            Flash::success(Lang::get('validation.delete_success'));
+            return array(0,Lang::get('validation.delete_success'));
+        }else{
+            //Sem permissão
+            Flash::error(Lang::get('validation.permission'));
+            return array(1,Lang::get('validation.permission'));
+        }    
     }
 
     /**

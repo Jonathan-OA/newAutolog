@@ -14,8 +14,8 @@
 {!! Form::select('type', array('Coletor' => 'Coletor', 'Desktop' => 'Desktop'), null, ['class' => 'form-control']) !!}
 
 <!-- Module Field -->
-{!! Form::label('module', Lang::get('models.module').':') !!}
-{!! Form::select('module', $modules, null, ['class' => 'form-control']) !!}
+{!! Form::label('module_name', Lang::get('models.module').':') !!}
+{!! Form::select('module_name', $modules, null, ['class' => 'form-control']) !!}
 
 <!-- Level Field -->
 {!! Form::label('level', Lang::get('models.level').':') !!}

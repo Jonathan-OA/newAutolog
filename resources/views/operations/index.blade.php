@@ -54,7 +54,7 @@
             },
             columns: [  { data: 'code', className: 'dt-body-right'},
                         { data: 'type' },
-                        { data: 'module' },
+                        { data: 'module_name' },
                         { data: 'level' },
                         { data: 'action' , className: "td_grid_dt" },
                         { data: 'description', className: "td_grid_dt" },
@@ -91,14 +91,12 @@
                 if(confirm('@lang("buttons.msg_remove")')){
                     //Token obrigatório para envio POST
                     var tk = $('meta[name="csrf-token"]').attr('content');
-                    var alertType;
                     $.ajax({
                         url: 'operations/'+data.id,
                         type: 'post',
                         data: {_method: 'delete', _token :tk},
-                        success: function(scs){
-                            console.log('aeee');
-                            //Atualiza o grid sem recarregar a pagina
+                        success: function(scs){ 
+                            //Recarrega grid sem atualizar a página
                             table.ajax.reload( null, false );
                             //Se retornou 0, foi excluído com sucesso
                             if(scs[0] == 0){
@@ -110,7 +108,7 @@
                             if(!$('.alert').length){
                                 $('#msg_excluir').html('<div class="alert alert-'+alertType+'">'+scs[1]+'</div>');
                             }else{
-                                $('.alert').toggleClass('alert-success alert-danger');
+                                $('.alert').toggleClass('alert-success alert-danger', true);
                                 $('.alert').html(scs[1]);
 
                             }

@@ -36,14 +36,16 @@ class User extends Authenticatable
     // Valida se usuário já esta logado
     public function valLogged($ip){
 
+        
         //Pega Data Atual
         $dataAtual = Carbon\Carbon::now();
         //Pega Sessão Atual
         $session_id = Session::getId();
         //Se a diferença for menor que 1 minutos, significa que ainda esta logado
         $ultimo = Carbon\Carbon::parse($this->last_login); 
+       
 
-        if($dataAtual->diffInMinutes($ultimo) <= 1 && $this->last_ip <> $ip){
+        if($dataAtual->diffInMinutes($ultimo) <= 1 && $this->last_ip <> $ip && trim($this->last_login) <> ''){
             return false;
         }else{
             //Atualiza data do ultimo login para a atual

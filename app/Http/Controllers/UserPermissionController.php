@@ -102,13 +102,18 @@ class UserPermissionController extends AppBaseController
     {
         $userPermission = $this->userPermissionRepository->findWithoutFail($id);
 
+        $userTypes = App\Models\UserType::getUserTypes();
+        $operations = App\Models\Operation::getOperations();
+
         if (empty($userPermission)) {
             Flash::error(Lang::get('validation.not_found'));
 
             return redirect(route('userPermissions.index'));
         }
 
-        return view('user_permissions.edit')->with('userPermission', $userPermission);
+        return view('user_permissions.edit')->with('userPermission', $userPermission)
+                                            ->with('userTypes',$userTypes)
+                                            ->with('operations',$operations);
     }
 
     /**

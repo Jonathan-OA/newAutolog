@@ -73,17 +73,28 @@
             }else{
                 //Excluir Registro
                 if(confirm('@lang("buttons.msg_remove")')){
+                    //Token obrigatório para envio POST
                     var tk = $('meta[name="csrf-token"]').attr('content');
                     $.ajax({
                         url: 'parameters/'+data.id,
                         type: 'post',
                         data: {_method: 'delete', _token :tk},
                         success: function(scs){ 
+                            //Recarrega grid sem atualizar a página
                             table.ajax.reload( null, false );
-                            if(!$('.alert-success').length){
-                                $('#msg_excluir').html('<div class="alert alert-success">@lang("validation.delete_success")</div>');
+                            //Se retornou 0, foi excluído com sucesso
+                            if(scs[0] == 0){
+                                alertType = 'success';
                             }else{
-                                $('.alert-success').html('@lang("validation.delete_success")');
+                                alertType = 'danger';
+                            }
+                            //Mostra mensagem de sucesso ou erro
+                            if(!$('.alert').length){
+                                $('#msg_excluir').html('<div class="alert alert-'+alertType+'">'+scs[1]+'</div>');
+                            }else{
+                                $('.alert').toggleClass('alert-success alert-danger', true);
+                                $('.alert').html(scs[1]);
+
                             }
                         }
                     });

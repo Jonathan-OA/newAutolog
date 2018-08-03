@@ -68,6 +68,13 @@ class LoginController extends Controller
             Flash::error(Lang::get('validation.qty_users'));
             return redirect(route('login'));
         }
+
+        //Filial diferente da cadastrada
+        if($request->company_id <> $user->company_id){
+            Auth::logout();
+            Flash::error(Lang::get('auth.branch'));
+            return redirect(route('login'));
+        }
         
     }
     

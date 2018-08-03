@@ -18,7 +18,7 @@
                 <tr >
                     <td >{!! $operation->code !!}</td>
                     <td >{!! $operation->type !!}</td>
-                    <td >{!! $operation->module !!}</td>
+                    <td >{!! $operation->module_name !!}</td>
                     <td >{!! $operation->level !!}</td>
                     <td >{!! $operation->action !!}</td>
                     <td >{!! $operation->description !!}</td>
