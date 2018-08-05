@@ -3,7 +3,7 @@
         <!-- Funções para status 0 -->
         <span ng-if="row.entity.document_status_id == 0">
             <!-- Liberar (Apenas status 0) -->
-            <button ng-click="callRoute('./document/liberate/'+row.entity.id)" class="icon_action" aria-label="@lang('buttons.liberate')" data-microtip-position="left" role="tooltip">
+            <button ng-click="callRoute('./document/liberate/'+row.entity.id+'/prod')" class="icon_action" aria-label="@lang('buttons.liberate')" data-microtip-position="left" role="tooltip">
                 <img class='icon' src='{{ asset('/icons/liberar.png') }}'> 
             </button>
              <!-- Editar (Apenas status 0) -->
@@ -20,7 +20,7 @@
         
         <!-- Retornar (Status 1 e 2) -->
         <button ng-if="row.entity.document_status_id == 1 || row.entity.document_status_id == 2 "
-                ng-click="callRoute('./document/return/'+row.entity.id)"
+                ng-click="callRoute('./document/return/'+row.entity.id+'/prod')"
                 class="icon_action" aria-label="@lang('buttons.return')" data-microtip-position="left" role="tooltip">
                 <img class='icon' src='{{asset('/icons/retornar.png') }}'>
         </button>

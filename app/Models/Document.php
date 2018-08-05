@@ -146,7 +146,7 @@ class Document extends Model
                 return $return;
             }
 
-            
+            $entrou = 0;
             //Busca todas as regras disponíveis para o tipo de documento
             $rules = App\Models\DocumentTypeRule::where([
                                                             ['company_id', Auth::user()->company_id],
@@ -159,6 +159,7 @@ class Document extends Model
                                                     
             DB::beginTransaction();
             foreach($rules as $rule){
+                $entrou = 1;
                 $rule_code = $rule['liberation_rule_code'];
                 //Valida se existe a função com esse nome/código na classe correspondente
                 if(method_exists(new $class(),$rule_code)){
@@ -174,7 +175,12 @@ class Document extends Model
                     echo 'Regra '.$rule_code.' não existe no arquivo de liberação.';
                 }
             }
-            if($erro == 0){
+
+            //Se não tem regras, da erro
+            if($entrou == 0){
+                $return['erro'] = 1;
+                $return['msg'] = 'Sem regras cadastradas para este Tipo de Documento.';
+            }else if($erro == 0){
                 //Deu tudo certo, da o commit
                 DB::commit();
 
@@ -186,13 +192,13 @@ class Document extends Model
                 $return['msg'] = 'Documento liberado com sucesso!';
                 $return['urlRet'] = $urlRet;
 
-            }else{
-                $return['urlRet'] = $urlRet;
             }
+            $return['urlRet'] = $urlRet;
+            
             
         }else{
             $return['erro'] = 1;
-            $return['msg'] = 'Erro ao liberar o documento.';
+            $return['msg'] = 'Erro ao liberar o Documento.';
 
         }
 

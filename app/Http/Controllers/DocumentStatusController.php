@@ -36,7 +36,7 @@ class DocumentStatusController extends AppBaseController
         $this->documentStatusRepository->pushCriteria(new RequestCriteria($request));
         $documentStatus = $this->documentStatusRepository->all();
 
-        return view('document_status.index')
+        return view('document_types.document_status.index')
             ->with('documentStatus', $documentStatus);
     }
 
@@ -50,12 +50,12 @@ class DocumentStatusController extends AppBaseController
         //Valida se usuário possui permissão para acessar esta opção
         if(App\Models\User::getPermission('document_status_add',Auth::user()->user_type_code)){
 
-            return view('document_status.create');
+            return view('document_types.document_status.create');
 
         }else{
             //Sem permissão
             Flash::error(Lang::get('validation.permission'));
-            return redirect(route('document_status.index'));
+            return redirect(route('documentStatus.index'));
         }
     }
 
@@ -94,7 +94,7 @@ class DocumentStatusController extends AppBaseController
             return redirect(route('documentStatus.index'));
         }
 
-        return view('document_status.show')->with('documentStatus', $documentStatus);
+        return view('document_types.document_status.show')->with('documentStatus', $documentStatus);
     }
 
     /**
@@ -117,12 +117,12 @@ class DocumentStatusController extends AppBaseController
                 return redirect(route('documentStatus.index'));
             }
 
-            return view('document_status.edit')->with('documentStatus', $documentStatus);
+            return view('document_types.document_status.edit')->with('documentStatus', $documentStatus);
         
         }else{
             //Sem permissão
             Flash::error(Lang::get('validation.permission'));
-            return redirect(route('document_status.index'));
+            return redirect(route('documentStatus.index'));
         }
     }
 

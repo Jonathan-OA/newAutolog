@@ -10,6 +10,7 @@
                          <!-- Textos baseados no arquivo de linguagem -->
                          <li class="active-l"><a href="#">@lang('models.document_types') </a></li>
                          <li><a href="{!! route('moviments.index') !!}">@lang('models.moviments')</a></li>
+                         <li><a href="{!! route('documentStatus.index') !!}">@lang('models.document_status')</a></li>
                      </ul>
                  </div>
                 <div class="panel panel-default">

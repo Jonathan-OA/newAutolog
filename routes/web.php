@@ -31,9 +31,9 @@ Route::group(['middleware' => 'web'], function() {
     // ----------------------------------------------------------------------------------------------
 
     //Rota que libera um documento
-    Route::get('/document/liberate/{id}', 'DocumentController@liberateDoc');
+    Route::get('/document/liberate/{id}/{module?}', 'DocumentController@liberateDoc');
     //Rota que retorna um documento
-    Route::get('/document/return/{id}', 'DocumentController@returnDoc');
+    Route::get('/document/return/{id}/{module?}', 'DocumentController@returnDoc');
 
     //BOTÕES
     Route::get('getButtons/{modulo}', 'ButtonsController@getButtons');
