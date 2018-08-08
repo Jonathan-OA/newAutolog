@@ -66,7 +66,8 @@ class Supplier extends Model
         'phone2' => 'string',
         'obs1' => 'string',
         'obs2' => 'string',
-        'obs3' => 'string'
+        'obs3' => 'string',
+        'status' => 'boolean'
     ];
 
     /**

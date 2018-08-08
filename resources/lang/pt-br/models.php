@@ -265,6 +265,7 @@ return [
     'sequence_item' => 'SeqItem',
     'title' => 'Título',
     'color' => 'Cor',
+    'user_code' => 'Usuário',
 
     
     
@@ -284,6 +285,8 @@ return [
     'items' => 'Itens',
     'items_doc' => 'Itens do Documento',
     'dashboard' => 'Dashboard',
+    'support' => 'Suporte',
+    'message' => 'Mensagem',
     
 
 

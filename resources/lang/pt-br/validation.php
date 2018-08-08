@@ -98,6 +98,7 @@ return [
     'plt_prefixo'               => 'Prefixo de palete inválido.',
     'plt_exists'               => 'Palete já existe no sistema.',
     'document_number'               => 'Já existe um documento com o número informado.',
+    'support_success'               => 'Mensagem enviada! Em breve nossa equipe lhe responderá. ',
 
     /*
     |--------------------------------------------------------------------------

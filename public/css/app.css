@@ -337,7 +337,7 @@
     }
     
     .redClass {
-        background-color: #EDC1C1;
+        background-color: #EDC1C1 !important;
     }
     
     .table>tbody>tr>td {
@@ -418,6 +418,34 @@
     .lay_menu_op li a:hover {
         border-left: 10px solid #17263d;
         background-color: #ebe8e8;
+    }
+    
+    .lay_menu_sup {
+        margin-right: 1vw;
+        float: right;
+        margin-bottom: 0px;
+    }
+    
+    .btn-support {
+        color: #128B0B;
+        background-color: #F3F3F3;
+        border-color: #128B0B;
+        font-weight: bold;
+    }
+    
+    .btn-support:hover {
+        color: #128B0B;
+        background-color: #ebe8e8;
+    }
+    
+    .div_teste {
+        width: 200px;
+        height: 100px;
+        background: #f00;
+        position: absolute;
+        z-index: 100;
+        top: 30%;
+        left: 40;
     }
     
     [aria-expanded=true] .menu_ext {

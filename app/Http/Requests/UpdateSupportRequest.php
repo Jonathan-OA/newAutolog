@@ -3,9 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Models\User;
+use App\Models\Support;
 
-class UpdateUserRequest extends FormRequest
+class UpdateSupportRequest extends FormRequest
 {
 
     /**
@@ -25,12 +25,6 @@ class UpdateUserRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'name' => 'required|max:100',
-            'email' => 'email|max:50',
-            'password' => 'required|min:6|confirmed',
-            'user_type_code' => 'required|max:10',
-            'status' => 'required|in:0,1',
-        ];
+        return Support::$rules;
     }
 }

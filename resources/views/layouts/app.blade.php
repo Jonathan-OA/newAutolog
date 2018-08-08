@@ -41,7 +41,7 @@
                 <div class="lay_account">
                     {{strtoupper(Auth::user()->name) }}
                     </br>
-                    CHFR - 01
+                    TWX - 01
                 </div>
         </div>
     </div>
@@ -49,7 +49,17 @@
         <div class="col-md-2 hidden-sm no-pad-rg">
             <div class="lay_menu_op" id="lay_menu_op">
                 {!! $MyNavBar->asUl(array('class' => 'vertical menu', 'data-accordion-menu' => '')) !!}
+                 <!-- Botão de suporte que abre modal com o formulário -->
+                <div class="modal fade" id="supportModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    @include('layouts.support')
+                </div>
+                <div class="lay_menu_sup">
+                        <a class="btn btn-support" id="button-suporte" data-toggle="modal" data-target="#supportModal" title="Suporte"> @lang('models.support') 
+                            <img class="icon" src="{{ asset('/icons/suporte.png') }}" alt="Suporte" >
+                        </a>                    
+                </div>
             </div>
+            
         </div>
         <!-- ID: ctrl_rsp é responsavel pela mudança de colunas no design responsivo quando esconde o menu-->
         <div id="ctrl_rsp" class="col-md-10 col-sm-12 ">

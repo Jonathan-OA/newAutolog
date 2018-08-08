@@ -29,7 +29,8 @@ class SupplierRepository extends BaseRepository
         'active',
         'obs1',
         'obs2',
-        'obs3'
+        'obs3',
+        'status'
     ];
 
     /**

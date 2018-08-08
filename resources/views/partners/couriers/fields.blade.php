@@ -27,6 +27,17 @@
 {!! Form::label('state_registration', Lang::get('models.state_registration').':') !!}
 {!! Form::text('state_registration', null, ['class' => 'form-control']) !!}
 
+<!-- Status Field -->
+{!! Form::label('status', Lang::get('models.status').':') !!}
+<div class="onoffswitch">
+    <input type="hidden" name="status"  value="0" >
+    {{ Form::checkbox('status', 1, (!empty($courier->status)) ? $courier->status : 0 ,['class' => 'onoffswitch-checkbox', 'id' => 'status']) }}
+    <label class="onoffswitch-label" for="status">
+        <span class="onoffswitch-inner"></span>
+        <span class="onoffswitch-switch"></span>
+    </label>
+</div>
+
 <!-- Address Field -->
 {!! Form::label('address', Lang::get('models.address').':') !!}
 {!! Form::text('address', null, ['class' => 'form-control']) !!}
@@ -62,10 +73,6 @@
 <!-- Phone2 Field -->
 {!! Form::label('phone2', Lang::get('models.phone2').':') !!}
 {!! Form::text('phone2', null, ['class' => 'form-control']) !!}
-
-<!-- Status Field -->
-{!! Form::label('status', Lang::get('models.status').':') !!}
-{!! Form::number('status', null, ['class' => 'form-control']) !!}
 
 <!-- Obs1 Field -->
 {!! Form::label('obs1', Lang::get('models.obs1').':') !!}

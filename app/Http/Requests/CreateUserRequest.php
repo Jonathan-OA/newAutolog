@@ -31,6 +31,7 @@ class CreateUserRequest extends FormRequest
             'email' => 'email|max:50',
             'password' => 'required|min:6|confirmed',
             'user_type_code' => 'required|max:10',
+            'status' => 'required|in:0,1',
         ];
     }
 }

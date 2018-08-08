@@ -106,6 +106,7 @@ $(document).ready(function() {
     });
 
 
+    $('#button-suporte').click(function() {})
 
 });
 

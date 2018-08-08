@@ -27,7 +27,7 @@ class CreateCourierRequest extends FormRequest
     public function rules()
     {
         return [ 
-            'code' => 'required|string|unique:customers,code,NULL,id,company_id,'.Auth::user()->company_id.'|max:40',
+            'code' => 'required|string|unique:couriers,code,NULL,id,company_id,'.Auth::user()->company_id.'|max:40',
             'name' => 'required|string|max:50',
             'trading_name' => 'required|string|max:60',
             'state_registration' => 'nullable|string|max:20',

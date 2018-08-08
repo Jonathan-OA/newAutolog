@@ -28,6 +28,8 @@ return [
     'return' => 'Retornar',
     'liberate' => 'Liberar',
     'msg_remove' => 'Deseja excluir este registro?',
+    'send' => 'Enviar',
+    'close' => 'Fechar',
     
 
 ];

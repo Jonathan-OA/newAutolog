@@ -56,9 +56,7 @@
                         { data: 'type' },
                         { data: 'module_name' },
                         { data: 'level' },
-                        { data: 'action' , className: "td_grid_dt" },
                         { data: 'description', className: "td_grid_dt" },
-                        { data: 'local' },
                         { data: 'writes_log', className: "td_center"},
                         { data: null,
                             className: "th_grid",
@@ -66,15 +64,17 @@
                             width: "90px" 
                         }],
             "rowCallback": function( row, data, index ) {
+                console.log(row);
                     //Se esta inativo, coloca a linha com a cor vermelha
-                    if ( data.enabled == 0 ) {
+                    if ( data.enabled == '0' ) {
                         $(row).addClass('redClass');
                     }
+                    
                     //Se ativo, coloca icone de habilitado
                     if ( data.writes_log == 1 ) {
-                        $('td:eq(7)', row).html( "<img class='icon' src='{{asset('/icons/checked.png') }}'>" );
+                        $('td:eq(5)', row).html( "<img class='icon' src='{{asset('/icons/checked.png') }}'>" );
                     }else{
-                        $('td:eq(7)', row).html('');
+                        $('td:eq(5)', row).html('');
                     }
             }
       });   
