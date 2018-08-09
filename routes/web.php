@@ -79,8 +79,12 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('userTypes/datatable', 'UserTypeController@getData');
     Route::resource('userTypes', 'UserTypeController');
 
-    Route::get('userPermissions/datatable', 'UserPermissionController@getData');
+    Route::get('userPermissions/{user_type}/show', 'UserPermissionController@getPermissions');
+    Route::get('userPermissions/{user_type}', 'UserPermissionController@index');
     Route::resource('userPermissions', 'UserPermissionController');
+    
+    Route::get('userPermissions/{user_type}/create', 'UserPermissionController@create');
+
 
     Route::get('customers/datatable', 'CustomerController@getData');
     Route::resource('customers', 'CustomerController');

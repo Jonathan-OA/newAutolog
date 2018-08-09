@@ -572,3 +572,25 @@
     .input_error {
         border-color: red !important;
     }
+    
+    .input-group-text {
+        padding: 0.5vh 0.8vw;
+        background-color: #128b0b;
+    }
+    
+    .drop_header {
+        background-color: #d5d5d5;
+        color: black;
+        vertical-align: middle;
+        border: 1px solid black;
+    }
+    
+    .drop_row {
+        padding-left: 2vw;
+        color: black;
+        vertical-align: middle;
+    }
+    
+    .drop_row .input-group-text {
+        background-color: #d1d1d1;
+    }

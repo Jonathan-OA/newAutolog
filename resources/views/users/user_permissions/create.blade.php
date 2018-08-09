@@ -13,7 +13,7 @@
                             <div class="col-md-12">
                                 {!! Form::open(['route' => 'userPermissions.store']) !!}
                                 <div class="form-group">
-                                    @include('user_permissions.fields')
+                                    @include('users.user_permissions.fields')
                                 </div>
                                 {!! Form::close() !!}
                             </div>

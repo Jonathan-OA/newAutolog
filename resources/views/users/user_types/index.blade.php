@@ -4,21 +4,24 @@
     <div class="row">
         <div class="col-md-12 pad-ct">
             <div class="panel panel-default" >
-                <div class="panel-heading">
-                   <!-- Texto baseado no arquivo de linguagem -->
-                   @lang('models.user_permissions') 
+                <div class="panel-heading ptabs">
+                    <!-- Abas -->
+                    <ul class="nav nav-tabs">
+                         <!-- Textos baseados no arquivo de linguagem -->
+                         <li ><a href="{!! route('users.index') !!}">@lang('models.users') </a></li>
+                         <li class="active-l"><a href="#">@lang('models.user_types')</a></li> 
+                    </ul>
                 </div>
-                
                 <div class="panel panel-default">
                     <div class="row">
                         <div class="col-md-12">
                             @include('flash::message')
                             <div id="msg_excluir"></div>
                             <div class="row buttons_grid">
-                                <a class="btn btn-success"  href="{!! route('userPermissions.create') !!}">@lang('buttons.add')</a>
+                                <a class="btn btn-success"  href="{!! route('userTypes.create') !!}">@lang('buttons.add')</a>
                             </div>
                             <div class="panel-body">
-                                @include('user_permissions.table')
+                                @include('users.user_types.table')
                             </div>
                         </div>
                     </div>
@@ -33,10 +36,10 @@
     $(function() {
         
         //Parâmetros para criação da datatable
-        table = $("#userPermissions-table").DataTable({
+        table = $("#userTypes-table").DataTable({
             scrollX: true,
             scrollY: "47vh",
-            ajax: 'userPermissions/datatable',
+            ajax: 'userTypes/datatable',
             fixedColumns:   {
                 leftColumns: 0,
                 rightColumns: 1
@@ -52,30 +55,33 @@
                     sPrevious: "@lang('models.previous')",
                 }
             },
-            columns: [ { data: 'user_type_code' },
-                { data: 'operation_code' },
-               
+            columns: [ { data: 'code' },
+                       { data: 'description' },
+                       { data: 'active' },
                        { data: null,
                          className: "td_grid",
-                         defaultContent: "<button id='edit' aria-label='@lang('buttons.edit')' data-microtip-position='left' role='tooltip' ><img class='icon' src='{{asset('/icons/editar.png') }}'></button><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='{{asset('/icons/remover.png') }}'></button>",
+                         defaultContent: "<button id='permissions' aria-label='@lang('buttons.permissions')' data-microtip-position='left' role='tooltip' ><img class='icon' src='{{asset('/icons/permissoes2.png') }}'></button><button id='edit' aria-label='@lang('buttons.edit')'data-microtip-position='left' role='tooltip' ><img class='icon' src='{{asset('/icons/editar.png') }}'></button><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='{{asset('/icons/remover.png') }}'></button>",
                          width: "90px" 
                        }],
       });
 
       //Funções dos botões de editar e excluir
-      $('#userPermissions-table tbody').on( 'click', 'button', function () {
-            var data = table.row( $(this).parents('tr') ).data();
+      $('#userTypes-table tbody').on( 'click', 'button', function () {
+            var data = table.row( $(this).parents('tr')).data();
             var id = $(this).attr('id');
             if(id == 'edit'){
                 //Editar Registro
-                window.location.href = "{!! URL::to('userPermissions/"+data.id+"/edit') !!}";
+                window.location.href = "{!! URL::to('userTypes/"+data.id+"/edit') !!}";
+            }else if(id == 'permissions'){
+                //Permissões
+                window.location.href = "{!! URL::to('userPermissions/"+data.code+"') !!}";
             }else{
                 //Excluir Registro
                 if(confirm('@lang("buttons.msg_remove")')){
                     //Token obrigatório para envio POST
                     var tk = $('meta[name="csrf-token"]').attr('content');
                     $.ajax({
-                        url: 'userPermissions/'+data.id,
+                        url: 'userTypes/'+data.code,
                         type: 'post',
                         data: {_method: 'delete', _token :tk},
                         success: function(scs){ 

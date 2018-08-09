@@ -30,13 +30,19 @@ class UserPermissionController extends AppBaseController
      * @param Request $request
      * @return Response
      */
-    public function index(Request $request)
+    public function index($user_type_code)
     {
-        $this->userPermissionRepository->pushCriteria(new RequestCriteria($request));
-        $userPermissions = $this->userPermissionRepository->all();
-
-        return view('user_permissions.index')
-            ->with('userPermissions', $userPermissions);
+        //Pega todas as operações cadastradas no sistema + permissões para este usuário
+        $permissions = App\Models\UserPermission::getPermissions($user_type_code);
+        //Pega as permissões cadastradas para o usuário
+        $userPermissions = $this->userPermissionRepository->findWhere(['user_type_code' => $user_type_code]);   
+        
+        
+        return view('users.user_permissions.index')
+            ->with('permissions', $permissions)
+            ->with('userPermissions', $userPermissions)
+            ->with('userTypeCode',$user_type_code)
+            ->with('moduleAnt', '') ;
     }
 
     /**
@@ -48,7 +54,7 @@ class UserPermissionController extends AppBaseController
     {
         $userTypes = App\Models\UserType::getUserTypes();
         $operations = App\Models\Operation::getOperations();
-        return view('user_permissions.create')
+        return view('users.user_permissions.create')
                ->with('userTypes', $userTypes)
                ->with('operations', $operations);
     }
@@ -88,7 +94,7 @@ class UserPermissionController extends AppBaseController
             return redirect(route('userPermissions.index'));
         }
 
-        return view('user_permissions.show')->with('userPermission', $userPermission);
+        return view('users.user_permissions.show')->with('userPermission', $userPermission);
     }
 
     /**
@@ -111,7 +117,7 @@ class UserPermissionController extends AppBaseController
             return redirect(route('userPermissions.index'));
         }
 
-        return view('user_permissions.edit')->with('userPermission', $userPermission)
+        return view('users.user_permissions.edit')->with('userPermission', $userPermission)
                                             ->with('userTypes',$userTypes)
                                             ->with('operations',$operations);
     }
@@ -169,8 +175,8 @@ class UserPermissionController extends AppBaseController
      * Get data from model 
      *
      */
-    public function getData()
+    public function getPermissions($user_type_code)
     {
-        return DataTables::of(App\Models\UserPermission::query())->make(true);
+        return App\Models\UserPermission::getPermissions($user_type_code);
     }
 }

@@ -4,14 +4,14 @@
         <div class="col-md-12 pad-ct">
             <div class="panel panel-default" >
                 <div class="panel-heading">
-                    @lang('models.userTypes')
+                    @lang('models.user_permissions')
                 </div>
                 <div class="panel panel-default">
                     <div class="panel-body" >
                         <div class="row">
                             <div class="col-md-12">
-                                {!! Form::model($userType, ['route' => ['userTypes.update', $userType->id], 'method' => 'patch']) !!}
-                                  @include('user_types.fields',['action' => "edit"])
+                                {!! Form::model($userPermission, ['route' => ['userPermissions.update', $userPermission->id], 'method' => 'patch']) !!}
+                                  @include('users.user_permissions.fields',['action' => "edit"])
                                 {!! Form::close() !!}
                             </div>
                         </div>

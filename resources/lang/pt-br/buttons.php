@@ -30,6 +30,7 @@ return [
     'msg_remove' => 'Deseja excluir este registro?',
     'send' => 'Enviar',
     'close' => 'Fechar',
+    'permissions' => 'Permissões',
     
 
 ];

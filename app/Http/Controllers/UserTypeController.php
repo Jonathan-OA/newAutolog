@@ -35,7 +35,7 @@ class UserTypeController extends AppBaseController
         $this->userTypeRepository->pushCriteria(new RequestCriteria($request));
         $userTypes = $this->userTypeRepository->all();
 
-        return view('user_types.index')
+        return view('users.user_types.index')
             ->with('userTypes', $userTypes);
     }
 
@@ -46,7 +46,7 @@ class UserTypeController extends AppBaseController
      */
     public function create()
     {
-        return view('user_types.create');
+        return view('users.user_types.create');
     }
 
     /**
@@ -84,7 +84,7 @@ class UserTypeController extends AppBaseController
             return redirect(route('userTypes.index'));
         }
 
-        return view('user_types.show')->with('userType', $userType);
+        return view('users.user_types.show')->with('userType', $userType);
     }
 
     /**
@@ -104,7 +104,7 @@ class UserTypeController extends AppBaseController
             return redirect(route('userTypes.index'));
         }
 
-        return view('user_types.edit')->with('userType', $userType);
+        return view('users.user_types.edit')->with('userType', $userType);
     }
 
     /**

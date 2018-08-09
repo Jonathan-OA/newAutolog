@@ -36,7 +36,7 @@ class PalletItemController extends AppBaseController
      */
     public function index($pallet_id)
     {
-        
+
         $palletItems = $this->palletItemRepository->findWhere(array('pallet_id' => $pallet_id,
                                                                     'company_id' => Auth::user()->company_id));
         $palletBarcode = Pallet::find($pallet_id);   

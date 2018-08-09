@@ -4,9 +4,13 @@
     <div class="row">
         <div class="col-md-12 pad-ct">
             <div class="panel panel-default" >
-                <div class="panel-heading">
-                   <!-- Texto baseado no arquivo de linguagem -->
-                   @lang('models.users') 
+                <div class="panel-heading ptabs">
+                    <!-- Abas -->
+                    <ul class="nav nav-tabs">
+                         <!-- Textos baseados no arquivo de linguagem -->
+                         <li class="active-l"><a href="#">@lang('models.users') </a></li>
+                         <li><a href="{!! route('userTypes.index') !!}">@lang('models.user_types')</a></li> 
+                    </ul>
                 </div>
                 <div class="panel panel-default">
                     <div class="row">

@@ -1,5 +1,4 @@
 @extends('layouts.app')
-
 @section('content')
     <div class="row">
         <div class="col-md-12 pad-ct">
@@ -11,17 +10,14 @@
                     <div class="panel-body" >
                         <div class="row">
                             <div class="col-md-12">
-                                {!! Form::open(['route' => 'userTypes.store']) !!}
-                                <div class="form-group">
-                                    @include('user_types.fields')
-                                </div>
+                                {!! Form::model($userType, ['route' => ['userTypes.update', $userType->id], 'method' => 'patch']) !!}
+                                  @include('users.user_types.fields',['action' => "edit"])
                                 {!! Form::close() !!}
                             </div>
                         </div>
-                    </div>   
+                    </div>
                 </div>
             </div>
         </div>
-
     </div>
 @endsection

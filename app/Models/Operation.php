@@ -80,5 +80,7 @@ class Operation extends Model
                         ->pluck('description_f','code');
     }
 
+
+
     
 }

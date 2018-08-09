@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Eloquent as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use DB;
 
 /**
  * Class UserPermission
@@ -46,5 +47,19 @@ class UserPermission extends Model
         
     ];
 
+    /**
+     * Retorna todas as operações cadastradas e as permissões disponíveis para o usuário
+     *
+     * 
+     */
+    public static function getPermissions($user_type_code){
+        $GLOBALS['userType'] = $user_type_code;
+        return DB::table('operations')->leftJoin('user_permissions', function ($join) {
+                            $join->on('code', '=', 'operation_code')
+                                ->where('user_type_code', '=', $GLOBALS['userType']);
+                        })
+                        ->get();
+                        
+    }
     
 }
