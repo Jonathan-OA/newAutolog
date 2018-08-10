@@ -5,7 +5,6 @@
             <thead>
                 <th class="th_grid">@lang('models.code') </th>
                 <th class="th_grid">@lang('models.description') </th>
-                <th class="th_grid">@lang('models.active') </th>
                 <th class="th_grid">@lang('models.action')</th>
             </thead>
             <tbody>
@@ -13,7 +12,6 @@
                 <tr>
                     <td>{!! $userType->code !!}</td>
                     <td>{!! $userType->description !!}</td>
-                    <td>{!! $userType->active !!}</td>
                 </tr>
             @endforeach
             </tbody>

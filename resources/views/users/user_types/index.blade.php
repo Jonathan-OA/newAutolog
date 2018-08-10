@@ -57,12 +57,16 @@
             },
             columns: [ { data: 'code' },
                        { data: 'description' },
-                       { data: 'active' },
                        { data: null,
                          className: "td_grid",
                          defaultContent: "<button id='permissions' aria-label='@lang('buttons.permissions')' data-microtip-position='left' role='tooltip' ><img class='icon' src='{{asset('/icons/permissoes2.png') }}'></button><button id='edit' aria-label='@lang('buttons.edit')'data-microtip-position='left' role='tooltip' ><img class='icon' src='{{asset('/icons/editar.png') }}'></button><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='{{asset('/icons/remover.png') }}'></button>",
                          width: "90px" 
                        }],
+            "rowCallback": function( row, data, index ) {
+                    if ( data.active == 0 ) {
+                    $(row).addClass('redClass');
+                    }
+            }
       });
 
       //Funções dos botões de editar e excluir

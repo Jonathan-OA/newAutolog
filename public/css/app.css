@@ -580,17 +580,23 @@
     
     .drop_header {
         background-color: #d5d5d5;
-        color: black;
+        font-weight: bold;
+        color: #17263d;
         vertical-align: middle;
-        border: 1px solid black;
+        border-bottom: 1px solid black;
     }
     
     .drop_row {
         padding-left: 2vw;
         color: black;
         vertical-align: middle;
+        border-bottom: 1px solid black;
     }
     
     .drop_row .input-group-text {
         background-color: #d1d1d1;
+    }
+    
+    .permission {
+        background-color: #92E48D !important;
     }

@@ -47,7 +47,12 @@
             //Pega nome do módulo clicado
             var module = $(this).attr("name");
             var operations = $("input[id^='"+module+".']");
-            operations.prop('checked', !operations.prop('checked'));
+            if($(this).prop('checked')){
+                operations.prop('checked', true);
+            }else{
+                operations.prop('checked', false);
+            }
+            
         })
                     
     });

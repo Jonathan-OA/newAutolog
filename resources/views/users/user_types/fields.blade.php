@@ -14,8 +14,15 @@
 {!! Form::text('description', null, ['class' => 'form-control']) !!}
 
 <!-- Active Field -->
-{!! Form::label('active', Lang::get('models.active').':') !!}
-{!! Form::select('active', array('1' => 'Sim', '0' => 'Não'), null, ['class' => 'form-control']) !!}
+{!! Form::label('active', Lang::get('models.status').':') !!}
+<div class="onoffswitch">
+        <input type="hidden" name="active"  value="0" >
+        {{ Form::checkbox('active', 1, (!empty($userType->active)) ? $userType->active : 0 ,['class' => 'onoffswitch-checkbox', 'id' => 'active']) }}
+        <label class="onoffswitch-label" for="active">
+            <span class="onoffswitch-inner"></span>
+            <span class="onoffswitch-switch"></span>
+        </label>
+</div>
 </div>
 
 <!-- Submit Field -->
