@@ -34,7 +34,7 @@ class SupplierController extends AppBaseController
     public function index(Request $request)
     {
         $this->supplierRepository->pushCriteria(new RequestCriteria($request));
-        $suppliers = $this->supplierRepository->all();
+        $suppliers = $this->supplierRepository->findByField('company_id', Auth::user()->company_id);
 
         return view('partners.suppliers.index')
             ->with('suppliers', $suppliers);

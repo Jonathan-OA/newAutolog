@@ -34,7 +34,7 @@ class VolumeController extends AppBaseController
     public function index(Request $request)
     {
         $this->volumeRepository->pushCriteria(new RequestCriteria($request));
-        $volumes = $this->volumeRepository->all();
+        $volumes = $this->volumeRepository->findByField('company_id', Auth::user()->company_id);
 
         return view('volumes.index')
             ->with('volumes', $volumes);

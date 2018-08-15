@@ -13,6 +13,7 @@ use Response;
 use DataTables;
 use App;
 use Lang;
+use Auth;
 
 class UserTypeController extends AppBaseController
 {
@@ -96,15 +97,24 @@ class UserTypeController extends AppBaseController
      */
     public function edit($id)
     {
-        $userType = $this->userTypeRepository->findWithoutFail($id);
+        //Valida se usuário possui permissão para acessar esta opção
+        if(App\Models\User::getPermission('user_types_edit',Auth::user()->user_type_code)){
 
-        if (empty($userType)) {
-            Flash::error(Lang::get('validation.not_found'));
+            $userType = $this->userTypeRepository->findWithoutFail($id);
 
+            if (empty($userType)) {
+                Flash::error(Lang::get('validation.not_found'));
+
+                return redirect(route('userTypes.index'));
+            }
+
+
+            return view('users.user_types.edit')->with('userType', $userType);
+        }else{
+            //Sem permissão
+            Flash::error(Lang::get('validation.permission'));
             return redirect(route('userTypes.index'));
         }
-
-        return view('users.user_types.edit')->with('userType', $userType);
     }
 
     /**
@@ -126,6 +136,14 @@ class UserTypeController extends AppBaseController
         }
 
         $userType = $this->userTypeRepository->update($request->all(), $id);
+        
+        //Grava log
+        $requestF = $request->all();
+        $descricao = 'Alterou Tipo de Usuário ID: '.$id.' - '.$requestF['code'].' Status: '.$requestF['status'];
+        $log = App\Models\Log::wlog('user_types_edit', $descricao);
+
+        //Atualiza status de todos os usuários deste tipo de usuário
+        $upd = App\Models\UserType::setStatusUsers($userType['code'],$userType['status']);
 
         Flash::success(Lang::get('validation.update_success'));
 
@@ -141,19 +159,34 @@ class UserTypeController extends AppBaseController
      */
     public function destroy($id)
     {
-        $userType = $this->userTypeRepository->findWithoutFail($id);
+        //Valida se usuário possui permissão para acessar esta opção
+        if(App\Models\User::getPermission('user_types_remove',Auth::user()->user_type_code)){
+            
+            $userType = $this->userTypeRepository->findWithoutFail($id);
 
-        if (empty($userType)) {
-            Flash::error(Lang::get('validation.not_found'));
+            if (empty($userType)) {
+                Flash::error(Lang::get('validation.not_found'));
 
-            return redirect(route('userTypes.index'));
-        }
+                return redirect(route('userTypes.index'));
+            }
 
-        $this->userTypeRepository->delete($id);
+            //Atualiza status de todos os usuários deste tipo de usuário
+            $upd = App\Models\UserType::setStatusUsers($userType['code'],0);
 
-        Flash::success(Lang::get('validation.delete_success'));
+            $this->userTypeRepository->delete($id);
 
-        return redirect(route('userTypes.index'));
+            //Grava log
+            $descricao = 'Excluiu Tipo de Usuário ID: '.$id.' - '.$userType['code'];
+            $log = App\Models\Log::wlog('user_types_remove', $descricao);
+
+            Flash::success(Lang::get('validation.delete_success'));
+            return array(0,Lang::get('validation.delete_success'));
+
+        }else{
+            //Sem permissão
+            Flash::error(Lang::get('validation.permission'));
+            return array(1,Lang::get('validation.permission'));
+        }    
     }
 
     /**

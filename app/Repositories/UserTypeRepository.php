@@ -12,7 +12,7 @@ class UserTypeRepository extends BaseRepository
      */
     protected $fieldSearchable = [
         'description',
-        'active'
+        'status'
     ];
 
     /**

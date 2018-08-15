@@ -36,6 +36,16 @@
 {!! Form::label('user_type_code', Lang::get('models.user_type_code').':') !!}
 {!! Form::select('user_type_code', $user_types, null, ['class' => 'form-control']) !!}
 
+<!-- Status Field -->
+{!! Form::label('status', Lang::get('models.status').':') !!}
+<div class="onoffswitch">
+    <input type="hidden" name="status"  value="0" >
+    {{ Form::checkbox('status', 1, (!empty($user->status)) ? $user->status : 0 ,['class' => 'onoffswitch-checkbox', 'id' => 'status']) }}
+    <label class="onoffswitch-label" for="status">
+        <span class="onoffswitch-inner"></span>
+        <span class="onoffswitch-switch"></span>
+    </label>
+</div>
 
 </div>
 

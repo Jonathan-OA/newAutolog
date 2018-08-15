@@ -34,7 +34,7 @@ class LiberationItemController extends AppBaseController
     public function index(Request $request)
     {
         $this->liberationItemRepository->pushCriteria(new RequestCriteria($request));
-        $liberationItems = $this->liberationItemRepository->all();
+        $liberationItems = $this->liberationItemRepository->findByField('company_id', Auth::user()->company_id);
 
         return view('liberation_items.index')
             ->with('liberationItems', $liberationItems);

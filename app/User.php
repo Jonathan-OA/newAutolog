@@ -35,7 +35,6 @@ class User extends Authenticatable
 
     // Valida se usuário já esta logado
     public function valLogged($ip){
-
         
         //Pega Data Atual
         $dataAtual = Carbon\Carbon::now();

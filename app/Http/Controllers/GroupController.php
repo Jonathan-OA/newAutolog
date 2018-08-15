@@ -34,7 +34,7 @@ class GroupController extends AppBaseController
     public function index(Request $request)
     {
         $this->groupRepository->pushCriteria(new RequestCriteria($request));
-        $groups = $this->groupRepository->all();
+        $groups = $this->groupRepository->findByField('company_id', Auth::user()->company_id);
 
         return view('products.groups.index')
             ->with('groups', $groups);

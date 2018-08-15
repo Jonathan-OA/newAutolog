@@ -28,7 +28,8 @@ class User extends Model
         'password',
         'email',
         'user_type_code',
-        'remember_token'
+        'remember_token',
+        'status'
     ];
 
     /**
@@ -44,7 +45,8 @@ class User extends Model
         'password' => 'string',
         'email' => 'string',
         'user_type_code' => 'string',
-        'remember_token' => 'string'
+        'remember_token' => 'string',
+        'status' => 'integer'
     ];
 
     /**

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Eloquent as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Auth;
 
 /**
  * Class UserType
@@ -24,7 +25,7 @@ class UserType extends Model
     public $fillable = [
         'code',
         'description',
-        'active'
+        'status'
     ];
 
     /**
@@ -49,8 +50,24 @@ class UserType extends Model
     //Retorna todos os tipos de usuários disponíveis
     public static function getUserTypes(){
         return UserType::selectRaw("code,CONCAT(code,' - ',description) as description_f")
-        ->where('active', '1')
-        ->pluck('description_f','code');
+                    ->where('status', '1')
+                    ->pluck('description_f','code');
+    }
+
+
+    /**
+     * Função que ativa/inativa todos os usuários de um 
+     * Parâmetros: Tipo de Usuário
+     * @var array
+     */
+
+    public static function setStatusUsers($user_type, $status){
+        return User::where([
+                            ['company_id', Auth::user()->company_id],
+                            ['user_type_code', $user_type]
+                          ])
+                          ->update(['status' => $status]);
+
     }
 
     

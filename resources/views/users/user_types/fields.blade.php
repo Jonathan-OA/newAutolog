@@ -13,12 +13,12 @@
 {!! Form::label('description', Lang::get('models.description').':') !!}
 {!! Form::text('description', null, ['class' => 'form-control']) !!}
 
-<!-- Active Field -->
-{!! Form::label('active', Lang::get('models.status').':') !!}
+<!-- Status Field -->
+{!! Form::label('status', Lang::get('models.status').':') !!}
 <div class="onoffswitch">
-        <input type="hidden" name="active"  value="0" >
-        {{ Form::checkbox('active', 1, (!empty($userType->active)) ? $userType->active : 0 ,['class' => 'onoffswitch-checkbox', 'id' => 'active']) }}
-        <label class="onoffswitch-label" for="active">
+        <input type="hidden" name="status"  value="0" >
+        {{ Form::checkbox('status', 1, (!empty($userType->status)) ? $userType->status : 0 ,['class' => 'onoffswitch-checkbox', 'id' => 'status']) }}
+        <label class="onoffswitch-label" for="status">
             <span class="onoffswitch-inner"></span>
             <span class="onoffswitch-switch"></span>
         </label>

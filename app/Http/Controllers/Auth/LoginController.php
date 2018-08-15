@@ -75,6 +75,13 @@ class LoginController extends Controller
             Flash::error(Lang::get('auth.branch'));
             return redirect(route('login'));
         }
+
+        //Usuário Inativo
+        if($user->status == 0){
+            Auth::logout();
+            Flash::error(Lang::get('auth.status'));
+            return redirect(route('login'));
+        }
         
     }
     

@@ -28,7 +28,7 @@ return [
         'array'   => 'The :attribute must have between :min and :max items.',
     ],
     'boolean'              => 'The :attribute field must be true or false.',
-    'confirmed'            => 'The :attribute confirmation does not match.',
+    'confirmed'            => ':attributes não conferem.',
     'date'                 => 'The :attribute is not a valid date.',
     'date_format'          => 'The :attribute does not match the format :format.',
     'different'            => 'The :attribute and :other must be different.',
@@ -55,8 +55,8 @@ return [
     'mimes'                => 'The :attribute must be a file of type: :values.',
     'min'                  => [
         'numeric' => 'The :attribute must be at least :min.',
-        'file'    => 'The :attribute must be at least :min kilobytes.',
-        'string'  => 'The :attribute must be at least :min characters.',
+        'file'    => 'O campo :attribute precisa ter pelo menos :min kilobytes.',
+        'string'  => 'O campo :attribute precisa ter pelo menos :min caracteres.',
         'array'   => 'The :attribute must have at least :min items.',
     ],
     'not_in'               => 'O valor selecionado no campo :attribute é inválido.',
@@ -168,7 +168,8 @@ return [
         'customer_code'  => 'Cliente',
         'courier_code'  => 'Transportadora',
         'supplier_code'  => 'Fornecedor',
-        'moviment_code'  => 'Movimento'
+        'moviment_code'  => 'Movimento',
+        'password'  => 'Senha'
     ],
 
 ];

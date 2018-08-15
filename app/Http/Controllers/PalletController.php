@@ -34,7 +34,7 @@ class PalletController extends AppBaseController
     public function index(Request $request)
     {
         $this->palletRepository->pushCriteria(new RequestCriteria($request));
-        $pallets = $this->palletRepository->all();
+        $pallets = $this->palletRepository->findByField('company_id', Auth::user()->company_id);
 
         return view('pallets.index')
             ->with('pallets', $pallets);

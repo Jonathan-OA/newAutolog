@@ -34,7 +34,7 @@ class LiberationRuleController extends AppBaseController
     public function index(Request $request)
     {
         $this->liberationRuleRepository->pushCriteria(new RequestCriteria($request));
-        $liberationRules = $this->liberationRuleRepository->all();
+        $liberationRules = $this->liberationRuleRepository->findByField('company_id', Auth::user()->company_id);
 
         return view('liberation_rules.index')
             ->with('liberationRules', $liberationRules);

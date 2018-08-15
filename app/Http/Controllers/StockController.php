@@ -36,7 +36,7 @@ class StockController extends AppBaseController
     public function index(Request $request)
     {
         $this->stockRepository->pushCriteria(new RequestCriteria($request));
-        $stocks = $this->stockRepository->all();
+        $stocks = $this->stockRepository->findByField('company_id', Auth::user()->company_id);
 
         return view('stocks.index')
             ->with('stocks', $stocks);

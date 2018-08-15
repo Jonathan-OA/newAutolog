@@ -21,3 +21,19 @@
         </div>
     </div>
 @endsection
+@section('scripts')
+<script>
+    var table;
+    $(function() {
+        $('#status').change(function(){
+            //Caso um tipo de usuário seja desativado, da mensagem de confirmação
+            if($(this).prop('checked') === false){
+                if(!confirm('Caso exista usuários para este tipo, TODOS serão desativados. Deseja continuar?')){
+                    $(this).prop('checked', true);
+                }
+            }
+        })
+    })
+
+</script>
+@endsection

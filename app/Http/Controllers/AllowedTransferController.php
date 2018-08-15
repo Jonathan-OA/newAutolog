@@ -34,7 +34,7 @@ class AllowedTransferController extends AppBaseController
     public function index(Request $request)
     {
         $this->allowedTransferRepository->pushCriteria(new RequestCriteria($request));
-        $allowedTransfers = $this->allowedTransferRepository->all();
+        $allowedTransfers = $this->allowedTransferRepository->findByField('company_id', Auth::user()->company_id);
 
         return view('allowed_transfers.index')
             ->with('allowedTransfers', $allowedTransfers);

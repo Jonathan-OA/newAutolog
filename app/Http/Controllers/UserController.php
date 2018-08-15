@@ -35,7 +35,7 @@ class UserController extends AppBaseController
     public function index(Request $request)
     {
         $this->userRepository->pushCriteria(new RequestCriteria($request));
-        $users = $this->userRepository->all();
+        $users = $this->userRepository->findByField('company_id', Auth::user()->company_id);
 
         return view('users.index')
             ->with('users', $users);
@@ -80,7 +80,8 @@ class UserController extends AppBaseController
             'email' => $input['email'],
             'user_type_code' => $input['user_type_code'],
             'password' => bcrypt($input['password']),
-            'last_login' => null
+            'last_login' => null,
+            'status' => $input['status']
             
         ]);
         
@@ -168,7 +169,7 @@ class UserController extends AppBaseController
 
         //Grava log
         $requestF = $request->all();
-        $descricao = 'Alterou Usuário: '.$requestF['code'].' - Email: '.$requestF['email'].' - Tipo:'.$requestF['user_type_code'];
+        $descricao = 'Alterou Usuário: '.$requestF['code'].' - Email: '.$requestF['email'].' - Tipo:'.$requestF['user_type_code'].' - Status: '.$requestF['status'];
         $log = App\Models\Log::wlog('users_edit', $descricao);
 
         Flash::success(Lang::get('validation.update_success'));

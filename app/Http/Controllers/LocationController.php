@@ -34,7 +34,7 @@ class LocationController extends AppBaseController
     public function index(Request $request)
     {
         $this->locationRepository->pushCriteria(new RequestCriteria($request));
-        $locations = $this->locationRepository->all();
+        $locations = $this->locationRepository->findByField('company_id', Auth::user()->company_id);
 
         return view('locations.index')
             ->with('locations', $locations);

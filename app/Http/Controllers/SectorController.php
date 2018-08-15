@@ -34,7 +34,7 @@ class SectorController extends AppBaseController
     public function index(Request $request)
     {
         $this->sectorRepository->pushCriteria(new RequestCriteria($request));
-        $sectors = $this->sectorRepository->all();
+        $sectors = $this->sectorRepository->findByField('company_id', Auth::user()->company_id);
 
         return view('locations.sectors.index')
             ->with('sectors', $sectors);

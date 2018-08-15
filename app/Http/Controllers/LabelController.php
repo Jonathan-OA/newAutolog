@@ -34,7 +34,7 @@ class LabelController extends AppBaseController
     public function index(Request $request)
     {
         $this->labelRepository->pushCriteria(new RequestCriteria($request));
-        $labels = $this->labelRepository->all();
+        $labels = $this->labelRepository->findByField('company_id', Auth::user()->company_id);
 
         return view('labels.index')
             ->with('labels', $labels);

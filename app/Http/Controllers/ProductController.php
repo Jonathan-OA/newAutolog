@@ -34,7 +34,7 @@ class ProductController extends AppBaseController
     public function index(Request $request)
     {
         $this->productRepository->pushCriteria(new RequestCriteria($request));
-        $products = $this->productRepository->all();
+        $products = $this->productRepository->findByField('company_id', Auth::user()->company_id);
 
         return view('products.index')
             ->with('products', $products);

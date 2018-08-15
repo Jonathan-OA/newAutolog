@@ -34,7 +34,7 @@ class DepositController extends AppBaseController
     public function index(Request $request)
     {
         $this->depositRepository->pushCriteria(new RequestCriteria($request));
-        $deposits = $this->depositRepository->all();
+        $deposits = $this->depositRepository->findByField('company_id', Auth::user()->company_id);
 
         return view('locations.deposits.index')
             ->with('deposits', $deposits);

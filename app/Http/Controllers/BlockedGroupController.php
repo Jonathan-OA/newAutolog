@@ -34,7 +34,7 @@ class BlockedGroupController extends AppBaseController
     public function index(Request $request)
     {
         $this->blockedGroupRepository->pushCriteria(new RequestCriteria($request));
-        $blockedGroups = $this->blockedGroupRepository->all();
+        $blockedGroups = $this->blockedGroupRepository->findByField('company_id', Auth::user()->company_id);
 
         return view('products.blocked_groups.index')
             ->with('blockedGroups', $blockedGroups);
