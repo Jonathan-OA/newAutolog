@@ -21,7 +21,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'company_id','code','name', 'email', 'password','user_type_code'
+        'company_id','code','name', 'email', 'password','user_type_code','last_notification'
     ];
 
     /**
@@ -92,7 +92,6 @@ class User extends Authenticatable
         //Atualiza data do ultimo login para a atual
         $this->last_login = $dataAtual->toDateTimeString();
         $this->save();
-         
 
     }
 

@@ -4,24 +4,21 @@
     <div class="row">
         <div class="col-md-12 pad-ct">
             <div class="panel panel-default" >
-                <div class="panel-heading ptabs">
-                    <!-- Abas -->
-                    <ul class="nav nav-tabs">
-                         <!-- Textos baseados no arquivo de linguagem -->
-                         <li class="active-l"><a href="#">@lang('models.users') </a></li>
-                         <li><a href="{!! route('userTypes.index') !!}">@lang('models.user_types')</a></li> 
-                    </ul>
+                <div class="panel-heading">
+                   <!-- Texto baseado no arquivo de linguagem -->
+                   @lang('models.notifications') 
                 </div>
                 <div class="panel panel-default">
                     <div class="row">
                         <div class="col-md-12">
+                            <!-- Alerta de erro / sucesso -->
                             @include('flash::message')
                             <div id="msg_excluir"></div>
                             <div class="row buttons_grid">
-                                <a class="btn btn-success"  href="{!! route('users.create') !!}">@lang('buttons.add')</a>
+                                <a class="btn btn-success"  href="{!! route('notifications.create') !!}">@lang('buttons.add')</a>
                             </div>
                             <div class="panel-body">
-                                @include('users.table')
+                                @include('notifications.table')
                             </div>
                         </div>
                     </div>
@@ -36,10 +33,11 @@
     $(function() {
         
         //Parâmetros para criação da datatable
-        table = $("#users-table").DataTable({
+        table = $("#notifications-table").DataTable({
             scrollX: true,
             scrollY: "47vh",
-            ajax: 'users/datatable',
+            ajax: 'notifications/datatable',
+            autoWidth: true,
             fixedColumns:   {
                 leftColumns: 0,
                 rightColumns: 1
@@ -55,36 +53,29 @@
                     sPrevious: "@lang('models.previous')",
                 }
             },
-            columns: [ { data: 'code', className: 'td_center' },
-                       { data: 'name' },
-                       { data: 'email' },
-                       { data: 'user_type_code', className: 'td_center' },
+            columns: [ { data: 'message' },
+               
                        { data: null,
-                         className: "td_grid",
+                         className: "th_grid",
                          defaultContent: "<button id='edit' aria-label='@lang('buttons.edit')' data-microtip-position='left' role='tooltip' ><img class='icon' src='{{asset('/icons/editar.png') }}'></button><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='{{asset('/icons/remover.png') }}'></button>",
                          width: "90px" 
-                       }],
-            "rowCallback": function( row, data, index ) {
-                    if ( data.status == 0 ) {
-                        $(row).addClass('redClass');
-                    }
-            }
+                        }],
       });
 
       //Funções dos botões de editar e excluir
-      $('#users-table tbody').on( 'click', 'button', function () {
+      $('#notifications-table tbody').on( 'click', 'button', function () {
             var data = table.row( $(this).parents('tr') ).data();
             var id = $(this).attr('id');
             if(id == 'edit'){
                 //Editar Registro
-                window.location.href = "{!! URL::to('users/"+data.id+"/edit') !!}";
+                window.location.href = "{!! URL::to('notifications/"+data.id+"/edit') !!}";
             }else{
                 //Excluir Registro
                 if(confirm('@lang("buttons.msg_remove")')){
                     //Token obrigatório para envio POST
                     var tk = $('meta[name="csrf-token"]').attr('content');
                     $.ajax({
-                        url: 'users/'+data.id,
+                        url: 'notifications/'+data.id,
                         type: 'post',
                         data: {_method: 'delete', _token :tk},
                         success: function(scs){ 

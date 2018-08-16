@@ -105,10 +105,16 @@ $(document).ready(function() {
         $(this).autocomplete("search");
     });
 
-
-    $('#button-suporte').click(function() {})
-
 });
+
+//Função que obtem a ultima notificação criada e a ultima lida pelo usuário
+function showNotification(user_code) {
+    $.ajax(APP_URL + "/notification/" + user_code)
+        .done(function(result) {
+            console.log(result);
+            $('#buttonNotification').append('<span class="notify">' + result[1] + '</span>')
+        });
+}
 
 //Função genérica que cria um gráfico 
 function generateGraph(ctx, url) {
@@ -177,6 +183,8 @@ function generateGraph(ctx, url) {
         });
     });
 }
+
+
 
 
 //Atualiza o usuário logado de 1 em 1 minuto

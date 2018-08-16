@@ -312,4 +312,12 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('supports/datatable', 'SupportController@getData');
     Route::resource('supports', 'SupportController');
 
+    Route::get('notification/{user_code}', function($user_code) {
+        return App\Models\Notification::getLastNotification($user_code);
+    });
 });
+
+
+
+
+

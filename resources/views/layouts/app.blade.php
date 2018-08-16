@@ -29,7 +29,9 @@
         <div class="title"> AUTOLOG WMS </div>
         <!-- Authentication Links -->
         <div class="lay_login hidden-sm">
-                <img class="icon" src="{{ asset('/icons/account.png') }}" alt="Account">
+                <a  href="#" id="buttonNotification" data-toggle="modal" data-target="#notificationModal" title="Notificações">
+                    <img class="icon" src="{{ asset('/icons/account_notf.png') }}" alt="Account">
+                </a>
                 <div class="lay_logout">
                     <a  href="{{ url('/logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
                         <img class="icon" src="{{ asset('/icons/logout.png') }}" alt="Logout">
@@ -41,7 +43,7 @@
                 <div class="lay_account">
                     {{strtoupper(Auth::user()->name) }}
                     </br>
-                    TWX - 01
+                    TWX
                 </div>
         </div>
     </div>
@@ -49,7 +51,7 @@
         <div class="col-md-2 hidden-sm no-pad-rg">
             <div class="lay_menu_op" id="lay_menu_op">
                 {!! $MyNavBar->asUl(array('class' => 'vertical menu', 'data-accordion-menu' => '')) !!}
-                 <!-- Botão de suporte que abre modal com o formulário -->
+                 <!-- Botão do suporte que abre modal com o formulário -->
                 <div class="modal fade" id="supportModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     @include('layouts.support')
                 </div>
@@ -58,6 +60,12 @@
                             <img class="icon" src="{{ asset('/icons/suporte.png') }}" alt="Suporte" >
                         </a>                    
                 </div>
+
+                <!-- Modal de notificações -->
+                <div class="modal fade" id="notificationModal" tabindex="-1" role="dialog"  aria-hidden="true">
+                        @include('layouts.notification')
+                </div>
+
             </div>
             
         </div>

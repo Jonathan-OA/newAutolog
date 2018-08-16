@@ -13,6 +13,7 @@ use Response;
 use DataTables;
 use App;
 use Lang;
+use Auth;
 
 class UserPermissionController extends AppBaseController
 {
@@ -53,22 +54,33 @@ class UserPermissionController extends AppBaseController
      */
     public function store(CreateUserPermissionRequest $request)
     {
-        $input = $request->all();
-        $userType =  $input['user_type_code'];
-        $permissions = $input['permissions'];
+        //Valida se usuário possui permissão para acessar esta opção
+        if(App\Models\User::getPermission('user_permissions_add',Auth::user()->user_type_code)){
+            $input = $request->all();
+            $userType =  $input['user_type_code'];
+            $permissions = $input['permissions'];
 
-        //Deleta as permissões anteriores para o tipo de usuário
-        $deletedRows = App\Models\UserPermission::where('user_type_code', $userType)->delete();
-        
-        //Loop para inserir das permissões
-        foreach($permissions as $permission){
-            $input['operation_code'] = $permission;
-            $perm = $this->userPermissionRepository->create($input);
+            //Deleta as permissões anteriores para o tipo de usuário
+            $deletedRows = App\Models\UserPermission::where('user_type_code', $userType)->delete();
+            
+
+            //Loop para inserir das permissões
+            foreach($permissions as $permission){
+                $input['operation_code'] = $permission;
+                $perm = $this->userPermissionRepository->create($input);
+            }
+
+            //Grava log
+            $descricao = 'Alterou permissões - Tipo de usuário: '.$userType;
+            $log = App\Models\Log::wlog('user_permissions_add', $descricao);
+
+            Flash::success(Lang::get('validation.save_success'));
+        }else{
+            //Sem permissão
+            Flash::error(Lang::get('validation.permission'));
         }
-
-        Flash::success(Lang::get('validation.save_success'));
-
         return redirect(route('userTypes.index'));
+        
     }
 
     /**

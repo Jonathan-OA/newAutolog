@@ -58,6 +58,7 @@ class UserPermission extends Model
                             $join->on('code', '=', 'operation_code')
                                 ->where('user_type_code', '=', $GLOBALS['userType']);
                         })
+                        ->orderBy('module_name', 'asc')
                         ->get();
                         
     }

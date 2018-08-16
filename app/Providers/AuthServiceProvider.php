@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\View;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use App; 
+use Auth;
 
 class AuthServiceProvider extends ServiceProvider
 {

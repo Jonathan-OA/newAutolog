@@ -78,6 +78,7 @@ return [
     'document_items' => 'Itens do Documento',
     'logs' => 'Logs do Sistema',
     'graphs' => 'Gráficos',
+    'notifications' => 'Notificações',
 
     //Columns
     'id' => 'ID',
