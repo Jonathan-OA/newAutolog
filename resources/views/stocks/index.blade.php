@@ -15,7 +15,7 @@
                             @include('flash::message')
                             <div id="msg_excluir"></div>
                             <div class="row buttons_grid">
-                                <a class="btn btn-success"  href="{!! route('stocks.create') !!}">@lang('buttons.add')</a>
+                                <!-- <a class="btn btn-success"  href="{!! route('stocks.create') !!}">@lang('buttons.add')</a> -->
                                 <a class="btn btn-success"  href="entradaManual">Ent. Manual</a>
                             </div>
                             <div class="panel-body">
