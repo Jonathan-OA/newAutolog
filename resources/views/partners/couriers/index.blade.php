@@ -11,7 +11,7 @@
                         <li><a href="{!! route('customers.index') !!}">@lang('models.customers') </a></li>
                         <li><a href="{!! route('suppliers.index') !!}">@lang('models.suppliers')</a></li>
                         <li class="active-l"><a href="#">@lang('models.couriers')</a></li>
-                        <li><a href="{!! route('vehicles.index') !!}">@lang('models.vehicles')</a></li>
+                        <!--<li><a href="{!! route('vehicles.index') !!}">@lang('models.vehicles')</a></li>-->
                     </ul>
                 </div>
                 <div class="panel panel-default">

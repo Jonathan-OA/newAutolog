@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Sector;
+use Auth;
 
 class UpdateSectorRequest extends FormRequest
 {
@@ -25,6 +26,10 @@ class UpdateSectorRequest extends FormRequest
      */
     public function rules()
     {
-        return Sector::$rules;
+        return [ 
+            'code' => 'required|string|unique:sectors,code,'.$this->get('id').',id,company_id,'.Auth::user()->company_id.'|max:10',
+            'description' => 'required|string|max:50',
+            'status' => 'required|in:0,1',
+        ];
     }
 }

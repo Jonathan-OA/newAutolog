@@ -10,8 +10,8 @@
 
     <!-- Operation Code Field -->
     {!! Form::label('operation_code', Lang::get('models.operation_code').':') !!}
-    {!! Form::select('operation_code', $operations,(!empty($parameter->operation_code)) ? $parameter->operation_code : '', ['class' => 'form-control']) !!}
-
+    {!! Form::text('operation_code', null, ['class' => 'form-control','id' => 'autocomplete', 'table' => 'operations']) !!}
+    
     <!-- Code Field -->
     {!! Form::label('code', Lang::get('models.code').':') !!}
     @if(isset($action) && $action == 'edit')

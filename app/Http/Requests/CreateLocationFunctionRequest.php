@@ -25,6 +25,9 @@ class CreateLocationFunctionRequest extends FormRequest
      */
     public function rules()
     {
-        return LocationFunction::$rules;
+        return [ 
+            'code' => 'required|string|unique:location_functions,code|max:10',
+            'description' => 'required|string|max:50'
+        ];
     }
 }

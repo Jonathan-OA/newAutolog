@@ -169,7 +169,10 @@ return [
         'courier_code'  => 'Transportadora',
         'supplier_code'  => 'Fornecedor',
         'moviment_code'  => 'Movimento',
-        'password'  => 'Senha'
+        'password'  => 'Senha',
+        'prev_level'  => 'Nível Anterior',
+        'pallet_status_id'  => 'Status',
+        'label_status_id'  => 'Status'
     ],
 
 ];

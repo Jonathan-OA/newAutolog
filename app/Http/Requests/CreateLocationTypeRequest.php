@@ -25,6 +25,15 @@ class CreateLocationTypeRequest extends FormRequest
      */
     public function rules()
     {
-        return LocationType::$rules;
+        return [ 
+            'code' => 'required|string|unique:location_types,code|max:10',
+            'description' => 'required|string|max:50',
+            'capacity_kg' => 'nullable|numeric|between:0,9999999999.999999',
+            'capacity_m3' => 'nullable|numeric|between:0,9999999999.999999',
+            'capacity_qty' => 'nullable|numeric|between:0,9999999999.999999',
+            'lenght' => 'nullable|numeric|between:0,9999999999.999999',
+            'width' => 'nullable|numeric|between:0,9999999999.999999',
+            'height' => 'nullable|numeric|between:0,9999999999.999999'
+        ];
     }
 }

@@ -70,7 +70,6 @@
                 //Valida palete informado (Se não existir vai criar)
                 var cbplt = $(this).val();
                 if(cbplt || !$(this).hasClass('input_error') || !$(this).hasClass('input_ok')){
-                    console.log('ENTROU');
                     $.ajax("pallets/val/"+ cbplt)
                     .done(function(data) {
                         //erro = 1: Não existe; erro = 2: status encerrado ou cancelado

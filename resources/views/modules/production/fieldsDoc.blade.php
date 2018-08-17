@@ -24,6 +24,7 @@
     @else
         {!! Form::text('number', null, ['class' => 'form-control']) !!}
     @endif
+    
     <!-- Customer Code Field -->
     {!! Form::label('customer_code', Lang::get('models.customer_code').':') !!}
     {!! Form::text('customer_code', null, ['class' => 'form-control', 'id' => 'autocomplete', 'table' => 'customers']) !!}

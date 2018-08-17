@@ -34,6 +34,7 @@ class CreatePackingRequest extends FormRequest
             'company_id' => 'required|integer|exists:companies,id',
             'product_code' => 'required|string|exists:products,code,company_id,'.Auth::user()->company_id.'|max:40',
             'prev_qty' => 'required|numeric|between:0,9999999999.999999',
+            'prev_level' => 'required|integer',
             'label_type_code' => 'nullable|string|exists:label_types,code|max:10',
             'packing_type_code' => 'nullable|string|exists:packing_types,code|max:10',
             'print_label' => 'required|digits:1',
@@ -41,7 +42,6 @@ class CreatePackingRequest extends FormRequest
             'conf_batch' => 'required|digits:1',
             'conf_due_date' => 'required|digits:1',
             'conf_prod_date' => 'required|digits:1',
-
             ];
     }
 }

@@ -27,8 +27,9 @@ class CreateGroupRequest extends FormRequest
     public function rules()
     {
         return [ 
-                 'code' => 'required|string|unique:groups,code,NULL,id,company_id,'.Auth::user()->company_id.'|max:10',
-                 'description' => 'required|string|max:40',
-              ];
+            'code' => 'required|string|unique:groups,code,NULL,id,company_id,'.Auth::user()->company_id.'|max:10',
+            'description' => 'required|string|max:50',
+            'product_type_code' => 'required|exists:product_types,code',
+        ];
     }
 }

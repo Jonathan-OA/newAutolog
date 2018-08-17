@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Group;
+use Auth;
 
 class UpdateGroupRequest extends FormRequest
 {
@@ -25,6 +26,10 @@ class UpdateGroupRequest extends FormRequest
      */
     public function rules()
     {
-        return Group::$rules;
+        return [ 
+            'code' => 'required|string|unique:groups,code,'.$this->get('id').',id,company_id,'.Auth::user()->company_id.'|max:10',
+            'description' => 'required|string|max:50',
+            'product_type_code' => 'required|exists:product_types,code',
+        ];
     }
 }

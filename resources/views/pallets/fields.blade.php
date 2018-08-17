@@ -16,7 +16,6 @@
 {!! Form::label('pallet_status_id', Lang::get('models.pallet_status_id').':') !!}
 {!! Form::select('pallet_status_id', $palletStatus, (!empty($pallet->pallet_status_id)) ? $pallet->pallet_status_id : 'null', ['class' => 'form-control']) !!}
 
-
 <!-- Location Code Field -->
 {!! Form::label('location_code', Lang::get('models.location_code').':') !!}
 {!! Form::text('location_code', null, ['class' => 'form-control','id' => 'autocomplete', 'table' => 'locations']) !!}

@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreatepalletStatusRequest;
-use App\Http\Requests\UpdatepalletStatusRequest;
-use App\Repositories\palletStatusRepository;
+use App\Http\Requests\CreatePalletStatusRequest;
+use App\Http\Requests\UpdatePalletStatusRequest;
+use App\Repositories\PalletStatusRepository;
 use App\Http\Controllers\AppBaseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,7 +20,7 @@ class PalletStatusController extends AppBaseController
     /** @var  palletStatusRepository */
     private $palletStatusRepository;
 
-    public function __construct(palletStatusRepository $palletStatusRepo)
+    public function __construct(PalletStatusRepository $palletStatusRepo)
     {
         $this->palletStatusRepository = $palletStatusRepo;
     }
@@ -62,11 +62,11 @@ class PalletStatusController extends AppBaseController
     /**
      * Store a newly created palletStatus in storage.
      *
-     * @param CreatepalletStatusRequest $request
+     * @param CreatePalletStatusRequest $request
      *
      * @return Response
      */
-    public function store(CreatepalletStatusRequest $request)
+    public function store(CreatePalletStatusRequest $request)
     {
         $input = $request->all();
 

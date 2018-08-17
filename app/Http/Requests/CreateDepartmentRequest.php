@@ -25,6 +25,10 @@ class CreateDepartmentRequest extends FormRequest
      */
     public function rules()
     {
-        return Department::$rules;
+        return [ 
+            'code' => 'required|string|unique:departments,code,NULL,id,company_id,'.Auth::user()->company_id.'|max:10',
+            'description' => 'required|string|max:50',
+            'status' => 'required|in:0,1',
+        ];
     }
 }

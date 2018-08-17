@@ -5,6 +5,7 @@ namespace App\Models;
 use Eloquent as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Auth;
+use Request;
 
 /**
  * Class DepositType
@@ -23,6 +24,7 @@ class DepositType extends Model
 
 
     public $fillable = [
+        'id',
         'code',
         'description'
     ];
@@ -42,9 +44,7 @@ class DepositType extends Model
      *
      * @var array
      */
-    public static $rules = [
-        
-    ];
+    public static $rules = [ ];
 
     //Retorna todos os tipos de depositos disponíveis
     public static function getDepTypes(){

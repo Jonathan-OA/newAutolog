@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use App\Models\DepositType;
+use Request;
 
 class CreateDepositTypeRequest extends FormRequest
 {
@@ -25,6 +26,9 @@ class CreateDepositTypeRequest extends FormRequest
      */
     public function rules()
     {
-        return DepositType::$rules;
+        return [ 
+            'code' => 'required|string|unique:deposit_types,code|max:10',
+            'description' => 'required|string|max:50'
+        ];
     }
 }

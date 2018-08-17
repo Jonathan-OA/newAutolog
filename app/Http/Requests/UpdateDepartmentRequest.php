@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Department;
+use Auth;
 
 class UpdateDepartmentRequest extends FormRequest
 {
@@ -25,6 +26,10 @@ class UpdateDepartmentRequest extends FormRequest
      */
     public function rules()
     {
-        return Department::$rules;
+        return [ 
+            'code' => 'required|string|unique:departments,code,'.$this->get('id').',id,company_id,'.Auth::user()->company_id.'|max:10',
+            'description' => 'required|string|max:50',
+            'status' => 'required|in:0,1',
+        ];
     }
 }

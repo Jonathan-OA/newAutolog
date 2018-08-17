@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Deposit;
+use Auth;
 
 class UpdateDepositRequest extends FormRequest
 {
@@ -25,6 +26,12 @@ class UpdateDepositRequest extends FormRequest
      */
     public function rules()
     {
-        return Deposit::$rules;
+        return [ 
+            'code' => 'required|string|unique:deposits,code,'.$this->get('id').',id,company_id,'.Auth::user()->company_id.'|max:10',
+            'description' => 'required|string|max:50',
+            'department_code' => 'required|string|exists:departments,code,company_id,'.Auth::user()->company_id.'|max:10',
+            'deposit_type_code' => 'required|string|exists:deposit_types,code|max:10',
+            'status' => 'required|in:0,1',
+        ];
     }
 }

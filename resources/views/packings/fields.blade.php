@@ -6,6 +6,8 @@
 
 <!-- Level Field -->
 {!! Form::label('level', Lang::get('models.level').':') !!}
+
+
 {!! Form::select('level', array('1' => '1', '2' => '2', '3' => '3'), null, ['class' => 'form-control']) !!}
 
 <!-- Product Code Field -->
@@ -13,7 +15,14 @@
 
 <!-- Uom Code Field -->
 {!! Form::label('uom_code', Lang::get('models.uom_code').':') !!}
-{!! Form::select('uom_code', $uoms, null, ['class' => 'form-control']) !!}
+@if(isset($action) && $action == 'edit')
+{!! Form::text('uom_code', null, ['class' => 'form-control','readonly']) !!}    
+    <!-- Id Field -->
+    <input id='id' name='id' type='hidden' value='{!! $packing->id !!}'>
+@else
+    {!! Form::text('uom_code', null, ['class' => 'form-control','id' => 'autocomplete', 'table' => 'uoms']) !!}    
+@endif
+
 
 <!-- Barcode Field -->
 {!! Form::label('barcode', Lang::get('models.barcode').':') !!}

@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Models\PalletStatus;
 
-class CreatePaleteStatusRequest extends FormRequest
+class CreatePalletStatusRequest extends FormRequest
 {
 
     /**

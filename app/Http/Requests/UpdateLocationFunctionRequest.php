@@ -25,6 +25,9 @@ class UpdateLocationFunctionRequest extends FormRequest
      */
     public function rules()
     {
-        return LocationFunction::$rules;
+        return [ 
+            'code' => 'required|string|unique:location_functions,code,'.$this->get('id').',id|max:10',
+            'description' => 'required|string|max:50'
+        ];
     }
 }

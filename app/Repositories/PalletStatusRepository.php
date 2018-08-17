@@ -14,7 +14,7 @@ use InfyOm\Generator\Common\BaseRepository;
  * @method PalletStatus find($id, $columns = ['*'])
  * @method PalletStatus first($columns = ['*'])
 */
-class PaleteStatusRepository extends BaseRepository
+class PalletStatusRepository extends BaseRepository
 {
     /**
      * @var array

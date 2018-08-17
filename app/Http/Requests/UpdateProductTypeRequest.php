@@ -25,6 +25,9 @@ class UpdateProductTypeRequest extends FormRequest
      */
     public function rules()
     {
-        return ProductType::$rules;
+        return [ 
+            'code' => 'required|string|unique:product_types,code,'.$this->get('id').',id|max:10',
+            'description' => 'required|string|max:50'
+        ];
     }
 }

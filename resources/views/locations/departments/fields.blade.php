@@ -8,6 +8,8 @@
 {!! Form::label('code', Lang::get('models.code').':') !!}
 @if(isset($action) && $action == 'edit')
     {!! Form::text('code', null, ['class' => 'form-control','readonly' => 'true']) !!}
+    <!-- Id Field -->
+    <input id='id' name='id' type='hidden' value='{!! $department->id !!}'>
 @else
     {!! Form::text('code', null, ['class' => 'form-control']) !!}  
 @endif

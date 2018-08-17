@@ -74,13 +74,22 @@ class PalletController extends AppBaseController
      */
     public function store(CreatePalletRequest $request)
     {
+
         $input = $request->all();
 
-        $pallet = $this->palletRepository->create($input);
+        //Valida se o prefixo do palete esta de acordo com o parâmetro
+        $prefix = App\Models\Param::getParam('prefixo_palete','PLT');
+        if(substr($input['barcode'],0,3) <> $prefix){
+            Flash::error(Lang::get('validation.plt_prefixo'));
+            return redirect(route('pallets.create'));
+        }else{
+            $pallet = $this->palletRepository->create($input);
+            Flash::success(Lang::get('validation.save_success'));
+            return redirect(route('pallets.index'));
+        }
+        
 
-        Flash::success(Lang::get('validation.save_success'));
-
-        return redirect(route('pallets.index'));
+        
     }
 
     /**
