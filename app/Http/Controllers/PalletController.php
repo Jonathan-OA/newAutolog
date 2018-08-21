@@ -77,10 +77,11 @@ class PalletController extends AppBaseController
 
         $input = $request->all();
 
-        //Valida se o prefixo do palete esta de acordo com o parâmetro
-        $prefix = App\Models\Param::getParam('prefixo_palete','PLT');
-        if(substr($input['barcode'],0,3) <> $prefix){
-            Flash::error(Lang::get('validation.plt_prefixo'));
+        //Valida se o barcode é valido e não existe
+        $ret = App\Models\Pallet::valPallet($input['barcode']);
+        if($ret['erro'] > 2){
+            //Desconsidera erro 1 e 2 = palete não existe e palete cancelado
+            Flash::error($ret['msg']);
             return redirect(route('pallets.create'));
         }else{
             $pallet = $this->palletRepository->create($input);

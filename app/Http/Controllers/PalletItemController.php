@@ -57,10 +57,11 @@ class PalletItemController extends AppBaseController
         //Valida se usuário possui permissão para acessar esta opção
         if(App\Models\User::getPermission('pallet_items_add',Auth::user()->user_type_code)){
             $palletBarcode = Pallet::find($pallet_id);   
-            $uoms = Uom::getUoms();
+            $palletStatus = App\Models\PalletStatus::getPalletsStatus();
+
             return view('pallet_items.create')
                     ->with('palletBarcode', $palletBarcode->barcode)
-                    ->with('uom_cads', $uoms)
+                    ->with('palletStatus', $palletStatus)
                     ->with('palletId', $pallet_id);
 
         }else{
@@ -124,9 +125,9 @@ class PalletItemController extends AppBaseController
         if(App\Models\User::getPermission('pallet_items_edit',Auth::user()->user_type_code)){
 
             $palletItem = $this->palletItemRepository->findWithoutFail($id);
-            $pallet_id = $palletItem['original']['pallet_id'];
-            $palletBarcode = Pallet::find($pallet_id);   
-            $uoms = Uom::getUoms();
+            $pallet_id = $palletItem['pallet_id'];
+            $palletBarcode = Pallet::find($pallet_id);
+            $palletStatus = App\Models\PalletStatus::getPalletsStatus();
 
             if (empty($palletItem)) {
                 Flash::error(Lang::get('validation.not_found'));
@@ -138,7 +139,7 @@ class PalletItemController extends AppBaseController
                     ->with('palletItem', $palletItem)
                     ->with('palletBarcode', $palletBarcode->barcode)
                     ->with('palletId', $pallet_id)
-                    ->with('uom_cads', $uoms);
+                    ->with('palletStatus', $palletStatus);
         
         }else{
             //Sem permissão
@@ -187,6 +188,7 @@ class PalletItemController extends AppBaseController
      */
     public function destroy($id)
     {
+        
         //Valida se usuário possui permissão para acessar esta opção
         if(App\Models\User::getPermission('pallet_items_remove',Auth::user()->user_type_code)){
             
@@ -198,7 +200,7 @@ class PalletItemController extends AppBaseController
                 return redirect(route('palletItems.index'));
             }
 
-            //$this->palletItemRepository->delete($id);
+            $this->palletItemRepository->delete($id);
 
              //Grava log
             $descricao = 'Excluiu PalletItem ID: '.$id;

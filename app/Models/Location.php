@@ -79,7 +79,7 @@ class Location extends Model
      * @var array
      */
 
-    public static function valEnd($barcode,  $product = '', $qde = '', $company_id  =''){
+    public static function valLocation($barcode,  $product = '', $qde = '', $company_id  =''){
 
         $company_id = (trim($company_id == ''))?Auth::user()->company_id: $company_id;
         $erro = 0;
@@ -119,7 +119,7 @@ class Location extends Model
             
             if(trim($qde) <> '' && $erro == 0){
                 //Pega saldo atual do endereço e compara com a capacidade do tipo
-                $capc = Stock::getSaldo($end[0]->code);
+                $capc = Stock::getStock($end[0]->code);
                 $total = $capc + $qde;
                 if($total > $end[0]->capacity_qty){
                     //Capacidade Excedida

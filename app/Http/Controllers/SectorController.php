@@ -151,7 +151,7 @@ class SectorController extends AppBaseController
 
         //Grava log
         $requestF = $request->all();
-        $descricao = 'Alterou Sector ID: '.$id.' - '.$requestF['code'];
+        $descricao = 'Alterou Setor ID: '.$id.' - '.$requestF['code'];
         $log = App\Models\Log::wlog('sectors_edit', $descricao);
 
         //print_r($requestF);exit;

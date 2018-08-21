@@ -139,7 +139,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('pallets/datatable', 'PalletController@getData');
     Route::resource('pallets', 'PalletController');
     Route::get('pallets/val/{barcode}', function($barcode) {
-        return Pallet::valPal($barcode);
+        return Pallet::valPallet($barcode);
     });
 
     Route::get('configs/datatable', 'ConfigController@getData');
@@ -160,7 +160,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::resource('labels', 'LabelController');
 
     Route::get('stocks/datatable', 'StockController@getData');
-    Route::view('entradaManual', 'stocks.entradaManual');
+    Route::get('entradaManual', 'StockController@create');
     Route::resource('stocks', 'StockController');
 
     Route::get('finalities/datatable', 'FinalityController@getData');

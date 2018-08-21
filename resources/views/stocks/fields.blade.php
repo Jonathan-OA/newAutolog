@@ -37,30 +37,26 @@
 {!! Form::number('pallet_id', null, ['class' => 'form-control']) !!}
 
 <!-- Document Id Field -->
-{!! Form::label('document_id', Lang::get('models.document_id').':') !!}
-{!! Form::number('document_id', null, ['class' => 'form-control']) !!}
+<input id='document_id' name='document_id' type='hidden' value='{!! $stock->document_id !!}'>
 
 <!-- Document Item Id Field -->
-{!! Form::label('document_item_id', Lang::get('models.document_item_id').':') !!}
-{!! Form::number('document_item_id', null, ['class' => 'form-control']) !!}
+<input id='document_item_id' name='document_item_id' type='hidden' value='{!! $stock->document_item_id !!}'>
 
 <!-- Task Id Field -->
-{!! Form::label('task_id', Lang::get('models.task_id').':') !!}
-{!! Form::number('task_id', null, ['class' => 'form-control']) !!}
+<input id='task_id' name='task_id' type='hidden' value='{!! $stock->task_id !!}'>
 
 <!-- Finality Field -->
-{!! Form::label('finality_code', Lang::get('models.finality_code').':') !!}
-{!! Form::select('finality_code', $finalities, null, ['class' => 'form-control']) !!}
+<input id='finality_code' name='finality_code' type='hidden' value='{!! $stock->finality_code !!}'>
 
 <!-- User Id Field -->
 <input id='user_id' name='user_id' type='hidden' value='{!! Auth::user()->id !!}'>
 
 <!-- Operation Code Field -->
-<input id='operation_code' name='operation_code' type='hidden' value='664'>
+<input id='operation_code' name='operation_code' type='hidden' value='{!! $stock->operation_code !!}'>
 
 <!-- Volume Id Field -->
 {!! Form::label('volume_id', Lang::get('models.volume_id').':') !!}
-{!! Form::number('volume_id', null, ['class' => 'form-control']) !!}
+{!! Form::number('volume_id', (!empty($stock->operation_code))?$stock->operation_code:null, ['class' => 'form-control']) !!}
 </div>
 
 <!-- Submit Field -->

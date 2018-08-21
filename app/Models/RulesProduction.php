@@ -38,7 +38,7 @@ class RulesProduction extends Model
             $qdeItem = $item['qty'];
             $restante = $qdeItem;
             //Busca saldo disponível nos depositos para esse produto
-            $saldos = App\Models\Stock::getSaldoDep($depositos, $item['product_code']);
+            $saldos = App\Models\Stock::getStockDep($depositos, $item['product_code']);
 
             foreach($saldos as $saldo){
                 if($saldo->qty <= $restante){

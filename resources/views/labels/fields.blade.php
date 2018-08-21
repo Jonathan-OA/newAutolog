@@ -10,7 +10,11 @@
 
 <!-- Barcode Field -->
 {!! Form::label('barcode', Lang::get('models.barcode').':') !!}
-{!! Form::text('barcode', null, ['class' => 'form-control']) !!}
+@if(isset($action) && $action == 'edit')
+    {!! Form::text('barcode', null, ['class' => 'form-control', 'readonly']) !!}
+@else
+    {!! Form::text('barcode', null, ['class' => 'form-control']) !!}
+@endif
 
 <!-- Product Code Field -->
 {!! Form::label('product_code', Lang::get('models.product_code').':') !!}
@@ -33,8 +37,7 @@
 {!! Form::text('prev_uom_code', null, ['class' => 'form-control','id' => 'autocomplete2', 'table' => 'packings','id_dep' => 'autocomplete','readonly']) !!}
 
 <!-- Label Status Id Field -->
-{!! Form::label('label_status_id', Lang::get('models.label_status_id').':') !!}
-{!! Form::select('label_status_id', $statusl, null, ['class' => 'form-control']) !!}
+<input id='label_status_id' name='label_status_id' type='hidden' value='{!! (!empty($label->label_status_id)) ? $label->label_status_id : 0 !!}'>
 
 <!-- Origin Field -->
 <input id='origin' name='origin' type='hidden' value='{!! (!empty($label->origin)) ? $label->origin : '' !!}'>

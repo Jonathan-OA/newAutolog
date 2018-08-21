@@ -10,9 +10,7 @@
                 <th class="th_grid">@lang('models.prim_qty') </th>
                 <th class="th_grid">@lang('models.prim_uom_code') </th>
                 <th class="th_grid">@lang('models.label_id') </th>
-                <th class="th_grid">@lang('models.activity_id') </th>
                 <th class="th_grid">@lang('models.status') </th>
-                <th class="th_grid">@lang('models.turn') </th>
                 <th class="th_grid">@lang('models.action')</th>
             </thead>
             <tbody>
@@ -25,9 +23,7 @@
                     <td>{!! $palletItem->prim_qty !!}</td>
                     <td>{!! $palletItem->prim_uom_code !!}</td>
                     <td>{!! $palletItem->label_id !!}</td>
-                    <td>{!! $palletItem->activity_id !!}</td>
-                    <td>{!! $palletItem->status !!}</td>
-                    <td>{!! $palletItem->turn !!}</td>
+                    <td>{!! $palletItem->pallet_status_id !!}</td>
                 </tr>
             @endforeach
             </tbody>

@@ -24,6 +24,7 @@ class LabelStatus extends Model
 	
 	
     public $fillable = [
+        'id',
         'description'
     ];
 

@@ -14,6 +14,7 @@
                             <div class="panel-body">
                                 <!-- Campos para preenchimento -->
                                 <div class="form_fields">
+                                    @include('adminlte-templates::common.errors')
                                      <!-- Alerta de erro / sucesso -->
                                     @include('flash::message')
                                     <div id="msg_excluir"></div>
@@ -45,7 +46,7 @@
                                             {{ Form::hidden('pltbarcode', '', array('id' => 'pltbarcode')) }}
                                             {{ Form::hidden('pallet_id', '', array('id' => 'pallet_id')) }}
                                             {{ Form::hidden('finality_code', 'SALDO') }}
-                                            {{ Form::hidden('operation_code', '664') }}
+                                            {{ Form::hidden('operation_code', 'stocks_add') }}
                                         </div>  
                                     </div> 
                                 </div>
@@ -62,13 +63,14 @@
 @endsection
 @section('scripts')
 <script>
-    var table;
     $(function() {
         $("#pallet_barcode").bind('keypress change',function(e){
+            
              //Se apertar enter ou alterar o campo entra na função
             if(e.which == 13 || e.type == 'change') {
                 //Valida palete informado (Se não existir vai criar)
                 var cbplt = $(this).val();
+                console.log('opaA');
                 if(cbplt || !$(this).hasClass('input_error') || !$(this).hasClass('input_ok')){
                     $.ajax("pallets/val/"+ cbplt)
                     .done(function(data) {
@@ -128,15 +130,14 @@
                             $('#msg_excluir').html("<div class='alert alert-danger'>@lang('validation.cb_error')</div>");
                         else
                             $('#msg_excluir').html("<div class='alert alert-danger'>@lang('validation.dataval_error')</div>");
-                        $("#barcode").val("");
-                        $("#location_code").val("");
-                        $('#hidden').addClass('hidden');
+                            $("#barcode").val("");
+                            $("#location_code").val("");
+                            $('#hidden').addClass('hidden');
                     }
                 })
 
             }
         })
-                    
     });
 
 </script>

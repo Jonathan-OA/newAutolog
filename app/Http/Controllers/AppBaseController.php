@@ -53,11 +53,13 @@ class AppBaseController extends Controller
         //Caso seja campos de Origem/Destino, considera o campo code
         if(strpos($field,'orig') !== false || strpos($field,'dest') !== false ){
             $field = 'code';
-        }elseif(strpos($field,'prev') !== false){
+        }elseif(strpos($field,'prev') !== false || strpos($field,'prim') !== false){
+            //Caso seja campos com Primário / Anterior, faz o corte para considerar o nome correto na tabela dep
             $field = substr($field,5);
         }
 
         
+     
 
         $GLOBALS['valDep'] = Input::get('valDep');
         $GLOBALS['campoDep'] = substr($tableDep,0,-1).'_code';

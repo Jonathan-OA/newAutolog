@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use App\Models\PalletItem;
+use Auth;
 
 class UpdatePalletItemRequest extends FormRequest
 {
@@ -25,6 +26,15 @@ class UpdatePalletItemRequest extends FormRequest
      */
     public function rules()
     {
-        return PalletItem::$rules;
+        return [ 
+            'pallet_id' => 'required|integer|exists:pallets,id,company_id,'.Auth::user()->company_id,
+            'product_code' => 'required|string|exists:products,code,company_id,'.Auth::user()->company_id.'|max:40',
+            'label_id' => 'nullable|integer|exists:labels,id,company_id,'.Auth::user()->company_id.'',
+            'qty' => 'required|numeric|between:0,9999999999.999999',
+            'uom_code' => 'required|string|exists:uoms,code|max:6',
+            'prev_qty' => 'required|numeric|between:0,9999999999.999999',
+            'prev_uom_code' => 'required|string|exists:uoms,code|max:6',
+            'pallet_status_id' => 'required|integer|exists:pallet_status,id',
+            ];
     }
 }

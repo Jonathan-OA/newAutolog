@@ -64,12 +64,10 @@
                         { data: 'product_code' },
                         { data: 'qty' },
                         { data: 'uom_code' },
-                        { data: 'prim_qty' },
-                        { data: 'prim_uom_code' },
+                        { data: 'prev_qty' },
+                        { data: 'prev_uom_code' },
                         { data: 'label_id' },
-                        { data: 'activity_id' },
-                        { data: 'status' },
-                        { data: 'turn' },
+                        { data: 'pallet_status_id' },
                         { data: null,
                     className: "th_grid",
                     defaultContent: "<button id='edit' aria-label='@lang('buttons.edit')' data-microtip-position='left' role='tooltip' ><img class='icon' src='{{asset('/icons/editar.png') }}'></button><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='{{asset('/icons/remover.png') }}'></button>",
@@ -94,7 +92,6 @@
                         type: 'post',
                         data: {_method: 'delete', _token :tk},
                         success: function(scs){ 
-                           
                             //Recarrega grid sem atualizar a página
                             table.ajax.reload( null, false );
                             //Se retornou 0, foi excluído com sucesso

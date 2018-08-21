@@ -83,7 +83,7 @@ class Stock extends Model
      * Retorna 0 quando faz insert e 1 quando faz update
      * @var array
      */
-    public static function atuSaldo($input, $finalidade = "SALDO"){
+    public static function updStock($input, $finalidade = "SALDO"){
 
         $input['company_id'] = Auth::user()->company_id;
         $input['finality_code'] = $finalidade;
@@ -112,17 +112,59 @@ class Stock extends Model
             //Não existe, faz o insert
             $newStock = new Stock($input);
             $newStock->save();
-            return 0;
+
+            //Se tem palete, atualiza pallet_itens
+            if(!empty($input['pallet_id']) && $input['pallet_id'] > 0){
+                $resPlt = Pallet::updPallet($input);
+            }
+           
         }else{
             //Existe, atualiza.
             $upStock = Stock::find($valExist->id);
-            $upStock->qty = $upStock->qty + $input['qty'];
             $upStock->prev_qty = $upStock->prev_qty + $input['prev_qty'];
+            //-----------------------------------------------------------------------------------------
+            //Validações para quantidade e quantidade primária ficarem corretas
+            //Só mexe na quantidade principal caso val_integer seja ativo (só aceita números inteiros)
+            $levels = Packing::getLevels($upStock->product_code);
+            if($upStock->uom_code <> $input['uom_code'] && $levels[$input['uom_code']]['int'] == 1){
+                if($levels[$upStock->uom_code]['level'] < $levels[$input['uom_code']]['level']){
+                    //Nível de embalagem que já existe na saldo é menor que o novo (Ex: UN - CX)
+                    //Soma a quantidade anterior do nível maior
+                    $upStock->qty += $input['prev_qty'];
+                }else{
+                    //Nível de embalagem que já existe na saldo é maior que o novo (Ex: CX - UN)
+                    //Só incrementa caso a quantidade atual + nova ultrapasse prev_qty
+                    $prevQtyLevel = $levels[$upStock->uom_code]['prev_qty'];
+                    $upStock->qty  = ceil($upStock->prev_qty/$prevQtyLevel);
+                }
+            }else if($levels[$input['uom_code']]['int'] == 1){
+                //Mesma unidade e só aceita números inteiros, só incrementa
+                $upStock->qty = $upStock->qty + $input['qty'];
+                //Se nível principal > anterior, ajusta quantidade
+                $prevQtyLevel = $levels[$upStock->uom_code]['prev_qty'];
+                if($levels[$input['uom_code']]['level'] > $levels[$input['prev_uom_code']]['level']){
+                    $upStock->qty = ceil($upStock->prev_qty/$prevQtyLevel);
+                }
+                
+            }
+            //------------------------------------------------------------------------------------------
+            
             $upStock->user_id = Auth::user()->id;
             $upStock->operation_code = $input['operation_code'];
             $upStock->save();
-            return 1;
+
+            //Se tem palete, atualiza pallet_itens
+            if(!empty($input['pallet_id']) && $input['pallet_id'] > 0){
+                $resPlt = Pallet::updPallet($input);
+            }
+
+            
         }
+
+        //Apaga linhas negativas / zeradas
+        $clStock = Stock::cleanStock($input['location_code'], $input['product_code']);
+
+        return true;
 
     }
 
@@ -131,7 +173,7 @@ class Stock extends Model
      * Parâmetros: Endereço e Produto
      * @var array
      */
-    public static function getSaldo($endere, $produto = "", $company_id = ""){
+    public static function getStock($endere, $produto = "", $company_id = ""){
 
         $company_id = (trim($company_id == ''))?Auth::user()->company_id: $company_id;
         $GLOBALS['produto'] = $produto;
@@ -155,7 +197,7 @@ class Stock extends Model
      * Parâmetros: Deposito(s), Produto e Tipo de Estoque (Palete, picking ou picking por produto)
      * @var array
      */
-    public static function getSaldoDep($depositos, $produto, $tipoEstq = "", $company_id = ""){
+    public static function getStockDep($depositos, $produto, $tipoEstq = "", $company_id = ""){
 
         $company_id = (trim($company_id == ''))?Auth::user()->company_id: $company_id;
 
@@ -188,6 +230,24 @@ class Stock extends Model
 
                                     //FAZER FIFO (VALIDADE)
         return $saldos;         
+    }
+
+    /**
+     * Função que deleta linhas com quantidades NEGATIVAS ou ZERADAS na saldo
+     * Parâmetros: Código do endereço, código do produto e ID da empresa/filial
+     * @var array
+     */
+    public static function cleanStock($location_code, $product_code, $company_id = ''){
+        $company_id = (trim($company_id == ''))?Auth::user()->company_id: $company_id;
+        return Stock::where([ 
+                                 ['company_id', $company_id],
+                                 ['prev_qty', '<=', 0],
+                                 ['product_code', $product_code],
+                                 ['location_code', $location_code],
+                                 ['finality_code', 'SALDO']
+                         ])
+                         ->delete();
+
     }
 
 

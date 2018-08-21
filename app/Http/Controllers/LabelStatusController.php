@@ -69,6 +69,7 @@ class LabelStatusController extends AppBaseController
     public function store(CreateLabelStatusRequest $request)
     {
         $input = $request->all();
+        
 
         $labelStatus = $this->labelStatusRepository->create($input);
 

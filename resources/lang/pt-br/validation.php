@@ -97,6 +97,8 @@ return [
     'end_cap'               => 'Capacidade do endereço foi excedida.',
     'plt_prefixo'               => 'Prefixo de palete inválido.',
     'plt_exists'               => 'Palete já existe no sistema.',
+    'plt_not_exists'               => 'Palete não encontrado no sistema.',
+    'plt_invalid'               => 'Palete inválido.',
     'document_number'               => 'Já existe um documento com o número informado.',
     'support_success'               => 'Mensagem enviada! Em breve nossa equipe lhe responderá. ',
 
@@ -172,7 +174,8 @@ return [
         'password'  => 'Senha',
         'prev_level'  => 'Nível Anterior',
         'pallet_status_id'  => 'Status',
-        'label_status_id'  => 'Status'
+        'label_status_id'  => 'Status',
+        'capacity_un' => 'Capacidade (UN)'
     ],
 
 ];

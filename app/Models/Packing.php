@@ -104,6 +104,34 @@ class Packing extends Model
 
     
 
+     /**
+     * Função retorna os detalhes dos níveis de embalagem de um produto
+     * Parâmetros: Código do produto e o ID da empresa / filial logada
+     * @var array
+     */
+    public static function getLevels($product_code, $company_id = ''){
+        
+        $company_id = (trim($company_id == ''))?Auth::user()->company_id: $company_id;
+        $levels = Packing::select('level','uom_code','prev_qty','prev_level','val_integer')
+                         ->join('uoms','uoms.code','packings.uom_code')
+                         ->where('company_id', Auth::user()->company_id)
+                         ->where('product_code', $product_code)
+                         ->get()
+                         ->toArray();
+
+        foreach($levels as $level){
+            //Cria array de retorno onde indice principal é a unidade de medida (facilitar calculo de saldos)
+            //val_integer = Valida se a unidade só aceita valores inteiros
+            $ret[$level['uom_code']] = ['level' => $level['level'], 'prev_qty' => $level['prev_qty'],
+                                        'prev_level' => $level['prev_level'], 'int' => $level['val_integer']];
+        }
+
+        return $ret;
+
+
+    }
+
+
      //Retorna todos as embalagens disponíveis para o produto
      public static function getPackings($produto){
         return Packing::selectRaw("uom_code,CONCAT(level,' - ',uom_code) as description_f")

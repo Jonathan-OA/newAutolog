@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Eloquent as Model;
 use Auth;
+use Lang;
+use DB;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -31,7 +33,8 @@ class Pallet extends Model
         'document_id',
         'height',
         'stacking',
-        'packing_type_code'
+        'packing_type_code',
+        'linked_document_id'
     ];
 
     /**
@@ -43,7 +46,8 @@ class Pallet extends Model
         'company_id' => 'integer',
         'barcode' => 'string',
         'location_code' => 'string',
-        'packing_type_code' => 'string'
+        'packing_type_code' => 'string',
+        'linked_document_id' => 'integer'
     ];
 
     /**
@@ -68,7 +72,7 @@ class Pallet extends Model
      * @var array
      */
 
-    public static function valPal( $barcode, $company_id = ''){
+    public static function valPallet( $barcode, $company_id = ''){
 
         $company_id = (trim($company_id == ''))?Auth::user()->company_id: $company_id;
         $ret['erro'] = 0;
@@ -80,8 +84,9 @@ class Pallet extends Model
         }
 
         if(strpos($pref,substr($barcode,0,3)) === false){
-            //Prefixo de inválido
+            //Prefixo de palete inválido
             $ret['erro'] = 3;
+            $ret['msg'] = \Lang::get('validation.plt_prefixo');
         }else{
             $pallet = Pallet::where([
                                     ['company_id', $company_id],
@@ -92,10 +97,16 @@ class Pallet extends Model
             if(count($pallet) == 0){
                 //Palete não existe
                 $ret['erro'] = 1;
+                $ret['msg'] = \Lang::get('validation.plt_not_exists');
             }else{
-                //Status existe e esta encerrado ou cancelado.
-                if($pallet[0]->pallet_status_id > 7){
+                //Palete existe e esta encerrado ou cancelado.
+                if($pallet[0]->pallet_status_id == 8 || $pallet[0]->pallet_status_id == 9){
                     $ret['erro'] = 2;
+                    $ret['msg'] = \Lang::get('validation.plt_invalid');
+                }else{
+                    //Palete já existe no sistema
+                    $ret['erro'] = 4;
+                    $ret['msg'] = \Lang::get('validation.plt_exists');
                 }
 
                 $ret['id'] = $pallet[0]->id;
@@ -111,7 +122,7 @@ class Pallet extends Model
      * @var array
      */
 
-    public static function createPal( $barcode, $endere = 'REC', $document_id = NULL, $company_id = ''){
+    public static function createPallet( $barcode, $endere = '', $document_id = NULL, $company_id = ''){
         $company_id = (trim($company_id == ''))?Auth::user()->company_id: $company_id;
         $barcode = strtoupper($barcode);
         $ret['erro'] = 0;
@@ -154,6 +165,67 @@ class Pallet extends Model
 
         return $ret;
     }
+
+    /**
+     * Função que insere / atualiza o saldo no palete
+     * Parâmetros: Array com informações a serem inseridas: Etiqueta, Quantidades, Unidades,etc.
+     * Retorna 0 quando faz insert e 1 quando faz update
+     * @var array
+     */
+    public static function updPallet($input){
+        //Valida se existe a linha para a etiqueta / produto
+        $valExist = DB::table('pallet_items')->select('id')
+                        ->where([
+                                    ['company_id', $input['company_id']],
+                                    ['pallet_id', $input['pallet_id']],
+                                    ['label_id', $input['label_id']],
+                                    ['pallet_status_id', '<>', '9']
+                        ])
+                        ->first();
+
+        if(empty($valExist->id)){
+            //Não existe, faz o insert
+            $newItem = new PalletItem($input);
+            $newItem->save();
+        }else{
+            //Existe, atualiza
+            $upItem = PalletItem::find($valExist->id);
+            $upItem->prev_qty = $upItem->prev_qty + $input['prev_qty'];
+            //-----------------------------------------------------------------------------------------
+            //Validações para quantidade e quantidade primária ficarem corretas
+            //Só mexe na quantidade principal caso val_integer seja ativo (só aceita números inteiros)
+            $levels = Packing::getLevels($upItem->product_code);
+            if($upItem->uom_code <> $input['uom_code'] && $levels[$input['uom_code']]['int'] == 1){
+                if($levels[$upItem->uom_code]['level'] < $levels[$input['uom_code']]['level']){
+                    //Nível de embalagem que já existe na saldo é menor que o novo (Ex: UN - CX)
+                    //Soma a quantidade anterior do nível maior
+                    $upItem->qty += $input['prev_qty'];
+                }else{
+                    //Nível de embalagem que já existe na saldo é maior que o novo (Ex: CX - UN)
+                    //Só incrementa caso a quantidade atual + nova ultrapasse prev_qty
+                    $prevQtyLevel = $levels[$upItem->uom_code]['prev_qty'];
+                    $upItem->qty  = ceil($upItem->prev_qty/$prevQtyLevel);
+                }
+            }else if($levels[$input['uom_code']]['int'] == 1){
+                //Mesma unidade e só aceita números inteiros, só incrementa
+                $upItem->qty = $upItem->qty + $input['qty'];
+                //Se nível principal > anterior, ajusta quantidade
+                $prevQtyLevel = $levels[$upItem->uom_code]['prev_qty'];
+                if($levels[$input['uom_code']]['level'] > $levels[$input['prev_uom_code']]['level']){
+                    $upItem->qty = ceil($upItem->prev_qty/$prevQtyLevel);
+                }
+                
+            }
+            //------------------------------------------------------------------------------------------
+            $upItem->save();
+        }
+
+        //Apaga linhas negativas
+        $clPlt = PalletItem::cleanItems($input['pallet_id']);
+
+        return true;
+    }
+
 
 
 }
