@@ -10,8 +10,8 @@
         <div class="box box-primary">
             <div class="box-body">
                 <div class="row" style="padding-left: 20px">
-                    @include('document_statuses.show_fields')
-                    <a href="{!! route('documentStatuses.index') !!}" class="btn btn-default">Back</a>
+                    @include('document_status.show_fields')
+                    <a href="{!! route('documentStatus.index') !!}" class="btn btn-default">Back</a>
                 </div>
             </div>
         </div>

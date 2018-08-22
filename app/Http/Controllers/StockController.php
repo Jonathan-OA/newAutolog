@@ -95,8 +95,12 @@ class StockController extends AppBaseController
                         return redirect(url('entradaManual'));
                     }
                 }
-
+               //Atualiza Saldo
                $stock = App\Models\Stock::updStock($input);
+               //Cria tarefa
+               $task = App\Models\Task::new('664',$input['location_code'],$input['location_code']);
+               $task->end();
+
                 //Grava log
                $descricao = 'Ent. Manual -  End:'.$input['location_code'].' Umv: '.$input['label_id'].' - Prd: '.$input['product_code'].' Qde: '.$input['qty'].'('. $input['prev_qty'].')';
                $log = App\Models\Log::wlog('stocks_add', $descricao);

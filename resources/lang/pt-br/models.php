@@ -79,6 +79,8 @@ return [
     'logs' => 'Logs do Sistema',
     'graphs' => 'Gráficos',
     'notifications' => 'Notificações',
+    'task_status' => 'Status das Tarefas',
+    'tasks' => 'Tarefas',
 
     //Columns
     'id' => 'ID',
@@ -267,6 +269,9 @@ return [
     'title' => 'Título',
     'color' => 'Cor',
     'user_code' => 'Usuário',
+    'start_date' => 'Data de Início',
+    'end_date' => 'Data de Fin.',
+    'task_status_id' => 'Status',
 
     
     

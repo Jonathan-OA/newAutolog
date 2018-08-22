@@ -175,7 +175,9 @@ return [
         'prev_level'  => 'Nível Anterior',
         'pallet_status_id'  => 'Status',
         'label_status_id'  => 'Status',
-        'capacity_un' => 'Capacidade (UN)'
+        'capacity_un' => 'Capacidade (UN)',
+        'dest_location_code' => 'Endereço Destino',
+        'orig_location_code' => 'Endereço Origem',
     ],
 
 ];

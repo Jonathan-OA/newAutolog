@@ -125,7 +125,7 @@ class Stock extends Model
             //-----------------------------------------------------------------------------------------
             //Validações para quantidade e quantidade primária ficarem corretas
             //Só mexe na quantidade principal caso val_integer seja ativo (só aceita números inteiros)
-            $levels = Packing::getLevels($upStock->product_code);
+            $levels = Packing::getLevels($upStock->product_code); //Pega todas embalagens
             if($upStock->uom_code <> $input['uom_code'] && $levels[$input['uom_code']]['int'] == 1){
                 if($levels[$upStock->uom_code]['level'] < $levels[$input['uom_code']]['level']){
                     //Nível de embalagem que já existe na saldo é menor que o novo (Ex: UN - CX)

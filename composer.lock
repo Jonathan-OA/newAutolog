@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "c68d3c75b9e8cf0c5bd83fdf8955fdf0",
+    "content-hash": "88c853e4e9b871feda8c587e45504a1e",
     "packages": [
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -1417,6 +1417,50 @@
                 "laravel"
             ],
             "time": "2017-10-30T16:48:59+00:00"
+        },
+        {
+            "name": "lavela/phpjasper",
+            "version": "v3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/lavela/phpjasper.git",
+                "reference": "d3d7bbc7d1d78766dd5c554189ba1680b9b0517a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/lavela/phpjasper/zipball/d3d7bbc7d1d78766dd5c554189ba1680b9b0517a",
+                "reference": "d3d7bbc7d1d78766dd5c554189ba1680b9b0517a",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^6.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "PHPJasper\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Leandro Cintra Bitencourt",
+                    "email": "leandrobitencourt.ti@gmail.com",
+                    "role": "lead"
+                }
+            ],
+            "description": "Gerador de relatórios PHP",
+            "keywords": [
+                "pdf",
+                "relatórios"
+            ],
+            "time": "2018-03-07T17:22:33+00:00"
         },
         {
             "name": "league/flysystem",

@@ -185,6 +185,7 @@ class Pallet extends Model
 
         if(empty($valExist->id)){
             //Não existe, faz o insert
+            $input['pallet_status_id'] = 2;
             $newItem = new PalletItem($input);
             $newItem->save();
         }else{

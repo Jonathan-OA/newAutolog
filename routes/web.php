@@ -321,3 +321,11 @@ Route::group(['middleware' => 'auth'], function() {
 
 
 
+
+
+Route::get('tasks/datatable', 'TaskController@getData');
+Route::resource('tasks', 'TaskController');
+
+
+Route::get('taskStatus/datatable', 'TaskStatusController@getData');
+Route::resource('taskStatus', 'TaskStatusController');
