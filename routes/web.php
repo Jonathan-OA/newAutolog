@@ -185,7 +185,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::resource('packings', 'PackingController');
 
     Route::get('packings/datatable/{code}', 'PackingController@getData');
-    Route::resource('packings', 'PackinGController',['except' => 'create']);
+    Route::resource('packings', 'PackingController',['except' => 'create']);
     Route::get('packings/ix/{code}', 'PackingController@index');
     Route::get('packings/create/{code}', 'PackingController@create');
 

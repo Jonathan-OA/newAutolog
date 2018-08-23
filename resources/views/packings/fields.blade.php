@@ -39,7 +39,7 @@
 
 <!-- Label Type Code Field -->
 {!! Form::label('label_type_code', Lang::get('models.label_type_code').':') !!}
-{!! Form::text('label_type_code', null, ['class' => 'form-control','id' => 'autocomplete', 'table' => 'label_types']) !!}
+{!! Form::text('label_type_code', null, ['class' => 'form-control','id' => 'autocomplete1', 'table' => 'label_types']) !!}
 
 <!-- Total Weight Field -->
 {!! Form::label('total_weight', Lang::get('models.total_weight').':') !!}
