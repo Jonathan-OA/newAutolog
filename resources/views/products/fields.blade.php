@@ -35,11 +35,11 @@
 
 <!-- Product Type Code Field -->
 {!! Form::label('product_type_code', Lang::get('models.product_type_code').':') !!}
-{!! Form::select('product_type_code', $prd_types, null, ['class' => 'form-control']) !!}
+{!! Form::text('product_type_code', null, ['class' => 'form-control','id' => 'autocomplete', 'table' => 'product_types']) !!}
 
 <!-- Group Code Field -->
 {!! Form::label('group_code', Lang::get('models.group_code').':') !!}
-{!! Form::select('group_code', $groups, null, ['class' => 'form-control']) !!}
+{!! Form::text('group_code', null, ['class' => 'form-control','id' => 'autocomplete1', 'table' => 'groups']) !!}
 
 <!-- Subgroup Code Field -->
 {!! Form::label('subgroup_code', Lang::get('models.subgroup_code').':') !!}
