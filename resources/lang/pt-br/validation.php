@@ -181,6 +181,8 @@ return [
         'aisle' => 'Corredor',
         'column' => 'Coluna',
         'packing_type_code' => 'Embalagem',
+        'subgroup_code' => 'SubGrupo',
+
     ],
 
 ];
