@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Department;
+use Auth;
 
 class CreateDepartmentRequest extends FormRequest
 {
