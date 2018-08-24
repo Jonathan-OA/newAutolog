@@ -78,8 +78,12 @@ class Task extends Model
         
     ];
 
-    //Função construtora
-    public static function new($operation_code, $orig = null, $dest = null, $document_id = null, $document_item_id = null ){
+    /**
+     * Função que cria uma tarefa
+     * Parâmetros: Operação, Endereços Origem e Destino, Documento, Item
+     * @var array
+     */
+    public static function create($operation_code, $orig = null, $dest = null, $document_id = null, $document_item_id = null ){
         $task = new Task();
         $task->company_id = Auth::user()->company_id;
         $task->operation_code = $operation_code;
@@ -120,11 +124,24 @@ class Task extends Model
         $this->save();
     }
 
-     //Retorna todos os tasks disponíveis
-     public static function getTasks(){
-        return Task::selectRaw("code,CONCAT(code,' - ',description) as description_f")
-                      ->where('company_id', Auth::user()->company_id)
-                      ->pluck('description_f','code');
+    /**
+     * Função que retorna informações sobre todas as tarefas
+     * Parâmetros: ID do documento (opcional)
+     * @var array
+     */
+     public static function getTasks($document_id = null){
+        $tasks =  Task::select('tasks.id','operations.code','operations.description','tasks.orig_location_code',
+                               'tasks.dest_location_code','tasks.start_date','tasks.end_date', 'tasks.task_status_id',
+                               'task_status.description as status_desc','documents.number', 'document_items.product_code',
+                               'operations.type' )
+                      ->join('operations', 'operations.code', 'operation_code')  
+                      ->join('task_status', 'task_status.id', 'tasks.task_status_id')  
+                      ->leftJoin('documents', 'documents.id', 'tasks.document_id')  
+                      ->leftJoin('document_items', 'document_items.id', 'tasks.document_item_id')  
+                      ->where('tasks.company_id', Auth::user()->company_id)
+                      ->get()
+                      ->toArray();
+        return $tasks;
     }
 
 

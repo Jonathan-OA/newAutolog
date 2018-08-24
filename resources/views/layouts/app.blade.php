@@ -91,6 +91,7 @@
     <script src="{{ asset('/js/app.js') }}"></script>
     <script src="{{ asset('/js/ui-grid/ui-grid.min.js') }}"></script>
     <script src="{{ asset('/js/ui-grid/auto-resize.js') }}"></script>
+    <script src="http://momentjs.com/downloads/moment.min.js"></script>    
     <script type="text/javascript">
         // URL base - Variável pode ser acessada em qualquer arquivo
         var APP_URL = {!! json_encode(url('/')) !!}

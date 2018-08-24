@@ -1,24 +1,31 @@
 @extends('layouts.app')
 
 @section('content')
+    <!-- BreadCrumb - Trilha  -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{!! route('tasks.index') !!}">@lang('models.tasks')</a></li>
+            <li class="breadcrumb-item active" aria-current="page">@lang('buttons.activities')</li>
+        </ol>
+    </nav>
     <div class="row">
         <div class="col-md-12 pad-ct">
-            <div class="panel panel-default" >
+            <div class="panel pbread panel-default" >
                 <div class="panel-heading">
                    <!-- Texto baseado no arquivo de linguagem -->
-                   @lang('models.tasks') 
+                   @lang('models.activities') - @lang('models.task_id'): {!!$taskId !!}
                 </div>
-                <div class="panel panel-default">
+                <div class="panel pbread panel-default">
                     <div class="row">
                         <div class="col-md-12">
                             <!-- Alerta de erro / sucesso -->
                             @include('flash::message')
                             <div id="msg_excluir"></div>
                             <div class="row buttons_grid">
-                                <a class="btn btn-success"  href="{!! route('tasks.create') !!}">@lang('buttons.add')</a>
+                                 <!-- Botão criar atividade -->
                             </div>
                             <div class="panel-body">
-                                @include('tasks.table')
+                                @include('activities.table')
                             </div>
                         </div>
                     </div>
@@ -28,17 +35,15 @@
     </div>
 @endsection
 @section('scripts')
-<script src="//cdn.datatables.net/plug-ins/1.10.19/dataRender/datetime.js"></script>
-
 <script>
     var table;
     $(function() {
         
         //Parâmetros para criação da datatable
-        table = $("#tasks-table").DataTable({
+        table = $("#activities-table").DataTable({
             scrollX: true,
             scrollY: "47vh",
-            ajax: 'tasks/datatable',
+            ajax: "{!! URL::to('activities/datatable/'.$taskId) !!}",
             autoWidth: true,
             fixedColumns:   {
                 leftColumns: 0,
@@ -55,56 +60,39 @@
                     sPrevious: "@lang('models.previous')",
                 }
             },
-            columns: [  { data: 'id' },
-                        { data: 'code', 
-                          render: function ( data, type, row ) {
-                            //Código + descrição
-                            return data +' - '+ row.description ;
-                          } 
-                        },
-                        { data: 'orig_location_code', className: 'td_center' },
-                        { data: 'dest_location_code', className: 'td_center' },
-                        { data: 'start_date', 
-                          className: 'td_center',
+            columns: [  { data: 'code' },
+                        { data: 'date',
                           render: function ( data, type, row ) {
                             //Data inicio
                             return moment(data).format("DD/MM/YYYY HH:mm");
-                          }
+                          } 
                         },
-                        { data: 'end_date', 
-                          className: 'td_center', 
-                          render: function ( data, type, row ) {
-                            //Data fim
-                            return moment(data).format("DD/MM/YYYY HH:mm");
-                          }
-                        }, 
-                        { data: 'status_desc', className: 'td_center' },
+                        { data: 'description' },
+                        { data: 'number' },
+                        { data: 'label_barcode' },
+                        { data: 'pallet_barcode' },
+                        { data: 'qty' },
                         { data: null,
                          className: "th_grid",
-                         defaultContent: "<button id='detail' aria-label='@lang('buttons.detail')' data-microtip-position='left' role='tooltip' style='margin-right: 3px' ><img class='icon' src='{{asset('/icons/detalhes2.png') }}'><button id='edit' aria-label='@lang('buttons.edit')' data-microtip-position='left' role='tooltip' ><img class='icon' src='{{asset('/icons/editar.png') }}'></button><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='{{asset('/icons/remover.png') }}'></button>",
+                         defaultContent: "<button id='edit' aria-label='@lang('buttons.edit')' data-microtip-position='left' role='tooltip' ><img class='icon' src='{{asset('/icons/editar.png') }}'></button><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='{{asset('/icons/remover.png') }}'></button>",
                          width: "90px" 
                         }],
       });
 
-
-
       //Funções dos botões de editar e excluir
-      $('#tasks-table tbody').on( 'click', 'button', function () {
+      $('#activities-table tbody').on( 'click', 'button', function () {
             var data = table.row( $(this).parents('tr') ).data();
             var id = $(this).attr('id');
             if(id == 'edit'){
                 //Editar Registro
-                window.location.href = "{!! URL::to('tasks/"+data.id+"/edit') !!}";
-            }else if(id == 'detail'){
-                //Embalagens
-                window.location.href = "{!! URL::to('activities/ix/"+data.id+"') !!}";
+                window.location.href = "{!! URL::to('activities/"+data.id+"/edit') !!}";
             }else{
                 //Excluir Registro
                 if(confirm('@lang("buttons.msg_remove")')){
                     //Token obrigatório para envio POST
                     var tk = $('meta[name="csrf-token"]').attr('content');
                     $.ajax({
-                        url: 'tasks/'+data.id,
+                        url: "{!! URL::to('activities/"+data.id+"') !!}",
                         type: 'post',
                         data: {_method: 'delete', _token :tk},
                         success: function(scs){ 

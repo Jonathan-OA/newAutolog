@@ -31,6 +31,7 @@ return [
     'send' => 'Enviar',
     'close' => 'Fechar',
     'permissions' => 'Permissões',
+    'activities' => 'Atividades',
     
 
 ];

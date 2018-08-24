@@ -81,6 +81,7 @@ return [
     'notifications' => 'Notificações',
     'task_status' => 'Status das Tarefas',
     'tasks' => 'Tarefas',
+    'activities' => 'Atividades',
 
     //Columns
     'id' => 'ID',
@@ -272,6 +273,9 @@ return [
     'start_date' => 'Data de Início',
     'end_date' => 'Data de Fin.',
     'task_status_id' => 'Status',
+    'reason_id' => 'Motivo',
+    'pallet_barcode' => 'Palete',
+    'document_number' => 'Documento',
 
     
     

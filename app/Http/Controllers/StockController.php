@@ -97,9 +97,11 @@ class StockController extends AppBaseController
                 }
                //Atualiza Saldo
                $stock = App\Models\Stock::updStock($input);
-               //Cria tarefa
-               $task = App\Models\Task::new('664',$input['location_code'],$input['location_code']);
+               //Cria tarefa e finaliza
+               $task = App\Models\Task::create('664',$input['location_code'],$input['location_code']);
                $task->end();
+               //Cria atividade
+               $atv = App\Models\Activity::create($task->id,$input['label_id'],$input['pallet_id'],$input['prev_qty'],'Entrada de Saldo');
 
                 //Grava log
                $descricao = 'Ent. Manual -  End:'.$input['location_code'].' Umv: '.$input['label_id'].' - Prd: '.$input['product_code'].' Qde: '.$input['qty'].'('. $input['prev_qty'].')';

@@ -189,6 +189,12 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('packings/ix/{code}', 'PackingController@index');
     Route::get('packings/create/{code}', 'PackingController@create');
 
+    Route::get('activities/datatable/{task_id}', 'ActivityController@getData');
+    Route::resource('activities', 'ActivityController',['except' => 'create']);
+    Route::get('activities/ix/{task_id}', 'ActivityController@index');
+    Route::get('activities/create/{task_id}', 'ActivityController@create');
+
+
     Route::get('packingTypes/datatable', 'PackingTypeController@getData');
     Route::resource('packingTypes', 'PackingTypeController');
 
@@ -329,3 +335,6 @@ Route::resource('tasks', 'TaskController');
 
 Route::get('taskStatus/datatable', 'TaskStatusController@getData');
 Route::resource('taskStatus', 'TaskStatusController');
+
+
+

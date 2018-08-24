@@ -203,6 +203,6 @@ class TaskController extends AppBaseController
      */
     public function getData()
     {
-        return Datatables::of(App\Models\Task::where('company_id', Auth::user()->company_id))->make(true);
+        return Datatables::of(App\Models\Task::getTasks())->make(true);
     }
 }
