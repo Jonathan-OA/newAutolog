@@ -32,6 +32,7 @@ return [
     'close' => 'Fechar',
     'permissions' => 'Permissões',
     'activities' => 'Atividades',
+    'stock_transfer' => 'Transferência Manual',
     
 
 ];

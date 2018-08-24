@@ -29,6 +29,18 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('production/storeItem', 'Modules\ProductionController@storeItem')->name('production.storeItem');; //Cria item
     Route::resource('production', 'Modules\ProductionController'); //Ações de documentos de produção
     // ----------------------------------------------------------------------------------------------
+    // Modulo de Transferência
+    // ----------------------------------------------------------------------------------------------
+    Route::get('transfer/{document_id}/items', 'Modules\TransferController@showItems'); //Mostra grid de itens
+    Route::get('transfer/{document_id}/items/create', 'Modules\TransferController@createItem'); //Form de criação de itens
+    Route::get('transfer/{document_id}/items/{document_item_id}/edit', 'Modules\TransferController@editItem'); //Form de edição de itens
+    Route::patch('transfer/updateItem/{document_item_id}', 'Modules\TransferController@updateItem')->name('production.updateItem');; //Atualiza item
+    Route::post('transfer/storeItem', 'Modules\TransferController@storeItem')->name('transfer.storeItem');; //Cria item
+    Route::resource('transfer', 'Modules\TransferController'); //Ações de documentos de transferencia
+    Route::get('stockTransfer', 'Modules\TransferController@stockTransfer'); //Transferência Manual
+    
+    // ----------------------------------------------------------------------------------------------
+
 
     //Rota que libera um documento
     Route::get('/document/liberate/{id}/{module?}', 'DocumentController@liberateDoc');
@@ -321,6 +333,13 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('notification/{user_code}', function($user_code) {
         return App\Models\Notification::getLastNotification($user_code);
     });
+
+    Route::get('tasks/datatable', 'TaskController@getData');
+    Route::resource('tasks', 'TaskController');
+
+
+    Route::get('taskStatus/datatable', 'TaskStatusController@getData');
+    Route::resource('taskStatus', 'TaskStatusController');
 });
 
 
@@ -329,12 +348,7 @@ Route::group(['middleware' => 'auth'], function() {
 
 
 
-Route::get('tasks/datatable', 'TaskController@getData');
-Route::resource('tasks', 'TaskController');
 
-
-Route::get('taskStatus/datatable', 'TaskStatusController@getData');
-Route::resource('taskStatus', 'TaskStatusController');
 
 
 

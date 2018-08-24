@@ -6,7 +6,7 @@
             <div class="panel panel-default" >
                 <div class="panel-heading">
                    <!-- Texto baseado no arquivo de linguagem -->
-                   @lang('models.entradaManual') 
+                   @lang('models.stock_transfer') 
                 </div>
                 <div class="panel panel-default">
                     <div class="row">
@@ -18,11 +18,26 @@
                                      <!-- Alerta de erro / sucesso -->
                                     @include('flash::message')
                                     <div id="msg_excluir"></div>
-                                    {!! Form::label('pallet_barcode', Lang::get('models.pallet').':') !!}
-                                    {!! Form::text('pallet_barcode', null, ['class' => 'form-control']) !!}
-                                    {!! Form::label('barcode', Lang::get('models.barcode').':') !!}
-                                    {!! Form::text('barcode', null, ['class' => 'form-control']) !!}
-                                    {!! Form::open(['route' => 'stocks.store', 'id' => 'entForm']) !!} 
+                                    <div class="col-md-5">
+                                        {!! Form::label('orig_location_code', Lang::get('models.orig_location_code').':') !!}
+                                        {!! Form::text('orig_location_code', null, ['class' => 'form-control','id' => 'autocomplete', 'table' => 'locations']) !!}
+                                        {!! Form::label('pallet_barcode', Lang::get('models.pallet_barcode').':') !!}
+                                        {!! Form::text('pallet_barcode', null, ['class' => 'form-control','id' => 'pallet_barcode']) !!}
+                                        {!! Form::label('label_barcode', Lang::get('models.label_id').':') !!}
+                                        {!! Form::text('label_barcode', null, ['class' => 'form-control']) !!}
+                                    </div>
+                                    <div class="col-md-1">
+                                        <img class='center-block' style="padding-top: 10vh;" src='{{asset('/icons/seta.png') }}'>
+                                    </div>   
+                                    <div class="col-md-6">
+                                        {!! Form::label('dest_location_code', Lang::get('models.dest_location_code').':') !!}
+                                        {!! Form::text('dest_location_code', null, ['class' => 'form-control','id' => 'autocomplete2', 'table' => 'locations']) !!}
+                                        {!! Form::label('pallet_barcode', Lang::get('models.pallet_barcode').':') !!}
+                                        {!! Form::text('pallet_barcode', null, ['class' => 'form-control']) !!}
+                                        {!! Form::label('label_barcode', Lang::get('models.label_id').':') !!}
+                                        {!! Form::text('label_barcode', null, ['class' => 'form-control']) !!}
+                                    </div>
+                                    {!! Form::open(['route' => 'transfer.store', 'id' => 'entForm']) !!} 
                                     <!-- Só mostra demais campos quando ler um barcode correto --> 
                                     <div id="hidden" class="hidden">    
                                         <div class="form-group">
@@ -51,7 +66,7 @@
                                     </div> 
                                 </div>
                                 {!! Form::submit(Lang::get('buttons.save'), ['class' => 'btn btn-primary']) !!}
-                                <a href="{!! route('stocks.index') !!}" class="btn btn-default">@lang('buttons.cancel')</a>
+                                <a href="{!! route('transfer.index') !!}" class="btn btn-default">@lang('buttons.cancel')</a>
                                 {!! Form::close() !!}
                             </div>
                         </div>
@@ -75,17 +90,8 @@
                     .done(function(data) {
                         //erro = 1: Não existe; erro = 2: status encerrado ou cancelado
                         if(data.erro == 1 && cbplt != 0){
-                            $("#pallet_id").val("");
-                            if(confirm("Palete não existe. Deseja criar um novo?")){
-                                $("#pallet_barcode").removeClass('input_error');
-                                $("#pallet_barcode").addClass('input_ok is-valid');
-                                $("#pallet_id").val(data.id);
-                                $("#barcode").focus();
-                            }else{
-                                $("#pallet_barcode").addClass('input_error');
-                                $("#pallet_barcode").val("");
-                            }
-                            $('#msg_excluir').html("");
+                            $('#msg_excluir').html("<div class='alert alert-danger'>@lang('validation.plt_prefixo')</div>");
+                            $("#pallet_barcode").addClass('input_error');
                         }else{
                             if(data.erro == 3){
                                 $('#msg_excluir').html("<div class='alert alert-danger'>@lang('validation.plt_prefixo')</div>");

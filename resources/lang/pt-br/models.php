@@ -276,7 +276,7 @@ return [
     'reason_id' => 'Motivo',
     'pallet_barcode' => 'Palete',
     'document_number' => 'Documento',
-
+    'stock_transfer' => 'Transferência Manual',
     
     
     //PlaceHolders
@@ -288,6 +288,7 @@ return [
     'production' => 'Módulo de Produção',  
     'receipt' => 'Módulo de Recebimento',  
     'separation' => 'Módulo de Separação',  
+    'transfer' => 'Módulo de Transferência',  
     'document_edit' => 'Documento: ',  
     'document_create' => 'Criação de Documento',  
     'item_create' => 'Criação de Item',  
