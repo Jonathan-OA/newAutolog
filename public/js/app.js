@@ -107,6 +107,7 @@ $(document).ready(function() {
 
 });
 
+
 //Função que obtem a ultima notificação criada e a ultima lida pelo usuário
 function showNotification(user_code) {
     $.ajax(APP_URL + "/notification/" + user_code)

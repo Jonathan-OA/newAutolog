@@ -298,6 +298,9 @@ return [
     'dashboard' => 'Dashboard',
     'support' => 'Suporte',
     'message' => 'Mensagem',
+    'barcode_orig' => 'Palete / Etiqueta Origem',
+    'barcode_dest' => 'Palete / Endereço Destino',
+    'label_barcode' => 'Etiqueta'
     
 
 

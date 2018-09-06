@@ -18,53 +18,54 @@
                                      <!-- Alerta de erro / sucesso -->
                                     @include('flash::message')
                                     <div id="msg_excluir"></div>
-                                    <div class="col-md-5">
-                                        {!! Form::label('orig_location_code', Lang::get('models.orig_location_code').':') !!}
-                                        {!! Form::text('orig_location_code', null, ['class' => 'form-control','id' => 'autocomplete', 'table' => 'locations']) !!}
-                                        {!! Form::label('pallet_barcode', Lang::get('models.pallet_barcode').':') !!}
-                                        {!! Form::text('pallet_barcode', null, ['class' => 'form-control','id' => 'pallet_barcode']) !!}
-                                        {!! Form::label('label_barcode', Lang::get('models.label_id').':') !!}
-                                        {!! Form::text('label_barcode', null, ['class' => 'form-control']) !!}
+                                    <div class="col-md-4">
+                                        {!! Form::label('barcode_orig', Lang::get('models.barcode_orig').':') !!}
+                                        {!! Form::text('barcode_orig', null, ['class' => 'form-control', 'id' => 'barcode_orig']) !!}
+                                    </div>
+                                    <div class="col-md-3">
+                                        <span id="orig_location" class="hidden">
+                                            {!! Form::label('orig_location_code', Lang::get('models.orig_location_code').':') !!}
+                                            {!! Form::text('orig_location_code', null, ['class' => 'form-control','readonly']) !!}
+                                        </span>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <span id="label_barcodeD" class="hidden">
+                                                {!! Form::label('label_barcode', Lang::get('models.label_barcode').':') !!}
+                                                {!! Form::text('label_barcode', null, ['class' => 'form-control']) !!}
+                                        </span>
                                     </div>
                                     <div class="col-md-1">
-                                        <img class='center-block' style="padding-top: 10vh;" src='{{asset('/icons/seta.png') }}'>
-                                    </div>   
-                                    <div class="col-md-6">
-                                        {!! Form::label('dest_location_code', Lang::get('models.dest_location_code').':') !!}
-                                        {!! Form::text('dest_location_code', null, ['class' => 'form-control','id' => 'autocomplete2', 'table' => 'locations']) !!}
-                                        {!! Form::label('pallet_barcode', Lang::get('models.pallet_barcode').':') !!}
-                                        {!! Form::text('pallet_barcode', null, ['class' => 'form-control']) !!}
-                                        {!! Form::label('label_barcode', Lang::get('models.label_id').':') !!}
-                                        {!! Form::text('label_barcode', null, ['class' => 'form-control']) !!}
+                                        <a class="btn btn-success"  href="#" onclick="addItem()">Add</a>
+                                    </div>  
+                                    {{ Form::hidden('pallet_id', '', array('id' => 'pallet_id')) }}
+                                    {{ Form::hidden('pltbarcode', '', array('id' => 'pltbarcode')) }}
+                                    {{ Form::hidden('prev_qty', '', array('id' => 'prev_qty')) }}
+                                    {{ Form::hidden('product_code', '', array('id' => 'product_code')) }}
+
+                                    <!-- Tabela que lista as etiquetas lidas para esta transferência -->
+                                    {!! Form::open(['route' => 'transfer.storeStockTransfer', 'id' => 'trfForm']) !!} 
+                                    <div class="col-md-10 col-md-offset-1" style="margin-top: 3vh">
+                                        <table class="table table-bordered" id="transfer-table" cellspacing="0" width="100%">
+                                                <thead>
+                                                    <th class="th_grid">@lang('models.pallet_id') </th>
+                                                    <th class="th_grid">@lang('models.label_id') </th>
+                                                    <th class="th_grid">@lang('models.product_code') </th>
+                                                    <th class="th_grid">@lang('models.location_code') </th>
+                                                    <th class="th_grid">@lang('models.qty') </th>
+                                                    <th class="th_grid">@lang('models.action') </th>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                        </table>
                                     </div>
-                                    {!! Form::open(['route' => 'transfer.store', 'id' => 'entForm']) !!} 
-                                    <!-- Só mostra demais campos quando ler um barcode correto --> 
-                                    <div id="hidden" class="hidden">    
-                                        <div class="form-group">
-                                            {!! Form::label('product_code', Lang::get('models.product_code').':') !!}
-                                            {!! Form::text('product_code', null, ['class' => 'form-control', 'readonly']) !!}
-                                            {!! Form::label('qty', Lang::get('models.qty').':') !!}
-                                            {!! Form::text('qty', null, ['class' => 'form-control']) !!}
-                                            {!! Form::label('uom_code', Lang::get('models.uom_code').':') !!}
-                                            {!! Form::text('uom_code', null, ['class' => 'form-control', 'readonly']) !!}
-                                            {!! Form::label('prev_qty', Lang::get('models.prev_qty').':') !!}
-                                            {!! Form::text('prev_qty', null, ['class' => 'form-control']) !!}    
-                                            {!! Form::label('prev_uom_code', Lang::get('models.prev_uom_code').':') !!}
-                                            {!! Form::text('prev_uom_code', null, ['class' => 'form-control', 'readonly']) !!}
-                                            {!! Form::label('location_code', Lang::get('models.location_code').':') !!}
-                                            {!! Form::text('location_code', null, ['class' => 'form-control', 'id' => 'autocomplete', 'table' => 'locations']) !!}
-                                            <!-- Campos não visiveis para o usuario -->
-                                            {{ Form::hidden('company_id', Auth::user()->company_id) }}
-                                            {{ Form::hidden('user_id', Auth::user()->id) }}
-                                            {{ Form::hidden('label_id', '', array('id' => 'label_id')) }}
-                                            {{ Form::hidden('task_id', '') }}
-                                            {{ Form::hidden('pltbarcode', '', array('id' => 'pltbarcode')) }}
-                                            {{ Form::hidden('pallet_id', '', array('id' => 'pallet_id')) }}
-                                            {{ Form::hidden('finality_code', 'SALDO') }}
-                                            {{ Form::hidden('operation_code', 'stocks_add') }}
-                                        </div>  
-                                    </div> 
+                                    <div class="col-md-12">
+                                        {!! Form::label('dest_location_code', Lang::get('models.dest_location_code').':') !!}
+                                        {!! Form::text('dest_location_code', null, ['class' => 'form-control']) !!}
+                                    </div>
+                                    
                                 </div>
+                                
+                                
                                 {!! Form::submit(Lang::get('buttons.save'), ['class' => 'btn btn-primary']) !!}
                                 <a href="{!! route('transfer.index') !!}" class="btn btn-default">@lang('buttons.cancel')</a>
                                 {!! Form::close() !!}
@@ -79,71 +80,131 @@
 @section('scripts')
 <script>
     $(function() {
-        $("#pallet_barcode").bind('keypress change',function(e){
-            
+        $("#barcode_orig").bind('keypress change',function(e){
+        
              //Se apertar enter ou alterar o campo entra na função
             if(e.which == 13 || e.type == 'change') {
-                //Valida palete informado (Se não existir vai criar)
+                var prefixos = "{{$prefixos}}";
+                var arrayPref = prefixos.split(',');               
+                //Valida palete ou etiqueta informado
                 var cbplt = $(this).val();
-                if(cbplt || !$(this).hasClass('input_error') || !$(this).hasClass('input_ok')){
+                if(jQuery.inArray(cbplt.substr(0,3), arrayPref) != -1){
+                    //Se tem prefixo de palete, Procura palete
                     $.ajax("pallets/val/"+ cbplt)
                     .done(function(data) {
-                        //erro = 1: Não existe; erro = 2: status encerrado ou cancelado
-                        if(data.erro == 1 && cbplt != 0){
-                            $('#msg_excluir').html("<div class='alert alert-danger'>@lang('validation.plt_prefixo')</div>");
-                            $("#pallet_barcode").addClass('input_error');
-                        }else{
-                            if(data.erro == 3){
-                                $('#msg_excluir').html("<div class='alert alert-danger'>@lang('validation.plt_prefixo')</div>");
-                                $("#pallet_barcode").addClass('input_error');
+                        //erro <> 5 = Palte não encontrado ou não possui saldo
+                        if(data.erro != 5 && cbplt != 0){
+                            //Erro
+                            if(data.erro == 5){
+                                $('#msg_excluir').html("<div class='alert alert-danger'>@lang('validation.plt_stock')</div>");
                             }else{
-                                $('#msg_excluir').html("");
-                                $("#pallet_barcode").removeClass('input_error');
-                                $("#pallet_barcode").addClass('input_ok');
-                                $("#pallet_id").val(data.id);
-                                $("#barcode").focus();
+                                $('#msg_excluir').html("<div class='alert alert-danger'>@lang('validation.plt_invalid')</div>");
                             }
+                            $("#barcode_orig").addClass('input_error');
+                        }else{
+                                $('#msg_excluir').html("");
+                                $("#barcode_orig").removeClass('input_error');
+                                $("#barcode_orig").addClass('input_ok');
+                                $("#pallet_id").val(data.id);
+                                $('#orig_location').removeClass('hidden');
+                                $('#label_barcodeD').removeClass('hidden');
+                                $("#orig_location_code").val(data.location);
+                                $("#barcode").focus();
                         }
                         $("#pltbarcode").val(cbplt);
+                    })
+                }else{
+                    //Não é palete, Procura Etiqueta
+                    $.ajax("products/val/"+ cbplt)
+                    .done(function(dataL) {
+                        if(dataL.erro == 0){
+                            //Caso encontre o barcode, atualiza os inputs com os valores obtidos
+                            //Limpa campo de msg, caso esteja preenchido
+                            $('#msg_excluir').html("");
+                            $("#prev_qty").val(dataL.infos.prev_qty);
+                            $("#product_code").val(dataL.infos.product_code);
+                            $('.alert').remove();
+                            $("#pltbarcode").val("");
+                            $("#pallet_id").val("");
+                            if(dataL.infos.label_id != ""){
+                                $("#label_barcode").val(cbplt);
+                            }
+                            $('#orig_location').removeClass('hidden');
+                            
+                        }else{
+                            $('#msg_excluir').html("<div class='alert alert-danger'>@lang('validation.cb_error')</div>");
+                        }
                     })
                 }
             }
 
         });
 
-        $("#barcode").bind('keypress change',function(e){
-            //Se apertar enter ou alterar o campo, busca informações do barcode informado
-            if(e.which == 13 || e.type == 'change')  {
-                $.ajax("products/val/"+ $(this).val())
-                .done(function(data) {
-                    if(data.erro == 0){
+        $("#label_barcode").bind('keypress change',function(e){
+            var pallet_id = $("#pallet_id").val();
+            //Se apertar enter ou alterar o campo entra na função
+            if(e.which == 13 || e.type == 'change') {
+                var cbplt = $(this).val();
+                //Não é palete, Procura Etiqueta
+                $.ajax("products/val/"+ cbplt)
+                .done(function(dataL) {
+                    if(dataL.erro == 0){
                         //Caso encontre o barcode, atualiza os inputs com os valores obtidos
-                        $("#qty").val(data.infos.qty);
-                        $("#prev_qty").val(data.infos.prev_qty);
-                        $("#uom_code").val(data.infos.uom_code);
-                        $("#prev_uom_code").val(data.infos.prev_uom_code);
-                        $("#product_code").val(data.infos.product_code);
-                        $("#label_id").val(data.infos.label_id);
                         //Limpa campo de msg, caso esteja preenchido
                         $('#msg_excluir').html("");
-                        $('#hidden').removeClass('hidden');
+                        $("#prev_qty").val(dataL.infos.prev_qty);
+                        $("#product_code").val(dataL.infos.product_code);
                         $('.alert').remove();
-                        
+                        $("#label_barcode").removeClass('input_error');
+                        $("#label_barcode").addClass('input_ok');
                     }else{
+                        $("#label_barcode").removeClass('input_ok');
+                        $("#label_barcode").addClass('input_error');
                         //Mostra msg de barcode invalido ou validade
-                        if(data.erro == 1)
-                            $('#msg_excluir').html("<div class='alert alert-danger'>@lang('validation.cb_error')</div>");
-                        else
-                            $('#msg_excluir').html("<div class='alert alert-danger'>@lang('validation.dataval_error')</div>");
-                            $("#barcode").val("");
-                            $("#location_code").val("");
-                            $('#hidden').addClass('hidden');
+                        $('#msg_excluir').html("<div class='alert alert-danger'>@lang('validation.cb_error')</div>");
                     }
                 })
-
             }
         })
+
+        //Apaga item da lista
+        $('#transfer-table tbody').on( 'click', 'button', function () {
+            var data = $(this).parents('tr');
+            data.remove();
+        })
+
     });
+
+    //Adiciona item para transferência
+    function addItem(){
+        var pallet_id = $("#pallet_id").val();
+        var pallet = $("#pltbarcode").val();
+        var label = $("#label_barcode").val();
+        var location = $("#orig_location_code").val();
+        var qtde = $("#prev_qty").val();
+        var product = $("#product_code").val();
+
+        //Se leu o pallet inteiro e não informou etiqueta, transfere o pallet inteiro
+        if(pallet.length > 0 && label.length === 0){
+            $.ajax("pallets/items/"+ pallet_id)
+            .done(function(datat) {
+                datat.forEach(function(item) {
+                    $("#transfer-table")
+                    .append("<tr id='"+item.id+"'><td>"+item.plt_barcode+"</td><td><input name='labels[]' type='text' value='"+item.label_barcode+"' readonly></td><td>"
+                            +item.product_code+"</td><td>"+location+"</td><td><input name='qtys[]' type='number' 'step'='0.000001' value='"+item.prev_qty+"'>"+item.prev_uom_code+
+                            "</td><td><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='{{asset('/icons/remover.png')}}'></button></td></tr>")
+                });
+            }); 
+        }else{
+            //Insere só o produto lido
+            $("#transfer-table")
+                    .append("<tr><td>"+pallet+"</td><td>"+label+"</td><td>"
+                            +product+"</td><td>"+location+"</td><td>"+qtde+
+                            "</td><td><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='{{asset('/icons/remover.png')}}'></button></td></tr>")
+        }
+    }
+
+    
 
 </script>
 @endsection

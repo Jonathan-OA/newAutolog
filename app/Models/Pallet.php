@@ -78,12 +78,14 @@ class Pallet extends Model
         $ret['erro'] = 0;
 
         //Valida prefixo do palete informado com o  parâmetro
-        $pref = Parameter::getParam('prefixo_palete');               
+        $pref = Parameter::getParam('prefixo_palete');    
         if(trim($pref) == ''){
             $pref = 'PLT';
         }
-
-        if(strpos($pref,substr($barcode,0,3)) === false){
+        //Transforma parametro em array (casos de mais de um prefixo de palete)
+        $prefArray = explode(',',$pref);  
+        
+        if(!in_array(substr($barcode,0,3),$prefArray)){
             //Prefixo de palete inválido
             $ret['erro'] = 3;
             $ret['msg'] = \Lang::get('validation.plt_prefixo');
@@ -104,12 +106,28 @@ class Pallet extends Model
                     $ret['erro'] = 2;
                     $ret['msg'] = \Lang::get('validation.plt_invalid');
                 }else{
-                    //Palete já existe no sistema
-                    $ret['erro'] = 4;
-                    $ret['msg'] = \Lang::get('validation.plt_exists');
+                    //Palete já existe no sistema - Valida se tem saldo
+                    $stockPlt = Stock::where([
+                                                    ['company_id', $company_id],
+                                                    ['pallet_id', $pallet[0]->id],
+                                                    ['finality_code', 'SALDO']
+                                            ])
+                                            ->get();
+                    if(count($stockPlt) == 0){
+                        //Sem saldo
+                        $ret['erro'] = 4;
+                        $ret['msg'] = \Lang::get('validation.plt_exists');
+                    }else{
+                        //Com saldo
+                        $ret['erro'] = 5;
+                        $ret['msg'] = \Lang::get('validation.plt_exists');
+                    }
+                   
+                    
                 }
 
                 $ret['id'] = $pallet[0]->id;
+                $ret['location'] = $pallet[0]->location_code;
             }
         }
         return $ret;

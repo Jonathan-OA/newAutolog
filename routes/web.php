@@ -13,6 +13,7 @@
 
 use App\Models\Product;
 use App\Models\Pallet;
+use App\Models\PalletItem;
 
 Auth::routes();
 
@@ -37,7 +38,9 @@ Route::group(['middleware' => 'auth'], function() {
     Route::patch('transfer/updateItem/{document_item_id}', 'Modules\TransferController@updateItem')->name('production.updateItem');; //Atualiza item
     Route::post('transfer/storeItem', 'Modules\TransferController@storeItem')->name('transfer.storeItem');; //Cria item
     Route::resource('transfer', 'Modules\TransferController'); //Ações de documentos de transferencia
-    Route::get('stockTransfer', 'Modules\TransferController@stockTransfer'); //Transferência Manual
+    Route::get('stockTransfer', 'Modules\TransferController@stockTransfer'); //Tela de Transferência Manual
+    Route::post('stockTransfer/store', 'Modules\TransferController@storeStockTransfer')->name('transfer.storeStockTransfer');; //Cria Doc. de Transferencia Manual
+    
     
     // ----------------------------------------------------------------------------------------------
 
@@ -152,6 +155,9 @@ Route::group(['middleware' => 'auth'], function() {
     Route::resource('pallets', 'PalletController');
     Route::get('pallets/val/{barcode}', function($barcode) {
         return Pallet::valPallet($barcode);
+    });
+    Route::get('pallets/items/{pallet_id}', function($pallet_id) {
+        return PalletItem::getPalletItems($pallet_id);
     });
 
     Route::get('configs/datatable', 'ConfigController@getData');

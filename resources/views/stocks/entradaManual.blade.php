@@ -28,25 +28,33 @@
                                         <div class="form-group">
                                             {!! Form::label('product_code', Lang::get('models.product_code').':') !!}
                                             {!! Form::text('product_code', null, ['class' => 'form-control', 'readonly']) !!}
-                                            {!! Form::label('qty', Lang::get('models.qty').':') !!}
-                                            {!! Form::text('qty', null, ['class' => 'form-control']) !!}
-                                            {!! Form::label('uom_code', Lang::get('models.uom_code').':') !!}
-                                            {!! Form::text('uom_code', null, ['class' => 'form-control', 'readonly']) !!}
-                                            {!! Form::label('prev_qty', Lang::get('models.prev_qty').':') !!}
-                                            {!! Form::text('prev_qty', null, ['class' => 'form-control']) !!}    
-                                            {!! Form::label('prev_uom_code', Lang::get('models.prev_uom_code').':') !!}
-                                            {!! Form::text('prev_uom_code', null, ['class' => 'form-control', 'readonly']) !!}
-                                            {!! Form::label('location_code', Lang::get('models.location_code').':') !!}
-                                            {!! Form::text('location_code', null, ['class' => 'form-control', 'id' => 'autocomplete', 'table' => 'locations']) !!}
-                                            <!-- Campos não visiveis para o usuario -->
-                                            {{ Form::hidden('company_id', Auth::user()->company_id) }}
-                                            {{ Form::hidden('user_id', Auth::user()->id) }}
-                                            {{ Form::hidden('label_id', '', array('id' => 'label_id')) }}
-                                            {{ Form::hidden('task_id', '') }}
-                                            {{ Form::hidden('pltbarcode', '', array('id' => 'pltbarcode')) }}
-                                            {{ Form::hidden('pallet_id', '', array('id' => 'pallet_id')) }}
-                                            {{ Form::hidden('finality_code', 'SALDO') }}
-                                            {{ Form::hidden('operation_code', 'stocks_add') }}
+                                            <div class="col-md-6">
+                                                {!! Form::label('qty', Lang::get('models.qty').':') !!}
+                                                {!! Form::text('qty', null, ['class' => 'form-control']) !!}
+                                            </div>
+                                            <div class="col-md-6">
+                                                {!! Form::label('uom_code', Lang::get('models.uom_code').':') !!}
+                                                {!! Form::text('uom_code', null, ['class' => 'form-control', 'readonly']) !!}
+                                            </div>
+                                            <div class="col-md-6">
+                                                {!! Form::label('prev_qty', Lang::get('models.prev_qty').':') !!}
+                                                {!! Form::text('prev_qty', null, ['class' => 'form-control']) !!}    
+                                            </div>
+                                            <div class="col-md-6">
+                                                {!! Form::label('prev_uom_code', Lang::get('models.prev_uom_code').':') !!}
+                                                {!! Form::text('prev_uom_code', null, ['class' => 'form-control', 'readonly']) !!}
+                                            </div>
+                                                {!! Form::label('location_code', Lang::get('models.location_code').':') !!}
+                                                {!! Form::text('location_code', null, ['class' => 'form-control', 'id' => 'autocomplete', 'table' => 'locations']) !!}
+                                                <!-- Campos não visiveis para o usuario -->
+                                                {{ Form::hidden('company_id', Auth::user()->company_id) }}
+                                                {{ Form::hidden('user_id', Auth::user()->id) }}
+                                                {{ Form::hidden('label_id', '', array('id' => 'label_id')) }}
+                                                {{ Form::hidden('task_id', '') }}
+                                                {{ Form::hidden('pltbarcode', '', array('id' => 'pltbarcode')) }}
+                                                {{ Form::hidden('pallet_id', '', array('id' => 'pallet_id')) }}
+                                                {{ Form::hidden('finality_code', 'SALDO') }}
+                                                {{ Form::hidden('operation_code', 'stocks_add') }}
                                         </div>  
                                     </div> 
                                 </div>

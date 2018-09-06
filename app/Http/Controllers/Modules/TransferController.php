@@ -34,9 +34,9 @@ class TransferController extends AppBaseController
         return view('modules.transfer.gridDoc'); 
     }
 
-    //--------------------------------------------------------------------------------------------
+    //---------------------------------------------------------------------------------------------
     //                                     Funções de Documentos
-    //--------------------------------------------------------------------------------------------
+    //---------------------------------------------------------------------------------------------
     // --------------------------------------------------------------------------------------------
 
     /**
@@ -150,9 +150,9 @@ class TransferController extends AppBaseController
 
 
 
-    //--------------------------------------------------------------------------------------------
+    //---------------------------------------------------------------------------------------------
     //                                     Funções de Itens
-    //--------------------------------------------------------------------------------------------
+    //---------------------------------------------------------------------------------------------
     // --------------------------------------------------------------------------------------------
 
     /**
@@ -267,6 +267,12 @@ class TransferController extends AppBaseController
         return $documents->toArray();
     }
 
+
+    //---------------------------------------------------------------------------------------------
+    //                                Funções de Transf Manual
+    //---------------------------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
+
     /**
      * Tela de transferencia manual
      *
@@ -274,14 +280,32 @@ class TransferController extends AppBaseController
      * @return Response
      */
     public function stockTransfer(){    
+
+        $prefixos = App\Models\Parameter::getParam('prefixo_palete', 'PLT');
+
         //Valida se usuário possui permissão para acessar esta opção
         if(App\Models\User::getPermission('stocks_add',Auth::user()->user_type_code)){
-            return view('modules.transfer.stockTransfer');
+            return view('modules.transfer.stockTransfer')->with('prefixos',$prefixos);
         }else{
             //Sem permissão
             Flash::error(Lang::get('validation.permission'));
             return redirect(route('transfer.index'));
         }
+
+    }
+
+    /**
+     * Cria documento de transferência manual
+     *
+     * @param CreateDocumentItemRequest $request
+     *
+     * @return Response
+     */
+    public function storeStockTransfer(Request $request)
+    {
+        $input = $request->all();       
+
+        print_r($input);exit;
 
     }
 }

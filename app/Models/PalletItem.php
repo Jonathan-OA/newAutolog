@@ -60,10 +60,18 @@ class PalletItem extends Model
 
     
      //Retorna todos os itens de um palete
-     public static function getPalletItems(){
-        return PalletItem::selectRaw("code,CONCAT(code,' - ',description) as description_f")
-                         ->where('company_id', Auth::user()->company_id)
-                         ->pluck('description_f','code');
+     public static function getPalletItems($pallet_id){
+         
+        return PalletItem::select('pallets.barcode as plt_barcode', 'labels.barcode as label_barcode',
+                                  'pallet_items.product_code', 'pallet_items.prev_qty',
+                                  'pallet_items.prev_uom_code', 'pallet_items.id')
+                          ->join('pallets','pallets.id','pallet_items.pallet_id')
+                          ->leftJoin('labels','labels.id','pallet_items.label_id')
+                          ->where('pallet_items.company_id', Auth::user()->company_id)
+                          ->where('pallet_items.pallet_id', $pallet_id)
+                          ->where('pallet_items.pallet_status_id', '<>', '9')
+                          ->get()
+                          ->toArray();
     }
 
     /**

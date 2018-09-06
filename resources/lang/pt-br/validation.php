@@ -99,6 +99,7 @@ return [
     'plt_exists'               => 'Palete já existe no sistema.',
     'plt_not_exists'               => 'Palete não encontrado no sistema.',
     'plt_invalid'               => 'Palete inválido.',
+    'plt_stock'               => 'Palete não possui saldo.',
     'document_number'               => 'Já existe um documento com o número informado.',
     'support_success'               => 'Mensagem enviada! Em breve nossa equipe lhe responderá. ',
 
