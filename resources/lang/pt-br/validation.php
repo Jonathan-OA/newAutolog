@@ -98,8 +98,9 @@ return [
     'plt_prefixo'               => 'Prefixo de palete inválido.',
     'plt_exists'               => 'Palete já existe no sistema.',
     'plt_not_exists'               => 'Palete não encontrado no sistema.',
-    'plt_invalid'               => 'Palete inválido.',
+    'plt_invalid'               => 'Palete encerrado.',
     'plt_stock'               => 'Palete não possui saldo.',
+    'plt_dataval'               => 'Palete possui etiquetas vencidas! Não é possível transferir.',
     'document_number'               => 'Já existe um documento com o número informado.',
     'support_success'               => 'Mensagem enviada! Em breve nossa equipe lhe responderá. ',
 

@@ -157,7 +157,11 @@ Route::group(['middleware' => 'auth'], function() {
         return Pallet::valPallet($barcode);
     });
     Route::get('pallets/items/{pallet_id}', function($pallet_id) {
-        return PalletItem::getPalletItems($pallet_id);
+        return PalletItem::getItems($pallet_id);
+    });
+
+    Route::post('stocks/verify', function($pallet_id, $location_code, $label_id, $produto) {
+        return Stock::verStock($pallet_id, $location_code, $label_id, $produto);
     });
 
     Route::get('configs/datatable', 'ConfigController@getData');

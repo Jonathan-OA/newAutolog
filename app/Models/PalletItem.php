@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Eloquent as Model;
 use Auth;
+use Carbon\Carbon;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -59,8 +60,8 @@ class PalletItem extends Model
     ];
 
     
-     //Retorna todos os itens de um palete
-     public static function getPalletItems($pallet_id){
+    //Retorna todos os itens de um palete
+    public static function getItems($pallet_id){
          
         return PalletItem::select('pallets.barcode as plt_barcode', 'labels.barcode as label_barcode',
                                   'pallet_items.product_code', 'pallet_items.prev_qty',
@@ -73,6 +74,26 @@ class PalletItem extends Model
                           ->get()
                           ->toArray();
     }
+
+    /**
+     * Função que valida se todas as etiquetas do palete estão ok (validade, etc..)
+     * Parâmetros: ID do Palete e ID da empresa/filial
+     * @var array
+     */
+    public static function valItems($pallet_id, $company_id = ''){
+        $company_id = (trim($company_id == ''))?Auth::user()->company_id: $company_id;
+        return PalletItem::join('labels','labels.id','pallet_items.label_id')
+                          ->where([ 
+                                 ['pallet_items.pallet_id', $pallet_id],
+                                 ['pallet_items.pallet_status_id','<>', 9],
+                                 ['labels.company_id', $company_id],
+                                 ['labels.due_date', '<', Carbon::now()]
+                         ])
+                         ->whereNotNull('labels.due_date')
+                         ->count();
+
+    }
+
 
     /**
      * Função que deleta linhas com quantidades NEGATIVAS ou ZERADAS no palete

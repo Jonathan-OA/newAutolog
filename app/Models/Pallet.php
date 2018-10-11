@@ -7,6 +7,7 @@ use Auth;
 use Lang;
 use DB;
 
+
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -88,7 +89,7 @@ class Pallet extends Model
         if(!in_array(substr($barcode,0,3),$prefArray)){
             //Prefixo de palete inválido
             $ret['erro'] = 3;
-            $ret['msg'] = \Lang::get('validation.plt_prefixo');
+            $ret['msg_erro'] = \Lang::get('validation.plt_prefixo');
         }else{
             $pallet = Pallet::where([
                                     ['company_id', $company_id],
@@ -99,12 +100,12 @@ class Pallet extends Model
             if(count($pallet) == 0){
                 //Palete não existe
                 $ret['erro'] = 1;
-                $ret['msg'] = \Lang::get('validation.plt_not_exists');
+                $ret['msg_erro'] = \Lang::get('validation.plt_not_exists');
             }else{
                 //Palete existe e esta encerrado ou cancelado.
                 if($pallet[0]->pallet_status_id == 8 || $pallet[0]->pallet_status_id == 9){
                     $ret['erro'] = 2;
-                    $ret['msg'] = \Lang::get('validation.plt_invalid');
+                    $ret['msg_erro'] = \Lang::get('validation.plt_invalid');
                 }else{
                     //Palete já existe no sistema - Valida se tem saldo
                     $stockPlt = Stock::where([
@@ -116,11 +117,17 @@ class Pallet extends Model
                     if(count($stockPlt) == 0){
                         //Sem saldo
                         $ret['erro'] = 4;
-                        $ret['msg'] = \Lang::get('validation.plt_exists');
+                        $ret['msg_erro'] = \Lang::get('validation.plt_stock');
                     }else{
                         //Com saldo
-                        $ret['erro'] = 5;
-                        $ret['msg'] = \Lang::get('validation.plt_exists');
+                        //Valida se possui etiquetas vencidas
+                        if(PalletItem::valItems($pallet[0]->id) == 0){
+                            $ret['erro'] = 5;
+                            $ret['msg_erro'] = \Lang::get('validation.plt_exists');
+                        }else{
+                            $ret['erro'] = 6;
+                            $ret['msg_erro'] = \Lang::get('validation.plt_dataval');
+                        }
                     }
                    
                     

@@ -173,14 +173,14 @@ class Stock extends Model
      * Parâmetros: Endereço e Produto
      * @var array
      */
-    public static function getStock($endere, $produto = "", $company_id = ""){
+    public static function getStock($location_code, $product_code = "", $company_id = ""){
 
         $company_id = (trim($company_id == ''))?Auth::user()->company_id: $company_id;
-        $GLOBALS['produto'] = $produto;
+        $GLOBALS['produto'] = $product_code;
         //Obtem a soma do endereço
         $saldo = Stock::where([
                                 ['company_id', $company_id],
-                                ['location_code',$endere]
+                                ['location_code',$location_code]
                        ])
                        ->where(function ($query) {
                            if(trim($GLOBALS['produto']) <> ''){
@@ -197,7 +197,7 @@ class Stock extends Model
      * Parâmetros: Deposito(s), Produto e Tipo de Estoque (Palete, picking ou picking por produto)
      * @var array
      */
-    public static function getStockDep($depositos, $produto, $tipoEstq = "", $company_id = ""){
+    public static function getStockDep($depositos, $product_code, $tipoEstq = "", $company_id = ""){
 
         $company_id = (trim($company_id == ''))?Auth::user()->company_id: $company_id;
 
@@ -221,7 +221,7 @@ class Stock extends Model
                                      })
                                      ->where([
                                                 ['stocks.company_id', Auth::user()->company_id],
-                                                ['stocks.product_code', $produto],
+                                                ['stocks.product_code', $product_code],
                                         ])
                                     ->groupBy('stocks.product_code', 'stocks.label_id','stocks.pallet_id',
                                               'stocks.location_code','stocks.uom_code')
@@ -231,6 +231,40 @@ class Stock extends Model
                                     //FAZER FIFO (VALIDADE)
         return $saldos;         
     }
+
+    /**
+     * Função que valida se existe um saldo de acordo com os parâmetros
+     * Parâmetros: Endereço e Produto
+     * @var array
+     */
+    public static function verStock($pallet_id, $location_code, $label_id, $produto, $company_id = ""){
+        $company_id = (trim($company_id == ''))?Auth::user()->company_id: $company_id;
+
+        $GLOBALS['pallet_id'] = $pallet_id;
+        $GLOBALS['company_id'] = $company_id;
+        $GLOBALS['location_code'] = $location_code;
+        $GLOBALS['label_id'] = $label_id;
+
+        $saldo = Stock::where(function ($query) {
+                            $query->where('company_id',$GLOBALS['company_id']);
+                            $query->where('finality_code','SALDO');
+
+                            if(trim($GLOBALS['pallet_id']) <> ''){
+                                $query->where('pallet_id',$GLOBALS['pallet_id']);
+                            }
+                            if(trim($GLOBALS['location_code']) <> ''){
+                                $query->where('location_code',$GLOBALS['location_code']);
+                            }
+                            if(trim($GLOBALS['label_id']) <> ''){
+                                $query->where('label_id',$GLOBALS['label_id']);
+                            }
+                        })
+                       ->count();
+        return $saldo;
+
+    }
+
+
 
     /**
      * Função que deleta linhas com quantidades NEGATIVAS ou ZERADAS na saldo

@@ -277,6 +277,7 @@ return [
     'pallet_barcode' => 'Palete',
     'document_number' => 'Documento',
     'stock_transfer' => 'Transferência Manual',
+    'decimal_places' => 'Casas Decimais',
     
     
     //PlaceHolders

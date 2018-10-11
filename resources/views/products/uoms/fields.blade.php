@@ -24,6 +24,11 @@
         <span class="onoffswitch-switch"></span>
     </label>
 </div>
+
+<!-- Decimal Places Field -->
+{!! Form::label('decimal_places', Lang::get('models.decimal_places').':') !!}
+{!! Form::select('decimal_places', [ 0 => 'Nenhuma', 1 => '1', 2 => '2', 3 => '3'], (!empty($uom->decimal_places)) ? $uom->decimal_places : '', ['class' => 'form-control', 'id' => 'decimal_places']) !!}
+
 </div>
 
 <!-- Submit Field -->

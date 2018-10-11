@@ -6,6 +6,7 @@ use Eloquent as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Auth;
 use DB;
+use Lang;
 use Carbon\Carbon;
 
 
@@ -81,6 +82,7 @@ class Product extends Model
     /**
      * Função que valida o código de produto lido (Retorna o array com as informações ou false caso não encontre o item)
      * Parâmetros: Barcode a ser procurado e o ID da empresa / filial logada
+     * Retorno: Código do erro, mensagem de erro e informações da etiqueta
      * @var array
      */
 
@@ -108,7 +110,7 @@ class Product extends Model
                                     ->select('labels.id as label_id', 'labels.product_code','products.description','labels.qty','labels.uom_code',
                                              'labels.prev_qty','labels.prev_uom_code','labels.batch','labels.batch_supplier',
                                              'labels.serial_number','labels.prod_date','labels.due_date','labels.origin',
-                                             'packings.conf_batch','packings.conf_batch_supplier','packings.conf_serial',
+                                             'packings.conf_batch','packings.conf_batch_supplier','packings.conf_serial','packings.create_label',
                                              'packings.conf_due_date','packings.conf_prod_date','labels.label_status_id as label_status',
                                              'products.group_code', 'products.product_type_code','packings.label_type_code', 'labels.due_date')
                                     ->get();   
@@ -131,7 +133,7 @@ class Product extends Model
                               ])
                               ->select( DB::raw("'' as label_id"), 'packings.product_code','products.description',
                                         DB::raw('1 as qty'),'packings.uom_code','packings.prev_qty','prevL.uom_code as prev_uom_code',
-                                        'packings.conf_batch','packings.conf_batch_supplier','packings.conf_serial',
+                                        'packings.conf_batch','packings.conf_batch_supplier','packings.conf_serial','packings.create_label',
                                         'packings.conf_due_date','packings.conf_prod_date',DB::raw("'' as batch"),DB::raw("'' as batch_supplier"),
                                         DB::raw("'' as serial_number"),DB::raw("'' as prod_date"), DB::raw("'' as due_date"),
                                         DB::raw("0 as label_status"),'products.group_code', 'products.product_type_code','packings.label_type_code')
@@ -150,7 +152,7 @@ class Product extends Model
                                   ])
                                   ->select( DB::raw("'' as label_id"), 'packings.product_code','products.description',
                                          DB::raw('1 as qty'),'packings.uom_code','packings.prev_qty','packings.uom_code as prev_uom_code',
-                                        'packings.conf_batch','packings.conf_batch_supplier','packings.conf_serial',
+                                        'packings.conf_batch','packings.conf_batch_supplier','packings.conf_serial','packings.create_label',
                                         'packings.conf_due_date','packings.conf_prod_date',DB::raw("'' as batch"),DB::raw("'' as batch_supplier"),
                                         DB::raw("'' as serial_number"),DB::raw("'' as prod_date"), DB::raw("'' as due_date"), 
                                         DB::raw("0 as label_status"),'products.group_code', 'products.product_type_code','packings.label_type_code')
@@ -158,14 +160,16 @@ class Product extends Model
                 if(count($infos) == 0){
                     //Não encontrou registros - Erro
                     $ret['erro'] = 1;
+                    $ret['msg_erro'] = Lang::get('validation.cb_error');
                     $infos[0] = '';
                 }
             }
         }else{
-            //Se achou a etiqueta, valida data de validade
+            //Se achou a etiqueta, verifica data de validade
             if(!empty($infos[0]->due_date)){
                 if(Carbon::now() > $infos[0]->due_date){
                     $ret['erro'] = 2;
+                    $ret['msg_erro'] = Lang::get('validation.dataval_error');
                 }
             }
         }

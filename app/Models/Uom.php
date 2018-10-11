@@ -22,7 +22,8 @@ class Uom extends Model
     public $fillable = [
         'code',
         'description',
-        'val_integer'
+        'val_integer',
+        'decimal_places'
     ];
 
     /**

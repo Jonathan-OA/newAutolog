@@ -189,8 +189,12 @@ function generateGraph(ctx, url) {
 
 
 //Atualiza o usuário logado de 1 em 1 minuto
+//Global = false para não chamar os eventos de loading (ajaxStart / ajaxStop)
 setInterval(function() {
-    $.ajax(APP_URL + "/users/updTime")
+    $.ajax({
+            url: APP_URL + "/users/updTime",
+            global: false
+        })
         .done(function() {
             //
         });

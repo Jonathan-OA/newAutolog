@@ -12,6 +12,12 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="panel-body">
+                                <!-- Modal de Carregamento -->
+                                <div class="modal fade" id="loadingModal" tabindex="-1" role="dialog"  aria-hidden="true">
+                                        <div class="modal-dialog" id="loading" role="document">
+                                                  <div class="loader"></div>
+                                        </div>
+                                </div>
                                 <!-- Campos para preenchimento -->
                                 <div class="form_fields">
                                     @include('adminlte-templates::common.errors')
@@ -45,7 +51,7 @@
                                     <!-- Tabela que lista as etiquetas lidas para esta transferência -->
                                     {!! Form::open(['route' => 'transfer.storeStockTransfer', 'id' => 'trfForm']) !!} 
                                     <div class="col-md-10 col-md-offset-1" style="margin-top: 3vh">
-                                        <table class="table table-bordered" id="transfer-table" cellspacing="0" width="100%">
+                                        <table class="table table-bordered table-din" id="transfer-table" cellspacing="0" width="100%">
                                                 <thead>
                                                     <th class="th_grid">@lang('models.pallet_id') </th>
                                                     <th class="th_grid">@lang('models.label_id') </th>
@@ -54,7 +60,7 @@
                                                     <th class="th_grid">@lang('models.qty') </th>
                                                     <th class="th_grid">@lang('models.action') </th>
                                                 </thead>
-                                                <tbody>
+                                                <tbody >
                                                 </tbody>
                                         </table>
                                     </div>
@@ -79,11 +85,24 @@
 @endsection
 @section('scripts')
 <script>
+
+    $(document).on({
+
+        ajaxStart: function (e) {                               
+            $('#loadingModal').modal('toggle');                                  
+        },
+        ajaxStop: function() {
+           $('#loadingModal').modal('toggle');                       
+        }
+
+    });
+
     $(function() {
-        $("#barcode_orig").bind('keypress change',function(e){
-        
+        //Campo PALETE/ETIQUETA origem
+        $("#barcode_orig").bind('change',function(e){
              //Se apertar enter ou alterar o campo entra na função
-            if(e.which == 13 || e.type == 'change') {
+            if(e.type == 'change' ) {
+                e.preventDefault();
                 var prefixos = "{{$prefixos}}";
                 var arrayPref = prefixos.split(',');               
                 //Valida palete ou etiqueta informado
@@ -95,28 +114,32 @@
                         //erro <> 5 = Palte não encontrado ou não possui saldo
                         if(data.erro != 5 && cbplt != 0){
                             //Erro
-                            if(data.erro == 5){
-                                $('#msg_excluir').html("<div class='alert alert-danger'>@lang('validation.plt_stock')</div>");
-                            }else{
-                                $('#msg_excluir').html("<div class='alert alert-danger'>@lang('validation.plt_invalid')</div>");
-                            }
+                            $('#msg_excluir').html("<div class='alert alert-danger'>"+data.msg_erro+"</div>");
+                            //Esconde campos de endereço e etiqueta para ler novamente e da msg de erro
                             $("#barcode_orig").addClass('input_error');
+                            $('#orig_location').addClass('hidden');
+                            $('#label_barcodeD').addClass('hidden');
+                            $("#pallet_id").val('');
                         }else{
-                                $('#msg_excluir').html("");
-                                $("#barcode_orig").removeClass('input_error');
-                                $("#barcode_orig").addClass('input_ok');
-                                $("#pallet_id").val(data.id);
-                                $('#orig_location').removeClass('hidden');
-                                $('#label_barcodeD').removeClass('hidden');
-                                $("#orig_location_code").val(data.location);
-                                $("#barcode").focus();
+                            $('#msg_excluir').html("");
+                            $("#barcode_orig").removeClass('input_error');
+                            $("#barcode_orig").addClass('input_ok');
+                            $("#pallet_id").val(data.id);
+                            $('#orig_location').removeClass('hidden');
+                            $('#label_barcodeD').removeClass('hidden');
+                            $("#orig_location_code").val(data.location);
+                            $("#barcode").focus();
+                            //Bloqueia o input de endereço caso seja palete
+                            $('#orig_location_code').attr('readonly', true)
+                            $("#pltbarcode").val(cbplt);
                         }
-                        $("#pltbarcode").val(cbplt);
+                        
                     })
                 }else{
                     //Não é palete, Procura Etiqueta
                     $.ajax("products/val/"+ cbplt)
                     .done(function(dataL) {
+                        //console.log(dataL);
                         if(dataL.erro == 0){
                             //Caso encontre o barcode, atualiza os inputs com os valores obtidos
                             //Limpa campo de msg, caso esteja preenchido
@@ -130,9 +153,12 @@
                                 $("#label_barcode").val(cbplt);
                             }
                             $('#orig_location').removeClass('hidden');
-                            
+                            $('#orig_location_code').removeAttr('readonly');
+                            $('#orig_location_code').val('');
+                            $('#label_barcodeD').addClass('hidden');
                         }else{
-                            $('#msg_excluir').html("<div class='alert alert-danger'>@lang('validation.cb_error')</div>");
+                            //Não encontrou o barcode ou etiqueta vencida
+                            $('#msg_excluir').html("<div class='alert alert-danger'>"+dataL.msg_erro+"</div>");
                         }
                     })
                 }
@@ -140,30 +166,39 @@
 
         });
 
-        $("#label_barcode").bind('keypress change',function(e){
+        //Campo ETIQUETA 
+        $("#label_barcode").bind('change',function(e){
             var pallet_id = $("#pallet_id").val();
+            var cbplt = $(this).val();
             //Se apertar enter ou alterar o campo entra na função
-            if(e.which == 13 || e.type == 'change') {
-                var cbplt = $(this).val();
-                //Não é palete, Procura Etiqueta
-                $.ajax("products/val/"+ cbplt)
-                .done(function(dataL) {
-                    if(dataL.erro == 0){
-                        //Caso encontre o barcode, atualiza os inputs com os valores obtidos
-                        //Limpa campo de msg, caso esteja preenchido
-                        $('#msg_excluir').html("");
-                        $("#prev_qty").val(dataL.infos.prev_qty);
-                        $("#product_code").val(dataL.infos.product_code);
-                        $('.alert').remove();
-                        $("#label_barcode").removeClass('input_error');
-                        $("#label_barcode").addClass('input_ok');
-                    }else{
-                        $("#label_barcode").removeClass('input_ok');
-                        $("#label_barcode").addClass('input_error');
-                        //Mostra msg de barcode invalido ou validade
-                        $('#msg_excluir').html("<div class='alert alert-danger'>@lang('validation.cb_error')</div>");
-                    }
-                })
+            if(e.type == 'change') {
+                if(cbplt.length > 0){
+                    //Se preencheu algo, busca etiqueta
+                    $.ajax("products/val/"+ cbplt)
+                    .done(function(dataL) {
+                        if(dataL.erro == 0){
+                            //Caso encontre o barcode, atualiza os inputs com os valores obtidos
+                            //Limpa campo de msg, caso esteja preenchido
+                            $('#msg_excluir').html("");
+                            $("#prev_qty").val(dataL.infos.prev_qty);
+                            $("#product_code").val(dataL.infos.product_code);
+                            $('.alert').remove();
+                            $("#label_barcode").removeClass('input_error');
+                            $("#label_barcode").addClass('input_ok');
+                        }else{
+                            $("#label_barcode").removeClass('input_ok');
+                            $("#label_barcode").addClass('input_error');
+                            //Mostra msg de barcode invalido ou validade
+                            $('#msg_excluir').html("<div class='alert alert-danger'>@lang('validation.cb_error')</div>");
+                        }
+                    })
+                }else{
+                    //Campo vazio, limpa erros
+                    $('#msg_excluir').html("");
+                    $('.alert').remove();
+                    $("#label_barcode").removeClass('input_error');
+                    $("#label_barcode").removeClass('input_ok');
+                }
             }
         })
 
@@ -192,15 +227,15 @@
                     $("#transfer-table")
                     .append("<tr id='"+item.id+"'><td>"+item.plt_barcode+"</td><td><input name='labels[]' type='text' value='"+item.label_barcode+"' readonly></td><td>"
                             +item.product_code+"</td><td>"+location+"</td><td><input name='qtys[]' type='number' 'step'='0.000001' value='"+item.prev_qty+"'>"+item.prev_uom_code+
-                            "</td><td><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='{{asset('/icons/remover.png')}}'></button></td></tr>")
+                            "</td><td align='center'><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='{{asset('/icons/remover.png')}}'></button></td></tr>")
                 });
             }); 
         }else{
             //Insere só o produto lido
             $("#transfer-table")
-                    .append("<tr><td>"+pallet+"</td><td>"+label+"</td><td>"
-                            +product+"</td><td>"+location+"</td><td>"+qtde+
-                            "</td><td><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='{{asset('/icons/remover.png')}}'></button></td></tr>")
+            .append("<tr><td>"+pallet+"</td><td>"+label+"</td><td>"
+                    +product+"</td><td>"+location+"</td><td>"+qtde+
+                    "</td><td><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='{{asset('/icons/remover.png')}}'></button></td></tr>")
         }
     }
 

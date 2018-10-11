@@ -133,13 +133,10 @@
                         
                     }else{
                         //Mostra msg de barcode invalido ou validade
-                        if(data.erro == 1)
-                            $('#msg_excluir').html("<div class='alert alert-danger'>@lang('validation.cb_error')</div>");
-                        else
-                            $('#msg_excluir').html("<div class='alert alert-danger'>@lang('validation.dataval_error')</div>");
-                            $("#barcode").val("");
-                            $("#location_code").val("");
-                            $('#hidden').addClass('hidden');
+                        $('#msg_excluir').html("<div class='alert alert-danger'>"+data.msg_erro+"</div>");
+                        $("#barcode").val("");
+                        $("#location_code").val("");
+                        $('#hidden').addClass('hidden');
                     }
                 })
 

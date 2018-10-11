@@ -59,6 +59,33 @@
     .nowp {
         white-space: nowrap;
     }
+    
+    .loader {
+        border: 16px solid #d0d0d0;
+        /* Light grey */
+        border-top: 16px solid #17263d;
+        /* Blue */
+        border-radius: 50%;
+        width: 100px;
+        height: 100px;
+        animation: spin 2s linear infinite;
+    }
+    
+    #loading {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center
+    }
+    
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
     /* --------------------------------------------*/
     /*              Header Layout                  */
     /* --------------------------------------------*/
@@ -352,6 +379,43 @@
         position: absolute;
         z-index: 2;
     }
+    /* -------------------------------------------------
+    /* TABELA DINAMICA (TRANSFERENCIA MANUAL, ETC...) */
+    
+    .table-din thead,
+    .table-din tbody,
+    .table-din tr,
+    .table-din td,
+    .table-din th {
+        display: block;
+    }
+    
+    .table-din tr:after {
+        content: ' ';
+        display: block;
+        visibility: hidden;
+        clear: both;
+    }
+    
+    .table-din tbody {
+        height: 30vh;
+        overflow-y: auto;
+    }
+    
+    .table-din tbody td,
+    .table-din thead th {
+        width: 16.66%;
+        float: left;
+    }
+    
+    .table-din input {
+        width: 80%
+    }
+    
+    .table-din .icon {
+        width: 17px !important;
+    }
+    /* ------------------------------------------------- */
     
     .dataTables_info {
         float: left !important;
