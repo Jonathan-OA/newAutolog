@@ -55,20 +55,48 @@
             },
             columns: [  { data: 'barcode' },
                         { data: 'product_code' },
-                        { data: 'qty' },
-                        { data: 'uom_code' },
                         { data: 'prev_qty' },
                         { data: 'prev_uom_code' },
                         { data: 'batch' },
                         { data: 'batch_supplier' },
                         { data: 'label_status_id' },
-
+                        { data: 'due_date', 
+                          className: "th_grid",
+                          render: function ( data, type, row ) {
+                                //Data de validade
+                                return moment(data).format("DD/MM/YYYY");
+                          } 
+                        },
                         { data: null,
                          className: "th_grid",
                          defaultContent: "<button id='edit' aria-label='@lang('buttons.edit')' data-microtip-position='left' role='tooltip' ><img class='icon' src='{{asset('/icons/editar.png') }}'></button><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='{{asset('/icons/remover.png') }}'></button>",
                          width: "90px" 
                         }],
       });
+      
+      //Filtros adicionais
+      //Apenas etiquetas vencidas
+      $('#labels-table_filter').append('<input type="checkbox" id="vencidas"> Etiquetas Vencidas');
+      $('#vencidas').on('change', function () {
+        table.draw();
+      });
+
+      //Extensão dos filtros no datatable
+      $.fn.dataTable.ext.search.push(
+        function(settings, data, dataIndex) {
+            var dueDate =data[7] || 0; // Data de Validade
+            var date = moment().format('DD-MM-YYYY'); //Data Atual
+            console.log(date+' -- '+dueDate);
+            var check = $('#vencidas').prop('checked');
+
+            if(!check || ( check && moment(dueDate).isSameOrAfter(date))){
+                return true;
+            }else{
+                return false;
+            }
+
+        }
+      )
 
       //Funções dos botões de editar e excluir
       $('#labels-table tbody').on( 'click', 'button', function () {

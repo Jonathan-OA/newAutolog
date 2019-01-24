@@ -46,6 +46,7 @@
                                     {{ Form::hidden('pallet_id', '', array('id' => 'pallet_id')) }}
                                     {{ Form::hidden('pltbarcode', '', array('id' => 'pltbarcode')) }}
                                     {{ Form::hidden('prev_qty', '', array('id' => 'prev_qty')) }}
+                                    {{ Form::hidden('prev_uom_code', '', array('id' => 'prev_uom_code')) }}
                                     {{ Form::hidden('product_code', '', array('id' => 'product_code')) }}
 
                                     <!-- Tabela que lista as etiquetas lidas para esta transferência -->
@@ -231,12 +232,15 @@
                 });
             }); 
         }else{
-            //Insere só o produto lido
+            //Insere só o produto lido caso ainda não exista
+            if($('input[type=text]').each(function(){
+                arrText.push($(this).val());
+            }))
             $("#transfer-table")
-            .append("<tr><td>"+pallet+"</td><td>"+label+"</td><td>"
-                    +product+"</td><td>"+location+"</td><td>"+qtde+
-                    "</td><td><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='{{asset('/icons/remover.png')}}'></button></td></tr>")
-        }
+            .append("<tr><td>"+pallet+"</td><td><input name='labels[]' type='text' value='"+label+"' readonly></td><td>"
+                            +product+"</td><td>"+location+"</td><td><input name='qtys[]' type='number' 'step'='0.000001' value='"+qtde+"'>"+item.prev_uom_code+
+                            "</td><td align='center'><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='{{asset('/icons/remover.png')}}'></button></td></tr>")
+            }
     }
 
     

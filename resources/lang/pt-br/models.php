@@ -289,6 +289,7 @@ return [
     'production' => 'Módulo de Produção',  
     'receipt' => 'Módulo de Recebimento',  
     'separation' => 'Módulo de Separação',  
+    'inventory' => 'Módulo de Inventário',  
     'transfer' => 'Módulo de Transferência',  
     'document_edit' => 'Documento: ',  
     'document_create' => 'Criação de Documento',  
@@ -301,7 +302,9 @@ return [
     'message' => 'Mensagem',
     'barcode_orig' => 'Palete / Etiqueta Origem',
     'barcode_dest' => 'Palete / Endereço Destino',
-    'label_barcode' => 'Etiqueta'
+    'label_barcode' => 'Etiqueta',
+    'stock' => 'Saldo',
+    'items_select' => 'Seleção de Itens'
     
 
 

@@ -78,9 +78,11 @@ class Document extends Model
                                  'supplier_code','courier_code','vehicle_id','driver_id','invoice','serial_number',
                                  'emission_date','start_date','end_date','wave','total_volumes','total_weight',
                                  'document_status_id','total_net_weigth','priority','comments','user_id',
-                                 'documents.created_at','documents.updated_at','moviment_code', 'document_status.description')
+                                 'documents.created_at','documents.updated_at','moviment_code', 'document_status.description',
+                                 'inventory_status.description as inv_description')
                         ->join('document_types', 'documents.document_type_code', '=', 'document_types.code')
                         ->join('document_status', 'document_status.id', '=', 'documents.document_status_id')
+                        ->leftJoin('inventory_status', 'inventory_status.id', '=', 'documents.inventory_status_id')
                        ->where([
                                  ['documents.company_id', Auth::user()->company_id],
                                  ['document_types.moviment_code', $moviment_code]                        

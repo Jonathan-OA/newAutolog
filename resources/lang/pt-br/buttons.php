@@ -14,6 +14,7 @@ return [
     */
 
     'add' => 'Adicionar',
+    'add_items' => 'Adicionar Itens',
     'remove' => 'Excluir',
     'edit' => 'Editar',
     'cancel' => 'Cancelar',

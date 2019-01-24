@@ -54,6 +54,7 @@
     .td_center {
         text-align: center;
         align-content: center;
+        vertical-align: middle;
     }
     
     .nowp {

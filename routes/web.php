@@ -40,8 +40,15 @@ Route::group(['middleware' => 'auth'], function() {
     Route::resource('transfer', 'Modules\TransferController'); //Ações de documentos de transferencia
     Route::get('stockTransfer', 'Modules\TransferController@stockTransfer'); //Tela de Transferência Manual
     Route::post('stockTransfer/store', 'Modules\TransferController@storeStockTransfer')->name('transfer.storeStockTransfer');; //Cria Doc. de Transferencia Manual
-    
-    
+    // ----------------------------------------------------------------------------------------------
+    // Modulo de Inventário
+    // ----------------------------------------------------------------------------------------------
+    Route::get('inventory/{document_id}/items', 'Modules\InventoryController@showItems'); //Mostra grid de itens
+    Route::get('inventory/{document_id}/selectItems', 'Modules\InventoryController@selectItems'); //Form de seleção de itens para o inventário
+    Route::get('inventory/{document_id}/items/{document_item_id}/edit', 'Modules\InventoryController@editItem'); //Form de edição de itens
+    Route::patch('inventory/updateItem/{document_item_id}', 'Modules\InventoryController@updateItem')->name('inventory.updateItem');; //Atualiza item
+    Route::post('inventory/storeItem', 'Modules\InventoryController@storeItem')->name('inventory.storeItem');; //Cria item
+    Route::resource('inventory', 'Modules\InventoryController'); //Ações de documentos de inventário
     // ----------------------------------------------------------------------------------------------
 
 

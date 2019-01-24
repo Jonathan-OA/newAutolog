@@ -202,7 +202,8 @@ class Stock extends Model
         $company_id = (trim($company_id == ''))?Auth::user()->company_id: $company_id;
 
         $GLOBALS['tipoEstq'] = $tipoEstq;
-        $GLOBALS['depositos'] = explode(",",$depositos);
+        //Transforma os depositos em array retirando os espaços em branco
+        $GLOBALS['depositos'] = explode(",",substr(str_replace(' ','',$depositos),0,-1));
         
         //Obtem a soma do endereço
         $saldos = DB::table('stocks')->select('stocks.product_code', 'stocks.label_id','stocks.pallet_id',
@@ -229,6 +230,62 @@ class Stock extends Model
                                     ->toArray();
 
                                     //FAZER FIFO (VALIDADE)
+        return $saldos;         
+    }
+
+    /**
+     * Função que retorna os saldos disponíveis (Para Inventário)
+     * Parâmetros: Deposito(s) e ID do Documento de Inventário
+     * @var array
+     */
+    public static function getStockInv($depositos, $document_id, $company_id = ""){
+
+        $company_id = (trim($company_id == ''))?Auth::user()->company_id: $company_id;
+        
+        //Transforma os depositos em array retirando os espaços em branco
+        $GLOBALS['depositos'] = explode(",",substr(str_replace(' ','',$depositos),0,-1));
+        $GLOBALS['document_id'] = $document_id;
+
+
+        //Obtem os endereços / produtos
+        $saldos = DB::table('stocks')->select('locations.deposit_code', 
+                                              'stocks.location_code',
+                                              'stocks.product_code',
+                                              DB::raw("SUM(stocks.prev_qty) as qde"),
+                                              'stocks.prev_uom_code',
+                                              DB::raw("COUNT(others.id) as count"))
+                                     ->join('locations', function ($join) {
+                                         //Considera apenas os depositos do filtro
+                                        $join->on('locations.code', '=', 'stocks.location_code')
+                                             ->whereColumn('locations.company_id','stocks.company_id')
+                                             ->whereIn('locations.deposit_code',$GLOBALS['depositos']);
+                                     })
+                                     ->leftJoin('inventories', function ($join) {
+                                         //Desconsidera itens já inseridos no documento
+                                        $join->on('locations.code', '=', 'inventories.location_code')
+                                             ->whereColumn('stocks.company_id','inventories.company_id')
+                                             ->whereColumn('stocks.product_code','inventories.product_code')
+                                             ->where('inventories.document_id', $GLOBALS['document_id']);
+                                     })
+                                     ->leftJoin('stocks as others', function ($join) {
+                                        //Conta se o endereço/produto possui reserva / empenho
+                                       $join->on('stocks.location_code', '=', 'others.location_code')
+                                            ->whereColumn('stocks.company_id','others.company_id')
+                                            ->whereColumn('stocks.product_code','others.product_code')
+                                            ->where('others.finality_code','<>', 'SALDO');
+                                    })
+                                     ->where([
+                                        ['stocks.company_id', Auth::user()->company_id],
+                                        ['stocks.finality_code', 'SALDO'],
+                                     ])
+                                     ->groupBy('locations.deposit_code', 
+                                               'stocks.location_code',
+                                               'stocks.product_code',
+                                               'stocks.prev_uom_code')
+                                     ->orderBy('locations.deposit_code')
+                                     ->get()
+                                     ->toArray();
+
         return $saldos;         
     }
 

@@ -5,13 +5,12 @@
             <thead>
                 <th class="th_grid">@lang('models.barcode') </th>
                 <th class="th_grid">@lang('models.product_code') </th>
-                <th class="th_grid">@lang('models.qty') </th>
-                <th class="th_grid">@lang('models.uom_code') </th>
                 <th class="th_grid">@lang('models.prev_qty') </th>
                 <th class="th_grid">@lang('models.prev_uom_code') </th>
                 <th class="th_grid">@lang('models.batch') </th>
                 <th class="th_grid">@lang('models.batch_supplier') </th>
                 <th class="th_grid">@lang('models.label_status_id') </th>
+                <th class="th_grid">@lang('models.due_date') </th>
                 <th class="th_grid">@lang('models.action')</th>
             </thead>
             <tbody>
@@ -19,13 +18,12 @@
                 <tr>
                     <td>{!! $label->barcode !!}</td>
                     <td>{!! $label->product_code !!}</td>
-                    <td>{!! $label->qty !!}</td>
-                    <td>{!! $label->uom_code !!}</td>
                     <td>{!! $label->prev_qty !!}</td>
                     <td>{!! $label->prev_uom_code !!}</td>
                     <td>{!! $label->batch !!}</td>
                     <td>{!! $label->batch_supplier !!}</td>
                     <td>{!! $label->label_status_id !!}</td>
+                    <td>{!! $label->due_date !!}</td>
                 </tr>
             @endforeach
             </tbody>
