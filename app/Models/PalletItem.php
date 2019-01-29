@@ -30,8 +30,8 @@ class PalletItem extends Model
         'product_code',
         'qty',
         'uom_code',
-        'prev_qty',
-        'prev_uom_code',
+        'prim_qty',
+        'prim_uom_code',
         'label_id',
         'activity_id',
         'pallet_status_id',
@@ -47,7 +47,7 @@ class PalletItem extends Model
         'company_id' => 'integer',
         'product_code' => 'string',
         'uom_code' => 'string',
-        'prev_uom_code' => 'string'
+        'prim_uom_code' => 'string'
     ];
 
     /**
@@ -64,8 +64,8 @@ class PalletItem extends Model
     public static function getItems($pallet_id){
          
         return PalletItem::select('pallets.barcode as plt_barcode', 'labels.barcode as label_barcode',
-                                  'pallet_items.product_code', 'pallet_items.prev_qty',
-                                  'pallet_items.prev_uom_code', 'pallet_items.id')
+                                  'pallet_items.product_code', 'pallet_items.prim_qty',
+                                  'pallet_items.prim_uom_code', 'pallet_items.id')
                           ->join('pallets','pallets.id','pallet_items.pallet_id')
                           ->leftJoin('labels','labels.id','pallet_items.label_id')
                           ->where('pallet_items.company_id', Auth::user()->company_id)
@@ -104,7 +104,7 @@ class PalletItem extends Model
         $company_id = (trim($company_id == ''))?Auth::user()->company_id: $company_id;
         return PalletItem::where([ 
                                  ['company_id', $company_id],
-                                 ['prev_qty', '<=', 0],
+                                 ['prim_qty', '<=', 0],
                                  ['pallet_id', $pallet_id]
                          ])
                          ->delete();

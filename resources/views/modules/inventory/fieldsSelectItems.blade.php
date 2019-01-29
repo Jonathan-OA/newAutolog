@@ -8,7 +8,8 @@
                 <div class="input-group mb-3">
                     <div class="input-group-prepend" style="float: left; margin-right: 2vw">
                         <div class="input-group-text">
-                        <input type="checkbox" id ="hd_{{$stock->deposit_code}}" name="{{$stock->deposit_code}}" >
+                        <!-- Checkbox que armazenará todos os depositos selecionados -->
+                        <input type="checkbox" id ="H_{{$stock->deposit_code}}" name="deposits[]" value="{{$stock->deposit_code}}">
                         </div>
                     </div>
                     <span style="vertical-align: middle">
@@ -31,19 +32,24 @@
         @endif
         <tr>
             <td class="td_center">
-                <input type="checkbox" id ="dd_{{$stock->product_code}}" name="{{$stock->deposit_code}}" {{ (($stock->count > 0) ? 'disabled' : '') }} >
+                <input type="checkbox" id="V{{$stock->deposit_code}}" name="items[]" value="{{$stock->location_code}}+{{$stock->product_code}}" {{ (($stock->count > 0 || $stock->exs > 0) ? 'disabled' : '') }} >
             </td>
             <td>{!! $stock->location_code !!}</td>
             <td>{!! $stock->product_code !!}</td>
-            <td class="td_center">{!! (float)$stock->qde !!} {!! $stock->prev_uom_code !!}</td>
+            <td class="td_center">{!! (float)$stock->qde !!} {!! $stock->prim_uom_code !!}</td>
             <td class="td_center">
-            @if($stock->count > 0)
+            @if($stock->count > 0 || $stock->exs > 0)
                 <!-- Valida se produto / endereço pode ser incluído no inventario -->
-                <img class='icon' src='{{asset('/icons/warning.png') }}'>
-                Item / Endereço possui Reserva ou Empenho
-                
-            @else
-                Ok!
+               
+                @if($stock->exs > 0)
+                     <!-- Item já inserido -->
+                     <img class='icon' src='{{asset('/icons/checked.png') }}'>
+                @else
+                    <!-- Item com reserva / empenho -->
+                    <img class='icon' src='{{asset('/icons/warning.png') }}'>
+                    @lang('validation.inv_stock')
+                @endif
+
             @endif
             </td>
         </tr>
@@ -52,7 +58,7 @@
 </table>
 </div>
   
-    <!-- Submit Field -->
-    {!! Form::submit(Lang::get('buttons.save'), ['class' => 'btn btn-primary']) !!}
-    <a href="{!! route('inventory.index') !!}" class="btn btn-default">@lang('buttons.cancel')</a>
+<!-- Submit Field -->
+{!! Form::submit(Lang::get('buttons.save'), ['name' => 'teste', 'class' => 'btn btn-primary']) !!}
+<a href="{!! route('inventory.index') !!}" class="btn btn-default">@lang('buttons.cancel')</a>
     

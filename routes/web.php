@@ -45,13 +45,12 @@ Route::group(['middleware' => 'auth'], function() {
     // ----------------------------------------------------------------------------------------------
     Route::get('inventory/{document_id}/items', 'Modules\InventoryController@showItems'); //Mostra grid de itens
     Route::get('inventory/{document_id}/selectItems', 'Modules\InventoryController@selectItems'); //Form de seleção de itens para o inventário
+    Route::post('inventory/{document_id}/selectItems', 'Modules\InventoryController@selectItems'); //Form de seleção de itens para o inventário
     Route::get('inventory/{document_id}/items/{document_item_id}/edit', 'Modules\InventoryController@editItem'); //Form de edição de itens
     Route::patch('inventory/updateItem/{document_item_id}', 'Modules\InventoryController@updateItem')->name('inventory.updateItem');; //Atualiza item
-    Route::post('inventory/storeItem', 'Modules\InventoryController@storeItem')->name('inventory.storeItem');; //Cria item
+    Route::post('inventory/{document_id}/storeItem', 'Modules\InventoryController@storeItem')->name('inventory.storeItem');; //Cria item
     Route::resource('inventory', 'Modules\InventoryController'); //Ações de documentos de inventário
     // ----------------------------------------------------------------------------------------------
-
-
     //Rota que libera um documento
     Route::get('/document/liberate/{id}/{module?}', 'DocumentController@liberateDoc');
     //Rota que retorna um documento
@@ -369,3 +368,7 @@ Route::group(['middleware' => 'auth'], function() {
 
 
 
+
+
+Route::get('inventoryItems/datatable', 'InventoryItemController@getData');
+Route::resource('inventoryItems', 'InventoryItemController');

@@ -31,8 +31,8 @@ class Stock extends Model
         'location_code',
         'qty',
         'uom_code',
-        'prev_qty',
-        'prev_uom_code',
+        'prim_qty',
+        'prim_uom_code',
         'pallet_id',
         'document_id',
         'document_item_id',
@@ -53,7 +53,7 @@ class Stock extends Model
         'product_code' => 'string',
         'location_code' => 'string',
         'uom_code' => 'string',
-        'prev_uom_code' => 'string',
+        'prim_uom_code' => 'string',
         'finality_code' => 'string',
         'user_id' => 'integer',
         'operation_code' => 'string'
@@ -93,7 +93,7 @@ class Stock extends Model
         //Caso seja reserva, empenho ou em inventário, coloca a quantidade negativa
         if($finalidade <> 'SALDO' && $finalidade <> 'RESSUP'){
             $input['qty'] *= -1;
-            $input['prev_qty'] *= -1;
+            $input['prim_qty'] *= -1;
         }
 
         //Valida se existe a linha para decidir se faz insert ou update
@@ -121,7 +121,7 @@ class Stock extends Model
         }else{
             //Existe, atualiza.
             $upStock = Stock::find($valExist->id);
-            $upStock->prev_qty = $upStock->prev_qty + $input['prev_qty'];
+            $upStock->prim_qty = $upStock->prim_qty + $input['prim_qty'];
             //-----------------------------------------------------------------------------------------
             //Validações para quantidade e quantidade primária ficarem corretas
             //Só mexe na quantidade principal caso val_integer seja ativo (só aceita números inteiros)
@@ -130,20 +130,20 @@ class Stock extends Model
                 if($levels[$upStock->uom_code]['level'] < $levels[$input['uom_code']]['level']){
                     //Nível de embalagem que já existe na saldo é menor que o novo (Ex: UN - CX)
                     //Soma a quantidade anterior do nível maior
-                    $upStock->qty += $input['prev_qty'];
+                    $upStock->qty += $input['prim_qty'];
                 }else{
                     //Nível de embalagem que já existe na saldo é maior que o novo (Ex: CX - UN)
-                    //Só incrementa caso a quantidade atual + nova ultrapasse prev_qty
-                    $prevQtyLevel = $levels[$upStock->uom_code]['prev_qty'];
-                    $upStock->qty  = ceil($upStock->prev_qty/$prevQtyLevel);
+                    //Só incrementa caso a quantidade atual + nova ultrapasse prim_qty
+                    $prevQtyLevel = $levels[$upStock->uom_code]['prim_qty'];
+                    $upStock->qty  = ceil($upStock->prim_qty/$prevQtyLevel);
                 }
             }else if($levels[$input['uom_code']]['int'] == 1){
                 //Mesma unidade e só aceita números inteiros, só incrementa
                 $upStock->qty = $upStock->qty + $input['qty'];
                 //Se nível principal > anterior, ajusta quantidade
-                $prevQtyLevel = $levels[$upStock->uom_code]['prev_qty'];
-                if($levels[$input['uom_code']]['level'] > $levels[$input['prev_uom_code']]['level']){
-                    $upStock->qty = ceil($upStock->prev_qty/$prevQtyLevel);
+                $prevQtyLevel = $levels[$upStock->uom_code]['prim_qty'];
+                if($levels[$input['uom_code']]['level'] > $levels[$input['prim_uom_code']]['level']){
+                    $upStock->qty = ceil($upStock->prim_qty/$prevQtyLevel);
                 }
                 
             }
@@ -173,22 +173,40 @@ class Stock extends Model
      * Parâmetros: Endereço e Produto
      * @var array
      */
-    public static function getStock($location_code, $product_code = "", $company_id = ""){
+    public static function getStock($location_code, $product_code = "", $type=1, $company_id = ""){
 
         $company_id = (trim($company_id == ''))?Auth::user()->company_id: $company_id;
         $GLOBALS['produto'] = $product_code;
-        //Obtem a soma do endereço
-        $saldo = Stock::where([
-                                ['company_id', $company_id],
-                                ['location_code',$location_code]
-                       ])
-                       ->where(function ($query) {
-                           if(trim($GLOBALS['produto']) <> ''){
-                                $query->where('product_code',$GLOBALS['produto']);
-                           }
-                       })
-                      ->sum('prev_qty');
+
+        //Se $type == 1, retorna a somatória total. Se == 2, retorna as linhas detalhadas referentes ao item
+        if($type == 1){
+            //Obtem a soma do endereço
+            $saldo = Stock::where([
+                                    ['company_id', $company_id],
+                                    ['location_code',$location_code]
+                        ])
+                        ->where(function ($query) {
+                            if(trim($GLOBALS['produto']) <> ''){
+                                    $query->where('product_code',$GLOBALS['produto']);
+                            }
+                        })
+                        ->sum('prim_qty');
+        }else{
+            //Pega todas as infos
+            $saldo = Stock::where([
+                                    ['company_id', $company_id],
+                                    ['location_code',$location_code]
+                                ])
+                                ->where(function ($query) {
+                                    if(trim($GLOBALS['produto']) <> ''){
+                                            $query->where('product_code',$GLOBALS['produto']);
+                                    }
+                                })
+                                ->get()
+                                ->toArray();
+        }
         return $saldo;         
+
 
     }
 
@@ -207,7 +225,7 @@ class Stock extends Model
         
         //Obtem a soma do endereço
         $saldos = DB::table('stocks')->select('stocks.product_code', 'stocks.label_id','stocks.pallet_id',
-                                              'stocks.location_code', DB::raw("SUM(prev_qty) as qty"),
+                                              'stocks.location_code', DB::raw("SUM(prim_qty) as qty"),
                                               'stocks.uom_code')
                                      ->join('locations', function ($join) {
                                         $join->on('locations.code', '=', 'stocks.location_code')
@@ -251,21 +269,22 @@ class Stock extends Model
         $saldos = DB::table('stocks')->select('locations.deposit_code', 
                                               'stocks.location_code',
                                               'stocks.product_code',
-                                              DB::raw("SUM(stocks.prev_qty) as qde"),
-                                              'stocks.prev_uom_code',
-                                              DB::raw("COUNT(others.id) as count"))
+                                              DB::raw("SUM(stocks.prim_qty) as qde"),
+                                              'stocks.prim_uom_code',
+                                              DB::raw("COUNT(others.id) as count"),
+                                              DB::raw("COUNT(inventory_items.id) as exs"))
                                      ->join('locations', function ($join) {
                                          //Considera apenas os depositos do filtro
                                         $join->on('locations.code', '=', 'stocks.location_code')
                                              ->whereColumn('locations.company_id','stocks.company_id')
                                              ->whereIn('locations.deposit_code',$GLOBALS['depositos']);
                                      })
-                                     ->leftJoin('inventories', function ($join) {
+                                     ->leftJoin('inventory_items', function ($join) {
                                          //Desconsidera itens já inseridos no documento
-                                        $join->on('locations.code', '=', 'inventories.location_code')
-                                             ->whereColumn('stocks.company_id','inventories.company_id')
-                                             ->whereColumn('stocks.product_code','inventories.product_code')
-                                             ->where('inventories.document_id', $GLOBALS['document_id']);
+                                        $join->on('stocks.location_code', '=', 'inventory_items.location_code')
+                                             ->whereColumn('stocks.company_id','inventory_items.company_id')
+                                             ->whereColumn('stocks.product_code','inventory_items.product_code')
+                                             ->where('inventory_items.document_id', $GLOBALS['document_id']);
                                      })
                                      ->leftJoin('stocks as others', function ($join) {
                                         //Conta se o endereço/produto possui reserva / empenho
@@ -276,12 +295,12 @@ class Stock extends Model
                                     })
                                      ->where([
                                         ['stocks.company_id', Auth::user()->company_id],
-                                        ['stocks.finality_code', 'SALDO'],
+                                        ['stocks.finality_code', 'SALDO']
                                      ])
                                      ->groupBy('locations.deposit_code', 
                                                'stocks.location_code',
                                                'stocks.product_code',
-                                               'stocks.prev_uom_code')
+                                               'stocks.prim_uom_code')
                                      ->orderBy('locations.deposit_code')
                                      ->get()
                                      ->toArray();
@@ -332,7 +351,7 @@ class Stock extends Model
         $company_id = (trim($company_id == ''))?Auth::user()->company_id: $company_id;
         return Stock::where([ 
                                  ['company_id', $company_id],
-                                 ['prev_qty', '<=', 0],
+                                 ['prim_qty', '<=', 0],
                                  ['product_code', $product_code],
                                  ['location_code', $location_code],
                                  ['finality_code', 'SALDO']

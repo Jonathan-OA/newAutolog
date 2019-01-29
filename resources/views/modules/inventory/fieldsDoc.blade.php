@@ -41,9 +41,20 @@
     {!! Form::label('comments', Lang::get('models.comments').':') !!}
     {!! Form::text('comments', null, ['class' => 'form-control']) !!}
 
-    <!-- Deposits Field -->
-    {!! Form::label('deposits', Lang::get('models.deposits').':') !!}
-    {!! Form::text('deposits', null, ['class' => 'form-control','id' => 'autocomplete1', 'table' => 'deposits', 'multiple']) !!}
+    <hr>
+    <div class="panel-heading" >
+        Parâmetros
+    </div>
+    <hr>
+    {!! Form::label('comments', 'Contagens:') !!}
+    {{ Form::radio('result', 'buy' , false) }} 1
+    {{ Form::radio('result', 'buy' , true) }} 2
+    {{ Form::radio('result', 'buy' , false) }} 3 
+    {{ Form::radio('result', 'sell' , false) }} 4
+<br>
+    {!! Form::label('comments', 'Valida Saldo:') !!}
+    {{ Form::radio('saldo', 'buy' , true) }} Sim
+    {{ Form::radio('saldo', 'buy' , true) }} Não
 
 </div>
 

@@ -21,20 +21,20 @@
                             <div id="msg_excluir"></div>
                             <div class="panel-body">
                                 <div class="row">
-                                    {!! Form::open(['route' => 'inventory.index']) !!}
+                                    {!! Form::open(['url' => 'inventory/'.$document->id.'/selectItems']) !!}
                                     <div class="col-md-10">
                                         <!-- Deposits Field -->
                                         {!! Form::label('deposits', Lang::get('models.deposits').':') !!}
                                         {!! Form::text('deposits', null, ['class' => 'form-control','id' => 'autocomplete1', 'table' => 'deposits', 'multiple']) !!}
                                     </div>
                                     <div class="col-md-2" style="padding-top:25px">
-                                        <a href="{!! route('inventory.index') !!}" class="btn btn-primary">@lang('buttons.filter')</a>
+                                        {!! Form::submit(Lang::get('buttons.filter'), ['class' => 'btn btn-primary']) !!}
                                     </div>
                                     {!! Form::close() !!}
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12">
-                                        {!! Form::open(['route' => 'inventory.storeItem']) !!}
+                                        {!! Form::open(['url' => 'inventory/'.$document->id.'/storeItem']) !!}
                                             <div class="form-group" style="overflow-y: auto">
                                                  @include('modules.inventory.fieldsSelectItems')
                                             </div>
@@ -54,10 +54,10 @@
     var table;
     $(function() {
         //Função para selecionar todos os endereços do depósito
-        $("input[id^='hd_']").change(function(){
+        $("input[id^='H_']").change(function(){
             //Pega nome do depósito clicado (desconsiderando os desabilitados por conter reserva)
-            var deposit = $(this).attr("name");
-            var locations = $("input[name='"+deposit+"']:enabled");
+            var deposit = $(this).attr("value");
+            var locations = $("input[id^='V"+deposit+"']:enabled");
             if($(this).prop('checked')){
                 locations.prop('checked', true);
             }else{

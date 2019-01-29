@@ -103,6 +103,8 @@ return [
     'plt_dataval'               => 'Palete possui etiquetas vencidas! Não é possível transferir.',
     'document_number'               => 'Já existe um documento com o número informado.',
     'support_success'               => 'Mensagem enviada! Em breve nossa equipe lhe responderá. ',
+    'inv_stock'               => 'Item / Endereço possui Reserva ou Empenho. ',
+    'inv_exists'               => 'Item / Endereço já inserido no Documento. ',
 
     /*
     |--------------------------------------------------------------------------

@@ -184,14 +184,20 @@ class InventoryController extends AppBaseController
      * @return Response
      */
 
-    public function selectItems($document_id)
+    public function selectItems($document_id, Request $request)
     {
+        if ($request->isMethod('POST')) {
+            $input = $request->all(); 
+        }else{
+            $input['deposits'] = 'DEP01,DEP02,';
+        }
+        
         //Valida se usuário possui permissão para acessar esta opção
         if(App\Models\User::getPermission('documents_inv_item_add',Auth::user()->user_type_code)){
             $document = $this->documentRepository->findWithoutFail($document_id);
 
             //Pega todos os saldos para montar a tela de itens
-            $stocks = App\Models\Stock::getStockInv('DEP01,DEP02,', $document->id);
+            $stocks = App\Models\Stock::getStockInv($input['deposits'], $document->id);
            
             return view('modules.inventory.selectItems')->with('document',$document)
                                                         ->with('stocks', $stocks)
@@ -208,18 +214,38 @@ class InventoryController extends AppBaseController
     /**
      * Grava o novo item de um documento de inventário
      *
-     * @param CreateDocumentItemRequest $request
+     * @param Document $document_id
      *
      * @return Response
      */
-    public function storeItem(CreateDocumentItemRequest $request)
+    public function storeItem($document_id, Request $request)
     {
-        $input = $request->all();       
+        $input = $request->all(); 
+        
+        //Loop no array detalhado de cada deposito para pegar produtos e endereços
+        foreach($input['items'] as $detailItem){
+            //Quebra as informações pelo caractere '+', que separa o endereço do produto
+            $detail = explode('+',$detailItem);
+            //Pega saldos do produto + endereço
+            $stocks = App\Models\Stock::getStock($detail[0], $detail[1], 2);
+            //Loop nos saldos
+            foreach($stocks as $stock){
+                //Insere o item na tabela de itens de inventário
+                $invItem = new App\Models\InventoryItem();
+                $invItem->company_id = Auth::user()->company_id;
+                $invItem->document_id = $document_id;
+                $invItem->location_code = $stock['location_code'];
+                $invItem->label_id = $stock['label_id'];
+                $invItem->product_code = $stock['product_code'];
+                $invItem->pallet_id = $stock['pallet_id'];
+                $invItem->qty_wms = $stock['prim_qty'];
+                $invItem->inventory_status_id = 0;
+                $invItem->save();
 
-        $documentItem = $this->documentItemRepository->create($input);
-        Flash::success(Lang::get('validation.save_success'));
+            }
+        }
 
-        return redirect(url('inventory/'.$input['document_id'].'/items'));
+        return redirect(url('inventory/'.$document_id.'/selectItems'));
 
     }
 
