@@ -44,8 +44,7 @@ Route::group(['middleware' => 'auth'], function() {
     // Modulo de Inventário
     // ----------------------------------------------------------------------------------------------
     Route::get('inventory/{document_id}/items', 'Modules\InventoryController@showItems'); //Mostra grid de itens
-    Route::get('inventory/{document_id}/selectItems', 'Modules\InventoryController@selectItems'); //Form de seleção de itens para o inventário
-    Route::post('inventory/{document_id}/selectItems', 'Modules\InventoryController@selectItems'); //Form de seleção de itens para o inventário
+    Route::match(['GET', 'POST'],'inventory/{document_id}/selectItems', 'Modules\InventoryController@selectItems'); //Form de seleção de itens para o inventário
     Route::get('inventory/{document_id}/items/{document_item_id}/edit', 'Modules\InventoryController@editItem'); //Form de edição de itens
     Route::patch('inventory/updateItem/{document_item_id}', 'Modules\InventoryController@updateItem')->name('inventory.updateItem');; //Atualiza item
     Route::post('inventory/{document_id}/storeItem', 'Modules\InventoryController@storeItem')->name('inventory.storeItem');; //Cria item
@@ -65,6 +64,10 @@ Route::group(['middleware' => 'auth'], function() {
     });
     Route::get('/api/documentItems/{doc_id}/{statusDsc?}', function($document_id, $stsDsc = '') {
         return App\Models\DocumentItem::getItens($document_id, $stsDsc);
+    });
+    
+    Route::get('/api/inventoryItems/{doc_id}/{statusDsc?}', function($document_id, $stsDsc = '') {
+        return App\Models\InventoryItem::getItens($document_id, $stsDsc);
     });
     Route::get('/api/itemsProd/{document}', 'Modules\ProductionController@getItems');
     Route::post('/api/grid/', 'Modules\Geral\GridController@setColumns');
@@ -363,12 +366,17 @@ Route::group(['middleware' => 'auth'], function() {
 
 
 
-
-
-
-
-
-
-
 Route::get('inventoryItems/datatable', 'InventoryItemController@getData');
 Route::resource('inventoryItems', 'InventoryItemController');
+
+
+Route::get('activityStatus/datatable', 'ActivityStatusController@getData');
+Route::resource('activityStatus', 'ActivityStatusController');
+
+
+Route::get('inventoryStatus/datatable', 'InventoryStatusController@getData');
+Route::resource('inventoryStatus', 'InventoryStatusController');
+
+
+Route::get('liberationStatus/datatable', 'LiberationStatusController@getData');
+Route::resource('liberationStatus', 'LiberationStatusController');

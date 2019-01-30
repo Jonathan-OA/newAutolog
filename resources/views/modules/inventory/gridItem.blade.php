@@ -22,7 +22,7 @@
                             @include('flash::message')
                             <div class="row buttons_grid">
                                     <div class="icon_grid" aria-label="@lang('buttons.add')" data-microtip-position="bottom" role="tooltip">
-                                        <a href="{!! url('inventory/'.$document->id.'/items/create') !!}">
+                                        <a href="{!! url('inventory/'.$document->id.'/selectItems') !!}">
                                             <img class='icon' src='{{asset('/icons/add.png') }}'>
                                         </a>
                                     </div>

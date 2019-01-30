@@ -287,7 +287,7 @@ class Stock extends Model
                                              ->where('inventory_items.document_id', $GLOBALS['document_id']);
                                      })
                                      ->leftJoin('stocks as others', function ($join) {
-                                        //Conta se o endereço/produto possui reserva / empenho
+                                        //Conta se o endereço/produto possui reserva / empenho / inventário
                                        $join->on('stocks.location_code', '=', 'others.location_code')
                                             ->whereColumn('stocks.company_id','others.company_id')
                                             ->whereColumn('stocks.product_code','others.product_code')

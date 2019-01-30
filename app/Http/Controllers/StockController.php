@@ -74,7 +74,7 @@ class StockController extends AppBaseController
             $input = $request->all();
 
             //Valida endereço
-            $retEnd = App\Models\Location::valLocation($input['location_code'], $input['product_code'], $input['prev_qty']);
+            $retEnd = App\Models\Location::valLocation($input['location_code'], $input['product_code'], $input['prim_qty']);
             if($retEnd == 0){
                 //Sem erros ao validar o endereço
                 //Cria o palete caso não exista
@@ -101,10 +101,10 @@ class StockController extends AppBaseController
                $task = App\Models\Task::create('664',$input['location_code'],$input['location_code']);
                $task->end();
                //Cria atividade
-               $atv = App\Models\Activity::create($task->id,$input['label_id'],$input['pallet_id'],$input['prev_qty'],'Entrada de Saldo');
+               $atv = App\Models\Activity::create($task->id,$input['label_id'],$input['pallet_id'],$input['prim_qty'],'Entrada de Saldo');
 
                 //Grava log
-               $descricao = 'Ent. Manual -  End:'.$input['location_code'].' Umv: '.$input['label_id'].' - Prd: '.$input['product_code'].' Qde: '.$input['qty'].'('. $input['prev_qty'].')';
+               $descricao = 'Ent. Manual -  End:'.$input['location_code'].' Umv: '.$input['label_id'].' - Prd: '.$input['product_code'].' Qde: '.$input['qty'].'('. $input['prim_qty'].')';
                $log = App\Models\Log::wlog('stocks_add', $descricao);
    
                Flash::success(Lang::get('validation.save_success'));
@@ -197,7 +197,7 @@ class StockController extends AppBaseController
     public function update($id, UpdateStockRequest $request)
     {
         $stock = $this->stockRepository->findWithoutFail($id);
-        $qdeOrg = ($stock->prev_qty*1);
+        $qdeOrg = ($stock->prim_qty*1);
         if (empty($stock)) {
             Flash::error(Lang::get('validation.not_found'));
 
@@ -206,13 +206,13 @@ class StockController extends AppBaseController
 
         //Grava log
         $requestF = $request->all();
-        $descricao = 'Alterou Saldo ID: '.$id.' - End:'.$requestF['location_code'].' Umv: '.$requestF['label_id'].' - Prd: '.$requestF['product_code'].' Qde: '.$requestF['prev_qty'].'(Ant:'. $qdeOrg.')';
+        $descricao = 'Alterou Saldo ID: '.$id.' - End:'.$requestF['location_code'].' Umv: '.$requestF['label_id'].' - Prd: '.$requestF['product_code'].' Qde: '.$requestF['prim_qty'].'(Ant:'. $qdeOrg.')';
         $log = App\Models\Log::wlog('stocks_edit', $descricao);
 
         //Se tem palete, atualiza na pallet_items
         if(!empty($stock->pallet_id) && $stock->pallet_id>0){
             //Diminui da quantidade original para retirar o valor correto
-            $stock->prev_qty = $requestF['prev_qty'] - $qdeOrg;
+            $stock->prim_qty = $requestF['prim_qty'] - $qdeOrg;
             $resPlt = App\Models\Pallet::updPallet($stock->toArray());
         }
 
@@ -245,7 +245,7 @@ class StockController extends AppBaseController
 
             //Se tem palete, apaga da pallet_items
             if(!empty($stock->pallet_id) && $stock->pallet_id>0){
-                $stock->prev_qty = $stock->prev_qty * -1;
+                $stock->prim_qty = $stock->prim_qty * -1;
                 $resPlt = App\Models\Pallet::updPallet($stock->toArray());
             }
 

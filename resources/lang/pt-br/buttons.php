@@ -34,6 +34,7 @@ return [
     'permissions' => 'Permissões',
     'activities' => 'Atividades',
     'stock_transfer' => 'Transferência Manual',
+    'select_items' => 'Selecionar Itens',
     
 
 ];

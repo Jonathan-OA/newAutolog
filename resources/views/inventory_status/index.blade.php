@@ -6,7 +6,7 @@
             <div class="panel panel-default" >
                 <div class="panel-heading">
                    <!-- Texto baseado no arquivo de linguagem -->
-                   @lang('models.labels') 
+                   @lang('models.inventory_status') 
                 </div>
                 <div class="panel panel-default">
                     <div class="row">
@@ -15,10 +15,10 @@
                             @include('flash::message')
                             <div id="msg_excluir"></div>
                             <div class="row buttons_grid">
-                                <a class="btn btn-success"  href="{!! route('labels.create') !!}">@lang('buttons.add')</a>
+                                <a class="btn btn-success"  href="{!! route('inventoryStatus.create') !!}">@lang('buttons.add')</a>
                             </div>
                             <div class="panel-body">
-                                @include('labels.table')
+                                @include('inventory_status.table')
                             </div>
                         </div>
                     </div>
@@ -33,10 +33,10 @@
     $(function() {
         
         //Parâmetros para criação da datatable
-        table = $("#labels-table").DataTable({
+        table = $("#inventoryStatus-table").DataTable({
             scrollX: true,
             scrollY: "47vh",
-            ajax: 'labels/datatable',
+            ajax: 'inventoryStatus/datatable',
             autoWidth: true,
             fixedColumns:   {
                 leftColumns: 0,
@@ -53,65 +53,29 @@
                     sPrevious: "@lang('models.previous')",
                 }
             },
-            columns: [  { data: 'barcode' },
-                        { data: 'product_code' },
-                        { data: 'prim_qty' },
-                        { data: 'prim_uom_code' },
-                        { data: 'batch' },
-                        { data: 'batch_supplier' },
-                        { data: 'label_status_id' },
-                        { data: 'due_date', 
-                          className: "th_grid",
-                          render: function ( data, type, row ) {
-                                //Data de validade
-                                return moment(data).format("DD/MM/YYYY");
-                          } 
-                        },
-                        { data: null,
+            columns: [ { data: 'description' },
+               
+                       { data: null,
                          className: "th_grid",
                          defaultContent: "<button id='edit' aria-label='@lang('buttons.edit')' data-microtip-position='left' role='tooltip' ><img class='icon' src='{{asset('/icons/editar.png') }}'></button><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='{{asset('/icons/remover.png') }}'></button>",
                          width: "90px" 
                         }],
       });
-      
-      //Filtros adicionais
-      //Apenas etiquetas vencidas
-      $('#labels-table_filter').append('<input type="checkbox" id="vencidas"> Etiquetas Vencidas');
-      $('#vencidas').on('change', function () {
-        table.draw();
-      });
-
-      //Extensão dos filtros no datatable
-      $.fn.dataTable.ext.search.push(
-        function(settings, data, dataIndex) {
-            var dueDate =data[7] || 0; // Data de Validade
-            var date = moment().format('DD-MM-YYYY'); //Data Atual
-            console.log(date+' -- '+dueDate);
-            var check = $('#vencidas').prop('checked');
-
-            if(!check || ( check && moment(dueDate).isSameOrAfter(date))){
-                return true;
-            }else{
-                return false;
-            }
-
-        }
-      )
 
       //Funções dos botões de editar e excluir
-      $('#labels-table tbody').on( 'click', 'button', function () {
+      $('#inventoryStatus-table tbody').on( 'click', 'button', function () {
             var data = table.row( $(this).parents('tr') ).data();
             var id = $(this).attr('id');
             if(id == 'edit'){
                 //Editar Registro
-                window.location.href = "{!! URL::to('labels/"+data.id+"/edit') !!}";
+                window.location.href = "{!! URL::to('inventoryStatus/"+data.id+"/edit') !!}";
             }else{
                 //Excluir Registro
                 if(confirm('@lang("buttons.msg_remove")')){
                     //Token obrigatório para envio POST
                     var tk = $('meta[name="csrf-token"]').attr('content');
                     $.ajax({
-                        url: 'labels/'+data.id,
+                        url: 'inventoryStatus/'+data.id,
                         type: 'post',
                         data: {_method: 'delete', _token :tk},
                         success: function(scs){ 

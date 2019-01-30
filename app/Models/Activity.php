@@ -46,14 +46,20 @@ class Activity extends Model
         'company_id',
         'task_id',
         'user_id',
-        'date',
+        'start_date',
+        'end_date',
         'description',
         'document_id',
         'document_item_id',
+        'liberation_item_id',
+        'inventory_item_id',
+        'product_code',
         'label_id',
         'pallet_id',
         'qty',
-        'reason_id'
+        'activity_status_id',
+        'reason_id',
+        'count'
     ];
 
     /**
@@ -79,10 +85,12 @@ class Activity extends Model
 
     /**
      * Função que cria uma atividade
-     * Parâmetros: ID Tarefa, Etiqueta, Pallet, Quantidade, Descrição, Documento, Item, ID Motivo, Usuário
+     * Parâmetros: ID Tarefa, Produto, Etiqueta, Pallet, Quantidade, Descrição, Documento, Item, Endereço, Status, Contagem, ID Motivo, Usuário
      * @var array
      */
-    public static function create($task_id ,$label_id, $pallet_id, $qty, $description, $document_id = '',$document_item_id = '', $reason_id = '',$user_id = ''){
+    public static function create($task_id ,$product, $label_id, $pallet_id, $qty, $description, $document_id = '',
+                                  $document_item_id = '', $location = '', $liberation_item_id = '', $inventory_item_id = '',
+                                  $status = '', $count = '',$reason_id = '',$user_id = '' ){
         //Caso não venha usuário, considera o logado
         $user_id = (trim($user_id == ''))?Auth::user()->id: $user_id;
         $data = Carbon::now();
@@ -91,14 +99,20 @@ class Activity extends Model
         $actv->company_id = Auth::user()->company_id;
         $actv->task_id = $task_id;
         $actv->user_id = $user_id;
+        $actv->product_code = $product;
         $actv->label_id = $label_id;
         $actv->pallet_id = $pallet_id;
         $actv->qty = $qty;
-        $actv->date = $data;
+        $actv->start_date = $data;
         $actv->description = $description;
         $actv->document_id = $document_id;
         $actv->document_item_id = $document_item_id;
+        $actv->liberation_item_id = $liberation_item_id;
+        $actv->inventory_item_id = $inventory_item_id;
+        $actv->location_code = $location;
+        $actv->activity_status_id = $status;
         $actv->reason_id = $reason_id;
+        $actv->count = $count;
         $actv->save();
         return $actv;
     }
@@ -111,15 +125,26 @@ class Activity extends Model
      * @var array
      */
     public static function getActivities($task_id){
-        $actvs =  Activity::select('activities.id','activities.description','activities.date','activities.qty',
+        $actvs =  Activity::select('activities.id','activities.description','activities.start_date','activities.qty',
                                    'activities.label_id','pallets.barcode as pallet_barcode','documents.number',
-                                   'document_items.product_code', 'users.code','labels.barcode as label_barcode')
+                                   'document_items.product_code', 'users.user_code','labels.barcode as label_barcode',
+                                   'products.code as product_code', 'activity_status_id', 'locations.code as location_code',
+                                   'activity_status.description as status_description')
                       ->join('tasks', 'tasks.id', 'activities.task_id')  
                       ->join('users', 'users.id', 'activities.user_id')  
                       ->leftJoin('documents', 'documents.id', 'activities.document_id')  
                       ->leftJoin('document_items', 'document_items.id', 'activities.document_item_id')  
                       ->leftJoin('pallets', 'pallets.id', 'activities.pallet_id')  
                       ->leftJoin('labels', 'labels.id', 'activities.label_id')  
+                      ->leftJoin('activity_status', 'activity_status.id', 'activities.activity_status_id')  
+                      ->leftJoin('products', function ($join) {
+                            $join->on('products.code', '=', 'activities.product_code')
+                                 ->whereColumn('products.company_id','activities.company_id');
+                      })
+                      ->leftJoin('locations', function ($join) {
+                                $join->on('locations.code', '=', 'activities.location_code')
+                                    ->whereColumn('locations.company_id','activities.company_id');
+                      })
                       ->where('activities.company_id', Auth::user()->company_id)
                       ->where('activities.task_id', $task_id)
                       ->get()

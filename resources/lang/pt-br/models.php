@@ -79,10 +79,14 @@ return [
     'logs' => 'Logs do Sistema',
     'graphs' => 'Gráficos',
     'notifications' => 'Notificações',
-    'task_status' => 'Status das Tarefas',
+    'task_status' => 'Status de Tarefas',
     'tasks' => 'Tarefas',
     'activities' => 'Atividades',
+    'activity_status' => 'Status de Atividades',
+    'liberation_status' => 'Status de Liberação',
+    'inventory_status' => 'Status de Inventário',
 
+    
     //Columns
     'id' => 'ID',
     'name' => 'Nome',

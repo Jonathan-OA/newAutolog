@@ -14,6 +14,7 @@ use Response;
 use DataTables;
 use App;
 use Lang;
+use DB;
 
 class InventoryItemController extends AppBaseController
 {
@@ -160,29 +161,29 @@ class InventoryItemController extends AppBaseController
     /**
      * Remove the specified InventoryItem from storage.
      *
-     * @param  int $id
+     * @param  int $document_id, 
+     * @param  string deposit, location
      *
      * @return Response
      */
-    public function destroy($id)
+    public function destroy($document_id, Request $request)
     {
+
         //Valida se usuário possui permissão para acessar esta opção
         if(App\Models\User::getPermission('inventory_items_remove',Auth::user()->user_type_code)){
             
-            $inventoryItem = $this->inventoryItemRepository->findWithoutFail($id);
+            //Apaga as linhas do endereço + produto informados
+            $rLb = DB::table('inventory_items')->where([  
+                ['company_id', Auth::user()->company_id],
+                ['document_id', $document_id],
+                ['location_code', $request['location']],
+                ['product_code', $request['product']]
 
-            if (empty($inventoryItem)) {
-                Flash::error(Lang::get('validation.not_found'));
-
-                return redirect(route('inventoryItems.index'));
-            }
-
-            $this->inventoryItemRepository->delete($id);
+            ])->delete();
 
              //Grava log
-            $descricao = 'Excluiu InventoryItem ID: '.$id;
+            $descricao = 'Excluiu Linhas do Inventário: '.$document_id. 'Endereço: '.$request['location'].' Produto: '.$request['product'];
             $log = App\Models\Log::wlog('inventory_items_remove', $descricao);
-
 
             Flash::success(Lang::get('validation.delete_success'));
             return array(0,Lang::get('validation.delete_success'));

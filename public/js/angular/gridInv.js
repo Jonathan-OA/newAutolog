@@ -164,14 +164,11 @@ app.controller('DetCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '
         },
         enableGridMenu: true,
         columnDefs: [
+            { name: 'Depósito', field: 'deposit_code' },
+            { name: 'Endereço', field: 'location_code' },
             { name: 'Item', field: 'product_code' },
             { name: 'Quantidade', field: 'qty' },
-            { name: 'Unidade', field: 'uom_code' },
-            { name: 'Lote', field: 'batch' },
-            { name: 'Lote Fornec', field: 'batch_supplier' },
-            { name: 'Qtd. Conf.', field: 'qty_conf' },
-            { name: 'Qtd. Embarc.', field: 'qty_ship' },
-            { name: 'Status', field: 'document_status_id', cellTemplate: '<div class="ui-grid-cell-contents"><div class="grid_cell stat{{grid.getCellValue(row, col)}}"><p>{{row.entity.description}}</p></div></div>' },
+            { name: 'Status', field: 'description', cellTemplate: '<div class="ui-grid-cell-contents"><div class="grid_cell stat{{grid.getCellValue(row, col)}}"><p>{{row.entity.description}}</p></div></div>' },
             { name: 'Opções', cellTemplate: 'options' }
         ],
         enablePaginationControls: false,
@@ -211,12 +208,32 @@ app.controller('DetCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '
         window.location = route;
     }
 
+    //Exclui itens do documento de inventário
+    $scope.removeItem = function(document_id, location_code, product_code, msg) {
+
+        if (confirm(msg)) {
+            //Token obrigatório para envio POST
+            var tk = $('meta[name="csrf-token"]').attr('content');
+            $.ajax({
+                url: '../../inventoryItems/' + document_id,
+                type: 'post',
+                data: { _method: 'delete', _token: tk, location: location_code, product: product_code },
+                success: function(scs) {
+                    window.location.reload();
+                },
+                error: function() {
+                    alert("error");
+                }
+            });
+        }
+    }
+
     //Carrega a tabela quando clicar nos detalhes do documento
     $scope.showGrid = function(id, number) {
         $scope.documentNumber = number;
 
         //Busca os itens do documento
-        $http.get('../../api/documentItems/' + id)
+        $http.get('../../api/inventoryItems/' + id)
             .then(function(response) {
                 $scope.gridDetalhes.data = response.data;
             });

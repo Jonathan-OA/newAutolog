@@ -152,7 +152,7 @@ class LabelController extends AppBaseController
 
         //Grava log
         $requestF = $request->all();
-        $descricao = 'Alterou Etiqueta ID: '.$id.' - Barcode: '.$requestF['barcode'].' - Fat: '.$requestF['prev_qty'].' - Sts: '.$requestF['label_status_id'];
+        $descricao = 'Alterou Etiqueta ID: '.$id.' - Barcode: '.$requestF['barcode'].' - Fat: '.$requestF['prim_qty'].' - Sts: '.$requestF['label_status_id'];
         $log = App\Models\Log::wlog('labels_edit', $descricao);
 
 

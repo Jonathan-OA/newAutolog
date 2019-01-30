@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Eloquent as Model;
 use Auth;
+use DB;
 
 
 /**
@@ -98,19 +99,33 @@ class InventoryItem extends Model
         
     ];
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     **/
-    public function inventoryStatus()
-    {
-        return $this->belongsTo(\App\Models\InventoryStatus::class);
-    }
-
-     //Retorna todos os inventory_items disponíveis
-     public static function getInventoryItems(){
-        return InventoryItem::selectRaw("code,CONCAT(code,' - ',description) as description_f")
-                      ->where('company_id', Auth::user()->company_id)
-                      ->pluck('description_f','code');
+    
+    
+     //Retorna todos os itens disponíveis em um documento desconsiderando o status do parâmetro
+     public static function getItens($document_id, $statusDsc = ''){
+        
+        return InventoryItem::select(DB::raw("MIN('inventory_items.id') as id"),'inventory_items.company_id',
+                                    'document_id','inventory_items.product_code','location_code',DB::raw("SUM(qty_wms) as qty"),
+                                    'inventory_items.created_at', 'description', 'deposit_code', 'inventory_status_id')
+                            ->join('inventory_status','inventory_status.id','inventory_items.inventory_status_id')
+                            ->join('locations', function($join){
+                                $join->on('locations.code','inventory_items.location_code')
+                                     ->whereColumn('locations.company_id','inventory_items.company_id');
+                            })
+                            ->where('inventory_items.company_id', Auth::user()->company_id)
+                            ->where('document_id', $document_id)
+                            ->where(function ($query) {
+                                if(!empty($statusDsc)){
+                                    $query->where('inventory_status_id.id', '<>' ,$statusDsc);
+                                }
+                            })
+                            ->groupBy('inventory_items.company_id', 
+                                      'inventory_items.product_code',
+                                      'location_code',
+                                      'inventory_items.created_at',
+                                      'description')
+                            ->get()
+                            ->toArray();
     }
 
 

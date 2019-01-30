@@ -36,14 +36,14 @@
 
 <!-- Prev Qty Field -->
 <div class="col-md-12">
-    {!! Form::label('prev_qty', 'Prev Qty:') !!}
-    <p>{!! $label->prev_qty !!}</p>
+    {!! Form::label('prim_qty', 'Prev Qty:') !!}
+    <p>{!! $label->prim_qty !!}</p>
 </div>
 
 <!-- Prev Uom Code Field -->
 <div class="col-md-12">
-    {!! Form::label('prev_uom_code', 'Prev Uom Code:') !!}
-    <p>{!! $label->prev_uom_code !!}</p>
+    {!! Form::label('prim_uom_code', 'Prev Uom Code:') !!}
+    <p>{!! $label->prim_uom_code !!}</p>
 </div>
 
 <!-- Document Id Field -->
