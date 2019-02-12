@@ -264,6 +264,12 @@
         margin-bottom: 0px;
         margin-top: 5px;
     }
+    
+    .options {
+        height: 40px;
+        padding: 5px 5px;
+        background-color: #172540;
+    }
     /* ------------------------------------------------*/
     /*  Cores relacionadas aos status dos documentos   */
     /* ------------------------------------------------*/

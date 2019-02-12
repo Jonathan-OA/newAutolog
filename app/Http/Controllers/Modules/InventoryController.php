@@ -68,7 +68,16 @@ class InventoryController extends AppBaseController
      */
     public function store(CreateDocumentRequest $request)
     {
-        $input = $request->all();       
+        $input = $request->all();
+
+        //Concatena todos os parametros informados em uma string separando por ; e grava no campo comments
+        //O tratamento é feito no app coletor
+        $parameters = "550_contagens=".$input['counts'].";550_valida_saldo=".
+                      $input['vstock'].";550_valida_endereco=".$input['vlocation'].
+                      ";550_valida_produto=".$input['vproduct'].";";
+
+        $input['comments'] = $parameters;
+        $deposits = (empty($input['deposits']))? '' : $input['deposits'];
         
         //Verifica se número do documento é valido (não existe outro doc com o mesmo tipo / numero)
         $countDoc = App\Models\Document::valDocumentNumber($input['document_type_code'], $input['number']);
@@ -82,7 +91,7 @@ class InventoryController extends AppBaseController
         }
        
         //Pega todos os saldos para montar a tela de itens
-        $stocks = App\Models\Stock::getStockInv($input['deposits'], $document->id);
+        $stocks = App\Models\Stock::getStockInv($deposits, $document->id);
         
         //Valida o tipo de inventário e já encaminha para a seleção de itens
         if($input['document_type_code'] == 'IVD'){
@@ -139,7 +148,6 @@ class InventoryController extends AppBaseController
     public function update($id, UpdateDocumentRequest $request)
     {
         $document = $this->documentRepository->findWithoutFail($id);
-
         
         //Valida se documento foi encontrado
         if (empty($document)) {
@@ -147,6 +155,15 @@ class InventoryController extends AppBaseController
         }else{
             //Grava log
             $requestF = $request->all();
+
+            //Concatena todos os parametros informados em uma string separando por ; e grava no campo comments
+            //O tratamento é feito no app coletor
+            $parameters = "550_contagens=".$requestF['counts'].";550_valida_saldo=".
+            $requestF['vstock'].";550_valida_endereco=".$requestF['vlocation'].
+            ";550_valida_produto=".$requestF['vproduct'].";";
+
+            $requestF['comments'] = $parameters;
+
             $descricao = 'Alterou Documento ID: '.$id.' - '.$requestF['document_type_code'].' '.$requestF['number'];
             $log = App\Models\Log::wlog('documents_inv_edit', $descricao);
 
@@ -188,8 +205,10 @@ class InventoryController extends AppBaseController
     {
         if ($request->isMethod('POST')) {
             $input = $request->all(); 
+            $deposits = (empty($input['deposits']))? '' : $input['deposits'];
         }else{
-            $input['deposits'] = 'DEP01,DEP02,';
+            //Se não informou depósitos por padrão, não lista nada
+            $deposits = 'DEP01,DEP02,';
         }
         
         //Valida se usuário possui permissão para acessar esta opção
@@ -197,7 +216,7 @@ class InventoryController extends AppBaseController
             $document = $this->documentRepository->findWithoutFail($document_id);
 
             //Pega todos os saldos para montar a tela de itens
-            $stocks = App\Models\Stock::getStockInv($input['deposits'], $document->id);
+            $stocks = App\Models\Stock::getStockInv($deposits, $document->id);
            
             return view('modules.inventory.selectItems')->with('document',$document)
                                                         ->with('stocks', $stocks)

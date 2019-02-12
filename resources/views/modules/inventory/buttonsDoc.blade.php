@@ -1,5 +1,5 @@
-<script type="text/ng-template" id="options">    
-    <div id="hhhaaa" class="ui-grid-cell-contents" style="overflow: visible !important;"  ng-controller="MainCtrl">
+<script type="text/ng-template" id="buttonsOptions">   
+    <div ng-attr-id='' class="ui-grid-cell-contents" style="overflow: visible !important;"  ng-controller="MainCtrl">
         <!-- Detalhar -->
         <!-- <button data-toggle="modal" ng-click="showGridDet(, row.entity.number)" data-target="#myModal" class="icon_action" aria-label="@lang('buttons.detail')" data-microtip-position="left" role="tooltip"> -->
          <button ng-click="callRoute('./inventory/'+row.entity.id+'/items')" class="icon_action" aria-label="@lang('buttons.detail')" data-microtip-position="left" role="tooltip"> 

@@ -4,12 +4,10 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Models Language Lines
+    | Models
     |--------------------------------------------------------------------------
     |
-    | The following language lines are used during authentication for various
-    | messages that we need to display to the user. You are free to modify
-    | these language lines according to your application's requirements.
+    | Textos relacionados a nomes de tabelas, colunas e algumas informações gerais.
     |
     */
     
@@ -308,7 +306,10 @@ return [
     'barcode_dest' => 'Palete / Endereço Destino',
     'label_barcode' => 'Etiqueta',
     'stock' => 'Saldo',
-    'items_select' => 'Seleção de Itens'
+    'items_select' => 'Seleção de Itens',
+    'yes' => 'Sim',
+    'no' => 'Não',
+
     
 
 

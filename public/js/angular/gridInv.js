@@ -17,135 +17,135 @@ app.config(['$qProvider', function($qProvider) {
 
 
 //Grid de documentos
-app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '$timeout', '$element', function($rootScope, $scope, $http, uiGridConstants, $timeout, $element) {
-    $scope.hasFilter = false;
-    $scope.gridOptions = {
-        enableFullRowSelection: false,
-        multiSelect: false,
-        enableFiltering: false,
-        fastWatch: true,
-        onRegisterApi: function(gridApi) {
-            $scope.gridApi = gridApi;
-            $timeout(function() {
-                $scope.restoreState();
-            }, 50);
-            //Chama a função que preenche o grid
-            $scope.getFirstData();
-            //Caso o filtro não retorne nenhuma informação, busca todos os documentos
-            $scope.gridApi.core.on.rowsRendered($scope, function() {
-                var qty_lines = $scope.gridApi.core.getVisibleRows($scope.gridApi.grid).length;
+app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '$timeout',
+    function($rootScope, $scope, $http, uiGridConstants, $timeout) {
+        $scope.hasFilter = false;
+        $scope.gridOptions = {
+            enableFullRowSelection: false,
+            multiSelect: false,
+            enableFiltering: false,
+            fastWatch: true,
+            onRegisterApi: function(gridApi) {
+                $scope.gridApi = gridApi;
+                $timeout(function() {
+                    $scope.restoreState();
+                }, 50);
+                //Chama a função que preenche o grid
+                $scope.getFirstData();
+                //Caso o filtro não retorne nenhuma informação, busca todos os documentos
+                $scope.gridApi.core.on.rowsRendered($scope, function() {
+                    var qty_lines = $scope.gridApi.core.getVisibleRows($scope.gridApi.grid).length;
 
-                if (qty_lines == 0 && $scope.gridOptions.enableFiltering && !$scope.hasFilter) {
-                    //Variavel de controle para buscar o filtro externo apenas uma vez
-                    $scope.hasFilter = true;
-                    //Busca os dados novamente sem filtro de quantidade
-                    $http.get('api/documents/090')
-                        .then(function(response) {
-                            $scope.gridOptions.data = response.data;
-                        });
-                } else {
-                    $scope.hasFilter = false;
-                }
-            })
-        },
-        enableGridMenu: true,
-        columnDefs: [
-            { name: 'Número', field: 'number' },
-            { name: 'Tipo', field: 'document_type_code' },
-            {
-                name: 'Status',
-                field: 'document_status_id',
-                display: 'description',
-                filter: {
-                    noTerm: true,
-                    type: uiGridConstants.filter.SELECT,
-                    selectOptions: [{ value: '0', label: 'Pendente' }, { value: '1', label: 'Liberado' }, { value: '2', label: 'Em execução' },
-                        { value: '8', label: 'Encerrado' }, { value: '9', label: 'Cancelado' }
-                    ]
-                },
-                cellTemplate: '<div class="ui-grid-cell-contents" ><div class="grid_cell stat{{grid.getCellValue(row, col)}}"> <p>{{row.entity.description}}</p></div></div>'
+                    if (qty_lines == 0 && $scope.gridOptions.enableFiltering && !$scope.hasFilter) {
+                        //Variavel de controle para buscar o filtro externo apenas uma vez
+                        $scope.hasFilter = true;
+                        //Busca os dados novamente sem filtro de quantidade
+                        $http.get('api/documents/090')
+                            .then(function(response) {
+                                $scope.gridOptions.data = response.data;
+                            });
+                    } else {
+                        $scope.hasFilter = false;
+                    }
+                })
             },
-            { name: 'Contagem', field: 'inv_description' },
-            { name: 'Emissão', field: 'emission_date', type: 'date', cellFilter: "date:\'yyyy-MM-dd\'" },
-            { name: 'Início', field: 'start_date', type: 'date', cellFilter: "date:\'yyyy-MM-dd\'" },
-            { name: 'Finalização', field: 'end_date', type: 'date', cellFilter: "date:\'yyyy-MM-dd\'" },
-            { name: 'Opções', cellTemplate: 'options' }
-        ],
-        enablePaginationControls: true,
-        paginationPageSize: 25
-    };
+            enableGridMenu: true,
+            columnDefs: [
+                { name: 'Número', field: 'number' },
+                { name: 'Tipo', field: 'document_type_code' },
+                {
+                    name: 'Status',
+                    field: 'document_status_id',
+                    display: 'description',
+                    filter: {
+                        noTerm: true,
+                        type: uiGridConstants.filter.SELECT,
+                        selectOptions: [{ value: '0', label: 'Pendente' }, { value: '1', label: 'Liberado' }, { value: '2', label: 'Em execução' },
+                            { value: '8', label: 'Encerrado' }, { value: '9', label: 'Cancelado' }
+                        ]
+                    },
+                    cellTemplate: '<div class="ui-grid-cell-contents" ><div class="grid_cell stat{{grid.getCellValue(row, col)}}"> <p>{{row.entity.description}}</p></div></div>'
+                },
+                { name: 'Contagem', field: 'inv_description' },
+                { name: 'Emissão', field: 'emission_date', type: 'date', cellFilter: "date:\'yyyy-MM-dd\'" },
+                { name: 'Início', field: 'start_date', type: 'date', cellFilter: "date:\'yyyy-MM-dd\'" },
+                { name: 'Finalização', field: 'end_date', type: 'date', cellFilter: "date:\'yyyy-MM-dd\'" },
+                { name: 'Opções', cellTemplate: 'buttonsOptions' }
+            ],
+            enablePaginationControls: true,
+            paginationPageSize: 25,
+            rowTemplate: '<div ng-click="grid.appScope.clickRow(row, $event)" ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.uid" class="ui-grid-cell" ng-class="col.colIndex()" ui-grid-cell></div>',
+        };
 
-    //Função que chama as rotas do laravel
-    $scope.callRoute = function(route) {
-        window.location = route;
-    }
+        //Função que chama as rotas do laravel
+        $scope.callRoute = function(route) {
+            window.location = route;
+        }
 
-    //Salva o grid atual em uma variavel de sessão e banco (ajax)
-    $scope.saveState = function() {
-        var datas = $scope.gridApi.saveState.save();
-        localStorage.setItem('Autolog_GridInv', JSON.stringify(datas));
-        $http({
-            method: 'POST',
-            url: 'api/grid'
-        }).then(function(data) {
-            $scope.PostDataResponse = data;
-        }, function(error) {
-            console.log("Erro ao buscar Grid Salvo");
-        });
-    };
+        //Salva o grid atual em uma variavel de sessão e banco (ajax)
+        $scope.saveState = function() {
+            var datas = $scope.gridApi.saveState.save();
+            localStorage.setItem('Autolog_GridInv', JSON.stringify(datas));
+            $http({
+                method: 'POST',
+                url: 'api/grid'
+            }).then(function(data) {
+                $scope.PostDataResponse = data;
+            }, function(error) {
+                console.log("Erro ao buscar Grid Salvo");
+            });
+        };
 
-    //Restaura o grid salvo em sessão ou banco (ajax)
-    $scope.restoreState = function() {
-        var columns = localStorage.getItem('Autolog_GridInv');
-        if (columns) {
-            $scope.gridApi.saveState.restore($scope, JSON.parse(columns));
-        } else {
+        //Restaura o grid salvo em sessão ou banco (ajax)
+        $scope.restoreState = function() {
+            var columns = localStorage.getItem('Autolog_GridInv');
+            if (columns) {
+                $scope.gridApi.saveState.restore($scope, JSON.parse(columns));
+            } else {
+                $http({
+                    method: 'GET',
+                    url: 'api/grid/Inventario'
+                }).then(function(data) {
+                    $scope.gridApi.saveState.restore($scope, data);
+                });
+            }
+        };
+
+        //Carrega grid com os 2 mil ultimos documentos
+        $scope.getFirstData = function() {
             $http({
                 method: 'GET',
-                url: 'api/grid/Inventario'
-            }).then(function(data) {
-                $scope.gridApi.saveState.restore($scope, data);
+                url: 'api/documents/090/2000'
+            }).then(function(success) {
+                $scope.gridOptions.data = success.data;
+            }, function(error) {
+                console.log("Errouuu" + error);
             });
         }
-    };
 
-    //Carrega grid com os 2 mil ultimos documentos
-    $scope.getFirstData = function() {
-        $http({
-            method: 'GET',
-            url: 'api/documents/090/2000'
-        }).then(function(success) {
-            $scope.gridOptions.data = success.data;
-        }, function(error) {
-            console.log("Errouuu" + error);
-        });
+
+        //Esconde / Mostra os filtros
+        $scope.toggleFiltering = function() {
+            $scope.hasFilter = false;
+            $scope.gridOptions.enableFiltering = !$scope.gridOptions.enableFiltering;
+            $scope.gridApi.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
+        };
+
+
+        $scope.clickRow = function(row, $event) {
+            $('#options').remove();
+            var top = $($event.currentTarget).position().top;
+            var left = $($event.currentTarget).position().left + $event.currentTarget.clientWidth;
+
+
+            $($event.currentTarget).after('<div class="options" id="options" style="position: absolute;  left: ' + left + 'px; ";></div>');
+            console.log($('#buttonsOptions')[0].firstChild);
+            $('#options').html($('#buttonsOptions')[0].firstChild);
+        }
+
+
     }
-
-
-    //Esconde / Mostra os filtros
-    $scope.toggleFiltering = function() {
-        $scope.hasFilter = false;
-        $scope.gridOptions.enableFiltering = !$scope.gridOptions.enableFiltering;
-        $scope.gridApi.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
-    };
-
-    //Carrega botões para o documento
-    /*
-    $scope.showActions = function(modulo, id) {
-        $.get('getButtons/' + modulo, function(data) {
-            //Remove a div gerada anteriormente (caso exista)
-            $('#div_buttons').remove();
-            //Carrega os botões
-            var tp = $('#listButtons' + id).position().top;
-            var lp = $('#listButtons' + id).position().left - 40;
-            //alert($('#lay_header').width());
-            $('#listButtons' + id).before('<span class="options" name="options" onmouseleave="" style="position: absolute;  left: ' + lp + 'px; ";>' + data + '</span>');
-
-            //console.log($('#listButtons' + id).position());
-        })
-    };
-    */
-}]);
+]);
 
 //Grid de detalhes dos documentos
 app.controller('DetCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '$timeout', '$interval', function($rootScope, $scope, $http, uiGridConstants, $timeout, $interval) {
