@@ -54,6 +54,7 @@ abstract class DataTableAbstract implements DataTable, Arrayable, Jsonable
         'edit'   => [],
         'filter' => [],
         'order'  => [],
+        'only'   => null,
     ];
 
     /**
@@ -220,6 +221,19 @@ abstract class DataTableAbstract implements DataTable, Arrayable, Jsonable
     }
 
     /**
+     * Get only selected columns in response.
+     *
+     * @param array $columns
+     * @return $this
+     */
+    public function only(array $columns = [])
+    {
+        $this->columnDef['only'] = $columns;
+
+        return $this;
+    }
+
+    /**
      * Declare columns to escape values.
      *
      * @param string|array $columns
@@ -234,13 +248,21 @@ abstract class DataTableAbstract implements DataTable, Arrayable, Jsonable
 
     /**
      * Set columns that should not be escaped.
+     * Optionally merge the defaults from config.
      *
      * @param array $columns
+     * @param bool $merge
      * @return $this
      */
-    public function rawColumns(array $columns)
+    public function rawColumns(array $columns, $merge = false)
     {
-        $this->columnDef['raw'] = $columns;
+        if ($merge) {
+            $config = $this->config->get('datatables.columns');
+
+            $this->columnDef['raw'] = array_merge($config['raw'], $columns);
+        } else {
+            $this->columnDef['raw'] = $columns;
+        }
 
         return $this;
     }
@@ -349,6 +371,20 @@ abstract class DataTableAbstract implements DataTable, Arrayable, Jsonable
     }
 
     /**
+     * Add with query callback value on response.
+     *
+     * @param string   $key
+     * @param callable $value
+     * @return $this
+     */
+    public function withQuery($key, callable $value)
+    {
+        $this->appends[$key] = $value;
+
+        return $this;
+    }
+
+    /**
      * Override default ordering method with a closure callback.
      *
      * @param callable $closure
@@ -409,6 +445,19 @@ abstract class DataTableAbstract implements DataTable, Arrayable, Jsonable
     public function setTotalRecords($total)
     {
         $this->totalRecords = $total;
+
+        return $this;
+    }
+
+    /**
+     * Set filtered records manually.
+     *
+     * @param int $total
+     * @return $this
+     */
+    public function setFilteredRecords($total)
+    {
+        $this->filteredRecords = $total;
 
         return $this;
     }
@@ -541,6 +590,16 @@ abstract class DataTableAbstract implements DataTable, Arrayable, Jsonable
     }
 
     /**
+     * Count filtered items.
+     *
+     * @return int
+     */
+    protected function filteredCount()
+    {
+        return $this->filteredRecords ? $this->filteredRecords : $this->count();
+    }
+
+    /**
      * Perform necessary filters.
      *
      * @return void
@@ -556,7 +615,7 @@ abstract class DataTableAbstract implements DataTable, Arrayable, Jsonable
         }
 
         $this->columnSearch();
-        $this->filteredRecords = $this->isFilterApplied ? $this->count() : $this->totalRecords;
+        $this->filteredRecords = $this->isFilterApplied ? $this->filteredCount() : $this->totalRecords;
     }
 
     /**
@@ -660,12 +719,12 @@ abstract class DataTableAbstract implements DataTable, Arrayable, Jsonable
      */
     protected function render(array $data)
     {
-        $output = array_merge([
+        $output = $this->attachAppends([
             'draw'            => (int) $this->request->input('draw'),
             'recordsTotal'    => $this->totalRecords,
             'recordsFiltered' => $this->filteredRecords,
             'data'            => $data,
-        ], $this->appends);
+        ]);
 
         if ($this->config->isDebugging()) {
             $output = $this->showDebugger($output);
@@ -677,6 +736,17 @@ abstract class DataTableAbstract implements DataTable, Arrayable, Jsonable
             $this->config->get('datatables.json.header', []),
             $this->config->get('datatables.json.options', 0)
         );
+    }
+
+    /**
+     * Attach custom with meta on response.
+     *
+     * @param array $data
+     * @return array
+     */
+    protected function attachAppends(array $data)
+    {
+        return array_merge($data, $this->appends);
     }
 
     /**
@@ -702,7 +772,9 @@ abstract class DataTableAbstract implements DataTable, Arrayable, Jsonable
     protected function errorResponse(\Exception $exception)
     {
         $error = $this->config->get('datatables.error');
-        if ($error === 'throw') {
+        $debug = $this->config->get('app.debug');
+
+        if ($error === 'throw' || (! $error && ! $debug)) {
             throw new Exception($exception->getMessage(), $code = 0, $exception);
         }
 
@@ -713,7 +785,7 @@ abstract class DataTableAbstract implements DataTable, Arrayable, Jsonable
             'recordsTotal'    => $this->totalRecords,
             'recordsFiltered' => 0,
             'data'            => [],
-            'error'           => $error ? __($error) : "Exception Message:\n\n" . $exception->getMessage(),
+            'error'           => $error ? __($error) : "Exception Message:\n\n".$exception->getMessage(),
         ]);
     }
 
@@ -751,7 +823,7 @@ abstract class DataTableAbstract implements DataTable, Arrayable, Jsonable
     protected function setupKeyword($value)
     {
         if ($this->config->isSmartSearch()) {
-            $keyword = '%' . $value . '%';
+            $keyword = '%'.$value.'%';
             if ($this->config->isWildcard()) {
                 $keyword = Helper::wildcardLikeString($value);
             }
@@ -767,8 +839,8 @@ abstract class DataTableAbstract implements DataTable, Arrayable, Jsonable
     /**
      * Get column name to be use for filtering and sorting.
      *
-     * @param int $index
-     * @param bool    $wantsAlias
+     * @param int  $index
+     * @param bool $wantsAlias
      * @return string
      */
     protected function getColumnName($index, $wantsAlias = false)

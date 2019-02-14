@@ -180,19 +180,6 @@ class ViewGenerator extends BaseGenerator
             }
         }
 
-        $datatable = '';
-        //ATUALIZA TABELA PARA CRIAR JS DO DATATABLE
-        foreach ($this->commandData->fields as $field) {
-            if($field->name != 'id' && $field->name != 'created_at'  && $field->name != 'updated_at'){
-                $datatable .= "{ data: '$field->name' },
-                ";
-            }
-        }
-        $datatable = substr($datatable,0,-1);
-        
-        $templateData = str_replace('$FIELDS_DATATABLE$', $datatable, $templateData);
-        
-
         FileUtil::createFile($this->path, 'index.blade.php', $templateData);
 
         $this->commandData->commandInfo('index.blade.php created');
@@ -313,34 +300,14 @@ class ViewGenerator extends BaseGenerator
             //            }
 
             $fieldTemplate = HTMLFieldGenerator::generateHTML($field, $this->templateType);
-           
-
 
             if (!empty($fieldTemplate)) {
-                echo '= Field: '.$field->htmlType;
                 $fieldTemplate = fill_template_with_field_data(
                     $this->commandData->dynamicVars,
                     $this->commandData->fieldNamesMapping,
                     $fieldTemplate,
                     $field
                 );
-                if($field->name == 'company_id'){
-                    $fieldTemplate = "\n<!-- Company Id Field -->\n<input id='company_id' name='company_id' type='hidden' value='{!! Auth::user()->company_id !!}'>";   
-                }
-                if($field->name == 'code'){
-                    $fieldTemplate = "<!-- Code Field -->
-                                      {!! Form::label('code', Lang::get('models.code').':') !!}
-                                      @if(isset(\$action) && \$action == 'edit')
-                                         {!! Form::text('code', null, ['class' => 'form-control','readonly' => 'true']) !!}
-                                      @else
-                                         {!! Form::text('code', null, ['class' => 'form-control']) !!}
-                                      @endif";   
-                }
-
-
-
-
-
                 $this->htmlFields[] = $fieldTemplate;
             }
         }

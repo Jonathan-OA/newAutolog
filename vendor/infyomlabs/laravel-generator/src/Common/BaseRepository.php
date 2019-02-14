@@ -3,24 +3,16 @@
 namespace InfyOm\Generator\Common;
 
 use Exception;
-use Auth;
-
 
 abstract class BaseRepository extends \Prettus\Repository\Eloquent\BaseRepository
 {
     public function findWithoutFail($id, $columns = ['*'])
     {
         try {
-            $ret = $this->find($id, $columns);
-            //Valida se registro pertence a mesma filial logada (Edição e Exclusão) - Se tabela tiver o campo
-            if($ret->company_id == Auth::user()->company_id || trim($ret->company_id) == '')
-                return $this->find($id, $columns);
-            else
-                return;
+            return $this->find($id, $columns);
         } catch (Exception $e) {
             return;
         }
-
     }
 
     public function create(array $attributes)

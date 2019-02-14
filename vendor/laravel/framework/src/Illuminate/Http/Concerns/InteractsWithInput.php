@@ -15,7 +15,7 @@ trait InteractsWithInput
      *
      * @param  string  $key
      * @param  string|array|null  $default
-     * @return string|array
+     * @return string|array|null
      */
     public function server($key = null, $default = null)
     {
@@ -38,7 +38,7 @@ trait InteractsWithInput
      *
      * @param  string  $key
      * @param  string|array|null  $default
-     * @return string|array
+     * @return string|array|null
      */
     public function header($key = null, $default = null)
     {
@@ -94,7 +94,7 @@ trait InteractsWithInput
     /**
      * Determine if the request contains any of the given inputs.
      *
-     * @param  string|array  $key
+     * @param  string|array  $keys
      * @return bool
      */
     public function hasAny($keys)
@@ -129,6 +129,25 @@ trait InteractsWithInput
         }
 
         return true;
+    }
+
+    /**
+     * Determine if the request contains a non-empty value for any of the given inputs.
+     *
+     * @param  string|array  $keys
+     * @return bool
+     */
+    public function anyFilled($keys)
+    {
+        $keys = is_array($keys) ? $keys : func_get_args();
+
+        foreach ($keys as $key) {
+            if ($this->filled($key)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -238,7 +257,7 @@ trait InteractsWithInput
      *
      * @param  string  $key
      * @param  string|array|null  $default
-     * @return string|array
+     * @return string|array|null
      */
     public function query($key = null, $default = null)
     {
@@ -251,7 +270,7 @@ trait InteractsWithInput
      * @param  string  $key
      * @param  string|array|null  $default
      *
-     * @return string|array
+     * @return string|array|null
      */
     public function post($key = null, $default = null)
     {
@@ -274,7 +293,7 @@ trait InteractsWithInput
      *
      * @param  string  $key
      * @param  string|array|null  $default
-     * @return string|array
+     * @return string|array|null
      */
     public function cookie($key = null, $default = null)
     {
@@ -351,7 +370,7 @@ trait InteractsWithInput
      *
      * @param  string  $key
      * @param  mixed  $default
-     * @return \Illuminate\Http\UploadedFile|array|null
+     * @return \Illuminate\Http\UploadedFile|\Illuminate\Http\UploadedFile[]|array|null
      */
     public function file($key = null, $default = null)
     {
@@ -364,7 +383,7 @@ trait InteractsWithInput
      * @param  string  $source
      * @param  string  $key
      * @param  string|array|null  $default
-     * @return string|array
+     * @return string|array|null
      */
     protected function retrieveItem($source, $key, $default)
     {

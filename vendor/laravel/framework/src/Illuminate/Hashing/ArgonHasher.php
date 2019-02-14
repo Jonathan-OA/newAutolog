@@ -5,7 +5,7 @@ namespace Illuminate\Hashing;
 use RuntimeException;
 use Illuminate\Contracts\Hashing\Hasher as HasherContract;
 
-class ArgonHasher implements HasherContract
+class ArgonHasher extends AbstractHasher implements HasherContract
 {
     /**
      * The default memory cost factor.
@@ -29,26 +29,38 @@ class ArgonHasher implements HasherContract
     protected $threads = 2;
 
     /**
-     * Get information about the given hashed value.
+     * Indicates whether to perform an algorithm check.
      *
-     * @param  string  $hashedValue
-     * @return array
+     * @var bool
      */
-    public function info($hashedValue)
+    protected $verifyAlgorithm = false;
+
+    /**
+     * Create a new hasher instance.
+     *
+     * @param  array  $options
+     * @return void
+     */
+    public function __construct(array $options = [])
     {
-        return password_get_info($hashedValue);
+        $this->time = $options['time'] ?? $this->time;
+        $this->memory = $options['memory'] ?? $this->memory;
+        $this->threads = $options['threads'] ?? $this->threads;
+        $this->verifyAlgorithm = $options['verify'] ?? $this->verifyAlgorithm;
     }
 
     /**
      * Hash the given value.
      *
-     * @param  string $value
-     * @param  array $options
+     * @param  string  $value
+     * @param  array  $options
      * @return string
+     *
+     * @throws \RuntimeException
      */
     public function make($value, array $options = [])
     {
-        $hash = password_hash($value, PASSWORD_ARGON2I, [
+        $hash = password_hash($value, $this->algorithm(), [
             'memory_cost' => $this->memory($options),
             'time_cost' => $this->time($options),
             'threads' => $this->threads($options),
@@ -62,32 +74,42 @@ class ArgonHasher implements HasherContract
     }
 
     /**
+     * Get the algorithm that should be used for hashing.
+     *
+     * @return int
+     */
+    protected function algorithm()
+    {
+        return PASSWORD_ARGON2I;
+    }
+
+    /**
      * Check the given plain value against a hash.
      *
-     * @param  string $value
-     * @param  string $hashedValue
-     * @param  array $options
+     * @param  string  $value
+     * @param  string  $hashedValue
+     * @param  array  $options
      * @return bool
      */
     public function check($value, $hashedValue, array $options = [])
     {
-        if (strlen($hashedValue) === 0) {
-            return false;
+        if ($this->verifyAlgorithm && $this->info($hashedValue)['algoName'] !== 'argon2i') {
+            throw new RuntimeException('This password does not use the Argon2i algorithm.');
         }
 
-        return password_verify($value, $hashedValue);
+        return parent::check($value, $hashedValue, $options);
     }
 
     /**
      * Check if the given hash has been hashed using the given options.
      *
-     * @param  string $hashedValue
-     * @param  array $options
+     * @param  string  $hashedValue
+     * @param  array  $options
      * @return bool
      */
     public function needsRehash($hashedValue, array $options = [])
     {
-        return password_needs_rehash($hashedValue, PASSWORD_ARGON2I, [
+        return password_needs_rehash($hashedValue, $this->algorithm(), [
             'memory_cost' => $this->memory($options),
             'time_cost' => $this->time($options),
             'threads' => $this->threads($options),

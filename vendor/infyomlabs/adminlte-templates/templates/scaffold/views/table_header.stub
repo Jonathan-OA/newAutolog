@@ -1,1 +1,1 @@
-<th class="th_grid">@lang('models.$FIELD_NAME$') </th>
+<th>$FIELD_NAME_TITLE$</th>
