@@ -14,11 +14,9 @@ app.config(['$qProvider', function($qProvider) {
     $qProvider.errorOnUnhandledRejections(false);
 }]);
 
-
-
 //Grid de documentos
-app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '$timeout',
-    function($rootScope, $scope, $http, uiGridConstants, $timeout) {
+app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '$timeout', '$animate', '$compile',
+    function($rootScope, $scope, $http, uiGridConstants, $timeout, $animate, $compile) {
         $scope.hasFilter = false;
         $scope.gridOptions = {
             enableFullRowSelection: false,
@@ -70,11 +68,11 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
                 { name: 'Emissão', field: 'emission_date', type: 'date', cellFilter: "date:\'yyyy-MM-dd\'" },
                 { name: 'Início', field: 'start_date', type: 'date', cellFilter: "date:\'yyyy-MM-dd\'" },
                 { name: 'Finalização', field: 'end_date', type: 'date', cellFilter: "date:\'yyyy-MM-dd\'" },
-                { name: 'Opções', cellTemplate: 'buttonsOptions' }
+               
             ],
             enablePaginationControls: true,
             paginationPageSize: 25,
-            rowTemplate: '<div ng-click="grid.appScope.clickRow(row, $event)" ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.uid" class="ui-grid-cell" ng-class="col.colIndex()" ui-grid-cell></div>',
+            rowTemplate: '<div ng-click="grid.appScope.clickRow(row, col, $event)" ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.uid" class="ui-grid-cell" ng-class="col.colIndex()" ui-grid-cell></div>',
         };
 
         //Função que chama as rotas do laravel
@@ -132,15 +130,27 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
         };
 
 
-        $scope.clickRow = function(row, $event) {
+        $scope.clickRow = function(row, col, $event) {
+            //Apaga outras caixas de botões que existirem
             $('#options').remove();
-            var top = $($event.currentTarget).position().top;
-            var left = $($event.currentTarget).position().left + $event.currentTarget.clientWidth;
+            $scope.row = row;
+            //Pega id da ultima coluna
+            var ultCol = $scope.gridApi.grid.columns[$scope.gridApi.grid.columns.length - 1].uid;
+            //Pega posição a esquerda do elemento clicado
+            var left = $($event.currentTarget).position().left;
+            if(col.uid != ultCol){
+                //Se não for ultima coluna do grid, adiciona a direita
+                left += $event.currentTarget.clientWidth;
+            }
+            var element = angular.element("<div ng-include=\"'tplButtons'\"></div>");
+            var container = angular.element('<div class="options" id="options" style="position: absolute;  left: ' + left + 'px; " ></div>');
+            $($event.currentTarget).after(container);
+            $animate.enter(element, container);
+            $compile(element)($scope);
+            $timeout(function(){
+                $scope.$apply();
+             },0)
 
-
-            $($event.currentTarget).after('<div class="options" id="options" style="position: absolute;  left: ' + left + 'px; ";></div>');
-            console.log($('#buttonsOptions')[0].firstChild);
-            $('#options').html($('#buttonsOptions')[0].firstChild);
         }
 
 
