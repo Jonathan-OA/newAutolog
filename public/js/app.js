@@ -1,5 +1,5 @@
 //Funções Relacionadas ao Layout Base
-$(document).ready(function() {
+$(document).ready(function(e) {
 
     //Esconde / Mostra Menu
     $('#button_menu').click(function() {
@@ -107,6 +107,15 @@ $(document).ready(function() {
 
 });
 
+//Função que mostra a modal de carregamento enquanto um .ajax é executado
+$(document).on({
+    ajaxStart: function(e) {
+        $('#loadingModal').modal('toggle');
+    },
+    ajaxStop: function() {
+        $('#loadingModal').modal('toggle');
+    }
+});
 
 //Função que obtem a ultima notificação criada e a ultima lida pelo usuário
 function showNotification(user_code) {

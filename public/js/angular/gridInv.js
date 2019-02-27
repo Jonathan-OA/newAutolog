@@ -68,7 +68,7 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
                 { name: 'Emissão', field: 'emission_date', type: 'date', cellFilter: "date:\'yyyy-MM-dd\'" },
                 { name: 'Início', field: 'start_date', type: 'date', cellFilter: "date:\'yyyy-MM-dd\'" },
                 { name: 'Finalização', field: 'end_date', type: 'date', cellFilter: "date:\'yyyy-MM-dd\'" },
-               
+
             ],
             enablePaginationControls: true,
             paginationPageSize: 25,
@@ -76,8 +76,28 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
         };
 
         //Função que chama as rotas do laravel
-        $scope.callRoute = function(route) {
-            window.location = route;
+        $scope.callRoute = function(route, assy = 0) {
+            //assy = 1 executa a URL sem sair da tela
+            if (assy == 1) {
+
+                //.Ajax mostra o icone de loading automaticamente
+                $.ajax({
+                        url: route
+                    })
+                    .done(function(data) {
+                        console.log(data);
+                        //Carrega novamente o grid 
+                        $scope.getFirstData();
+                    })
+                    .fail(function() {
+                        alert("Erro ao Acessar Função");
+                    });
+
+                //Apaga outras caixas de botões que existirem
+                $('#options').remove();
+            } else {
+                window.location = route;
+            }
         }
 
         //Salva o grid atual em uma variavel de sessão e banco (ajax)
@@ -133,23 +153,32 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
         $scope.clickRow = function(row, col, $event) {
             //Apaga outras caixas de botões que existirem
             $('#options').remove();
-            $scope.row = row;
+            //Passa todos os valores da linha selecionada para validação dos botões visíveis
+            $scope.row = row.entity;
+            $scope.row.status_inv = row.entity.inventory_status_id;
+            $scope.row.status_doc = row.entity.document_status_id;
             //Pega id da ultima coluna
             var ultCol = $scope.gridApi.grid.columns[$scope.gridApi.grid.columns.length - 1].uid;
+            var penultCol = $scope.gridApi.grid.columns[$scope.gridApi.grid.columns.length - 2].uid;
             //Pega posição a esquerda do elemento clicado
             var left = $($event.currentTarget).position().left;
-            if(col.uid != ultCol){
-                //Se não for ultima coluna do grid, adiciona a direita
+            if (col.uid != ultCol && col.uid != penultCol) {
+                //Se não for ultima/penúltima coluna do grid, adiciona a direita
                 left += $event.currentTarget.clientWidth;
+            } else {
+                left -= $event.currentTarget.clientWidth;
             }
+            //Adiciona elemento que chama o template criado (buttonsDoc.blade.php)
             var element = angular.element("<div ng-include=\"'tplButtons'\"></div>");
+            //Elemento que contem os botões
             var container = angular.element('<div class="options" id="options" style="position: absolute;  left: ' + left + 'px; " ></div>');
             $($event.currentTarget).after(container);
+            //Insere o elemento no container e compila no DOM da página
             $animate.enter(element, container);
             $compile(element)($scope);
-            $timeout(function(){
+            $timeout(function() {
                 $scope.$apply();
-             },0)
+            }, 0)
 
         }
 

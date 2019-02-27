@@ -176,6 +176,36 @@ class InventoryController extends AppBaseController
         return redirect(route('inventory.index'));
     }
 
+    /**
+     * Libera contagem de inventário
+     *
+     * @param CreateDocumentRequest $request
+     *
+     * @return Response
+     */
+    public function liberate($document_id, $cont)
+    {
+        $return = App\Models\Document::liberateInventory($document_id, $cont);
+
+        Flash::success(Lang::get('validation.update_success'));
+
+    }
+
+    /**
+     * Retorna inventário
+     *
+     * @param CreateDocumentRequest $request
+     *
+     * @return Response
+     */
+    public function return($document_id)
+    {
+        $return = App\Models\Document::returnInventory($document_id);
+
+        Flash::success(Lang::get('validation.update_success'));
+
+    }
+
 
 
     //--------------------------------------------------------------------------------------------
@@ -258,6 +288,7 @@ class InventoryController extends AppBaseController
                 $invItem->product_code = $stock['product_code'];
                 $invItem->pallet_id = $stock['pallet_id'];
                 $invItem->qty_wms = $stock['prim_qty'];
+                $invItem->uom_code = $stock['prim_uom_code'];
                 $invItem->inventory_status_id = 0;
                 $invItem->save();
 

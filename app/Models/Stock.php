@@ -84,14 +84,13 @@ class Stock extends Model
      * @var array
      */
     public static function updStock($input, $finalidade = "SALDO"){
-
         $input['company_id'] = Auth::user()->company_id;
         $input['finality_code'] = $finalidade;
         $input['user_id'] = Auth::user()->id;
         $input['operation_code'] = (empty($input['operation_code']))?'664':$input['operation_code'];
 
         //Caso seja reserva, empenho ou em inventário, coloca a quantidade negativa
-        if($finalidade <> 'SALDO' && $finalidade <> 'RESSUP'){
+        if($finalidade <> 'SALDO' && $finalidade <> 'RESSUP' && $input['qty'] > 0){
             $input['qty'] *= -1;
             $input['prim_qty'] *= -1;
         }

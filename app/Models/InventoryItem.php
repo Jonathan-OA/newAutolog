@@ -50,8 +50,7 @@ class InventoryItem extends Model
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
-	
-	
+
     public $fillable = [
         'company_id',
         'document_id',
@@ -60,6 +59,7 @@ class InventoryItem extends Model
         'label_id',
         'location_code',
         'qty_wms',
+        'uom_code',
         'inventory_status_id',
         'qty_1count',
         'user_1count',
@@ -104,9 +104,9 @@ class InventoryItem extends Model
      //Retorna todos os itens disponíveis em um documento desconsiderando o status do parâmetro
      public static function getItens($document_id, $statusDsc = ''){
         
-        return InventoryItem::select(DB::raw("MIN('inventory_items.id') as id"),'inventory_items.company_id',
+        return InventoryItem::select(DB::raw("MIN(inventory_items.id) as id "),'inventory_items.company_id',
                                     'document_id','inventory_items.product_code','location_code',DB::raw("SUM(qty_wms) as qty"),
-                                    'inventory_items.created_at', 'description', 'deposit_code', 'inventory_status_id')
+                                    'inventory_items.created_at', 'description', 'deposit_code', 'inventory_status_id', 'uom_code')
                             ->join('inventory_status','inventory_status.id','inventory_items.inventory_status_id')
                             ->join('locations', function($join){
                                 $join->on('locations.code','inventory_items.location_code')

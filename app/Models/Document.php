@@ -180,6 +180,7 @@ class Document extends Model
 
             //Se não tem regras, da erro
             if($entrou == 0){
+                DB::rollBack();
                 $return['erro'] = 1;
                 $return['msg'] = 'Sem regras cadastradas para este Tipo de Documento.';
             }else if($erro == 0){
@@ -208,6 +209,146 @@ class Document extends Model
 
     }
 
+    /**
+     * Função que libera o documento de inventário
+     * Parâmetros: ID do Documento , Contagem
+     * @var array
+     */
+
+    public static function liberateInventory($document_id, $cont = 1){
+        //Busca documento
+        $doc = App\Models\Document::find($document_id);
+        if(in_array($doc->document_type_code, array('IVD','IVG','IVR'))){
+            //Define status da inventory_item e a tarefa baseado na contagem
+            switch($cont){
+                case 1:
+                    $operation_code = "551";
+                    $status = 1;
+                break;
+                case 2:
+                    $operation_code = "552";
+                    $status = 2;
+                break;
+                case 3:
+                    $operation_code = "553";
+                    $status = 3;
+                break;
+                case 4:
+                    $operation_code = "554";
+                    $status = 4;
+                break;
+            }
+
+            
+
+            //Pega itens inseridos no inventario
+            $items = App\Models\InventoryItem::getItens($document_id);
+
+            foreach($items as $item){
+                //Primeira contagem cria as linhas EM INVENTARIO
+                if($cont == 1){
+                    $newStock = new Stock($item);
+                    $newStock['operation_code'] = '550';
+                    $newStock['prim_qty'] = $newStock['qty'];
+                    $newStock['prim_uom_code'] = $newStock['uom_code'];
+                    $newStock['label_id'] = NULL;
+                    $newStock['pallet_id'] = NULL;
+                    $stock = App\Models\Stock::updStock($newStock->toArray(), 'INVENTARIO');
+                }
+
+                //Cria uma tarefa para cada item / endereço
+                $task = App\Models\Task::create("$operation_code","{$item['location_code']}" ,"{$item['location_code']}", $document_id, NULL,$item['id'] );
+                
+                
+            }
+
+            //Atualiza todos os itens para o status da contagem
+            $upInv = DB::table('inventory_items')->where([  
+                        ['company_id', Auth::user()->company_id],
+                        ['document_id', $document_id],
+                        ['inventory_status_id','<>','8'],
+                        ['inventory_status_id','<>','9']
+            ])->update(['inventory_status_id' => $status]);
+
+            //Muda Status do Documento para liberado e contagem liberada
+            $doc->document_status_id = 1;
+            $doc->inventory_status_id = $status;
+            $doc->save();
+
+            $return['erro'] = 0;
+            $return['msg'] = 'Inventário Liberado com Sucesso';
+        }else{
+            $return['erro'] = 1;
+            $return['msg'] = 'Tipo de Documento Inválido para esta Operação.';
+        }
+
+        return $return;
+
+    }
+
+
+    /**
+     * Função que retorna o documento de inventário
+     * Parâmetros: ID do Documento
+     * @var array
+     */
+
+    public static function returnInventory($document_id){
+        //Busca documento
+        $doc = App\Models\Document::find($document_id);
+        if(in_array($doc->document_type_code, array('IVD','IVG','IVR'))){
+            //Só permite retornar com status de contagens pendentes
+            if(in_array($doc->inventory_status_id, array(1,2,3,4))){
+
+                //Atualiza todos os itens para o status pendente
+                $upInv = DB::table('inventory_items')->where([  
+                    ['company_id', Auth::user()->company_id],
+                    ['document_id', $document_id]
+                ])->update(['inventory_status_id' => 0,
+                            'qty_1count' => 0,
+                            'qty_2count' => 0,
+                            'qty_3count' => 0,
+                            'qty_4count' => 0,
+                            'user_1count' => NULL,
+                            'user_2count' => NULL,
+                            'user_3count' => NULL,
+                            'user_4count' => NULL]);
+                
+                //Volta status do documento
+                $upTsk = DB::table('documents')->where([  
+                    ['company_id', Auth::user()->company_id] ,
+                    ['id', $document_id]
+                ])->update(['document_status_id' => 0,
+                            'inventory_status_id' => 0]);
+
+                //Cancela todas as tarefas
+                $upTsk = DB::table('tasks')->where([  
+                    ['company_id', Auth::user()->company_id] ,
+                    ['document_id', $document_id],
+                ])->update(['task_status_id' => 9]);
+
+                //Apaga linhas em Inventário
+                $dSal = DB::table('stocks')->where([  
+                    ['company_id', Auth::user()->company_id],
+                    ['document_id', $document_id],
+                    ['finality_code', 'INVENTARIO']
+                ])->delete();
+
+                $return['erro'] = 0;
+                $return['msg'] = 'Inventário Retornado com Sucesso';
+
+            }else{
+                $return['erro'] = 1;
+                $return['msg'] = 'Status de Inventário Inválido para esta Operação.';
+            }
+        }else{
+            $return['erro'] = 1;
+            $return['msg'] = 'Tipo de Documento Inválido para esta Operação.';
+        }
+
+
+
+    }
     /**
      * Função que retorna o documento para pendente
      * Parâmetros: ID do Documento 

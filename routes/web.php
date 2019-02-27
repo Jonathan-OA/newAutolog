@@ -49,6 +49,8 @@ Route::group(['middleware' => 'auth'], function() {
     Route::patch('inventory/updateItem/{document_item_id}', 'Modules\InventoryController@updateItem')->name('inventory.updateItem');; //Atualiza item
     Route::post('inventory/{document_id}/storeItem', 'Modules\InventoryController@storeItem')->name('inventory.storeItem');; //Cria item
     Route::resource('inventory', 'Modules\InventoryController'); //Ações de documentos de inventário
+    Route::get('/inventory/{id}/liberate/{cont?}', 'Modules\InventoryController@liberate'); //Libera Contagem
+    Route::get('/inventory/{id}/return', 'Modules\InventoryController@return'); //Retorna Inventário
     // ----------------------------------------------------------------------------------------------
     //Rota que libera um documento
     Route::get('/document/liberate/{id}/{module?}', 'DocumentController@liberateDoc');

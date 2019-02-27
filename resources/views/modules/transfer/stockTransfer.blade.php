@@ -12,12 +12,6 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="panel-body">
-                                <!-- Modal de Carregamento -->
-                                <div class="modal fade" id="loadingModal" tabindex="-1" role="dialog"  aria-hidden="true">
-                                        <div class="modal-dialog" id="loading" role="document">
-                                                  <div class="loader"></div>
-                                        </div>
-                                </div>
                                 <!-- Campos para preenchimento -->
                                 <div class="form_fields">
                                     @include('adminlte-templates::common.errors')
@@ -86,18 +80,6 @@
 @endsection
 @section('scripts')
 <script>
-
-    $(document).on({
-
-        ajaxStart: function (e) {                               
-            $('#loadingModal').modal('toggle');                                  
-        },
-        ajaxStop: function() {
-           $('#loadingModal').modal('toggle');                       
-        }
-
-    });
-
     $(function() {
         //Campo PALETE/ETIQUETA origem
         $("#barcode_orig").bind('change',function(e){

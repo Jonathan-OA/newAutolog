@@ -55,6 +55,12 @@
                 <div class="modal fade" id="supportModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     @include('layouts.support')
                 </div>
+                <!-- Modal do Ícone de Loading -->
+                <div class="modal fade" id="loadingModal" tabindex="-1" role="dialog"  aria-hidden="true">
+                    <div class="modal-dialog" id="loading" role="document">
+                            <div class="loader"></div>
+                    </div>
+                </div>
                 <div class="lay_menu_sup">
                         <a class="btn btn-support" id="button-suporte" data-toggle="modal" data-target="#supportModal" title="Suporte"> @lang('models.support') 
                             <img class="icon" src="{{ asset('/icons/suporte.png') }}" alt="Suporte" >

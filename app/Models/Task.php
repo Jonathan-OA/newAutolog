@@ -54,7 +54,8 @@ class Task extends Model
         'document_item_id',
         'orig_location_code',
         'dest_location_code',
-        'task_status_id'
+        'task_status_id',
+        'inventory_item_id'
     ];
 
     /**
@@ -83,12 +84,14 @@ class Task extends Model
      * Parâmetros: Operação, Endereços Origem e Destino, Documento, Item
      * @var array
      */
-    public static function create($operation_code, $orig = null, $dest = null, $document_id = null, $document_item_id = null ){
+    public static function create($operation_code, $orig = null, $dest = null, $document_id = null, 
+                                  $document_item_id = null, $inventory_item_id = null  ){
         $task = new Task();
         $task->company_id = Auth::user()->company_id;
         $task->operation_code = $operation_code;
         $task->document_id = $document_id;
         $task->document_item_id = $document_item_id;
+        $task->inventory_item_id = $inventory_item_id;
         $task->orig_location_code = $orig;
         $task->dest_location_code = $dest;
         $task->task_status_id = 0;

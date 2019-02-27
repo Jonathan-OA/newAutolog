@@ -33,6 +33,9 @@ return [
     'activities' => 'Atividades',
     'stock_transfer' => 'Transferência Manual',
     'select_items' => 'Selecionar Itens',
+    '1acont' => 'Liberar 1ª Contagem',
+    '2acont' => 'Liberar 2ª Contagem',
+    '3acont' => 'Liberar 3ª Contagem',
     
 
 ];

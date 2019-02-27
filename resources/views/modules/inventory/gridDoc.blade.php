@@ -44,5 +44,5 @@
     </div>
 @endsection
 @section('scripts')
-    <script src="js/angular/gridInv.js"></script>
+    <script src="js/angular/gridInv.js"></script>    
 @endsection
