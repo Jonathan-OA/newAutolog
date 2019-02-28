@@ -270,17 +270,20 @@
         border: 3px solid #17263d;
         background-color: #cccdce;
     }
-
-
+    
     .icon_action {
         background-color: inherit !important;
         text-decoration: none !important;
         float: none !important;
         padding: 5px;
     }
-
-    .options button:hover{
+    
+    .options button:hover {
         background-color: #e2e2e2 !important;
+    }
+    
+    .actionsGrid {
+        padding: 2em;
     }
     /* ------------------------------------------------*/
     /*  Cores relacionadas aos status dos documentos   */

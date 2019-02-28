@@ -185,9 +185,19 @@ class InventoryController extends AppBaseController
      */
     public function liberate($document_id, $cont)
     {
-        $return = App\Models\Document::liberateInventory($document_id, $cont);
+        //Valida se usuário possui permissão para acessar esta opção
+        if(App\Models\User::getPermission('documents_inv_lib',Auth::user()->user_type_code)){
+            $return = App\Models\Document::liberateInventory($document_id, $cont);
+            //Grava Logs
+            $descricao = 'Liberou '.$cont.'a Contagem de Inventário';
+            $log = App\Models\Log::wlog('documents_inv_lib', $descricao, $document_id);
 
-        Flash::success(Lang::get('validation.update_success'));
+            Flash::success(Lang::get('validation.update_success'));
+        }else{
+            //Sem permissão
+            Flash::error(Lang::get('validation.permission'));
+            //return redirect(url('inventory'));
+        }
 
     }
 
@@ -200,9 +210,20 @@ class InventoryController extends AppBaseController
      */
     public function return($document_id)
     {
-        $return = App\Models\Document::returnInventory($document_id);
+        //Valida se usuário possui permissão para acessar esta opção
+        if(App\Models\User::getPermission('documents_inv_ret',Auth::user()->user_type_code)){
+            $return = App\Models\Document::returnInventory($document_id);
 
-        Flash::success(Lang::get('validation.update_success'));
+             //Grava Logs
+             $descricao = 'Retornou Documento de Inventário';
+             $log = App\Models\Log::wlog('documents_inv_ret', $descricao, $document_id);
+
+            Flash::success(Lang::get('validation.update_success'));
+        }else{
+            //Sem permissão
+            Flash::error(Lang::get('validation.permission'));
+            //return redirect(url('inventory'));
+        }
 
     }
 

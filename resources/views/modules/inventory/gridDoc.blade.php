@@ -33,9 +33,14 @@
                                 </div>
                                     <!-- Botões com as opções para cada documento -->
                                     @include('modules.inventory.buttonsDoc')
-                                <button id="save" type="button" class="btn btn-success" ng-click="saveState()">Save</button>
-                                <button id="restore" type="button" class="btn btn-success" ng-click="restoreState()">Restore</button>
-                            </div>
+                                </div>
+                                <div class="actionsGrid">
+                                    <span aria-label="@lang('infos.actions_grid')" data-microtip-position="right" role="tooltip">
+                                            <img class='icon' src='{{asset('/icons/information.png') }}' >
+                                    </span>
+                                    <button id="save" type="button" class="btn btn-success" ng-click="saveState()">Salvar Grid</button>
+                                    <button id="restore" type="button" class="btn btn-success" ng-click="restoreState()">Restaurar Grid</button>
+                                </div>
                         </div>
                     </div>
                 </div>

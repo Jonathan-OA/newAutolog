@@ -96,6 +96,7 @@
     <script src="{{ asset('/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('/js/app.js') }}"></script>
     <script src="{{ asset('/js/ui-grid/ui-grid.min.js') }}"></script>
+    <script src="{{ asset('/js/ui-grid/ui-grid.core.min.js')}}"></script>
     <script src="{{ asset('/js/ui-grid/auto-resize.js') }}"></script>
     <script src="http://momentjs.com/downloads/moment.min.js"></script>    
     <script type="text/javascript">

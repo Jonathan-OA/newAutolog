@@ -76,10 +76,9 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
         };
 
         //Função que chama as rotas do laravel
-        $scope.callRoute = function(route, assy = 0) {
-            //assy = 1 executa a URL sem sair da tela
-            if (assy == 1) {
-
+        $scope.callRoute = function(route, async = 0) {
+            //async = 1 executa a função da URL sem sair da tela
+            if (async == 1) {
                 //.Ajax mostra o icone de loading automaticamente
                 $.ajax({
                         url: route
@@ -96,6 +95,7 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
                 //Apaga outras caixas de botões que existirem
                 $('#options').remove();
             } else {
+                //Entra na rota passada por parâmetro
                 window.location = route;
             }
         }

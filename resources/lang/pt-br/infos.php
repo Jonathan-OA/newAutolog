@@ -15,6 +15,7 @@ return [
     'param_stock'               => 'Permite ler apenas etiquetas que possuam saldo no sistema.',
     'param_product'               => 'Permite ler apenas produtos que foram selecionados no inventário.',
     'param_location'               => 'Permite ler apenas endereços que foram selecionados no inventário.',
+    'actions_grid'               => 'Permite salvar / restaurar alterações realizadas no grid de documentos',
 
     
 

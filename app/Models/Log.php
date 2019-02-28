@@ -30,7 +30,9 @@ class Log extends Model
         'company_id',
         'description',
         'user_id',
-        'operation_code'
+        'operation_code',
+        'document_id',
+        'document_item_id'
     ];
 
     /**
@@ -60,13 +62,15 @@ class Log extends Model
      *
      * @var array
      */
-    public static function wlog($oper, $desc){
+    public static function wlog($oper, $desc, $document_id = NULL, $document_item_id = NULL){
         //Só grava o log se a opção WRITES_LOG da Operação estiver habilitada
         if(Operation::where('code', $oper)->where('writes_log',1)->count() == 1){
             Log::create(['company_id' => Auth::user()->company_id,
                         'user_id' => Auth::id(),
                         'description' => $desc,
-                        'operation_code' => $oper]);
+                        'operation_code' => $oper,
+                        'document_id' => $document_id,
+                        'document_item_id' => $document_item_id]);
         }
 
     }
