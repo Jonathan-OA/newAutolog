@@ -7,9 +7,21 @@ use App;
 use Auth;
 use Flash;
 use Lang;
+use App\Repositories\DocumentRepository;
+use App\Repositories\DocumentItemRepository;
 
 class DocumentController extends Controller
 {
+
+    private $documentRepository;
+    private $documentItemRepository;
+
+    public function __construct(DocumentRepository $docRepo, DocumentItemRepository $itemRepo)
+    {
+        $this->documentRepository = $docRepo;
+        $this->documentItemRepository = $itemRepo;
+    }
+
     /**
      * Realiza a liberação do documento
      *
@@ -17,25 +29,32 @@ class DocumentController extends Controller
      * @param varchar $module
      * @return \Illuminate\Http\Response
      */
-    public function liberateDoc($document_id, $module = 'prod')
+    public function liberate($document_id, $module = 'prod')
     {
+        $document = $this->documentRepository->findWithoutFail($document_id);
+
         //Valida se usuário possui permissão para liberar documento (ex: documents_prod_lib)
         if(App\Models\User::getPermission('documents_'.$module.'_lib',Auth::user()->user_type_code)){
             $libDoc = App\Models\Document::liberate($document_id); 
             if($libDoc['erro'] <> 0){
                 //Erro na liberação
                 Flash::error($libDoc['msg']);
+                return array('danger',$libDoc['msg']);
             }else{
-                 //Sucesso na liberação
-                 Flash::success($libDoc['msg']);
-            }
-            return redirect(url($libDoc['urlRet']));
+                //Sucesso na liberação
 
+                //Grava Logs
+                $descricao = 'Liberação de Documento';
+                $log = App\Models\Log::wlog('documents_'.$module.'_lib', $descricao, $document_id);
+
+                Flash::success($libDoc['msg']);
+                return array('success',Lang::get('infos.liberation_doc', ['doc' =>  $document->number]));
+            }
         }else{
-             //Sem permissão
-             Flash::error(Lang::get('validation.permission'));
-             return redirect(url('production'));
+            Flash::error(Lang::get('validation.permission'));
+            return array('danger',Lang::get('validation.permission'));
         }
+
         
     }
 
@@ -45,24 +64,32 @@ class DocumentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function returnDoc($document_id, $module = 'prod')
+    public function return($document_id, $module = 'prod')
     {
+        $document = $this->documentRepository->findWithoutFail($document_id);
+
         //Valida se usuário possui permissão para retornar documento (ex: documents_prod_ret)
         if(App\Models\User::getPermission('documents_'.$module.'_ret',Auth::user()->user_type_code)){
             $retDoc = App\Models\Document::return($document_id); 
             if($retDoc['erro'] <> 0){
                 //Erro no retorno
                 Flash::error($retDoc['msg']);
+                return array('danger',$retDoc['msg']);
             }else{
                 //Sucesso no retorno
+
+                //Grava Logs
+                $descricao = 'Retorno de Documento';
+                $log = App\Models\Log::wlog('documents_'.$module.'_ret', $descricao, $document_id);
+
                 Flash::success($retDoc['msg']);
+                return array('success',Lang::get('infos.return_doc', ['doc' =>  $document->number]));
             }
-            return redirect(url($retDoc['urlRet']));
 
         }else{
             //Sem permissão
             Flash::error(Lang::get('validation.permission'));
-            return redirect(route('production'));
+            return array('danger',Lang::get('validation.permission'));
         }
 
 

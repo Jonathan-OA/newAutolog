@@ -185,6 +185,8 @@ class InventoryController extends AppBaseController
      */
     public function liberate($document_id, $cont)
     {
+        $document = $this->documentRepository->findWithoutFail($document_id);
+
         //Valida se usuário possui permissão para acessar esta opção
         if(App\Models\User::getPermission('documents_inv_lib',Auth::user()->user_type_code)){
             $return = App\Models\Document::liberateInventory($document_id, $cont);
@@ -192,11 +194,13 @@ class InventoryController extends AppBaseController
             $descricao = 'Liberou '.$cont.'a Contagem de Inventário';
             $log = App\Models\Log::wlog('documents_inv_lib', $descricao, $document_id);
 
-            Flash::success(Lang::get('validation.update_success'));
+            //Flash::success(Lang::get('infos.liberation_inv'));
+            return array('success',Lang::get('infos.liberation_inv', ['doc' =>  $document->number,
+                                                                      'cont' => $cont.'ª']));
         }else{
             //Sem permissão
-            Flash::error(Lang::get('validation.permission'));
-            //return redirect(url('inventory'));
+            //Flash::error(Lang::get('validation.permission'));
+            return array('danger',Lang::get('validation.permission'));
         }
 
     }
@@ -210,6 +214,9 @@ class InventoryController extends AppBaseController
      */
     public function return($document_id)
     {
+
+        $document = $this->documentRepository->findWithoutFail($document_id);
+
         //Valida se usuário possui permissão para acessar esta opção
         if(App\Models\User::getPermission('documents_inv_ret',Auth::user()->user_type_code)){
             $return = App\Models\Document::returnInventory($document_id);
@@ -218,11 +225,11 @@ class InventoryController extends AppBaseController
              $descricao = 'Retornou Documento de Inventário';
              $log = App\Models\Log::wlog('documents_inv_ret', $descricao, $document_id);
 
-            Flash::success(Lang::get('validation.update_success'));
+            return array('success',Lang::get('infos.return_doc', ['doc' =>  $document->number]));
         }else{
             //Sem permissão
-            Flash::error(Lang::get('validation.permission'));
-            //return redirect(url('inventory'));
+            //Flash::error(Lang::get('validation.permission'));
+            return array('danger',Lang::get('validation.permission'));
         }
 
     }

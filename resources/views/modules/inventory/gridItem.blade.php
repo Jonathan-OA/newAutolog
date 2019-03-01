@@ -32,8 +32,8 @@
                                 </div>
                                     <!-- Botões com as opções para cada documento -->
                                     @include('modules.inventory.buttonsItem')
-                                <button id="save" type="button" class="btn btn-success" ng-click="saveState()">Save</button>
-                                <button id="restore" type="button" class="btn btn-success" ng-click="restoreState()">Restore</button>
+                                <button id="save" type="button" class="btn btn-success" ng-click="saveState('Autolog_GridInv_Det')">Save</button>
+                                <button id="restore" type="button" class="btn btn-success" ng-click="restoreState('Autolog_GridInv_Det')">Restore</button>
                             </div>
                         </div>
                     </div>

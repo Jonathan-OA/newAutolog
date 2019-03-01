@@ -12,6 +12,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <!-- Alerta de erro / sucesso -->
+                            <div id="msg_excluir"></div>
                             @include('flash::message')
                             <div class="row buttons_grid">
                                     <div class="icon_grid" aria-label="@lang('buttons.add')" data-microtip-position="bottom" role="tooltip">
@@ -33,8 +34,13 @@
                                 </div>
                                     <!-- Botões com as opções para cada documento -->
                                     @include('modules.production.buttonsDoc')
-                                <button id="save" type="button" class="btn btn-success" ng-click="saveState()">Save</button>
-                                <button id="restore" type="button" class="btn btn-success" ng-click="restoreState()">Restore</button>
+                                <div class="actionsGrid">
+                                    <span aria-label="@lang('infos.actions_grid')" data-microtip-position="right" role="tooltip">
+                                            <img class='icon' src='{{asset('/icons/information.png') }}' >
+                                    </span>
+                                    <button id="save" type="button" class="btn btn-success" ng-click="saveState('Autolog_GridInv')">Salvar Grid</button>
+                                    <button id="restore" type="button" class="btn btn-success" ng-click="restoreState('Autolog_GridInv')">Restaurar Grid</button>
+                                </div>
                             </div>
                         </div>
                     </div>

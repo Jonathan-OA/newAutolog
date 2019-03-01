@@ -16,7 +16,9 @@ return [
     'param_product'               => 'Permite ler apenas produtos que foram selecionados no inventário.',
     'param_location'               => 'Permite ler apenas endereços que foram selecionados no inventário.',
     'actions_grid'               => 'Permite salvar / restaurar alterações realizadas no grid de documentos',
-
+    'liberation_inv'              => 'Documento :doc liberado com sucesso! ( :cont Contagem )',
+    'liberation_doc'              => 'Documento :doc liberado com sucesso!',
+    'return_doc'              => 'Documento :doc retornado com sucesso!',
     
 
 ];
