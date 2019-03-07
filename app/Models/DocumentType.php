@@ -86,5 +86,11 @@ class DocumentType extends Model
                      ->pluck('description_f','code');
    }
 
+   public static function getMoviment($document_type_code){
+    return DocumentType::select("moviment_code")
+            ->where('code','=',$document_type_code)
+            ->pluck('moviment_code');
+   }
+
 
 }

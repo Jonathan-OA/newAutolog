@@ -36,6 +36,7 @@ return [
     '1acont' => 'Liberar 1ª Contagem',
     '2acont' => 'Liberar 2ª Contagem',
     '3acont' => 'Liberar 3ª Contagem',
+    'rules' => 'Regras de Liberação',
     
 
 ];

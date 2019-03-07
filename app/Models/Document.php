@@ -74,19 +74,29 @@ class Document extends Model
      */
 
     public static function getDocuments($moviment_code, $qty){
-        $docs = Document::select('documents.id','company_id','number','document_type_code','customer_code',
-                                 'supplier_code','courier_code','vehicle_id','driver_id','invoice','serial_number',
+        $docs = Document::select('documents.id','documents.company_id','number','document_type_code','customer_code',
+                                 'supplier_code','courier_code','vehicle_id','driver_id','documents.invoice','documents.serial_number',
                                  'emission_date','start_date','end_date','wave','total_volumes','total_weight',
-                                 'document_status_id','total_net_weigth','priority','comments','user_id',
+                                 'documents.document_status_id','total_net_weigth','priority','comments','user_id',
                                  'documents.created_at','documents.updated_at','moviment_code', 'document_status.description',
-                                 'inventory_status.description as inv_description', 'inventory_status_id')
+                                 'inventory_status.description as inv_description', 'inventory_status_id', DB::raw("COUNT(DISTINCT document_items.id) as total_items"))
                         ->join('document_types', 'documents.document_type_code', '=', 'document_types.code')
                         ->join('document_status', 'document_status.id', '=', 'documents.document_status_id')
                         ->leftJoin('inventory_status', 'inventory_status.id', '=', 'documents.inventory_status_id')
+                        ->leftJoin('document_items', function ($join) {
+                            $join->on('documents.id', '=', 'document_items.document_id')
+                                 ->where('document_items.document_status_id','<>', 9);
+                        })
                        ->where([
                                  ['documents.company_id', Auth::user()->company_id],
                                  ['document_types.moviment_code', $moviment_code]                        
                        ])
+                       ->groupBy('documents.id','company_id','number','document_type_code','customer_code',
+                                'supplier_code','courier_code','vehicle_id','driver_id','invoice','serial_number',
+                                'emission_date','start_date','end_date','wave','total_volumes','total_weight',
+                                'document_status_id','total_net_weigth','priority','comments','user_id',
+                                'documents.created_at','documents.updated_at','moviment_code', 'document_status.description',
+                                'inventory_status.description', 'inventory_status_id')
                        ->orderBy('documents.id', 'desc')
                        ->take($qty)
                        ->get();
@@ -119,7 +129,7 @@ class Document extends Model
      */
 
     public static function liberate($document_id){
-
+        //echo 'opa';exit;
         $doc = Document::select('documents.number',
                                 'documents.document_type_code',
                                 'document_types.moviment_code')
@@ -158,7 +168,7 @@ class Document extends Model
                                                  ->get()
                                                  ->toArray();
 
-                                                    
+                                       
             DB::beginTransaction();
             foreach($rules as $rule){
                 $entrou = 1;
@@ -174,9 +184,12 @@ class Document extends Model
                         break;
                     }
                 }else{
-                    echo 'Regra '.$rule_code.' não existe no arquivo de liberação.';
+                    $erro = 1;
+                    $return['msg'] = 'Regra '.$rule_code.' não existe no arquivo de liberação.';
                 }
             }
+
+            
 
             //Se não tem regras, da erro
             if($entrou == 0){
@@ -193,11 +206,11 @@ class Document extends Model
 
                 $return['erro'] = 0;
                 $return['msg'] = 'Documento liberado com sucesso!';
-                $return['urlRet'] = $urlRet;
+
+            }else{
+                $return['erro'] = 1;
 
             }
-            $return['urlRet'] = $urlRet;
-            
             
         }else{
             $return['erro'] = 1;

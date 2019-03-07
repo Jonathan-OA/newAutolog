@@ -1,6 +1,11 @@
 <script type="text/ng-template" id="tplButtons">     
     <!-- Status do Doc: document_status_id (Pendente, Liberado, Execução, Liberado) --> 
     <div ng-attr-id="buttons{%row.id%}"  style="overflow: visible !important;" >
+        <!-- Detalhar -->
+        <button ng-click="callRoute('./production/'+row.id+'/items')" class="icon_action" aria-label="@lang('buttons.detail')" data-microtip-position="left" role="tooltip"> 
+            <img class='icon' src='{{asset('/icons/detalhes.png') }}'>
+        </button>
+
         <!-- Funções para status 0 -->
         <span ng-if="row.document_status_id == 0">
             <!-- Liberar (Apenas status 0) -->
@@ -12,11 +17,6 @@
                 <img class='icon' src='{{ asset('/icons/editar.png') }}'> 
             </button>
         </span>
-        
-        <!-- Detalhar -->
-        <button ng-click="callRoute('./production/'+row.id+'/items')" class="icon_action" aria-label="@lang('buttons.detail')" data-microtip-position="left" role="tooltip"> 
-            <img class='icon' src='{{asset('/icons/detalhes.png') }}'>
-        </button>
         
         <!-- Retornar (Status 1 e 2) -->
         <button ng-if="row.document_status_id == 1 || row.document_status_id == 2 "

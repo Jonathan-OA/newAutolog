@@ -62,6 +62,7 @@ $(document).ready(function(e) {
             if (typeof attr == typeof undefined || attr === false) {
                 $.ajax({
                     url: APP_URL + "/search",
+                    global: false, //GLOBAL - FALSE Para não mostrar o icone de loading a cada letra
                     dataType: "json",
                     data: {
                         term: extractLast(request.term),

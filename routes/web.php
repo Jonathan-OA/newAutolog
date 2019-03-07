@@ -297,7 +297,7 @@ Route::group(['middleware' => 'auth'], function() {
 
 
     Route::get('documentTypeRules/datatable', 'DocumentTypeRuleController@getData');
-    Route::resource('documentTypeRules', 'DocumentTypeRuleController');
+    Route::resource('documentTypeRules/{document_type}', 'DocumentTypeRuleController');
 
 
     Route::get('liberationItems/datatable', 'LiberationItemController@getData');

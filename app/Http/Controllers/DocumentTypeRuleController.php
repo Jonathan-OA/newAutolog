@@ -31,8 +31,14 @@ class DocumentTypeRuleController extends AppBaseController
      * @param Request $request
      * @return Response
      */
-    public function index(Request $request)
+    public function index($document_type_code)
     {
+        $moviment = App\Models\DocumentType::getMoviment($document_type_code);
+        $rc = App\Models\Moviment::getClass($moviment[0]);
+        $class = $rc['class'];
+        $rulesDocument = get_class_methods($class);
+     print_r($rulesDocument);exit;
+
         $this->documentTypeRuleRepository->pushCriteria(new RequestCriteria($request));
         $documentTypeRules = $this->documentTypeRuleRepository->all();
 

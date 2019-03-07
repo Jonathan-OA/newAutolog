@@ -66,8 +66,7 @@
                         { data: 'print_labels', className: 'td_center' },
                         { data: null,
                          className: "th_grid",
-                         defaultContent: "<button id='edit' aria-label='@lang('buttons.edit')' data-microtip-position='left' role='tooltip' ><img class='icon' src='{{asset('/icons/editar.png') }}'></button><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='{{asset('/icons/remover.png') }}'></button>",
-                         width: "90px" 
+                         defaultContent: "<button id='edit' aria-label='@lang('buttons.edit')' data-microtip-position='left' role='tooltip' ><img class='icon' src='{{asset('/icons/editar.png') }}'></button><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='{{asset('/icons/remover.png') }}'></button><button id='rules' aria-label='@lang('buttons.rules')' data-microtip-position='left' role='tooltip'><img class='icon' src='{{asset('/icons/rules.png') }}'></button>"
                         }],
             "rowCallback": function( row, data, index ) {
                     //Se ativo, coloca icone de habilitado
@@ -97,6 +96,9 @@
             var id = $(this).attr('id');
             if(id == 'edit'){
                 //Editar Registro
+                window.location.href = "{!! URL::to('documentTypes/"+data.id+"/edit') !!}";
+            }else if(id == 'rules'){
+                //Regras de Liberação
                 window.location.href = "{!! URL::to('documentTypes/"+data.id+"/edit') !!}";
             }else{
                 //Excluir Registro

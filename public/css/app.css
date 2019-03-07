@@ -350,6 +350,14 @@
         background-color: white;
     }
     
+    .th_grid>button {
+        margin: 0px 3px;
+    }
+    
+    .th_grid>button>.icon {
+        background-color: white;
+    }
+    
     .td_grid_dt {
         white-space: nowrap;
         vertical-align: middle !important;

@@ -162,6 +162,7 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
                     },
                     cellTemplate: '<div class="ui-grid-cell-contents" ><div class="grid_cell stat{{grid.getCellValue(row, col)}}"> <p>{{row.entity.description}}</p></div></div>'
                 },
+                { name: 'Itens', field: 'total_items', type: 'number' },
                 { name: 'Emissão', field: 'emission_date', type: 'date', cellFilter: "date:\'yyyy-MM-dd\'" },
                 { name: 'Cliente', field: 'customer_code' },
                 { name: 'Fornecedor', field: 'supplier_code' },
@@ -173,6 +174,8 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
             rowTemplate: '<div ng-click="grid.appScope.clickRow(row, col, $event)" ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.uid" class="ui-grid-cell" ng-class="col.colIndex()" ui-grid-cell></div>',
 
         };
+
+
 
         $scope.callRoute = function(route, async = 0) {
             //Chama função global que chama uma rota ao clicar no botão
