@@ -99,4 +99,49 @@ class RulesProduction extends Model
         $doc->save();
 
     }
+
+    //Regra que cria tarefa de produção e atualiza status
+    public static function prd003($document_id){
+        
+        $doc = App\Models\Document::find($document_id);
+        $doc->document_status_id = 1;
+        $doc->save();
+
+    }
+
+    //Regra que cria tarefa de produção e atualiza status
+    public static function prd004($document_id){
+        
+        $doc = App\Models\Document::find($document_id);
+        $doc->document_status_id = 1;
+        $doc->save();
+
+    }
+
+    //Regra que cria tarefa de produção e atualiza status
+    public static function prd005($document_id){
+        
+        $doc = App\Models\Document::find($document_id);
+        $doc->document_status_id = 1;
+        $doc->save();
+
+    }
+
+    //Regra que cria tarefa de produção e atualiza status
+    public static function prd006($document_id){
+        
+        $doc = App\Models\Document::find($document_id);
+        $doc->document_status_id = 1;
+        $doc->save();
+
+    }
+
+    //Regra que cria tarefa de produção e atualiza status
+    public static function prd007($document_id){
+        
+        $doc = App\Models\Document::find($document_id);
+        $doc->document_status_id = 1;
+        $doc->save();
+
+    }
 }

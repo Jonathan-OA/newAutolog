@@ -188,12 +188,12 @@ class DocumentTypeController extends AppBaseController
 
 
             Flash::success(Lang::get('validation.delete_success'));
-            return array(0,Lang::get('validation.delete_success'));
+            return array('success',Lang::get('validation.delete_success'));
 
         }else{
             //Sem permissão
             Flash::error(Lang::get('validation.permission'));
-            return array(1,Lang::get('validation.permission'));
+            return array('danger',Lang::get('validation.permission'));
         }    
     }
 

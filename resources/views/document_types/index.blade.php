@@ -58,9 +58,9 @@
                     sPrevious: "@lang('models.previous')",
                 }
             },
-            columns: [  { data: 'code' },
+            columns: [  { data: 'code', className: 'td_center' },
                         { data: 'description' },
-                        { data: 'moviment_code' },
+                        { data: 'moviment_code', className: 'td_center' },
                         { data: 'lib_automatic', className: 'td_center' },
                         { data: 'lib_location', className: 'td_center' },
                         { data: 'print_labels', className: 'td_center' },
@@ -99,7 +99,7 @@
                 window.location.href = "{!! URL::to('documentTypes/"+data.id+"/edit') !!}";
             }else if(id == 'rules'){
                 //Regras de Liberação
-                window.location.href = "{!! URL::to('documentTypes/"+data.id+"/edit') !!}";
+                window.location.href = "{!! URL::to('documentTypeRules/"+data.code+"') !!}";
             }else{
                 //Excluir Registro
                 if(confirm('@lang("buttons.msg_remove")')){
@@ -112,20 +112,10 @@
                         success: function(scs){ 
                             //Recarrega grid sem atualizar a página
                             table.ajax.reload( null, false );
-                            //Se retornou 0, foi excluído com sucesso
-                            if(scs[0] == 0){
-                                alertType = 'success';
-                            }else{
-                                alertType = 'danger';
-                            }
                             //Mostra mensagem de sucesso ou erro
-                            if(!$('.alert').length){
-                                $('#msg_excluir').html('<div class="alert alert-'+alertType+'">'+scs[1]+'</div>');
-                            }else{
-                                $('.alert').toggleClass('alert-success alert-danger', true);
-                                $('.alert').html(scs[1]);
-
-                            }
+                            $('.alert').remove();
+                            $('#msg_excluir').html('<div class="alert alert-' + scs[0] + '">' + scs[1] + '</div>');
+                            $('.alert').html(scs[1]);
                         }
                     });
                 }

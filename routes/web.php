@@ -292,21 +292,18 @@ Route::group(['middleware' => 'auth'], function() {
     Route::resource('blockedGroups', 'BlockedGroupController');
 
 
-    Route::get('liberationRules/datatable', 'LiberationRuleController@getData');
-    Route::resource('liberationRules', 'LiberationRuleController');
+    Route::get('liberationRules/datatable/{moviment}', 'LiberationRuleController@getData');
+    Route::resource('liberationRules', 'LiberationRuleController',['except' => 'create']);
+    Route::get('liberationRules/idx/{moviment}', 'LiberationRuleController@index');
+    Route::get('liberationRules/create/{moviment}', 'LiberationRuleController@create');
+    Route::get('liberationRules/{moviment}/{document_type}', function($moviment, $doc_type) {
+        return App\Models\LiberationRule::getLiberationRules($moviment, $doc_type);
+    });
 
-
-    Route::get('documentTypeRules/datatable', 'DocumentTypeRuleController@getData');
-    Route::resource('documentTypeRules/{document_type}', 'DocumentTypeRuleController');
-
-
-    Route::get('liberationItems/datatable', 'LiberationItemController@getData');
-    Route::resource('liberationItems', 'LiberationItemController');
-
-
-    Route::get('liberationItems/datatable', 'LiberationItemController@getData');
-    Route::resource('liberationItems', 'LiberationItemController');
-
+    Route::get('documentTypeRules/datatable/{document_type}', 'DocumentTypeRuleController@getData');
+    Route::get('documentTypeRules/{document_type}', 'DocumentTypeRuleController@index');
+    Route::post('documentTypeRules/{document_type}', 'DocumentTypeRuleController@store');
+    Route::delete('documentTypeRules/{document_type}', 'DocumentTypeRuleController@destroy');
 
     Route::get('liberationItems/datatable', 'LiberationItemController@getData');
     Route::resource('liberationItems', 'LiberationItemController');
@@ -361,6 +358,23 @@ Route::group(['middleware' => 'auth'], function() {
 
     Route::get('taskStatus/datatable', 'TaskStatusController@getData');
     Route::resource('taskStatus', 'TaskStatusController');
+
+    Route::get('inventoryItems/datatable', 'InventoryItemController@getData');
+    Route::resource('inventoryItems', 'InventoryItemController');
+
+
+    Route::get('activityStatus/datatable', 'ActivityStatusController@getData');
+    Route::resource('activityStatus', 'ActivityStatusController');
+
+
+    Route::get('inventoryStatus/datatable', 'InventoryStatusController@getData');
+    Route::resource('inventoryStatus', 'InventoryStatusController');
+
+
+    Route::get('liberationStatus/datatable', 'LiberationStatusController@getData');
+    Route::resource('liberationStatus', 'LiberationStatusController');
+
+
 });
 
 
@@ -368,17 +382,3 @@ Route::group(['middleware' => 'auth'], function() {
 
 
 
-Route::get('inventoryItems/datatable', 'InventoryItemController@getData');
-Route::resource('inventoryItems', 'InventoryItemController');
-
-
-Route::get('activityStatus/datatable', 'ActivityStatusController@getData');
-Route::resource('activityStatus', 'ActivityStatusController');
-
-
-Route::get('inventoryStatus/datatable', 'InventoryStatusController@getData');
-Route::resource('inventoryStatus', 'InventoryStatusController');
-
-
-Route::get('liberationStatus/datatable', 'LiberationStatusController@getData');
-Route::resource('liberationStatus', 'LiberationStatusController');

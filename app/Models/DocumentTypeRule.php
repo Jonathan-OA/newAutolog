@@ -56,12 +56,34 @@ class DocumentTypeRule extends Model
 
     
 
-     //Retorna todos os document_type_rules disponíveis
-     public static function getDocumentTypeRules(){
-        return DocumentTypeRule::selectRaw("code,CONCAT(code,' - ',description) as description_f")
+    /**
+     * Função que retorna todas as regras cadastradas para um tipo de documento
+     * Parâmetros: Tipo de documento
+     * @var array
+     */
+
+     public static function getDocumentTypeRules($document_type_code){
+        return DocumentTypeRule::select('document_type_rules.id','code', 'description', 'order', 'parameters')
+                      ->join('liberation_rules','liberation_rules.code', 'document_type_rules.liberation_rule_code')
+                      ->where('document_type_code', $document_type_code)
                       ->where('company_id', Auth::user()->company_id)
-                      ->pluck('description_f','code');
+                      ->orderBy('order')
+                      ->get();
     }
 
+    /**
+     * Função que retorna a ordem da ultima regra inserida para o documento
+     * Parâmetros: Tipo de documento
+     * @var array
+     */
+
+    public static function getOrder($document_type_code){
+        $max = DocumentTypeRule::where('document_type_code', $document_type_code)
+                               ->where('company_id', Auth::user()->company_id)
+                               ->max('order');
+        
+        return (int)$max + 1;
+
+    }
 
 }

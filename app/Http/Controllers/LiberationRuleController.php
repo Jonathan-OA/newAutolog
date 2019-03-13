@@ -7,8 +7,8 @@ use App\Http\Requests\UpdateLiberationRuleRequest;
 use App\Repositories\LiberationRuleRepository;
 use App\Http\Controllers\AppBaseController;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Flash;
+use Auth;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Response;
 use DataTables;
@@ -31,13 +31,13 @@ class LiberationRuleController extends AppBaseController
      * @param Request $request
      * @return Response
      */
-    public function index(Request $request)
+    public function index($moviment_code)
     {
-        $this->liberationRuleRepository->pushCriteria(new RequestCriteria($request));
-        $liberationRules = $this->liberationRuleRepository->findByField('company_id', Auth::user()->company_id);
+        $liberationRules = $this->liberationRuleRepository->findWhere(array('moviment_code' => $moviment_code));
 
         return view('liberation_rules.index')
-            ->with('liberationRules', $liberationRules);
+            ->with('liberationRules', $liberationRules)
+            ->with('moviment_code', $moviment_code);
     }
 
     /**
@@ -45,12 +45,12 @@ class LiberationRuleController extends AppBaseController
      *
      * @return Response
      */
-    public function create()
+    public function create($moviment_code)
     {
         //Valida se usuário possui permissão para acessar esta opção
         if(App\Models\User::getPermission('liberation_rules_add',Auth::user()->user_type_code)){
 
-            return view('liberation_rules.create');
+            return view('liberation_rules.create')->with('moviment_code', $moviment_code);;
 
         }else{
             //Sem permissão
@@ -70,15 +70,34 @@ class LiberationRuleController extends AppBaseController
     {
         $input = $request->all();
 
-        $liberationRule = $this->liberationRuleRepository->create($input);
+        //Pega qual a model responsavel pelas regras de liberação do módulo
+        $rc = App\Models\Moviment::getClass($request['moviment_code']);
 
-        Flash::success(Lang::get('validation.save_success'));
+        if($rc){
+            //Movimento possui regras / class atrelada
+            if(method_exists(new $rc['class'](),$input['code'])){
+                //Regra foi encontrada no arquivo
+                $liberationRule = $this->liberationRuleRepository->create($input);
+                Flash::success(Lang::get('validation.save_success'));
+                return redirect(url('liberationRules/idx/'.$liberationRule->moviment_code));
+            }else{
+                //Regra não existe no arquivo
+                $msg = 'Regra '.$input['code'].' não existe no arquivo de liberação ('.$rc['class'].')';
+                Flash::error($msg);
+            }
 
-        return redirect(route('liberationRules.index'));
+        }else{
+            $msg = 'Não foram encontradas regras para este movimento!';
+            Flash::error($msg);
+        }
+        
+        return redirect(url('liberationRules/create/'.$input['moviment_code']));
+        
+        
     }
 
     /**
-     * Display the specified LiberationRule.
+     * Display the specified Packing.
      *
      * @param  int $id
      *
@@ -91,11 +110,13 @@ class LiberationRuleController extends AppBaseController
         if (empty($liberationRule)) {
             Flash::error(Lang::get('validation.not_found'));
 
-            return redirect(route('liberationRules.index'));
+            return redirect(url('liberationRules/idx/'.$liberationRule->moviment_code));
         }
 
-        return view('liberation_rules.show')->with('liberationRule', $liberationRule);
+        return view('liberationRules.show')->with('liberationRule', $liberationRule);
     }
+
+
 
     /**
      * Show the form for editing the specified LiberationRule.
@@ -106,23 +127,24 @@ class LiberationRuleController extends AppBaseController
      */
     public function edit($id)
     {
+        $liberationRule = $this->liberationRuleRepository->findWithoutFail($id);
+        
         //Valida se usuário possui permissão para acessar esta opção
         if(App\Models\User::getPermission('liberation_rules_edit',Auth::user()->user_type_code)){
-
-            $liberationRule = $this->liberationRuleRepository->findWithoutFail($id);
 
             if (empty($liberationRule)) {
                 Flash::error(Lang::get('validation.not_found'));
 
-                return redirect(route('liberationRules.index'));
+                return redirect(url('liberationRules/idx/'.$liberationRule->moviment_code));
             }
 
-            return view('liberation_rules.edit')->with('liberationRule', $liberationRule);
+            return view('liberation_rules.edit')->with('liberationRule', $liberationRule)
+                                                ->with('moviment_code', $liberationRule->moviment_code);
         
         }else{
             //Sem permissão
             Flash::error(Lang::get('validation.permission'));
-            return redirect(route('liberation_rules.index'));
+            return redirect(url('liberationRules/idx/'.$liberationRule->moviment_code));
         }
     }
 
@@ -136,6 +158,7 @@ class LiberationRuleController extends AppBaseController
      */
     public function update($id, UpdateLiberationRuleRequest $request)
     {
+        
         $liberationRule = $this->liberationRuleRepository->findWithoutFail($id);
 
         if (empty($liberationRule)) {
@@ -147,14 +170,14 @@ class LiberationRuleController extends AppBaseController
         //Grava log
         $requestF = $request->all();
         $descricao = 'Alterou LiberationRule ID: '.$id.' - '.$requestF['code'];
-        $log = App\Models\Log::wlog('liberation_rules_edit', $descricao);
+        $log = App\Models\Log::wlog('liberation_items_edit', $descricao);
 
 
         $liberationRule = $this->liberationRuleRepository->update($request->all(), $id);
 
         Flash::success(Lang::get('validation.update_success'));
 
-        return redirect(route('liberationRules.index'));
+        return redirect(url('liberationRules/idx/'.$liberationRule->moviment_code));
     }
 
     /**
@@ -174,32 +197,33 @@ class LiberationRuleController extends AppBaseController
             if (empty($liberationRule)) {
                 Flash::error(Lang::get('validation.not_found'));
 
-                return redirect(route('liberationRules.index'));
+                return redirect(url('liberationRules/idx/'.$liberationRule['moviment_code']));
             }
 
             $this->liberationRuleRepository->delete($id);
 
              //Grava log
-            $descricao = 'Excluiu LiberationRule ID: '.$id;
+            $descricao = 'Excluiu liberationRule ID: '.$id.' - '.$liberationRule['code'];
             $log = App\Models\Log::wlog('liberation_rules_remove', $descricao);
 
 
             Flash::success(Lang::get('validation.delete_success'));
-            return array(0,Lang::get('validation.delete_success'));
+            return array('success',Lang::get('validation.delete_success'));
 
         }else{
             //Sem permissão
             Flash::error(Lang::get('validation.permission'));
-            return array(1,Lang::get('validation.permission'));
+            return array('danger',Lang::get('validation.permission'));
         }    
     }
 
-    /**
+     /**
      * Get data from model 
      *
      */
-    public function getData()
+    public function getData($moviment_code)
     {
-        return Datatables::of(App\Models\LiberationRule::all())->make(true);
+        return Datatables::of(App\Models\LiberationRule::where('moviment_code', '=', $moviment_code))->make(true);
     }
+
 }

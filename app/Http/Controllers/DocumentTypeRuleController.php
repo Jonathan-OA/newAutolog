@@ -14,6 +14,7 @@ use Response;
 use DataTables;
 use App;
 use Lang;
+use DB;
 
 class DocumentTypeRuleController extends AppBaseController
 {
@@ -33,37 +34,21 @@ class DocumentTypeRuleController extends AppBaseController
      */
     public function index($document_type_code)
     {
+        //Pega tipo de movimento do tipo de documento
         $moviment = App\Models\DocumentType::getMoviment($document_type_code);
-        $rc = App\Models\Moviment::getClass($moviment[0]);
-        $class = $rc['class'];
-        $rulesDocument = get_class_methods($class);
-     print_r($rulesDocument);exit;
+        //Pega todas as regras referentes aquele modulo (desconsiderando as já cadastradas)
+        $rulesMov = App\Models\LiberationRule::getLiberationRules($moviment[0], $document_type_code);
 
-        $this->documentTypeRuleRepository->pushCriteria(new RequestCriteria($request));
-        $documentTypeRules = $this->documentTypeRuleRepository->all();
-
+        //Pega todas as regras cadastradas para aquele tipo de documento
+        $documentTypeRules = App\Models\DocumentTypeRule::getDocumentTypeRules($document_type_code);  
+        
         return view('document_type_rules.index')
-            ->with('documentTypeRules', $documentTypeRules);
+            ->with('documentTypeRules', $documentTypeRules)
+            ->with('rulesMov', $rulesMov)
+            ->with('document_type_code', $document_type_code)
+            ->with('moviment_code', $moviment[0]);
     }
 
-    /**
-     * Show the form for creating a new DocumentTypeRule.
-     *
-     * @return Response
-     */
-    public function create()
-    {
-        //Valida se usuário possui permissão para acessar esta opção
-        if(App\Models\User::getPermission('document_type_rules_add',Auth::user()->user_type_code)){
-
-            return view('document_type_rules.create');
-
-        }else{
-            //Sem permissão
-            Flash::error(Lang::get('validation.permission'));
-            return redirect(route('document_type_rules.index'));
-        }
-    }
 
     /**
      * Store a newly created DocumentTypeRule in storage.
@@ -74,93 +59,19 @@ class DocumentTypeRuleController extends AppBaseController
      */
     public function store(CreateDocumentTypeRuleRequest $request)
     {
+       
         $input = $request->all();
+        //Assume company_id do usuário logado
+        $input['company_id'] = Auth::user()->company_id;
+        
+        //Pega ultima regra e incrementa ordem + 1
+        $input['order'] = App\Models\DocumentTypeRule::getOrder($input['document_type_code']);
 
         $documentTypeRule = $this->documentTypeRuleRepository->create($input);
 
-        Flash::success(Lang::get('validation.save_success'));
+        //Flash::success(Lang::get('validation.save_success'));
+        return array('success',Lang::get('validation.save_success'));
 
-        return redirect(route('documentTypeRules.index'));
-    }
-
-    /**
-     * Display the specified DocumentTypeRule.
-     *
-     * @param  int $id
-     *
-     * @return Response
-     */
-    public function show($id)
-    {
-        $documentTypeRule = $this->documentTypeRuleRepository->findWithoutFail($id);
-
-        if (empty($documentTypeRule)) {
-            Flash::error(Lang::get('validation.not_found'));
-
-            return redirect(route('documentTypeRules.index'));
-        }
-
-        return view('document_type_rules.show')->with('documentTypeRule', $documentTypeRule);
-    }
-
-    /**
-     * Show the form for editing the specified DocumentTypeRule.
-     *
-     * @param  int $id
-     *
-     * @return Response
-     */
-    public function edit($id)
-    {
-        //Valida se usuário possui permissão para acessar esta opção
-        if(App\Models\User::getPermission('document_type_rules_edit',Auth::user()->user_type_code)){
-
-            $documentTypeRule = $this->documentTypeRuleRepository->findWithoutFail($id);
-
-            if (empty($documentTypeRule)) {
-                Flash::error(Lang::get('validation.not_found'));
-
-                return redirect(route('documentTypeRules.index'));
-            }
-
-            return view('document_type_rules.edit')->with('documentTypeRule', $documentTypeRule);
-        
-        }else{
-            //Sem permissão
-            Flash::error(Lang::get('validation.permission'));
-            return redirect(route('document_type_rules.index'));
-        }
-    }
-
-    /**
-     * Update the specified DocumentTypeRule in storage.
-     *
-     * @param  int              $id
-     * @param UpdateDocumentTypeRuleRequest $request
-     *
-     * @return Response
-     */
-    public function update($id, UpdateDocumentTypeRuleRequest $request)
-    {
-        $documentTypeRule = $this->documentTypeRuleRepository->findWithoutFail($id);
-
-        if (empty($documentTypeRule)) {
-            Flash::error(Lang::get('validation.not_found'));
-
-            return redirect(route('documentTypeRules.index'));
-        }
-
-        //Grava log
-        $requestF = $request->all();
-        $descricao = 'Alterou DocumentTypeRule ID: '.$id.' - '.$requestF['code'];
-        $log = App\Models\Log::wlog('document_type_rules_edit', $descricao);
-
-
-        $documentTypeRule = $this->documentTypeRuleRepository->update($request->all(), $id);
-
-        Flash::success(Lang::get('validation.update_success'));
-
-        return redirect(route('documentTypeRules.index'));
     }
 
     /**
@@ -186,8 +97,16 @@ class DocumentTypeRuleController extends AppBaseController
             $this->documentTypeRuleRepository->delete($id);
 
              //Grava log
-            $descricao = 'Excluiu DocumentTypeRule ID: '.$id;
+            $descricao = 'Excluiu DocumentTypeRule ID: '.$id.' Code: '.$documentTypeRule->liberation_rule_code.' - '.$documentTypeRule->document_type_code;
             $log = App\Models\Log::wlog('document_type_rules_remove', $descricao);
+
+            //Atualiza a ordem das linhas que sobraram
+            DB::table('document_type_rules')
+            ->where('company_id', Auth::user()->company_id)
+            ->where('document_type_code', $documentTypeRule->document_type_code)
+            ->where('order','>',$documentTypeRule->order)
+            ->decrement('order');
+
 
 
             Flash::success(Lang::get('validation.delete_success'));
@@ -204,8 +123,8 @@ class DocumentTypeRuleController extends AppBaseController
      * Get data from model 
      *
      */
-    public function getData()
+    public function getData($document_type_code)
     {
-        return Datatables::of(App\Models\DocumentTypeRule::where('company_id', Auth::user()->company_id))->make(true);
+        return Datatables::of(App\Models\DocumentTypeRule::getDocumentTypeRules($document_type_code))->make(true);
     }
 }

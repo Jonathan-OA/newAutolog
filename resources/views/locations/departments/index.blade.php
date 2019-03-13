@@ -96,20 +96,10 @@
                         success: function(scs){ 
                             //Recarrega grid sem atualizar a página
                             table.ajax.reload( null, false );
-                            //Se retornou 0, foi excluído com sucesso
-                            if(scs[0] == 0){
-                                alertType = 'success';
-                            }else{
-                                alertType = 'danger';
-                            }
                             //Mostra mensagem de sucesso ou erro
-                            if(!$('.alert').length){
-                                $('#msg_excluir').html('<div class="alert alert-'+alertType+'">'+scs[1]+'</div>');
-                            }else{
-                                $('.alert').toggleClass('alert-success alert-danger', true);
-                                $('.alert').html(scs[1]);
-
-                            }
+                            $('.alert').remove();
+                            $('#msg_excluir').html('<div class="alert alert-' + scs[0] + '">' + scs[1] + '</div>');
+                            $('.alert').html(scs[1]);
                         }
                     });
                 }

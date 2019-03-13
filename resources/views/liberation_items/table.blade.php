@@ -20,16 +20,16 @@
             @foreach($liberationItems as $liberationItem)
                 <tr>
                     <td>{!! $liberationItem->company_id !!}</td>
-            <td>{!! $liberationItem->document_id !!}</td>
-            <td>{!! $liberationItem->document_item_id !!}</td>
-            <td>{!! $liberationItem->product_code !!}</td>
-            <td>{!! $liberationItem->pallet_id !!}</td>
-            <td>{!! $liberationItem->label_id !!}</td>
-            <td>{!! $liberationItem->qty !!}</td>
-            <td>{!! $liberationItem->liberation_status_id !!}</td>
-            <td>{!! $liberationItem->orig_location_code !!}</td>
-            <td>{!! $liberationItem->dest_location_code !!}</td>
-            <td>{!! $liberationItem->task_id !!}</td>
+                    <td>{!! $liberationItem->document_id !!}</td>
+                    <td>{!! $liberationItem->document_item_id !!}</td>
+                    <td>{!! $liberationItem->product_code !!}</td>
+                    <td>{!! $liberationItem->pallet_id !!}</td>
+                    <td>{!! $liberationItem->label_id !!}</td>
+                    <td>{!! $liberationItem->qty !!}</td>
+                    <td>{!! $liberationItem->liberation_status_id !!}</td>
+                    <td>{!! $liberationItem->orig_location_code !!}</td>
+                    <td>{!! $liberationItem->dest_location_code !!}</td>
+                    <td>{!! $liberationItem->task_id !!}</td>
                 </tr>
             @endforeach
             </tbody>

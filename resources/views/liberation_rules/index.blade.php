@@ -1,21 +1,28 @@
 @extends('layouts.app')
 
 @section('content')
+    <!-- BreadCrumb - Trilha  -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{!! route('moviments.index') !!}">@lang('models.moviments')</a></li>
+        <li class="breadcrumb-item active" aria-current="page">@lang('models.liberation_rules')</li>
+        </ol>
+    </nav>
     <div class="row">
         <div class="col-md-12 pad-ct">
-            <div class="panel panel-default" >
+            <div class="panel pbread panel-default" >
                 <div class="panel-heading">
                    <!-- Texto baseado no arquivo de linguagem -->
-                   @lang('models.liberation_rules') 
+                   @lang('models.liberation_rules') - {!! $moviment_code !!}
                 </div>
-                <div class="panel panel-default">
+                <div class="panel pbread panel-default">
                     <div class="row">
                         <div class="col-md-12">
                             <!-- Alerta de erro / sucesso -->
                             @include('flash::message')
                             <div id="msg_excluir"></div>
                             <div class="row buttons_grid">
-                                <a class="btn btn-success"  href="{!! route('liberationRules.create') !!}">@lang('buttons.add')</a>
+                                <a class="btn btn-success"  href="{!! URL::to('liberationRules/create/'.$moviment_code) !!}">@lang('buttons.add')</a>
                             </div>
                             <div class="panel-body">
                                 @include('liberation_rules.table')
@@ -35,8 +42,8 @@
         //Parâmetros para criação da datatable
         table = $("#liberationRules-table").DataTable({
             scrollX: true,
-            scrollY: "47vh",
-            ajax: 'liberationRules/datatable',
+            scrollY: "40vh",
+            ajax: "{!! URL::to('liberationRules/datatable/'.$moviment_code) !!}",
             autoWidth: true,
             fixedColumns:   {
                 leftColumns: 0,
@@ -53,14 +60,23 @@
                     sPrevious: "@lang('models.previous')",
                 }
             },
-            columns: [ { data: 'code' },
-                       { data: 'module_name' },
-                       { data: 'enabled' },
-                       { data: null,
+            columns: [  { data: 'code', className: 'td_center'  },
+                        { data: 'moviment_code', className: 'td_center'  },
+                        { data: 'description' },
+                        { data: 'enabled', className: 'td_center'  },
+                        { data: null,
                          className: "th_grid",
                          defaultContent: "<button id='edit' aria-label='@lang('buttons.edit')' data-microtip-position='left' role='tooltip' ><img class='icon' src='{{asset('/icons/editar.png') }}'></button><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='{{asset('/icons/remover.png') }}'></button>",
                          width: "90px" 
                         }],
+            "rowCallback": function( row, data, index ) {
+                    //Se ativo, coloca icone de habilitado
+                    if ( data.enabled == 1 ) {
+                        $('td:eq(3)', row).html( "<img class='icon' src='{{asset('/icons/checked.png') }}'>" );
+                    }else{
+                        $('td:eq(3)', row).html('');
+                    }
+                }
       });
 
       //Funções dos botões de editar e excluir
@@ -76,26 +92,17 @@
                     //Token obrigatório para envio POST
                     var tk = $('meta[name="csrf-token"]').attr('content');
                     $.ajax({
-                        url: 'liberationRules/'+data.id,
+                        url: "{!! URL::to('liberationRules/"+data.id+"') !!}",
                         type: 'post',
                         data: {_method: 'delete', _token :tk},
                         success: function(scs){ 
                             //Recarrega grid sem atualizar a página
                             table.ajax.reload( null, false );
-                            //Se retornou 0, foi excluído com sucesso
-                            if(scs[0] == 0){
-                                alertType = 'success';
-                            }else{
-                                alertType = 'danger';
-                            }
                             //Mostra mensagem de sucesso ou erro
-                            if(!$('.alert').length){
-                                $('#msg_excluir').html('<div class="alert alert-'+alertType+'">'+scs[1]+'</div>');
-                            }else{
-                                $('.alert').toggleClass('alert-success alert-danger', true);
-                                $('.alert').html(scs[1]);
+                            $('.alert').remove();
+                            $('#msg_excluir').html('<div class="alert alert-' + scs[0] + '">' + scs[1] + '</div>');
+                            $('.alert').html(scs[1]);
 
-                            }
                         }
                     });
                 }

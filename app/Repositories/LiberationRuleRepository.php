@@ -8,7 +8,7 @@ use InfyOm\Generator\Common\BaseRepository;
 /**
  * Class LiberationRuleRepository
  * @package App\Repositories
- * @version July 4, 2018, 1:43 pm -03
+ * @version March 11, 2019, 1:54 pm -03
  *
  * @method LiberationRule findWithoutFail($id, $columns = ['*'])
  * @method LiberationRule find($id, $columns = ['*'])
@@ -22,6 +22,7 @@ class LiberationRuleRepository extends BaseRepository
     protected $fieldSearchable = [
         'code',
         'module_name',
+        'description',
         'enabled'
     ];
 

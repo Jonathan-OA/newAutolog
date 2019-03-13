@@ -280,6 +280,7 @@ return [
     'document_number' => 'Documento',
     'stock_transfer' => 'Transferência Manual',
     'decimal_places' => 'Casas Decimais',
+    'order' => 'Ordem de Exc.',
     
     
     //PlaceHolders

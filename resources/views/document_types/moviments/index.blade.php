@@ -59,11 +59,11 @@
                     sPrevious: "@lang('models.previous')",
                 }
             },
-            columns: [  { data: 'code' },
+            columns: [  { data: 'code', className: 'td_center' },
                         { data: 'description' },
                         { data: null,
                          className: "th_grid",
-                         defaultContent: "<button id='edit' aria-label='@lang('buttons.edit')' data-microtip-position='left' role='tooltip' ><img class='icon' src='{{asset('/icons/editar.png') }}'></button><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='{{asset('/icons/remover.png') }}'></button>",
+                         defaultContent: "<button id='edit' aria-label='@lang('buttons.edit')' data-microtip-position='left' role='tooltip' ><img class='icon' src='{{asset('/icons/editar.png') }}'></button><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='{{asset('/icons/remover.png') }}'></button><button id='rules' aria-label='@lang('buttons.rules')' data-microtip-position='left' role='tooltip'><img class='icon' src='{{asset('/icons/rules.png') }}'></button>",
                          width: "90px" 
                         }],
       });
@@ -75,6 +75,9 @@
             if(id == 'edit'){
                 //Editar Registro
                 window.location.href = "{!! URL::to('moviments/"+data.id+"/edit') !!}";
+            }else if(id == 'rules'){
+                //Regras de Liberação
+                window.location.href = "{!! URL::to('liberationRules/idx/"+data.code+"') !!}";
             }else{
                 //Excluir Registro
                 if(confirm('@lang("buttons.msg_remove")')){
@@ -87,20 +90,10 @@
                         success: function(scs){ 
                             //Recarrega grid sem atualizar a página
                             table.ajax.reload( null, false );
-                            //Se retornou 0, foi excluído com sucesso
-                            if(scs[0] == 0){
-                                alertType = 'success';
-                            }else{
-                                alertType = 'danger';
-                            }
                             //Mostra mensagem de sucesso ou erro
-                            if(!$('.alert').length){
-                                $('#msg_excluir').html('<div class="alert alert-'+alertType+'">'+scs[1]+'</div>');
-                            }else{
-                                $('.alert').toggleClass('alert-success alert-danger', true);
-                                $('.alert').html(scs[1]);
-
-                            }
+                            $('.alert').remove();
+                            $('#msg_excluir').html('<div class="alert alert-' + scs[0] + '">' + scs[1] + '</div>');
+                            $('.alert').html(scs[1]);
                         }
                     });
                 }

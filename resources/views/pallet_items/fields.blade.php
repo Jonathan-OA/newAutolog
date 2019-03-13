@@ -20,12 +20,12 @@
 {!! Form::text('uom_code', null, ['class' => 'form-control','id' => 'autocomplete1', 'table' => 'packings', 'id_dep' => 'autocomplete', 'readonly']) !!}
 
 <!-- Prim Qty Field -->
-{!! Form::label('prev_qty', Lang::get('models.prim_qty').':') !!}
-{!! Form::number('prev_qty', null, ['class' => 'form-control','step' => '0.000001','placeholder' => '0,000000']) !!}
+{!! Form::label('prim_qty', Lang::get('models.prim_qty').':') !!}
+{!! Form::number('prim_qty', null, ['class' => 'form-control','step' => '0.000001','placeholder' => '0,000000']) !!}
 
 <!-- Prim Uom Code Field -->
-{!! Form::label('prev_uom_code', Lang::get('models.prim_uom_code').':') !!}
-{!! Form::text('prev_uom_code', null, ['class' => 'form-control','id' => 'autocomplete2', 'table' => 'packings', 'id_dep' => 'autocomplete', 'readonly']) !!}
+{!! Form::label('prim_uom_code', Lang::get('models.prim_uom_code').':') !!}
+{!! Form::text('prim_uom_code', null, ['class' => 'form-control','id' => 'autocomplete2', 'table' => 'packings', 'id_dep' => 'autocomplete', 'readonly']) !!}
 
 <!-- Label Id Field -->
 {!! Form::label('label_id', Lang::get('models.label_id').':') !!}
