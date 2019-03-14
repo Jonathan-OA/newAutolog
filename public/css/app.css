@@ -471,6 +471,15 @@
     .dataTables_scrollBody {
         z-index: 1 !important;
     }
+    
+    .dataTables_group {
+        background-color: #404e65 !important;
+        font-weight: bold;
+    }
+    
+    .dataTables_group>td {
+        color: white !important;
+    }
     /* --------------------------------------------*/
     /*                   Menu                      */
     /* --------------------------------------------*/

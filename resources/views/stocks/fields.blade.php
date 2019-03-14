@@ -25,12 +25,12 @@
 {!! Form::select('uom_code', $uoms, null, ['id' => 'uom_code', 'class' => 'form-control']) !!}
 
 <!-- Prev Qty Field -->
-{!! Form::label('prev_qty', Lang::get('models.prev_qty').':') !!}
-{!! Form::number('prev_qty', null, ['class' => 'form-control','step' => '0.000001', 'placeholder' => '0,000000']) !!}
+{!! Form::label('prim_qty', Lang::get('models.prim_qty').':') !!}
+{!! Form::number('prim_qty', null, ['class' => 'form-control','step' => '0.000001', 'placeholder' => '0,000000']) !!}
 
 <!-- Prev Uom Code Field -->
-{!! Form::label('prev_uom_code', Lang::get('models.prev_uom_code').':') !!}
-{!! Form::select('prev_uom_code', $uoms, null, ['class' => 'form-control']) !!}
+{!! Form::label('prim_uom_code', Lang::get('models.prim_uom_code').':') !!}
+{!! Form::select('prim_uom_code', $uoms, null, ['class' => 'form-control']) !!}
 
 <!-- Pallet Id Field -->
 {!! Form::label('pallet_id', Lang::get('models.pallet_id').':') !!}

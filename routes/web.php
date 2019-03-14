@@ -361,7 +361,9 @@ Route::group(['middleware' => 'auth'], function() {
 
     Route::get('inventoryItems/datatable', 'InventoryItemController@getData');
     Route::resource('inventoryItems', 'InventoryItemController');
-
+    Route::get('inventoryItems/{document_id}/report', 'InventoryItemController@reportInv');
+    Route::get('inventoryItems/{document_id}/datatable', 'InventoryItemController@reportDatatable');
+    
 
     Route::get('activityStatus/datatable', 'ActivityStatusController@getData');
     Route::resource('activityStatus', 'ActivityStatusController');

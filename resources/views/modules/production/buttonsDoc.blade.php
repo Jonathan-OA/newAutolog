@@ -1,5 +1,7 @@
 <script type="text/ng-template" id="tplButtons">     
     <!-- Status do Doc: document_status_id (Pendente, Liberado, Execução, Liberado) --> 
+    <!-- função callRoute com o segundo parametro = 1: acessa a rota por ajax; segundo parametro  vazio: redireciona -->
+    
     <div ng-attr-id="buttons{%row.id%}"  style="overflow: visible !important;" >
         <!-- Detalhar -->
         <button ng-click="callRoute('./production/'+row.id+'/items')" class="icon_action" aria-label="@lang('buttons.detail')" data-microtip-position="left" role="tooltip"> 

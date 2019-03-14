@@ -1,6 +1,7 @@
 <script type="text/ng-template" id="tplButtons">  
     <!-- Status do Doc: document_status_id (Pendente, Liberado, Execução, Liberado) --> 
     <!-- Status do Inv: inventory_status_id (Pendente, 1ª Contagem Pendente, 2ª Contagem Pendente, etc) --> 
+    <!-- função callRoute com o segundo parametro = 1: acessa a rota por ajax. segundo parametro  vazio: redireciona -->
     <div ng-attr-id="buttons{%row.id%}"  style="overflow: visible !important;" >
         <!-- Detalhar -->
          <button  ng-click="callRoute('./inventory/'+row.id+'/items')" class="icon_action" aria-label="@lang('buttons.detail')" data-microtip-position="left" role="tooltip"> 
@@ -33,11 +34,16 @@
                 <img class='icon' src='{{asset('/icons/3acont.png') }}'>
         </button>
 
-         <!-- Retornar (Status Doc > 1 e < 8) -->
-       <button ng-if="row.status_doc != 0 && row.status_doc != 8"
-            ng-click="callRoute('./inventory/'+row.id+'/return', 1)"
-            class="icon_action" aria-label="@lang('buttons.return')" data-microtip-position="left" role="tooltip">
-            <img class='icon' src='{{asset('/icons/retornar.png') }}'>
-        </button>
+         <!-- Retornar e Relatorio de Contagens realizadas (Status Doc > 1 e < 8) -->
+         <span ng-if="row.status_doc != 0  && row.status_doc != 8">
+            <button ng-click="callRoute('./inventory/'+row.id+'/return', 1)"
+                    class="icon_action" aria-label="@lang('buttons.return')" data-microtip-position="left" role="tooltip">
+                    <img class='icon' src='{{asset('/icons/retornar.png') }}'>
+            </button>
+            <button ng-click="callRoute('./inventoryItems/'+row.id+'/report')"
+                    class="icon_action" aria-label="@lang('reports.reportInv')" data-microtip-position="left" role="tooltip">
+                    <img class='icon' src='{{asset('/icons/retornar.png') }}'>
+            </button>
+        </span>
     </div>
 </script>

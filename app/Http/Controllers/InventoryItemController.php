@@ -196,6 +196,31 @@ class InventoryItemController extends AppBaseController
     }
 
     /**
+     * Relatório de Apontamentos
+     *
+     * @param  int $id
+     *
+     * @return Response
+     */
+    public function reportInv($document_id)
+    {
+
+        $inventory_items = App\Models\InventoryItem::getAppointments($document_id, 1);
+
+        return view('modules.inventory.repInventory')
+                ->with('document_id', $document_id)
+                ->with('inventory_items', $inventory_items);
+        
+    }
+
+    public function reportDatatable($document_id)
+    {
+        return Datatables::of(App\Models\InventoryItem::getAppointments($document_id, 1))->make(true);
+        
+    }
+
+
+    /**
      * Get data from model 
      *
      */

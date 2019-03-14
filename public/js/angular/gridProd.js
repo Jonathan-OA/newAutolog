@@ -221,73 +221,74 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
 ]);
 
 //Grid de detalhes dos documentos
-app.controller('DetCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '$timeout', '$interval', function($rootScope, $scope, $http, uiGridConstants, $timeout, $interval) {
-    $scope.gridDetalhes = {};
-    $scope.gridDetalhes.data = [];
-    $scope.gridDetalhes = {
-        enableFullRowSelection: false,
-        multiSelect: false,
-        enableFiltering: false,
-        fastWatch: true,
-        onRegisterApi: function(gridApiDet) {
-            $scope.gridApiDet = gridApiDet;
-            $timeout(function() {
-                $scope.restoreState();
-            }, 50);
-        },
-        enableGridMenu: true,
-        columnDefs: [
-            { name: 'Item', field: 'product_code' },
-            { name: 'Quantidade', field: 'qty' },
-            { name: 'Unidade', field: 'uom_code' },
-            { name: 'Lote', field: 'batch' },
-            { name: 'Lote Fornec', field: 'batch_supplier' },
-            { name: 'Qtd. Conf.', field: 'qty_conf' },
-            { name: 'Qtd. Embarc.', field: 'qty_ship' },
-            { name: 'Status', field: 'document_status_id', cellTemplate: '<div class="ui-grid-cell-contents"><div class="grid_cell stat{{grid.getCellValue(row, col)}}"><p>{{row.entity.description}}</p></div></div>' },
-            { name: 'Opções', cellTemplate: 'options' }
-        ],
-        enablePaginationControls: false,
-        paginationPageSize: 18
-    };
+app.controller('DetCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '$timeout', '$interval',
+    function($rootScope, $scope, $http, uiGridConstants, $timeout, $interval) {
+        $scope.gridDetalhes = {};
+        $scope.gridDetalhes.data = [];
+        $scope.gridDetalhes = {
+            enableFullRowSelection: false,
+            multiSelect: false,
+            enableFiltering: false,
+            fastWatch: true,
+            onRegisterApi: function(gridApiDet) {
+                $scope.gridApiDet = gridApiDet;
+                $timeout(function() {
+                    $scope.restoreState();
+                }, 50);
+            },
+            enableGridMenu: true,
+            columnDefs: [
+                { name: 'Item', field: 'product_code' },
+                { name: 'Quantidade', field: 'qty' },
+                { name: 'Unidade', field: 'uom_code' },
+                { name: 'Lote', field: 'batch' },
+                { name: 'Lote Fornec', field: 'batch_supplier' },
+                { name: 'Qtd. Conf.', field: 'qty_conf' },
+                { name: 'Qtd. Embarc.', field: 'qty_ship' },
+                { name: 'Status', field: 'document_status_id', cellTemplate: '<div class="ui-grid-cell-contents"><div class="grid_cell stat{{grid.getCellValue(row, col)}}"><p>{{row.entity.description}}</p></div></div>' }
+            ],
+            enablePaginationControls: false,
+            paginationPageSize: 18
+        };
 
-    $scope.callRoute = function(route, async = 0) {
-        //Chama função global que chama uma rota ao clicar no botão
-        $rootScope.callRouteRS(route, async, $scope);
+        $scope.callRoute = function(route, async = 0) {
+            //Chama função global que chama uma rota ao clicar no botão
+            $rootScope.callRouteRS(route, async, $scope);
+        }
+
+        $scope.clickRow = function(row, col, $event) {
+            //Chama função global que manipula o click na linha do grid
+            $rootScope.clickRowRS(row, col, $event, $scope, $animate, $compile, $timeout);
+        }
+
+
+        //Salva o grid atual em uma variavel de sessão e banco (ajax)
+        $scope.saveState = function(name) {
+            $rootScope.saveStateRS($scope, name, $http);
+        };
+
+        //Restaura o grid salvo em sessão ou banco (ajax)
+        $scope.restoreState = function(name) {
+            $rootScope.restoreStateRS($scope, name, $http);
+        };
+
+        //Carrega a tabela quando clicar nos detalhes do documento
+        $scope.showGrid = function(id, number) {
+            $scope.documentNumber = number;
+
+            //Busca os itens do documento
+            $http.get('../../api/documentItems/' + id)
+                .then(function(response) {
+                    $scope.gridDetalhes.data = response.data;
+                });
+        }
+
+        //Esconde / Mostra os filtros
+        $scope.toggleFiltering = function() {
+            $rootScope.gridDetalhes.enableFiltering = !$scope.gridDetalhes.enableFiltering;
+            $rootScope.gridApiDet.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
+        };
+
+
     }
-
-    $scope.clickRow = function(row, col, $event) {
-        //Chama função global que manipula o click na linha do grid
-        $rootScope.clickRowRS(row, col, $event, $scope, $animate, $compile, $timeout);
-    }
-
-
-    //Salva o grid atual em uma variavel de sessão e banco (ajax)
-    $scope.saveState = function(name) {
-        $rootScope.saveStateRS($scope, name, $http);
-    };
-
-    //Restaura o grid salvo em sessão ou banco (ajax)
-    $scope.restoreState = function(name) {
-        $rootScope.restoreStateRS($scope, name, $http);
-    };
-
-    //Carrega a tabela quando clicar nos detalhes do documento
-    $scope.showGrid = function(id, number) {
-        $scope.documentNumber = number;
-
-        //Busca os itens do documento
-        $http.get('../../api/documentItems/' + id)
-            .then(function(response) {
-                $scope.gridDetalhes.data = response.data;
-            });
-    }
-
-    //Esconde / Mostra os filtros
-    $scope.toggleFiltering = function() {
-        $rootScope.gridDetalhes.enableFiltering = !$scope.gridDetalhes.enableFiltering;
-        $rootScope.gridApiDet.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
-    };
-
-
-}])
+])

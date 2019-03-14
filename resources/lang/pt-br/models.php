@@ -281,6 +281,11 @@ return [
     'stock_transfer' => 'Transferência Manual',
     'decimal_places' => 'Casas Decimais',
     'order' => 'Ordem de Exc.',
+    '1acount' => '1ª Cont.',
+    '2acount' => '2ª Cont.',
+    '3acount' => '3ª Cont.',
+    '4acount' => '4ª Cont.',
+    'qty_wms' => 'Qde. WMS',
     
     
     //PlaceHolders
@@ -310,7 +315,7 @@ return [
     'items_select' => 'Seleção de Itens',
     'yes' => 'Sim',
     'no' => 'Não',
-
+    'reports' => 'Relatórios'
     
 
 

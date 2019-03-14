@@ -225,18 +225,18 @@ class Pallet extends Model
                 if($levels[$upItem->uom_code]['level'] < $levels[$input['uom_code']]['level']){
                     //Nível de embalagem que já existe na saldo é menor que o novo (Ex: UN - CX)
                     //Soma a quantidade anterior do nível maior
-                    $upItem->qty += $input['prim_qty'];
+                    $upItem->qty += $input['prev_qty'];
                 }else{
                     //Nível de embalagem que já existe na saldo é maior que o novo (Ex: CX - UN)
                     //Só incrementa caso a quantidade atual + nova ultrapasse prim_qty
-                    $prevQtyLevel = $levels[$upItem->uom_code]['prim_qty'];
+                    $prevQtyLevel = $levels[$upItem->uom_code]['prev_qty'];
                     $upItem->qty  = ceil($upItem->prim_qty/$prevQtyLevel);
                 }
             }else if($levels[$input['uom_code']]['int'] == 1){
                 //Mesma unidade e só aceita números inteiros, só incrementa
                 $upItem->qty = $upItem->qty + $input['qty'];
                 //Se nível principal > anterior, ajusta quantidade
-                $prevQtyLevel = $levels[$upItem->uom_code]['prim_qty'];
+                $prevQtyLevel = $levels[$upItem->uom_code]['prev_qty'];
                 if($levels[$input['uom_code']]['level'] > $levels[$input['prim_uom_code']]['level']){
                     $upItem->qty = ceil($upItem->prim_qty/$prevQtyLevel);
                 }

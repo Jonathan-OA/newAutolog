@@ -30,10 +30,15 @@
                             <div class="panel-body">
                                 <div ui-grid="gridDetalhes" ui-grid-auto-resize  ui-grid-resize-columns ui-grid-selection ui-grid-pagination ui-grid-move-columns ui-grid-save-state >
                                 </div>
-                                    <!-- Botões com as opções para cada documento -->
-                                    @include('modules.inventory.buttonsItem')
-                                <button id="save" type="button" class="btn btn-success" ng-click="saveState('Autolog_GridInv_Det')">Save</button>
-                                <button id="restore" type="button" class="btn btn-success" ng-click="restoreState('Autolog_GridInv_Det')">Restore</button>
+                                <!-- Botões com as opções para cada documento -->
+                                @include('modules.inventory.buttonsItem')
+                                <div class="actionsGrid">
+                                    <span aria-label="@lang('infos.actions_grid')" data-microtip-position="right" role="tooltip">
+                                            <img class='icon' src='{{asset('/icons/information.png') }}' >
+                                    </span>
+                                    <button id="save" type="button" class="btn btn-success" ng-click="saveState('Autolog_GridTransf_Det')">Salvar Grid</button>
+                                    <button id="restore" type="button" class="btn btn-success" ng-click="restoreState('Autolog_GridTransf_Det')">Restaurar Grid</button>
+                                </div>
                             </div>
                         </div>
                     </div>
