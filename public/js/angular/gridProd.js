@@ -19,11 +19,16 @@ app.run(['$rootScope', function($rootScope) {
 
     //Função que chama as rotas do laravel
     $rootScope.callRouteRS = function(route, async = 0, $scope) {
+
+        //Pega todos os documentos selecionados para mandar como post
+        var documentsSelected = $scope.gridApi.selection.getSelectedRows();
+
         //async = 1 executa a função da URL sem sair da tela
         if (async == 1) {
             //.Ajax mostra o icone de loading automaticamente
             $.ajax({
-                    url: route
+                    url: route,
+                    data: documentsSelected
                 })
                 .done(function(data) {
                     //Mostra mensagem de sucesso ou erro
@@ -116,8 +121,14 @@ app.run(['$rootScope', function($rootScope) {
 app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '$timeout', '$animate', '$compile', '$filter',
     function($rootScope, $scope, $http, uiGridConstants, $timeout, $animate, $compile, $filter) {
         $scope.hasFilter = false;
+        $scope.docsSelected = 0;
+        $scope.clickFilter = 0;
         $scope.gridOptions = {
             enableFullRowSelection: false,
+            enableRowSelection: false,
+            enablePaginationControls: true,
+            paginationPageSize: 25,
+            rowSelection: false,
             multiSelect: false,
             enableFiltering: false,
             fastWatch: true,
@@ -143,7 +154,25 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
                     } else {
                         $scope.hasFilter = false;
                     }
-                })
+                });
+                //Função executada ao selecionar uma linha (Criação de onda)
+                $scope.gridApi.selection.on.rowSelectionChanged($scope, function(row) {
+                    if ($scope.gridApi.grid.options.multiSelect) {
+                        //Permite apenas documentos com status pendente
+                        if (row.entity.document_status_id == 0) {
+                            //Atualiza com a qde de linhas selecionadas
+                            $scope.docsSelected = $scope.gridApi.selection.getSelectedRows().length;
+                        } else {
+                            row.isSelected = false;
+                        }
+                    }
+                });
+
+                $scope.gridApi.selection.on.rowSelectionChangedBatch($scope, function(rows) {
+                    $scope.docsSelected = $scope.gridApi.selection.getSelectedRows().length;
+                });
+
+
             },
             enableGridMenu: true,
             columnDefs: [
@@ -154,7 +183,7 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
                     field: 'document_status_id',
                     display: 'description',
                     filter: {
-                        noTerm: true,
+                        noTerm: false,
                         type: uiGridConstants.filter.SELECT,
                         selectOptions: [{ value: '0', label: 'Pendente' }, { value: '1', label: 'Liberado' }, { value: '2', label: 'Em execução' },
                             { value: '8', label: 'Encerrado' }, { value: '9', label: 'Cancelado' }
@@ -175,7 +204,12 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
 
         };
 
-
+        $scope.callRouteConfirm = function(route, async = 0) {
+            if (confirm(msg)) {
+                //Chama função global que chama uma rota ao clicar no botão
+                $rootScope.callRouteRS(route, async, $scope);
+            }
+        }
 
         $scope.callRoute = function(route, async = 0) {
             //Chama função global que chama uma rota ao clicar no botão
@@ -210,12 +244,56 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
             });
         }
 
+        //Função que habilita multipla seleção (Onda / Campanha)
+        $scope.toggleMultiSelect = function() {
+            $('#testemicrotip').trigger('hover');
+            $('#wave_grid').toggle();
+            $scope.docsSelected = 0;
+
+            //Habilita / Desabilita multiselect
+            $scope.gridApi.selection.setMultiSelect(!$scope.gridApi.grid.options.multiSelect);
+
+            //Se esta ativando o botão, filtra por documentos pendentes na tela
+            if ($scope.gridApi.grid.options.multiSelect) {
+                $scope.gridApi.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
+                $scope.gridOptions.enableFiltering = true;
+
+                $scope.gridApi.grid.columns[3].filters[0] = {
+                    term: 0
+                };
+
+
+            } else {
+                $scope.gridOptions.enableFiltering = false;
+                $scope.gridApi.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
+            }
+            $scope.gridApi.grid.refresh();
+            //Limpa as linhas selecionadas
+            $scope.gridApi.selection.clearSelectedRows();
+
+        }
+
 
         //Esconde / Mostra os filtros
         $scope.toggleFiltering = function() {
+            if ($scope.gridApi.grid.options.multiSelect) {
+                //Limpa as linhas selecionadas
+                $scope.gridApi.selection.clearSelectedRows();
+                if ($scope.gridOptions.enableFiltering) {
+                    $scope.gridApi.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
+                } else {
+                    $scope.gridOptions.enableFiltering = true;
+                }
+
+            } else {
+                $scope.gridOptions.enableFiltering = !$scope.gridOptions.enableFiltering;
+                $scope.gridApi.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
+            }
+
+            $scope.clickFilter = !$scope.clickFilter;
+            alert($scope.clickFilter);
             $scope.hasFilter = false;
-            $scope.gridOptions.enableFiltering = !$scope.gridOptions.enableFiltering;
-            $scope.gridApi.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
+
         };
     }
 ]);

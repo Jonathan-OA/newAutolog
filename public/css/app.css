@@ -342,6 +342,12 @@
         margin: 14px 0 0 2%;
     }
     
+    #wave_grid {
+        margin-left: 10vw;
+        font-weight: bold;
+        display: none;
+    }
+    
     .th_grid {
         white-space: nowrap;
         border: 1px solid white;

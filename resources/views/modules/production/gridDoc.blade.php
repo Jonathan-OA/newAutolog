@@ -15,7 +15,7 @@
                             <div id="msg_excluir"></div>
                             @include('flash::message')
                             <div class="row buttons_grid">
-                                    <div class="icon_grid" aria-label="@lang('buttons.add')" data-microtip-position="bottom" role="tooltip">
+                                    <div class="icon_grid"  aria-label="@lang('buttons.add')" data-microtip-position="bottom" role="tooltip">
                                         <a href="{!! route('production.create') !!}">
                                             <img class='icon' src='{{asset('/icons/add.png') }}'>
                                         </a>
@@ -25,9 +25,16 @@
                                             <img class='icon' src='{{asset('/icons/import.png') }}'>
                                         </a>
                                     </div>
-                                    <button class="icon_grid" aria-label="@lang('buttons.filter')" data-microtip-position="bottom" role="tooltip" ng-click="toggleFiltering()">
+                                    <button id="testemicrotip" class="icon_grid" aria-label="@lang('buttons.filter')" data-microtip-position="bottom" role="tooltip" ng-click="toggleFiltering()">
                                         <img class='icon' src='{{asset('/icons/filter.png') }}'>
                                     </button>
+                                    <button class="icon_grid" aria-label="@lang('buttons.wave')" data-microtip-position="bottom" role="tooltip" ng-click="toggleMultiSelect()">
+                                        <img class='icon' src='{{asset('/icons/wave.png') }}'>
+                                    </button>
+                                    <div id="wave_grid" >
+                                        @lang('infos.select_wave') {% docsSelected %}
+                                        <button id="save" type="button" class="btn btn-success" ng-click="callRouteConfirm('./document/return/'+row.id+'/prod', 1, '@lang('buttons.msg_wave')')">@lang('buttons.wave')</button>
+                                    </div>
                             </div>
                             <div class="panel-body">
                                 <div ui-grid="gridOptions" ui-grid-auto-resize  ui-grid-resize-columns ui-grid-selection ui-grid-pagination ui-grid-move-columns ui-grid-save-state >
@@ -50,5 +57,6 @@
     </div>
 @endsection
 @section('scripts')
+    <script src="js/ui-grid/ui-grid.selection.min.js"></script>
     <script src="js/angular/gridProd.js"></script>
 @endsection

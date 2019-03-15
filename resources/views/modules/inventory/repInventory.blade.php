@@ -41,7 +41,8 @@
                                             </thead>
                                             <tbody>
                                                 @foreach($inventory_items as $item)
-                                                <tr>
+                                                <!-- Hidden pois o que mostra as informações é o ajax / datatable -->
+                                                <tr class="hidden">
                                                     <td>{!! $item->deposit_code !!}</td>
                                                     <td>{!! $item->location_code !!}</td>
                                                     <td>{!! $item->product_code !!}</td>

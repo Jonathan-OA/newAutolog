@@ -37,6 +37,7 @@ return [
     '2acont' => 'Liberar 2ª Contagem',
     '3acont' => 'Liberar 3ª Contagem',
     'rules' => 'Regras de Liberação',
-    
+    'wave' => 'Criar Onda',
+    'msg_wave' => 'Deseja liberar uma Onda com os documentos selecionados?',
 
 ];

@@ -42,7 +42,7 @@
             </button>
             <button ng-click="callRoute('./inventoryItems/'+row.id+'/report')"
                     class="icon_action" aria-label="@lang('reports.reportInv')" data-microtip-position="left" role="tooltip">
-                    <img class='icon' src='{{asset('/icons/retornar.png') }}'>
+                    <img class='icon' src='{{asset('/icons/report.png') }}'>
             </button>
         </span>
     </div>
