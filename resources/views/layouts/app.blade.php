@@ -64,7 +64,12 @@
                 <div class="lay_menu_sup">
                         <a class="btn btn-support" id="button-suporte" data-toggle="modal" data-target="#supportModal" title="Suporte"> @lang('models.support') 
                             <img class="icon" src="{{ asset('/icons/suporte.png') }}" alt="Suporte" >
-                        </a>                    
+                        </a>            
+                </div>
+                <div class="lay_menu_sup">
+                    <a class="btn btn-support" href="{{ asset('/apk/AUTOLOGWMS.apk') }}" id="button-android" title="Download APK Android">
+                        <img class="icon" src="{{ asset('/icons/android.png') }}" alt="Suporte" >
+                    </a>            
                 </div>
 
                 <!-- Modal de notificações -->
