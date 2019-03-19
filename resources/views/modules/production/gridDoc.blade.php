@@ -33,7 +33,7 @@
                                     </button>
                                     <div id="wave_grid" >
                                         @lang('infos.select_wave') {% docsSelected %}
-                                        <button id="save" type="button" class="btn btn-success" ng-click="callRouteConfirm('./document/return/'+row.id+'/prod', 1, '@lang('buttons.msg_wave')')">@lang('buttons.wave')</button>
+                                        <button id="save" type="button" class="btn btn-success" ng-click="callRouteConfirm('./document/liberate/prod', 1, '@lang('buttons.msg_wave')','post')">@lang('buttons.wave')</button>
                                     </div>
                             </div>
                             <div class="panel-body">

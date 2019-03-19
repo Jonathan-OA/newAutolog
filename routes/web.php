@@ -53,7 +53,8 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('/inventory/{id}/return', 'Modules\InventoryController@return'); //Retorna Inventário
     // ----------------------------------------------------------------------------------------------
     //Rota que libera um documento
-    Route::get('/document/liberate/{id}/{module?}', 'DocumentController@liberate');
+    //Route::get('/document/liberate/{id}/{module?}', 'DocumentController@liberate');
+    Route::post('/document/liberate/{module}', 'DocumentController@liberate');
     //Rota que retorna um documento
     Route::get('/document/return/{id}/{module?}', 'DocumentController@return');
 

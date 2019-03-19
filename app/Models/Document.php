@@ -124,52 +124,43 @@ class Document extends Model
 
     /**
      * Função que libera o documento encaminhando para as regras corretas de acordo com o tipo
-     * Parâmetros: ID do Documento 
+     * Parâmetros: Informações do(s) Documento(s) (id, moviment_code, document_type_code, etc.)
      * @var array
      */
 
-    public static function liberate($document_id){
-        //echo 'opa';exit;
-        $doc = Document::select('documents.number',
-                                'documents.document_type_code',
-                                'document_types.moviment_code')
-                       ->join('document_types', 'documents.document_type_code', '=', 'document_types.code')
-                       ->where([
-                                 ['documents.company_id', Auth::user()->company_id],
-                                 ['documents.id', $document_id],
-                                 ['documents.document_status_id', 0]
+    public static function liberate($documents, $module, $isWave = 0){
 
-                       ])
-                       ->get();
-                       
-        //Valida se achou o documento
-        if(count($doc) > 0){
-            $erro = 0;
-
-            //Busca qual a classe e o retorno para buscar as regras de liberação
-            $rc = App\Models\Moviment::getClass($doc[0]->moviment_code);
+        //Busca qual a classe e o retorno para buscar as regras de liberação 
+        $rc = App\Models\Moviment::getClass($documents[0]['moviment_code']);
             
-            if($rc){
-                $class = $rc['class'];
-                $urlRet = $rc['urlRet'];
-            }else{
-                $return['erro'] = 1;
-                $return['msg'] = 'Não foram encontradas regras para este movimento!';
-                return $return;
-            }
+        if($rc){
+            $class = $rc['class'];
+            $urlRet = $rc['urlRet'];
+        }else{
+            $return['erro'] = 1;
+            $return['msg'] = 'Não foram encontradas regras para este movimento!';
+            return $return;
+        }
 
+        $documentIds = array();
+
+        DB::beginTransaction();
+        foreach($documents as $doc){
+            $erro = 0;
             $entrou = 0;
+            $document_id = $doc['id'];
+            $documentIds[] = $doc['id'];
+
             //Busca todas as regras disponíveis para o tipo de documento
             $rules = App\Models\DocumentTypeRule::where([
                                                             ['company_id', Auth::user()->company_id],
-                                                            ['document_type_code', $doc[0]->document_type_code],
+                                                            ['document_type_code', $doc['document_type_code']],
                                                  ])
                                                  ->orderBy('order', 'asc')
                                                  ->get()
                                                  ->toArray();
 
                                        
-            DB::beginTransaction();
             foreach($rules as $rule){
                 $entrou = 1;
                 $rule_code = $rule['liberation_rule_code'];
@@ -178,9 +169,9 @@ class Document extends Model
                     //Chama a regra correspondente
                     $return = $class::$rule_code($document_id);
                     if($return['erro'] <> 0){
+                        //Erro ao executar a regra
+                        $return['msg'] .= ' - Documento: '.$doc['number'];
                         $erro = 1;
-                        //Caso dê erro, desfaz tudo que foi inserido
-                        DB::rollBack();
                         break;
                     }
                 }else{
@@ -193,29 +184,61 @@ class Document extends Model
 
             //Se não tem regras, da erro
             if($entrou == 0){
-                DB::rollBack();
+                $erro = 1;
                 $return['erro'] = 1;
-                $return['msg'] = 'Sem regras cadastradas para este Tipo de Documento.';
-            }else if($erro == 0){
-                //Deu tudo certo, da o commit
-                DB::commit();
-
-                //Grava log
-                $descricao = 'Liberou o documento: '.$doc[0]->document_type_code.' - '.$doc[0]->number.' ('.$document_id.')';
-                $log = App\Models\Log::wlog('documents_lib', $descricao);
-
-                $return['erro'] = 0;
-                $return['msg'] = 'Documento liberado com sucesso!';
-
+                $return['msg'] = 'Sem regras cadastradas para o Tipo de Documento '.$doc['document_type_code'].'.';
+                //Sai do loop
+                break;
+            }else if($erro == 1){
+                //Sai do loop
+                break;
+                $return['erro'] = 1;
             }else{
-                $return['erro'] = 1;
+                //Sem erros, grava log e libera o doc
+                $descricao = 'Liberou o documento: '.$doc['document_type_code'].' - '.$doc['number'];
+                $log = App\Models\Log::wlog('documents_'.$module.'_lib', $descricao, $document_id);
+
+                $updDoc = Document::where('company_id', Auth::user()->company_id)
+                                   ->where('id', $document_id)
+                                   ->where('document_status_id', 0)
+                                   ->update(['document_status_id' => 1]);
 
             }
             
-        }else{
-            $return['erro'] = 1;
-            $return['msg'] = 'Erro ao liberar o Documento.';
+        }
 
+
+        if($erro == 0){
+            //Sem Erros
+            //Valida se é ONDA
+            if($isWave == 1){
+                //Função que retorna o tipo de documento a ser gerado em liberação por onda
+                //Se não estiver preenchido, apenas será gerado o número da onda no campo wave(documents)
+                $docWave = Moviment::getDocWave($documents[0]['moviment_code']); 
+                $wave = date('Ymdhis');
+
+                //Se for onda, atualiza o campo em todos os documentos
+                $updDocs = Document::where('company_id', Auth::user()->company_id)
+                                   ->whereIn('id', $documentIds)
+                                   ->update(['wave' => $wave]);
+
+                 //Grava log
+                $descricao = 'Liberou Onda: '.$wave;
+                $log = App\Models\Log::wlog('documents_'.$module.'_lib', $descricao);
+
+                $return['msg'] = 'Onda '.$wave.' liberada com sucesso!';
+
+            }else{
+                $return['msg'] = 'Documento '.$documents[0]['number'].' liberado com sucesso!';
+            }
+            $return['erro'] = 0;
+
+            //Deu tudo certo, da o commit
+            DB::commit();
+
+        }else{
+            //Desfaz tudo que foi feito e retorna a msg de erro
+            DB::rollBack();
         }
 
         return $return;
@@ -391,6 +414,7 @@ class Document extends Model
 
         if(count($doc) > 0){
             $doc->document_status_id = 0;
+            $doc->wave = NULL;
             $doc->save();
             //Apaga informaçoes da tabela de liberação
             $rLb = DB::table('liberation_items')->where([  

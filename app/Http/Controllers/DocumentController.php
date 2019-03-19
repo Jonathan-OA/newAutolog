@@ -23,32 +23,36 @@ class DocumentController extends Controller
     }
 
     /**
-     * Realiza a liberação do documento
+     * Realiza a liberação do documentos
      *
      * @param  int  $id
      * @param varchar $module
      * @return \Illuminate\Http\Response
      */
-    public function liberate($document_id, $module = 'prod')
+    public function liberate($module, Request $request)
     {
-        $document = $this->documentRepository->findWithoutFail($document_id);
+        $input = $request->all(); 
+        //Valida se é uma ONDA ou não pela quantidade de documentos passados via POST
+        if(count($input['documents']) == 1){
+           $isWave = 0;
+        }else{
+           $isWave = 1;
+        }
+
+        //Recebe as informações do(s) documento(s) || Normal = 1 , Onda = Vários
+        $documents = $input['documents'];
 
         //Valida se usuário possui permissão para liberar documento (ex: documents_prod_lib)
         if(App\Models\User::getPermission('documents_'.$module.'_lib',Auth::user()->user_type_code)){
-            $libDoc = App\Models\Document::liberate($document_id); 
+            $libDoc = App\Models\Document::liberate($documents, $module, $isWave); 
             if($libDoc['erro'] <> 0){
                 //Erro na liberação
                 Flash::error($libDoc['msg']);
                 return array('danger',$libDoc['msg']);
             }else{
                 //Sucesso na liberação
-
-                //Grava Logs
-                $descricao = 'Liberação de Documento';
-                $log = App\Models\Log::wlog('documents_'.$module.'_lib', $descricao, $document_id);
-
                 Flash::success($libDoc['msg']);
-                return array('success',Lang::get('infos.liberation_doc', ['doc' =>  $document->number]));
+                return array('success', $libDoc['msg']);
             }
         }else{
             Flash::error(Lang::get('validation.permission'));

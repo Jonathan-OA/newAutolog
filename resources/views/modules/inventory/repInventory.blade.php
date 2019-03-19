@@ -91,7 +91,7 @@
                 'excel', 'pdf',
             ],
             scrollX: true,
-            scrollY: "66vh",
+            scrollY: "60vh",
             pageLength: 100,
             ajax: "{{url('inventoryItems/'.$document_id.'/datatable')}}",
             autoWidth: true,

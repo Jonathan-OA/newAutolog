@@ -11,7 +11,7 @@
         <!-- Funções para status 0 -->
         <span ng-if="row.document_status_id == 0">
             <!-- Liberar (Apenas status 0) -->
-            <button ng-click="callRoute('./document/liberate/'+row.id+'/prod', 1)" class="icon_action" aria-label="@lang('buttons.liberate')" data-microtip-position="left" role="tooltip">
+            <button ng-click="callRoute('./document/liberate/prod', 1, 'post')" class="icon_action" aria-label="@lang('buttons.liberate')" data-microtip-position="left" role="tooltip">
                 <img class='icon' src='{{ asset('/icons/liberar.png') }}'> 
             </button>
              <!-- Editar (Apenas status 0) -->

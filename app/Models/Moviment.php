@@ -25,7 +25,8 @@ class Moviment extends Model
 
     public $fillable = [
         'code',
-        'description'
+        'description',
+        'document_type_wave'
     ];
 
     /**
@@ -93,6 +94,22 @@ class Moviment extends Model
         }
 
     }
+
+    /**
+     * Função que retorna o tipo de documento a ser gerado em liberação por onda
+     * Se não estiver preenchido, apenas será gerado o número da onda no campo wave(documents)
+     * Parâmetros: Código do Movimento
+     * @var array
+     */
+
+    public static function getDocWave($moviment_code){
+        $docWave = Moviment::select('document_type_wave')
+                           ->where('code', $moviment_code)
+                           ->get();
+
+        return $docWave;
+    }
+
 
 
     //Retorna todos os $TABLE_NAME$ disponíveis

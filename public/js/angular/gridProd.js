@@ -18,17 +18,22 @@ app.config(['$qProvider', function($qProvider) {
 app.run(['$rootScope', function($rootScope) {
 
     //Função que chama as rotas do laravel
-    $rootScope.callRouteRS = function(route, async = 0, $scope) {
+    $rootScope.callRouteRS = function(route, async = 0, typeAjax = "get", $scope) {
 
         //Pega todos os documentos selecionados para mandar como post
         var documentsSelected = $scope.gridApi.selection.getSelectedRows();
 
         //async = 1 executa a função da URL sem sair da tela
         if (async == 1) {
+
+            //Token obrigatório para envio POST
+            var tk = $('meta[name="csrf-token"]').attr('content');
+
             //.Ajax mostra o icone de loading automaticamente
             $.ajax({
+                    type: typeAjax,
                     url: route,
-                    data: documentsSelected
+                    data: { 'documents': documentsSelected, _token: tk }
                 })
                 .done(function(data) {
                     //Mostra mensagem de sucesso ou erro
@@ -45,6 +50,10 @@ app.run(['$rootScope', function($rootScope) {
 
             //Apaga outras caixas de botões que existirem
             $('#options').remove();
+
+            //Desabilita o modo Onda caso esteja ativado
+            if ($scope.gridApi.grid.options.multiSelect) $scope.toggleMultiSelect();
+
         } else {
             //Entra na rota passada por parâmetro
             window.location = route;
@@ -53,34 +62,45 @@ app.run(['$rootScope', function($rootScope) {
 
     //Ação ao clicar na linha do grid
     $rootScope.clickRowRS = function(row, col, $event, $scope, $animate, $compile, $timeout) {
-        //Apaga outras caixas de botões que existirem
-        $('#options').remove();
-        //Passa todos os valores da linha selecionada para validação dos botões visíveis
-        $scope.row = row.entity;
-        $scope.row.status_inv = row.entity.inventory_status_id;
-        $scope.row.status_doc = row.entity.document_status_id;
-        //Pega id da ultima coluna
-        var ultCol = $scope.gridApi.grid.columns[$scope.gridApi.grid.columns.length - 1].uid;
-        var penultCol = $scope.gridApi.grid.columns[$scope.gridApi.grid.columns.length - 2].uid;
-        //Pega posição a esquerda do elemento clicado
-        var left = $($event.currentTarget).position().left;
-        if (col.uid != ultCol && col.uid != penultCol) {
-            //Se não for ultima/penúltima coluna do grid, adiciona a direita
-            left += $event.currentTarget.clientWidth;
+        //Só mostra a lista de botões se não estiver no modo ONDA
+        if (!$scope.gridApi.grid.options.multiSelect) {
+
+            //Limpa a linhas e Seleciona a linha clicada
+            $scope.gridApi.selection.clearSelectedRows();
+            row.isSelected = true;
+
+            //Apaga outras caixas de botões que existirem
+            $('#options').remove();
+            //Passa todos os valores da linha selecionada para validação dos botões visíveis
+            $scope.row = row.entity;
+            $scope.row.status_inv = row.entity.inventory_status_id;
+            $scope.row.status_doc = row.entity.document_status_id;
+            //Pega id da ultima coluna
+            var ultCol = $scope.gridApi.grid.columns[$scope.gridApi.grid.columns.length - 1].uid;
+            var penultCol = $scope.gridApi.grid.columns[$scope.gridApi.grid.columns.length - 2].uid;
+            //Pega posição a esquerda do elemento clicado
+            var left = $($event.currentTarget).position().left;
+            if (col.uid != ultCol && col.uid != penultCol) {
+                //Se não for ultima/penúltima coluna do grid, adiciona a direita
+                left += $event.currentTarget.clientWidth;
+            } else {
+                left -= $event.currentTarget.clientWidth;
+            }
+            //Adiciona elemento que chama o template criado (buttonsDoc.blade.php)
+            var element = angular.element("<div ng-include=\"'tplButtons'\"></div>");
+            //Elemento que contem os botões
+            var container = angular.element('<div class="options" id="options" style="position: absolute;  left: ' + left + 'px; " ></div>');
+            $($event.currentTarget).after(container);
+            //Insere o elemento no container e compila no DOM da página
+            $animate.enter(element, container);
+            $compile(element)($scope);
+            $timeout(function() {
+                $scope.$apply();
+            }, 0)
         } else {
-            left -= $event.currentTarget.clientWidth;
+            //Seleciona linha
+            row.isSelected = !row.isSelected;
         }
-        //Adiciona elemento que chama o template criado (buttonsDoc.blade.php)
-        var element = angular.element("<div ng-include=\"'tplButtons'\"></div>");
-        //Elemento que contem os botões
-        var container = angular.element('<div class="options" id="options" style="position: absolute;  left: ' + left + 'px; " ></div>');
-        $($event.currentTarget).after(container);
-        //Insere o elemento no container e compila no DOM da página
-        $animate.enter(element, container);
-        $compile(element)($scope);
-        $timeout(function() {
-            $scope.$apply();
-        }, 0)
 
     }
 
@@ -183,7 +203,7 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
                     field: 'document_status_id',
                     display: 'description',
                     filter: {
-                        noTerm: false,
+                        noTerm: true,
                         type: uiGridConstants.filter.SELECT,
                         selectOptions: [{ value: '0', label: 'Pendente' }, { value: '1', label: 'Liberado' }, { value: '2', label: 'Em execução' },
                             { value: '8', label: 'Encerrado' }, { value: '9', label: 'Cancelado' }
@@ -192,9 +212,9 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
                     cellTemplate: '<div class="ui-grid-cell-contents" ><div class="grid_cell stat{{grid.getCellValue(row, col)}}"> <p>{{row.entity.description}}</p></div></div>'
                 },
                 { name: 'Itens', field: 'total_items', type: 'number' },
+                { name: 'Onda', field: 'wave' },
                 { name: 'Emissão', field: 'emission_date', type: 'date', cellFilter: "date:\'yyyy-MM-dd\'" },
                 { name: 'Cliente', field: 'customer_code' },
-                { name: 'Fornecedor', field: 'supplier_code' },
                 { name: 'Transportadora', field: 'courier_code' },
                 { name: 'Data Encerramento', field: 'end_date' }
             ],
@@ -204,16 +224,16 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
 
         };
 
-        $scope.callRouteConfirm = function(route, async = 0) {
+        $scope.callRouteConfirm = function(route, async = 0, msg, type = "get") {
             if (confirm(msg)) {
                 //Chama função global que chama uma rota ao clicar no botão
-                $rootScope.callRouteRS(route, async, $scope);
+                $rootScope.callRouteRS(route, async, type, $scope);
             }
         }
 
-        $scope.callRoute = function(route, async = 0) {
+        $scope.callRoute = function(route, async = 0, type = "get") {
             //Chama função global que chama uma rota ao clicar no botão
-            $rootScope.callRouteRS(route, async, $scope);
+            $rootScope.callRouteRS(route, async, type, $scope);
         }
 
         $scope.clickRow = function(row, col, $event) {
@@ -249,49 +269,50 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
             $('#testemicrotip').trigger('hover');
             $('#wave_grid').toggle();
             $scope.docsSelected = 0;
+            $scope.clickFilter = 0;
+            $scope.gridApi.grid.refresh();
+
+            //Limpa as linhas selecionadas
+            $scope.gridApi.selection.clearSelectedRows();
+
+            //Limpa todos os filtros
+            $scope.gridApi.grid.clearAllFilters();
 
             //Habilita / Desabilita multiselect
             $scope.gridApi.selection.setMultiSelect(!$scope.gridApi.grid.options.multiSelect);
 
             //Se esta ativando o botão, filtra por documentos pendentes na tela
             if ($scope.gridApi.grid.options.multiSelect) {
-                $scope.gridApi.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
                 $scope.gridOptions.enableFiltering = true;
-
-                $scope.gridApi.grid.columns[3].filters[0] = {
-                    term: 0
-                };
-
-
+                $scope.gridApi.grid.columns[3].filters[0].term = 0;
             } else {
                 $scope.gridOptions.enableFiltering = false;
-                $scope.gridApi.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
+                $scope.gridApi.grid.columns[3].filters[0].term = '';
             }
-            $scope.gridApi.grid.refresh();
-            //Limpa as linhas selecionadas
-            $scope.gridApi.selection.clearSelectedRows();
 
         }
 
 
         //Esconde / Mostra os filtros
         $scope.toggleFiltering = function() {
-            if ($scope.gridApi.grid.options.multiSelect) {
-                //Limpa as linhas selecionadas
-                $scope.gridApi.selection.clearSelectedRows();
-                if ($scope.gridOptions.enableFiltering) {
-                    $scope.gridApi.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
-                } else {
-                    $scope.gridOptions.enableFiltering = true;
-                }
-
-            } else {
-                $scope.gridOptions.enableFiltering = !$scope.gridOptions.enableFiltering;
-                $scope.gridApi.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
-            }
 
             $scope.clickFilter = !$scope.clickFilter;
-            alert($scope.clickFilter);
+            //Limpa as linhas selecionadas
+            $scope.gridApi.selection.clearSelectedRows();
+            if (!$scope.gridApi.grid.options.multiSelect) {
+                //Limpa o filtro caso exista e a Onda não esteja ativada
+                $scope.gridApi.grid.columns[3].filters[0].term = '';
+                $scope.gridOptions.enableFiltering = !$scope.gridOptions.enableFiltering;
+                $scope.gridApi.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
+            } else {
+                $scope.gridApi.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
+                if (!$scope.clickFilter) {
+                    $scope.gridOptions.enableFiltering = !$scope.gridOptions.enableFiltering;
+                    $scope.gridApi.grid.columns[3].filters[0].term = 0;
+                    $scope.gridApi.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
+                    $scope.gridOptions.enableFiltering = !$scope.gridOptions.enableFiltering;
+                }
+            }
             $scope.hasFilter = false;
 
         };
