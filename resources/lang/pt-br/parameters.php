@@ -16,6 +16,7 @@ return [
     'param_stock' => 'Valida Saldo: ',
     'param_product' => 'Valida Produto: ',
     'param_location' => 'Valida Endereço: ',
+    'param_productdef' => 'Produto Padrão: ',
     
 
 ];

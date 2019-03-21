@@ -20,6 +20,7 @@ return [
     'liberation_doc'              => 'Documento :doc liberado com sucesso!',
     'return_doc'              => 'Documento :doc retornado com sucesso!',
     'select_wave'              => 'Documentos selecionados para Onda:',
+    'param_productdef'              => 'Produto padrão para as contagens do inventário:',
     
 
 ];

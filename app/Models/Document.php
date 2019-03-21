@@ -254,7 +254,7 @@ class Document extends Model
     public static function liberateInventory($document_id, $cont = 1){
         //Busca documento
         $doc = App\Models\Document::find($document_id);
-        if(in_array($doc->document_type_code, array('IVD','IVG','IVR'))){
+        if(in_array($doc->document_type_code, array('IVD','IVG','IVR','INV'))){
             //Define status da inventory_item e a tarefa baseado na contagem
             switch($cont){
                 case 1:
@@ -332,7 +332,7 @@ class Document extends Model
     public static function returnInventory($document_id){
         //Busca documento
         $doc = App\Models\Document::find($document_id);
-        if(in_array($doc->document_type_code, array('IVD','IVG','IVR'))){
+        if(in_array($doc->document_type_code, array('IVD','IVG','IVR','INV'))){
             //Só permite retornar com status de contagens pendentes
             if(in_array($doc->inventory_status_id, array(1,2,3,4))){
 
@@ -382,7 +382,7 @@ class Document extends Model
             $return['msg'] = 'Tipo de Documento Inválido para esta Operação.';
         }
 
-
+        return $return;
 
     }
     /**
@@ -412,7 +412,7 @@ class Document extends Model
             return $return;
         }
 
-        if(count($doc) > 0){
+        if($doc > 0){
             $doc->document_status_id = 0;
             $doc->wave = NULL;
             $doc->save();

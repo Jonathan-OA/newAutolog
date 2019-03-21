@@ -32,6 +32,7 @@
         <input id='document_status_id' name='document_status_id' type='hidden' value='0'>
     @endif
 
+    
     <!-- Emission Date Field -->
     {!! Form::label('emission_date', Lang::get('models.emission_date').':') !!}
     {!! Form::date('emission_date', (!empty($document->emission_date)) ? $document->emission_date->format('Y-m-d') : date('Y-m-d'), ['class' => 'form-control']) !!}
@@ -51,27 +52,36 @@
     {{ Form::radio('counts', '3' , false) }} 3 
     {{ Form::radio('counts', '4' , false) }} 4
     <br>
-    <span aria-label="@lang('infos.param_stock')" data-microtip-position="right" role="tooltip">
-        <img class='icon' src='{{asset('/icons/information.png') }}' >
+    <span id="parameters">
+        <span aria-label="@lang('infos.param_stock')" data-microtip-position="right" role="tooltip">
+            <img class='icon' src='{{asset('/icons/information.png') }}' >
+        </span>
+        {!! Form::label('vstock', Lang::get('parameters.param_stock')) !!}
+        {{ Form::radio('vstock', '1' , true) }} @lang('models.yes')
+        {{ Form::radio('vstock', '0' , true) }} @lang('models.no')
+        <br>
+        <span aria-label="@lang('infos.param_product')" data-microtip-position="right" role="tooltip">
+            <img class='icon' src='{{asset('/icons/information.png') }}' >
+        </span>
+        {!! Form::label('vproduct', Lang::get('parameters.param_product')) !!}
+        {{ Form::radio('vproduct', '1' , true) }} @lang('models.yes')
+        {{ Form::radio('vproduct', '0' , true) }} @lang('models.no')
+        <br>
+        <span aria-label="@lang('infos.param_location')" data-microtip-position="right" role="tooltip">
+            <img class='icon' src='{{asset('/icons/information.png') }}' >
+        </span>
+        {!! Form::label('vlocation', Lang::get('parameters.param_stock')) !!} 
+        {{ Form::radio('vlocation', '1' , true) }} @lang('models.yes')
+        {{ Form::radio('vlocation', '0' , true) }} @lang('models.no')
+        <br>
     </span>
-    {!! Form::label('vstock', Lang::get('parameters.param_stock')) !!}
-    {{ Form::radio('vstock', '1' , true) }} @lang('models.yes')
-    {{ Form::radio('vstock', '0' , true) }} @lang('models.no')
-    <br>
-    <span aria-label="@lang('infos.param_product')" data-microtip-position="right" role="tooltip">
-        <img class='icon' src='{{asset('/icons/information.png') }}' >
+    <span id="parameters_inv" style="display: none">
+        <span aria-label="@lang('infos.param_productdef')" data-microtip-position="right" role="tooltip">
+            <img class='icon' src='{{asset('/icons/information.png') }}' >
+        </span>
+        {!! Form::label('productdef', Lang::get('parameters.param_productdef')) !!} 
+        {!! Form::text('productdef', null, ['class' => 'form-control', 'id' => 'autocomplete', 'table' => 'products']) !!}
     </span>
-    {!! Form::label('vproduct', Lang::get('parameters.param_product')) !!}
-    {{ Form::radio('vproduct', '1' , true) }} @lang('models.yes')
-    {{ Form::radio('vproduct', '0' , true) }} @lang('models.no')
-    <br>
-    <span aria-label="@lang('infos.param_location')" data-microtip-position="right" role="tooltip">
-        <img class='icon' src='{{asset('/icons/information.png') }}' >
-    </span>
-    {!! Form::label('vlocation', Lang::get('parameters.param_stock')) !!} 
-    {{ Form::radio('vlocation', '1' , true) }} @lang('models.yes')
-    {{ Form::radio('vlocation', '0' , true) }} @lang('models.no')
-
 </div>
 
 <!-- Submit Field -->

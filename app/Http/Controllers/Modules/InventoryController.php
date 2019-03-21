@@ -74,7 +74,7 @@ class InventoryController extends AppBaseController
         //O tratamento é feito no app coletor
         $parameters = "550_contagens=".$input['counts'].";550_valida_saldo=".
                       $input['vstock'].";550_valida_endereco=".$input['vlocation'].
-                      ";550_valida_produto=".$input['vproduct'].";";
+                      ";550_valida_produto=".$input['vproduct'].";550_produto_default=".$input['productdef'];
 
         $input['comments'] = $parameters;
         $deposits = (empty($input['deposits']))? '' : $input['deposits'];
@@ -190,13 +190,19 @@ class InventoryController extends AppBaseController
         //Valida se usuário possui permissão para acessar esta opção
         if(App\Models\User::getPermission('documents_inv_lib',Auth::user()->user_type_code)){
             $return = App\Models\Document::liberateInventory($document_id, $cont);
-            //Grava Logs
-            $descricao = 'Liberou '.$cont.'a Contagem de Inventário';
-            $log = App\Models\Log::wlog('documents_inv_lib', $descricao, $document_id);
 
-            //Flash::success(Lang::get('infos.liberation_inv'));
-            return array('success',Lang::get('infos.liberation_inv', ['doc' =>  $document->number,
-                                                                      'cont' => $cont.'ª']));
+            if($return['erro'] == 0){
+                //Grava Logs
+                $descricao = 'Liberou '.$cont.'a Contagem de Inventário';
+                $log = App\Models\Log::wlog('documents_inv_lib', $descricao, $document_id);
+
+                //Flash::success(Lang::get('infos.liberation_inv'));
+                return array('success',Lang::get('infos.liberation_inv', ['doc' =>  $document->number,
+                                                                        'cont' => $cont.'ª']));
+            }else{
+                //Erro ao retornar
+                return array('danger',$return['msg']);
+            }
         }else{
             //Sem permissão
             //Flash::error(Lang::get('validation.permission'));
@@ -221,11 +227,16 @@ class InventoryController extends AppBaseController
         if(App\Models\User::getPermission('documents_inv_ret',Auth::user()->user_type_code)){
             $return = App\Models\Document::returnInventory($document_id);
 
-             //Grava Logs
-             $descricao = 'Retornou Documento de Inventário';
-             $log = App\Models\Log::wlog('documents_inv_ret', $descricao, $document_id);
-
-            return array('success',Lang::get('infos.return_doc', ['doc' =>  $document->number]));
+            if($return['erro'] == 0){
+                //Grava Logs
+                $descricao = 'Retornou Documento de Inventário';
+                $log = App\Models\Log::wlog('documents_inv_ret', $descricao, $document_id);
+           
+                return array('success',Lang::get('infos.return_doc', ['doc' =>  $document->number]));
+            }else{
+                //Erro ao retornar
+                return array('danger',$return['msg']);
+            }
         }else{
             //Sem permissão
             //Flash::error(Lang::get('validation.permission'));

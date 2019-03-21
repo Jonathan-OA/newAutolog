@@ -25,3 +25,21 @@
 
     </div>
 @endsection
+@section('scripts')
+    <script>
+    $(function() {
+        $('#document_type_code').change(function(){
+            //TIPO = INV é inventário cego, sem validar endereço, palete e quantidade.
+            if(this.value == 'INV'){
+                $('#parameters').hide();
+                $('#parameters_inv').show();
+                alert('ATENÇÃO: Este tipo de inventário não realiza nenhuma validação no sistema.');
+            }else{
+                $('#parameters').show();
+                $('#parameters_inv').hide();
+            }
+        })
+       
+    })
+    </script>    
+@endsection
