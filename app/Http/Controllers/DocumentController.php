@@ -68,13 +68,16 @@ class DocumentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function return($document_id, $module = 'prod')
+    public function return($module, Request $request)
     {
-        $document = $this->documentRepository->findWithoutFail($document_id);
+        $input = $request->all();
+
+        //Recebe as informações do(s) documento(s) || Normal = 1 , Onda = Vários
+        $documents = $input['documents'];
 
         //Valida se usuário possui permissão para retornar documento (ex: documents_prod_ret)
         if(App\Models\User::getPermission('documents_'.$module.'_ret',Auth::user()->user_type_code)){
-            $retDoc = App\Models\Document::return($document_id); 
+            $retDoc = App\Models\Document::return($documents, $module); 
             if($retDoc['erro'] <> 0){
                 //Erro no retorno
                 Flash::error($retDoc['msg']);
@@ -82,12 +85,43 @@ class DocumentController extends Controller
             }else{
                 //Sucesso no retorno
 
-                //Grava Logs
-                $descricao = 'Retorno de Documento';
-                $log = App\Models\Log::wlog('documents_'.$module.'_ret', $descricao, $document_id);
-
                 Flash::success($retDoc['msg']);
-                return array('success',Lang::get('infos.return_doc', ['doc' =>  $document->number]));
+                return array('success',$retDoc['msg']);
+            }
+
+        }else{
+            //Sem permissão
+            Flash::error(Lang::get('validation.permission'));
+            return array('danger',Lang::get('validation.permission'));
+        }
+
+
+    }
+
+     /**
+     * Realiza o cancelamento de um documento
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function cancel($module, Request $request)
+    {
+        $input = $request->all();
+
+        //Recebe as informações do(s) documento(s) || Normal = 1 , Onda = Vários
+        $documents = $input['documents'];
+
+        //Valida se usuário possui permissão para retornar documento (ex: documents_prod_ret)
+        if(App\Models\User::getPermission('documents_'.$module.'_ret',Auth::user()->user_type_code)){
+            $retDoc = App\Models\Document::cancel($documents, $module); 
+            if($retDoc['erro'] <> 0){
+                //Erro no cancelamento
+                Flash::error($retDoc['msg']);
+                return array('danger',$retDoc['msg']);
+            }else{
+                //Sucesso no Cancelamento
+                Flash::success($retDoc['msg']);
+                return array('success',$retDoc['msg']);
             }
 
         }else{

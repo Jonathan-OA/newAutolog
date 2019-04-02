@@ -18,11 +18,15 @@
              <button ng-click="callRoute('./production/'+row.id+'/edit')" class="icon_action" aria-label="@lang('buttons.edit')" data-microtip-position="left" role="tooltip">
                 <img class='icon' src='{{ asset('/icons/editar.png') }}'> 
             </button>
+            <!-- Cancelar (Apenas status 0) -->
+            <button ng-click="callRouteConfirm('./document/cancel/prod', 1,'@lang('buttons.msg_cancel')','post')" class="icon_action" aria-label="@lang('buttons.cancel')" data-microtip-position="left" role="tooltip">
+                <img class='icon' src='{{ asset('/icons/cancelar.png') }}'> 
+            </button>
         </span>
         
         <!-- Retornar (Status 1 e 2) -->
         <button ng-if="row.document_status_id == 1 || row.document_status_id == 2 "
-                ng-click="callRoute('./document/return/'+row.id+'/prod', 1)"
+                ng-click="callRouteConfirm('./document/return/prod', 1, '@lang('buttons.msg_return')', 'post')"
                 class="icon_action" aria-label="@lang('buttons.return')" data-microtip-position="left" role="tooltip">
                 <img class='icon' src='{{asset('/icons/retornar.png') }}'>
         </button>

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Auth;
 use App;
 use DB;
+use Lang;
 
 class Document extends Model
 {
@@ -387,60 +388,137 @@ class Document extends Model
     }
     /**
      * Função que retorna o documento para pendente
-     * Parâmetros: ID do Documento 
+     * Parâmetros: ID dos Documentos
      * @var array
      */
 
-    public static function return($document_id){
-        //Busca documento
-        $doc = App\Models\Document::find($document_id);
-        //Busca o movimento
-        $moviment = App\Models\DocumentType::select('moviment_code')
-                                           ->where('code', $doc->document_type_code)
-                                           ->get()
-                                           ->toArray();      
+    public static function return($documents, $module){
 
-        //Busca qual o modulo / retorno desse tipo de documento
-        $rc = App\Models\Moviment::getClass($moviment[0]['moviment_code']);
-        
-        if($rc){
-            $class = $rc['class'];
-            $urlRet = $rc['urlRet'];
-        }else{
-            $return['erro'] = 1;
-            $return['msg'] = 'Não foram encontradas regras para este movimento!';
-            return $return;
+        $documentIds = array();
+
+        DB::beginTransaction();
+        //Loop nos documentos passados como parâmetro
+        foreach($documents as $doc){
+            $erro = 0;
+            $entrou = 0;
+            $document_id = $doc['id'];
+            $documentIds[] = $doc['id'];
+
+            //Busca documento
+            $docT = App\Models\Document::find($document_id);
+
+            if(!empty($docT)){
+                $docT->document_status_id = 0;
+                $docT->wave = NULL;
+                $docT->save();
+                //Apaga informaçoes da tabela de liberação
+                $rLb = DB::table('liberation_items')->where([  
+                                                            ['company_id', Auth::user()->company_id],
+                                                            ['document_id', $document_id]
+                                                ])->delete();
+
+                //Apaga reservas criadas para o documento  
+                $rSt = DB::table('stocks')->where([  
+                                                            ['company_id', Auth::user()->company_id],
+                                                            ['document_id', $document_id],
+                                                            ['finality_code', 'RESERVA']
+                                                    ])->delete();     
+                
+                //Apagar tarefas
+                                                                                            
+                //Grava log
+                $descricao = 'Retornou o documento: '.$docT->document_type_code.' - '.$docT->number;
+                $log = App\Models\Log::wlog('documents_'.$module.'_ret', $descricao, $document_id);
+            }else{
+                $erro = 1;
+                break;
+                $return['erro'] = 1;
+                $return['msg'] = 'Documento ID('.$document_id.') não encontrado.';
+            }
         }
 
-        if($doc > 0){
-            $doc->document_status_id = 0;
-            $doc->wave = NULL;
-            $doc->save();
-            //Apaga informaçoes da tabela de liberação
-            $rLb = DB::table('liberation_items')->where([  
-                                                        ['company_id', Auth::user()->company_id],
-                                                        ['document_id', $document_id]
-                                            ])->delete();
-
-            //Apaga reservas criadas para o documento  
-            $rSt = DB::table('stocks')->where([  
-                                                        ['company_id', Auth::user()->company_id],
-                                                        ['document_id', $document_id],
-                                                        ['finality_code', 'RESERVA']
-                                                ])->delete();     
-            
-            //Apagar tarefas
-                                                                                          
-            //Grava log
-            $descricao = 'Retornou o documento: '.$doc->document_type_code.' - '.$doc->number.' ('.$document_id.')';
-            $log = App\Models\Log::wlog('documents_ret', $descricao);
-
+        if($erro == 0){
             $return['erro'] = 0;
-            $return['msg'] = 'Documento retornado com sucesso!';
-            $return['urlRet'] = $urlRet;
+            //Valida se apenas um documento foi passado como parametro
+            if(count($documents) == 1){
+                $return['msg'] = Lang::get('infos.return_doc',  ['doc' =>  $docT->number]);
+            }else{
+                $return['msg'] = Lang::get('infos.return_docs');
+            }
+            DB::commit();
         }else{
-            $return['erro'] = 1;
-            $return['msg'] = 'Erro ao retornar documento!';
+            DB::rollback();
+        }
+        
+        return $return;
+        
+    }
+
+    /**
+     * Função que cancela um documento
+     * Parâmetros: ID dos Documentos
+     * @var array
+     */
+
+    public static function cancel($documents, $module){
+
+        $documentIds = array();
+
+        DB::beginTransaction();
+        //Loop nos documentos passados como parâmetro
+        foreach($documents as $doc){
+            $erro = 0;
+            $entrou = 0;
+            $document_id = $doc['id'];
+            $documentIds[] = $doc['id'];
+
+            //Busca documento
+            $docT = App\Models\Document::find($document_id);
+
+            if(!empty($docT)){
+                //Cancela o status
+                $docT->document_status_id = 9;
+                $docT->save();
+                //Apaga informaçoes da tabela de liberação
+                $rLb = DB::table('liberation_items')->where([  
+                                                            ['company_id', Auth::user()->company_id],
+                                                            ['document_id', $document_id]
+                                                ])->delete();
+
+                //Apaga reservas criadas para o documento  
+                $rSt = DB::table('stocks')->where([  
+                                                            ['company_id', Auth::user()->company_id],
+                                                            ['document_id', $document_id],
+                                                            ['finality_code', 'RESERVA']
+                                                    ])->delete();     
+                //Cancela tarefas 
+                $rSt = DB::table('tasks')->where([  
+                                                    ['company_id', Auth::user()->company_id],
+                                                    ['document_id', $document_id],
+                                                    ['task_status_id', '<>', '8']
+                                         ])->update(['task_status_id' => '9']);                                                         
+                //Grava log
+                $descricao = 'Cancelou o documento: '.$docT->document_type_code.' - '.$docT->number;
+                $log = App\Models\Log::wlog('documents_'.$module.'_cancel', $descricao,$document_id);
+            }else{
+                $erro = 1;
+                break;
+                $return['erro'] = 1;
+                $return['msg'] = 'Documento ID('.$document_id.') não encontrado.';
+            }
+        }
+
+        if($erro == 0){
+            $return['erro'] = 0;
+            //Valida se apenas um documento foi passado como parametro
+            if(count($documents) == 1){
+                $return['msg'] = Lang::get('infos.cancel_doc',  ['doc' =>  $docT->number]);
+            }else{
+                $return['msg'] = Lang::get('infos.cancel_docs');
+            }
+            DB::commit();
+        }else{
+            DB::rollback();
         }
         
         return $return;

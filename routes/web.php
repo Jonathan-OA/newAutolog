@@ -52,11 +52,14 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('/inventory/{id}/liberate/{cont?}', 'Modules\InventoryController@liberate'); //Libera Contagem
     Route::get('/inventory/{id}/return', 'Modules\InventoryController@return'); //Retorna Inventário
     // ----------------------------------------------------------------------------------------------
-    //Rota que libera um documento
+    //Rota que libera documento(s)
     //Route::get('/document/liberate/{id}/{module?}', 'DocumentController@liberate');
     Route::post('/document/liberate/{module}', 'DocumentController@liberate');
-    //Rota que retorna um documento
-    Route::get('/document/return/{id}/{module?}', 'DocumentController@return');
+    //Rota que retorna documento(s)
+    Route::post('/document/return/{module?}', 'DocumentController@return');
+    //Rota que cancela documento(s)
+    Route::post('/document/cancel/{module?}', 'DocumentController@cancel');
+
 
     //BOTÕES
     Route::get('getButtons/{modulo}', 'ButtonsController@getButtons');

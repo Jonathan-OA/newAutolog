@@ -27,6 +27,8 @@ return [
     'return' => 'Retornar',
     'liberate' => 'Liberar',
     'msg_remove' => 'Deseja excluir este registro?',
+    'msg_cancel' => 'Deseja cancelar este documento?',
+    'msg_return' => 'Deseja retornar este documento?',
     'send' => 'Enviar',
     'close' => 'Fechar',
     'permissions' => 'Permissões',

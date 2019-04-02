@@ -319,6 +319,12 @@
         background: linear-gradient(#FFFF79, #EAEA2F);
     }
     
+    .stat9 {
+        background: -webkit-linear-gradient(#FFA4A4, #F33D28);
+        background: linear-gradient(#FFA4A4, #F33D28);
+        color: white !important;
+    }
+    
     .stat10 {
         background: -webkit-linear-gradient(#FFBF48, #FFA500);
         background: linear-gradient(#FFBF48, #FFA500);
