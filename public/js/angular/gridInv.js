@@ -162,9 +162,9 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
                     cellTemplate: '<div class="ui-grid-cell-contents" ><div class="grid_cell stat{{grid.getCellValue(row, col)}}"> <p>{{row.entity.description}}</p></div></div>'
                 },
                 { name: 'Contagem', field: 'inv_description' },
-                { name: 'Emissão', field: 'emission_date', type: 'date', cellFilter: "date:\'yyyy-MM-dd\'" },
-                { name: 'Início', field: 'start_date', type: 'date', cellFilter: "date:\'yyyy-MM-dd\'" },
-                { name: 'Finalização', field: 'end_date', type: 'date', cellFilter: "date:\'yyyy-MM-dd\'" },
+                { name: 'Emissão', field: 'emission_date', type: 'date', cellFilter: "dateFilter" },
+                { name: 'Início', field: 'start_date', type: 'date', cellFilter: "dateFilter" },
+                { name: 'Finalização', field: 'end_date', type: 'date', cellFilter: "dateFilter" },
 
             ],
             enablePaginationControls: true,
@@ -313,3 +313,14 @@ app.controller('DetCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '
 
     }
 ])
+
+//Filtro para converter data
+app.filter('dateFilter', function() {
+    return function(value) {
+        if (value) {
+            return moment(value).format('DD/MM/YY');
+        } else {
+            return '';
+        }
+    };
+})

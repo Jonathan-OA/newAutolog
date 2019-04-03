@@ -161,11 +161,11 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
                     cellTemplate: '<div class="ui-grid-cell-contents" ><div class="grid_cell stat{{grid.getCellValue(row, col)}}"> <p>{{row.entity.description}}</p></div></div>'
                 },
                 { name: 'Itens', field: 'total_items', type: 'number' },
-                { name: 'Emissão', field: 'emission_date', type: 'date', cellFilter: "date:\'yyyy-MM-dd\'" },
+                { name: 'Emissão', field: 'emission_date', type: 'date', cellFilter: "dateFilter" },
                 { name: 'Cliente', field: 'customer_code' },
                 { name: 'Fornecedor', field: 'supplier_code' },
                 { name: 'Transportadora', field: 'courier_code' },
-                { name: 'Data Encerramento', field: 'end_date' }
+                { name: 'Data Encerramento', field: 'end_date', type: 'date', cellFilter: "dateFilter" }
             ],
             enablePaginationControls: true,
             paginationPageSize: 25,
@@ -215,6 +215,10 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
             $scope.gridApi.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
         };
 
+        //Ajusta o layout depois que esconde / mostra o menu
+        $("#button_menu").click(function() {
+            $scope.gridApi.core.refresh();
+        });
 
     }
 ]);
@@ -291,6 +295,21 @@ app.controller('DetCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '
             $rootScope.gridApiDet.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
         };
 
+        //Ajusta o layout depois que esconde / mostra o menu
+        $("#button_menu").click(function() {
+            $scope.gridApi.core.refresh();
+        });
 
     }
 ])
+
+//Filtro para converter data
+app.filter('dateFilter', function() {
+    return function(value) {
+        if (value) {
+            return moment(value).format('DD/MM/YY');
+        } else {
+            return '';
+        }
+    };
+})

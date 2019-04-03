@@ -40,6 +40,7 @@ return [
     '3acont' => 'Liberar 3ª Contagem',
     'rules' => 'Regras de Liberação',
     'wave' => 'Criar Onda',
+    'refresh' => 'Atualizar Grid',
     'msg_wave' => 'Deseja liberar uma Onda com os documentos selecionados?',
 
 ];

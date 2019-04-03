@@ -126,7 +126,7 @@ app.run(['$rootScope', function($rootScope) {
         } else {
             $http({
                 method: 'GET',
-                url: 'api/grid/Inventario'
+                url: 'api/grid/Producao'
             }).then(function(data) {
                 $scope.gridApi.saveState.restore($scope, data);
             });
@@ -146,8 +146,6 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
         $scope.gridOptions = {
             enableFullRowSelection: false,
             enableRowSelection: false,
-            enablePaginationControls: true,
-            paginationPageSize: 25,
             rowSelection: false,
             multiSelect: false,
             enableFiltering: false,
@@ -155,7 +153,7 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
             onRegisterApi: function(gridApi) {
                 $scope.gridApi = gridApi;
                 $timeout(function() {
-                    $scope.restoreState();
+                    $scope.restoreState('Autolog_GridProd');
                 }, 50);
                 //Chama a função que preenche o grid
                 $scope.getFirstData();
@@ -175,16 +173,10 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
                         $scope.hasFilter = false;
                     }
                 });
-                //Função executada ao selecionar uma linha (Criação de onda)
-                $scope.gridApi.selection.on.rowSelectionChanged($scope, function(row) {
-                    if ($scope.gridApi.grid.options.multiSelect) {
-                        //Permite apenas documentos com status pendente
-                        if (row.entity.document_status_id == 0) {
-                            //Atualiza com a qde de linhas selecionadas
-                            $scope.docsSelected = $scope.gridApi.selection.getSelectedRows().length;
-                        } else {
-                            row.isSelected = false;
-                        }
+                //Cria função para evento de Scroll no grid.
+                $scope.$watch('gridApi.grid.isScrollingVertically', function(newData) {
+                    if (newData === true) {
+                        $rootScope.$broadcast('scrolled');
                     }
                 });
 
@@ -212,17 +204,28 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
                     cellTemplate: '<div class="ui-grid-cell-contents" ><div class="grid_cell stat{{grid.getCellValue(row, col)}}"> <p>{{row.entity.description}}</p></div></div>'
                 },
                 { name: 'Itens', field: 'total_items', type: 'number' },
-                { name: 'Onda', field: 'wave' },
-                { name: 'Emissão', field: 'emission_date', type: 'date', cellFilter: "date:\'yyyy-MM-dd\'" },
                 { name: 'Cliente', field: 'customer_code' },
+                {
+                    name: 'Produção',
+                    field: 'total_conf',
+                    cellTemplate: '<div class="ui-grid-cell-contents" ><div class="progress"><div class="progress-bar bg-success" role="progressbar" style="width: {{row.entity.total_conf}}%;" aria-valuenow="{{row.entity.total_conf}}" aria-valuemin="0" aria-valuemax="100">{{row.entity.total_conf}}%</div></div></div></div>'
+                },
+                { name: 'Onda', field: 'wave' },
+                { name: 'Emissão', field: 'emission_date', type: 'date', cellFilter: "dateFilter" },
+
                 { name: 'Transportadora', field: 'courier_code' },
-                { name: 'Data Encerramento', field: 'end_date' }
+                { name: 'Início', field: 'start_date', type: 'date', cellFilter: "dateFilter" },
+                { name: 'Finalização', field: 'end_date', type: 'date', cellFilter: "dateFilter" }
             ],
             enablePaginationControls: true,
-            paginationPageSize: 25,
+            paginationPageSizes: [25, 50, 75],
             rowTemplate: '<div ng-click="grid.appScope.clickRow(row, col, $event)" ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.uid" class="ui-grid-cell" ng-class="col.colIndex()" ui-grid-cell></div>',
 
         };
+        //Se houver scroll no grid, fecha as opções da linha
+        $scope.$on('scrolled', function(event, args) {
+            $('#options').remove();
+        });
 
         $scope.callRouteConfirm = function(route, async = 0, msg, type = "get") {
             if (confirm(msg)) {
@@ -252,14 +255,15 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
             $rootScope.restoreStateRS($scope, name, $http);
         };
 
-        //Carrega grid com os 2 mil ultimos documentos
+        //Carrega grid com os 3 mil ultimos documentos
         $scope.getFirstData = function() {
             $http({
                 method: 'GET',
-                url: 'api/documents/030/2000'
+                url: 'api/documents/030/3000'
             }).then(function(success) {
                 $scope.gridOptions.data = success.data;
             }, function(error) {
+                alert('Erro ao carregar Grid. Tente novamente')
                 console.log("Errouuu" + error);
             });
         }
@@ -316,6 +320,11 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
             $scope.hasFilter = false;
 
         };
+
+        //Ajusta o layout depois que esconde / mostra o menu
+        $("#button_menu").click(function() {
+            $scope.gridApi.core.refresh();
+        });
     }
 ]);
 
@@ -332,7 +341,7 @@ app.controller('DetCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '
             onRegisterApi: function(gridApiDet) {
                 $scope.gridApiDet = gridApiDet;
                 $timeout(function() {
-                    $scope.restoreState();
+                    $scope.restoreState('Autolog_GridProd_Det');
                 }, 50);
             },
             enableGridMenu: true,
@@ -388,6 +397,20 @@ app.controller('DetCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '
             $rootScope.gridApiDet.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
         };
 
-
+        //Ajusta o layout depois que esconde / mostra o menu
+        $("#button_menu").click(function() {
+            $scope.gridApi.core.refresh();
+        });
     }
 ])
+
+//Filtro para converter data
+app.filter('dateFilter', function() {
+    return function(value) {
+        if (value) {
+            return moment(value).format('DD/MM/YY');
+        } else {
+            return '';
+        }
+    };
+})
