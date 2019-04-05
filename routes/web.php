@@ -194,6 +194,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::resource('uoms', 'UomController');
 
     Route::get('labels/datatable', 'LabelController@getData');
+    Route::get('labels/{id}/traceability', 'LabelController@traceability');
     Route::resource('labels', 'LabelController');
 
     Route::get('stocks/datatable', 'StockController@getData');

@@ -90,6 +90,31 @@ class Label extends Model
         
     ];
 
+
+    /**
+     * Função de Rastreabilidade de Etiquetas
+     *
+     * @var array
+     */
+    public static function getTraceability($label_id){
+        return Activity::select('labels.barcode', 'tasks.operation_code', 'activities.start_date', 'tasks.orig_location_code',
+                                'tasks.dest_location_code', 'pallets.barcode as plt_barcode','users.code as user_code',
+                                'operations.description','activities.qty','activities.uom_code')
+                       ->join('tasks', 'tasks.id', 'activities.task_id')
+                       ->join('users', 'users.id', 'activities.user_id')
+                       ->join('labels', 'labels.id', 'activities.label_id')
+                       ->join('operations', 'operations.code', 'tasks.operation_code')
+                       ->leftJoin('pallets', 'pallets.id', 'activities.pallet_id')
+                       ->leftJoin('documents', 'documents.id', 'activities.document_id')
+                       ->where([ ['activities.label_id', $label_id],
+                                 ['activities.activity_status_id', '<>', 0], 
+                                 ['activities.company_id', '=', Auth::user()->company_id]
+                               ] 
+                       )
+                       ->orderBy('start_date', 'desc')
+                       ->get();
+    }
+
     
 
      //Retorna todos os labels disponíveis

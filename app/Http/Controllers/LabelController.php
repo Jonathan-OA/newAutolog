@@ -201,6 +201,35 @@ class LabelController extends AppBaseController
     }
 
     /**
+     * Tela de Rastreabilidade da Etiqueta
+     *
+     * @param  int $id
+     *
+     * @return Response
+     */
+    public function traceability($label_id)
+    {
+        //Valida se usuário possui permissão para acessar esta opção
+        if(App\Models\User::getPermission('labels_traceability',Auth::user()->user_type_code)){
+
+            $activities = App\Models\Label::getTraceability($label_id);
+            //print_r($activities);exit;
+            if (empty($activities)) {
+                Flash::error(Lang::get('validation.not_found'));
+
+                return redirect(route('labels.index'));
+            }
+
+            return view('labels.traceability')->with('activities',  $activities);
+        
+        }else{
+            //Sem permissão
+            Flash::error(Lang::get('validation.permission'));
+            return redirect(route('labels.index'));
+        }
+    }
+
+    /**
      * Get data from model 
      *
      */
