@@ -111,7 +111,7 @@ class Label extends Model
                                  ['activities.company_id', '=', Auth::user()->company_id]
                                ] 
                        )
-                       ->orderBy('start_date', 'desc')
+                       ->orderBy('start_date', 'asc')
                        ->get();
     }
 

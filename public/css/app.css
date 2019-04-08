@@ -184,7 +184,7 @@
     }
     
     .pbread {
-        height: 87vh !important;
+        height: 85.5vh !important;
     }
     
     .nav-tabs>li>a {
@@ -417,6 +417,10 @@
     
     .table>tbody>tr>td {
         padding: 2px 3px !important;
+    }
+
+    .table>tbody>tr:hover {
+       background: rgb(212, 212, 212);
     }
     
     #div_buttons {

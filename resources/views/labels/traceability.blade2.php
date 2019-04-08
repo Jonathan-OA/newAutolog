@@ -5,16 +5,19 @@
 <link rel="stylesheet" type="text/css" href="{{asset('/timeline/css/default.css') }}" />
 		<link rel="stylesheet" type="text/css" href="{{asset('/timeline/css/component.css') }}" />
 		<script src="{{asset('/timeline/js/modernizr.custom.js') }}"></script>
-<style>
-
-
-</style>
+    <!-- BreadCrumb - Trilha  -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{!! route('labels.index') !!}">@lang('models.labels')</a></li>
+          <li class="breadcrumb-item active" aria-current="page">@lang('buttons.traceability')</li>
+        </ol>
+    </nav>
     <div class="row">
         <div class="col-md-12 pad-ct">
             <div class="panel panel-default" >
                 <div class="panel-heading">
                    <!-- Texto baseado no arquivo de linguagem -->
-                   @lang('models.labels') - 00000003
+                   @lang('models.label_id'): {{$label->barcode}} &nbsp; &nbsp; - &nbsp; &nbsp;@lang('models.batch'): {{$label->batch}}
                 </div>
                 <div class="row">
                     <div class="col-md-12">

@@ -315,7 +315,8 @@ return [
     'items_select' => 'Seleção de Itens',
     'yes' => 'Sim',
     'no' => 'Não',
-    'reports' => 'Relatórios'
+    'reports' => 'Relatórios',
+    'traceability' => 'Rastreabilidade '
     
 
 

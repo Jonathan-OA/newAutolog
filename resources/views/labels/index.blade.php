@@ -8,18 +8,16 @@
                    <!-- Texto baseado no arquivo de linguagem -->
                    @lang('models.labels') 
                 </div>
-                <div class="panel panel-default">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <!-- Alerta de erro / sucesso -->
-                            @include('flash::message')
-                            <div id="msg_excluir"></div>
-                            <div class="row buttons_grid">
-                                <a class="btn btn-success"  href="{!! route('labels.create') !!}">@lang('buttons.add')</a>
-                            </div>
-                            <div class="panel-body">
-                                @include('labels.table')
-                            </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <!-- Alerta de erro / sucesso -->
+                        @include('flash::message')
+                        <div id="msg_excluir"></div>
+                        <div class="row buttons_grid">
+                            <a class="btn btn-success"  href="{!! route('labels.create') !!}">@lang('buttons.add')</a>
+                        </div>
+                        <div class="panel-body">
+                            @include('labels.table')
                         </div>
                     </div>
                 </div>
@@ -69,7 +67,7 @@
                         },
                         { data: null,
                          className: "th_grid",
-                         defaultContent: "<button id='edit' aria-label='@lang('buttons.edit')' data-microtip-position='left' role='tooltip' ><img class='icon' src='{{asset('/icons/editar.png') }}'></button><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='{{asset('/icons/remover.png') }}'></button>",
+                         defaultContent: "<button id='trace' aria-label='@lang('buttons.traceability')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='{{asset('/icons/detalhes2.png') }}'></button><button id='edit' aria-label='@lang('buttons.edit')' data-microtip-position='left' role='tooltip' ><img class='icon' src='{{asset('/icons/editar.png') }}'></button><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='{{asset('/icons/remover.png') }}'></button>",
                          width: "90px" 
                         }],
       });
@@ -105,6 +103,9 @@
             if(id == 'edit'){
                 //Editar Registro
                 window.location.href = "{!! URL::to('labels/"+data.id+"/edit') !!}";
+            }else if(id == 'trace'){
+                //Rastreabilidade
+                window.location.href = "{!! URL::to('labels/"+data.id+"/traceability') !!}";
             }else{
                 //Excluir Registro
                 if(confirm('@lang("buttons.msg_remove")')){

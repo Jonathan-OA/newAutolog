@@ -39,7 +39,7 @@ img {
 
 .timeline-centered {
     position: relative;
-    margin-bottom: 30px
+    margin: 20px;
 }
 
 .timeline-centered:after,
@@ -48,16 +48,21 @@ img {
     display: table
 }
 
+.panel-trace{
+    height: 91vh;
+    overflow-y: auto;
+}
+
 .timeline-centered:before {
     content: '';
     position: absolute;
     display: block;
     width: 4px;
-    background: #f5f5f6;
+    background: #dcdcdc;
     left: 50%;
     top: 20px;
     bottom: 20px;
-    margin-left: -4px
+    margin-left: -38.3%
 }
 
 .timeline-centered .timeline-entry .timeline-entry-inner:after,
@@ -72,7 +77,7 @@ img {
     position: relative;
     width: 50%;
     float: right;
-    margin-bottom: 70px;
+    margin-bottom: 10px;
     clear: both
 }
 
@@ -118,7 +123,7 @@ img {
 
 .timeline-centered .timeline-entry .timeline-entry-inner {
     position: relative;
-    margin-left: -22px
+    margin-left: -80%;
 }
 
 .timeline-centered .timeline-entry .timeline-entry-inner .timeline-time {
@@ -171,7 +176,7 @@ img {
 }
 
 .timeline-centered .timeline-entry .timeline-entry-inner .timeline-icon.bg-secondary {
-    background-color: #ee4749;
+    background-color: #17263d;
     color: #fff
 }
 
@@ -197,9 +202,8 @@ img {
 
 .timeline-centered .timeline-entry .timeline-entry-inner .timeline-label {
     position: relative;
-    background: #f5f5f6;
-    padding: 1.7em;
-    width: '300px';
+    background: #dcdcdc;
+    padding: 0.8em;
     margin-left: 70px;
     -webkit-background-clip: padding-box;
     -moz-background-clip: padding;
@@ -217,7 +221,7 @@ img {
     height: 0;
     border-style: solid;
     border-width: 9px 9px 9px 0;
-    border-color: transparent #f5f5f6 transparent transparent;
+    border-color: transparent #dcdcdc transparent transparent;
     left: 0;
     top: 10px;
     margin-left: -9px
@@ -225,8 +229,7 @@ img {
 
 .timeline-centered .timeline-entry .timeline-entry-inner .timeline-label h2,
 .timeline-centered .timeline-entry .timeline-entry-inner .timeline-label p {
-    color: #737881;
-    font-family: "Noto Sans", sans-serif;
+    color: #000000;
     font-size: 12px;
     margin: 0;
     line-height: 1.428571429
@@ -237,7 +240,7 @@ img {
 }
 
 .timeline-centered .timeline-entry .timeline-entry-inner .timeline-label h2 {
-    font-size: 16px;
+    font-size: 15px;
     margin-bottom: 10px
 }
 

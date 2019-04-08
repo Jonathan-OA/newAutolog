@@ -212,6 +212,7 @@ class LabelController extends AppBaseController
         //Valida se usuário possui permissão para acessar esta opção
         if(App\Models\User::getPermission('labels_traceability',Auth::user()->user_type_code)){
 
+            $label = $this->labelRepository->findWithoutFail($label_id);
             $activities = App\Models\Label::getTraceability($label_id);
             //print_r($activities);exit;
             if (empty($activities)) {
@@ -220,7 +221,8 @@ class LabelController extends AppBaseController
                 return redirect(route('labels.index'));
             }
 
-            return view('labels.traceability')->with('activities',  $activities);
+            return view('labels.traceability')->with('activities',  $activities)
+                                              ->with('label', $label);
         
         }else{
             //Sem permissão

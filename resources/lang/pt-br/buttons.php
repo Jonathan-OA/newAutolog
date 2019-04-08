@@ -42,5 +42,6 @@ return [
     'wave' => 'Criar Onda',
     'refresh' => 'Atualizar Grid',
     'msg_wave' => 'Deseja liberar uma Onda com os documentos selecionados?',
+    'traceability' => 'Rastreabilidade',
 
 ];
