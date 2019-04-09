@@ -124,10 +124,14 @@ class InventoryItem extends Model
                                 }
                             })
                             ->groupBy('inventory_items.company_id', 
+                                      'document_id',
                                       'inventory_items.product_code',
                                       'location_code',
                                       'inventory_items.created_at',
-                                      'description')
+                                      'description',
+                                      'deposit_code',
+                                      'inventory_status_id',
+                                      'uom_code')
                             ->get()
                             ->toArray();
     }

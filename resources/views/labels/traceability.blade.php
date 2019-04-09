@@ -2,7 +2,7 @@
 
 @section('content')
 
-<link rel="stylesheet" type="text/css" href="{{asset('/timeline/css/styles.min.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{asset('/css/timeline.min.css') }}" />
     <!-- BreadCrumb - Trilha  -->
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -38,12 +38,12 @@
                                             </time>
             
                                             <div class="timeline-icon {{(!$right)?'bg-secondary' : 'bg-success'}}">
-                                                <i class="entypo-feather"></i>
+                                                {{$activity->operation_code}}
                                             </div>
                                             <div class="timeline-label">
-                                                    <h2>{{$activity->operation_code}} - {{$activity->description}}</h2>
-                                                        <b>Quantidade:</b> {{$activity->qty}} {{$activity->uom_code}} <br>
-                                                        <b>Palete:</b> {{$activity->plt_barcode}} <br>
+                                                    <h2>{{$activity->description}}</h2>
+                                                        <b>Quantidade:</b> {{$activity->qty}} {{$activity->uom_code}}   |
+                                                        <b>Palete:</b> {{$activity->plt_barcode}}   |  
                                                         <b>Endereço:</b> {{$activity->orig_location_code}} 
                                                             @if(!empty($activity->dest_location_code))
                                                             => {{$activity->dest_location_code}}
