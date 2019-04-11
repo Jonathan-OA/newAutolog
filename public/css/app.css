@@ -360,6 +360,10 @@
     .buttons_grid {
         margin: 14px 0 0 2%;
     }
+
+    button:focus{
+        outline-width: 0px !important;
+    }
     
     #wave_grid {
         margin-left: 10vw;
