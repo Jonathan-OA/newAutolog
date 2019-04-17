@@ -21,6 +21,17 @@
 <!-- Product Type Code Field -->
 {!! Form::label('product_type_code', Lang::get('models.product_type_code').':') !!}
 {!! Form::select('product_type_code', $prd_types, null, ['class' => 'form-control']) !!}
+
+<!-- Label Type Code Field -->
+{!! Form::label('label_type_code', Lang::get('models.label_type_code').':') !!}
+{!! Form::text('label_type_code', null, ['class' => 'form-control', 'id' => 'autocomplete', 'table' => 'label_types']) !!}
+
+<!-- TRF Movement Field -->
+<span aria-label="@lang('infos.groups.trf_movement')" data-microtip-position="right" role="tooltip">
+    <img class='icon' src='{{asset('/icons/information.png') }}' >
+</span>
+{!! Form::label('trf_movement', Lang::get('models.trf_movement').':') !!}
+{!! Form::number('trf_movement', null, ['class' => 'form-control']) !!}
 </div>
 
 <!-- Submit Field -->

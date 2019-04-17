@@ -30,6 +30,8 @@ class UpdateGroupRequest extends FormRequest
             'code' => 'required|string|unique:groups,code,'.$this->get('id').',id,company_id,'.Auth::user()->company_id.'|max:10',
             'description' => 'required|string|max:50',
             'product_type_code' => 'required|exists:product_types,code',
+            'label_type_code' => 'nullable|string|exists:label_types,code,company_id,'.Auth::user()->company_id.'|max:10',
+            'trf_movement' => 'nullable|integer',
         ];
     }
 }

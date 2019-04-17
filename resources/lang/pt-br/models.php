@@ -83,6 +83,8 @@ return [
     'activity_status' => 'Status de Atividades',
     'liberation_status' => 'Status de Liberação',
     'inventory_status' => 'Status de Inventário',
+    'printer_types' => 'Tipos de Impressora',
+    'label_layouts' => 'Layouts de Etiqueta',
 
     
     //Columns
@@ -286,6 +288,10 @@ return [
     '3acount' => '3ª Cont.',
     '4acount' => '4ª Cont.',
     'qty_wms' => 'Qde. WMS',
+    'trf_movement' => 'Movimento de Exportação (ERP)',
+    'printer_type_code' => 'Tipo de Impressora',
+    'commands' => 'Comandos de Impressão',
+    'across' => 'Carreiras',
     
     
     //PlaceHolders
@@ -316,7 +322,8 @@ return [
     'yes' => 'Sim',
     'no' => 'Não',
     'reports' => 'Relatórios',
-    'traceability' => 'Rastreabilidade '
+    'traceability' => 'Rastreabilidade ',
+    'viewer' => 'Pré-Visualização '
     
 
 

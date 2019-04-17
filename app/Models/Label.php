@@ -73,7 +73,7 @@ class Label extends Model
         'serial_number' => 'string',
         'batch' => 'string',
         'batch_supplier' => 'string',
-        'layout_code' => 'string',
+        'label_type_code' => 'string',
         'text1' => 'string',
         'text2' => 'string',
         'text3' => 'string',

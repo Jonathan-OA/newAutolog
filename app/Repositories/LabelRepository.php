@@ -35,7 +35,7 @@ class LabelRepository extends BaseRepository
         'level',
         'travel_id',
         'task_id',
-        'layout_code',
+        'label_type_code',
         'weight',
         'width',
         'lenght',

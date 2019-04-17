@@ -1,7 +1,13 @@
+<div class="form_fields">
+@include('adminlte-templates::common.errors')
+
+@if(isset($action) && $action == 'edit')
+    <input id='id' name='id' type='hidden' value='{!! $$MODEL_NAME_CAMEL$->id !!}'>
+@endif
+
 $FIELDS$
+</div>
 
 <!-- Submit Field -->
-<div class="form-group col-sm-12">
-    {!! Form::submit('Save', ['class' => 'btn btn-primary']) !!}
-    <a href="{!! route('$ROUTE_NAMED_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.index') !!}" class="btn btn-default">Cancel</a>
-</div>
+{!! Form::submit(Lang::get('buttons.save'), ['class' => 'btn btn-primary']) !!}
+<a href="{!! route('$ROUTE_NAMED_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.index') !!}" class="btn btn-default">@lang('buttons.cancel')</a>

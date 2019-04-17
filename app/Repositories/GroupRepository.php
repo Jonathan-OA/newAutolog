@@ -14,7 +14,9 @@ class GroupRepository extends BaseRepository
         'company_id',
         'code',
         'description',
-        'product_type_code'
+        'product_type_code',
+        'trf_movement',
+        'label_type_code'
     ];
 
     /**

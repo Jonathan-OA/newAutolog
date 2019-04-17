@@ -7,9 +7,13 @@ use $NAMESPACE_REQUEST$\Update$MODEL_NAME$Request;
 use $NAMESPACE_REPOSITORY$\$MODEL_NAME$Repository;
 use $NAMESPACE_APP$\Http\Controllers\AppBaseController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Flash;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Response;
+use DataTables;
+use App;
+use Lang;
 
 class $MODEL_NAME$Controller extends AppBaseController
 {
@@ -43,7 +47,16 @@ class $MODEL_NAME$Controller extends AppBaseController
      */
     public function create()
     {
-        return view('$VIEW_PREFIX$$MODEL_NAME_PLURAL_SNAKE$.create');
+        //Valida se usuário possui permissão para acessar esta opção
+        if(App\Models\User::getPermission('$MODEL_NAME_PLURAL_SNAKE$_add',Auth::user()->user_type_code)){
+
+            return view('$VIEW_PREFIX$$MODEL_NAME_PLURAL_SNAKE$.create');
+
+        }else{
+            //Sem permissão
+            Flash::error(Lang::get('validation.permission'));
+            return redirect(route('$VIEW_PREFIX$$MODEL_NAME_PLURAL_SNAKE$.index'));
+        }
     }
 
     /**
@@ -59,7 +72,7 @@ class $MODEL_NAME$Controller extends AppBaseController
 
         $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->create($input);
 
-        Flash::success('$MODEL_NAME_HUMAN$ saved successfully.');
+        Flash::success(Lang::get('validation.save_success'));
 
         return redirect(route('$ROUTE_NAMED_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.index'));
     }
@@ -76,7 +89,7 @@ class $MODEL_NAME$Controller extends AppBaseController
         $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->findWithoutFail($id);
 
         if (empty($$MODEL_NAME_CAMEL$)) {
-            Flash::error('$MODEL_NAME_HUMAN$ not found');
+            Flash::error(Lang::get('validation.not_found'));
 
             return redirect(route('$ROUTE_NAMED_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.index'));
         }
@@ -93,15 +106,24 @@ class $MODEL_NAME$Controller extends AppBaseController
      */
     public function edit($id)
     {
-        $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->findWithoutFail($id);
+        //Valida se usuário possui permissão para acessar esta opção
+        if(App\Models\User::getPermission('$MODEL_NAME_PLURAL_SNAKE$_edit',Auth::user()->user_type_code)){
 
-        if (empty($$MODEL_NAME_CAMEL$)) {
-            Flash::error('$MODEL_NAME_HUMAN$ not found');
+            $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->findWithoutFail($id);
 
-            return redirect(route('$ROUTE_NAMED_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.index'));
+            if (empty($$MODEL_NAME_CAMEL$)) {
+                Flash::error(Lang::get('validation.not_found'));
+
+                return redirect(route('$ROUTE_NAMED_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.index'));
+            }
+
+            return view('$VIEW_PREFIX$$MODEL_NAME_PLURAL_SNAKE$.edit')->with('$MODEL_NAME_CAMEL$', $$MODEL_NAME_CAMEL$);
+        
+        }else{
+            //Sem permissão
+            Flash::error(Lang::get('validation.permission'));
+            return redirect(route('$VIEW_PREFIX$$MODEL_NAME_PLURAL_SNAKE$.index'));
         }
-
-        return view('$VIEW_PREFIX$$MODEL_NAME_PLURAL_SNAKE$.edit')->with('$MODEL_NAME_CAMEL$', $$MODEL_NAME_CAMEL$);
     }
 
     /**
@@ -117,14 +139,20 @@ class $MODEL_NAME$Controller extends AppBaseController
         $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->findWithoutFail($id);
 
         if (empty($$MODEL_NAME_CAMEL$)) {
-            Flash::error('$MODEL_NAME_HUMAN$ not found');
+            Flash::error(Lang::get('validation.not_found'));
 
             return redirect(route('$ROUTE_NAMED_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.index'));
         }
 
+        //Grava log
+        $requestF = $request->all();
+        $descricao = 'Alterou $MODEL_NAME$ ID: '.$id.' - '.$requestF['code'];
+        $log = App\Models\Log::wlog('$MODEL_NAME_PLURAL_SNAKE$_edit', $descricao);
+
+
         $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->update($request->all(), $id);
 
-        Flash::success('$MODEL_NAME_HUMAN$ updated successfully.');
+        Flash::success(Lang::get('validation.update_success'));
 
         return redirect(route('$ROUTE_NAMED_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.index'));
     }
@@ -138,18 +166,40 @@ class $MODEL_NAME$Controller extends AppBaseController
      */
     public function destroy($id)
     {
-        $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->findWithoutFail($id);
+        //Valida se usuário possui permissão para acessar esta opção
+        if(App\Models\User::getPermission('$MODEL_NAME_PLURAL_SNAKE$_remove',Auth::user()->user_type_code)){
+            
+            $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->findWithoutFail($id);
 
-        if (empty($$MODEL_NAME_CAMEL$)) {
-            Flash::error('$MODEL_NAME_HUMAN$ not found');
+            if (empty($$MODEL_NAME_CAMEL$)) {
+                Flash::error(Lang::get('validation.not_found'));
 
-            return redirect(route('$ROUTE_NAMED_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.index'));
-        }
+                return redirect(route('$ROUTE_NAMED_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.index'));
+            }
 
-        $this->$MODEL_NAME_CAMEL$Repository->delete($id);
+            $this->$MODEL_NAME_CAMEL$Repository->delete($id);
 
-        Flash::success('$MODEL_NAME_HUMAN$ deleted successfully.');
+             //Grava log
+            $descricao = 'Excluiu $MODEL_NAME$ ID: '.$id;
+            $log = App\Models\Log::wlog('$MODEL_NAME_PLURAL_SNAKE$_remove', $descricao);
 
-        return redirect(route('$ROUTE_NAMED_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.index'));
+
+            Flash::success(Lang::get('validation.delete_success'));
+            return array(0,Lang::get('validation.delete_success'));
+
+        }else{
+            //Sem permissão
+            Flash::error(Lang::get('validation.permission'));
+            return array(1,Lang::get('validation.permission'));
+        }    
+    }
+
+    /**
+     * Get data from model 
+     *
+     */
+    public function getData()
+    {
+        return Datatables::of(App\Models\$MODEL_NAME$::where('company_id', Auth::user()->company_id))->make(true);
     }
 }

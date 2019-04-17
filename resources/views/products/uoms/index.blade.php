@@ -14,18 +14,16 @@
                         <li><a href="{!! route('blockedGroups.index') !!}">@lang('models.blocked_groups')</a></li>
                     </ul>
                 </div>
-                <div class="panel panel-default">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <!-- Alerta de erro / sucesso -->
-                            @include('flash::message')
-                            <div id="msg_excluir"></div>
-                            <div class="row buttons_grid">
-                                <a class="btn btn-success"  href="{!! route('uoms.create') !!}">@lang('buttons.add')</a>
-                            </div>
-                            <div class="panel-body">
-                                @include('products.uoms.table')
-                            </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <!-- Alerta de erro / sucesso -->
+                        @include('flash::message')
+                        <div id="msg_excluir"></div>
+                        <div class="row buttons_grid">
+                            <a class="btn btn-success"  href="{!! route('uoms.create') !!}">@lang('buttons.add')</a>
+                        </div>
+                        <div class="panel-body">
+                            @include('products.uoms.table')
                         </div>
                     </div>
                 </div>

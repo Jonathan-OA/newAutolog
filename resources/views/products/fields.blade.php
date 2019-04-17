@@ -30,6 +30,9 @@
 </div>
 
 <!-- Origin Field -->
+<span aria-label="@lang('infos.products.origin')" data-microtip-position="right" role="tooltip">
+    <img class='icon' src='{{asset('/icons/information.png') }}' >
+</span>
 {!! Form::label('origin', Lang::get('models.origin_product').':') !!}
 {!! Form::text('origin', null, ['class' => 'form-control']) !!}
 

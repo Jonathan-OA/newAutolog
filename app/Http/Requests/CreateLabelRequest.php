@@ -35,6 +35,7 @@ class CreateLabelRequest extends FormRequest
             'prev_qty' => 'required|numeric|between:0,9999999999.999999',
             'prev_uom_code' => 'required|string|exists:uoms,code|max:6',
             'label_status_id' => 'required|integer|exists:label_status,id',
+            'label_type_code' => 'nullable|string|exists:label_types,code,company_id,'.Auth::user()->company_id.'|max:10',
             'document_id' => 'nullable|integer|exists:documents,id,company_id,'.Auth::user()->company_id,
             'document_item_id' => 'nullable|integer|exists:document_items,id,company_id,'.Auth::user()->company_id,
             'task_id' => 'nullable|integer|exists:tasks,id,company_id,'.Auth::user()->company_id,

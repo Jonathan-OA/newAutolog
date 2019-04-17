@@ -57,6 +57,7 @@ class Packing extends Model
         'barcode',
         'prev_qty',
         'prev_level',
+        'prim_level',
         'label_type_code',
         'total_weight',
         'total_net_weight',
@@ -112,7 +113,7 @@ class Packing extends Model
     public static function getLevels($product_code, $company_id = ''){
         
         $company_id = (trim($company_id == ''))?Auth::user()->company_id: $company_id;
-        $levels = Packing::select('level','uom_code','prev_qty','prev_level','val_integer')
+        $levels = Packing::select('level','uom_code','prev_qty','prev_level','val_integer', 'prim_qty')
                          ->join('uoms','uoms.code','packings.uom_code')
                          ->where('company_id', Auth::user()->company_id)
                          ->where('product_code', $product_code)
@@ -123,7 +124,8 @@ class Packing extends Model
             //Cria array de retorno onde indice principal é a unidade de medida (facilitar calculo de saldos)
             //val_integer = Valida se a unidade só aceita valores inteiros
             $ret[$level['uom_code']] = ['level' => $level['level'], 'prev_qty' => $level['prev_qty'],
-                                        'prev_level' => $level['prev_level'], 'int' => $level['val_integer']];
+                                        'prev_level' => $level['prev_level'], 'int' => $level['val_integer'],
+                                        'prim_qty' => $level['prim_qty']];
         }
 
         return $ret;

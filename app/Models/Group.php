@@ -39,7 +39,9 @@ class Group extends Model
         'company_id' => 'integer',
         'code' => 'string',
         'description' => 'string',
-        'product_type_code' => 'string'
+        'product_type_code' => 'string',
+        'trf_movement' => 'string',
+        'label_type_code' => 'string'
     ];
 
     /**
