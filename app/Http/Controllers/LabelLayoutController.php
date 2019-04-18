@@ -55,7 +55,7 @@ class LabelLayoutController extends AppBaseController
         }else{
             //Sem permissão
             Flash::error(Lang::get('validation.permission'));
-            return redirect(route('label_layouts.index'));
+            return redirect(route('labelLayouts.index'));
         }
     }
 
@@ -122,7 +122,7 @@ class LabelLayoutController extends AppBaseController
         }else{
             //Sem permissão
             Flash::error(Lang::get('validation.permission'));
-            return redirect(route('label_layouts.index'));
+            return redirect(route('labelLayouts.index'));
         }
     }
 

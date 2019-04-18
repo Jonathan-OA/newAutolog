@@ -55,7 +55,7 @@ class PrinterTypeController extends AppBaseController
         }else{
             //Sem permissão
             Flash::error(Lang::get('validation.permission'));
-            return redirect(route('printer_types.index'));
+            return redirect(route('printerTypes.index'));
         }
     }
 
@@ -122,7 +122,7 @@ class PrinterTypeController extends AppBaseController
         }else{
             //Sem permissão
             Flash::error(Lang::get('validation.permission'));
-            return redirect(route('printer_types.index'));
+            return redirect(route('printerTypes.index'));
         }
     }
 

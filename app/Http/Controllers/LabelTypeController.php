@@ -55,7 +55,7 @@ class LabelTypeController extends AppBaseController
         }else{
             //Sem permissão
             Flash::error(Lang::get('validation.permission'));
-            return redirect(route('label_types.index'));
+            return redirect(route('labelTypes.index'));
         }
     }
 
@@ -122,7 +122,7 @@ class LabelTypeController extends AppBaseController
         }else{
             //Sem permissão
             Flash::error(Lang::get('validation.permission'));
-            return redirect(route('label_types.index'));
+            return redirect(route('labelTypes.index'));
         }
     }
 
