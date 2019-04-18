@@ -6,14 +6,12 @@
                 <div class="panel-heading">
                     @lang('models.deposits')
                 </div>
-                <div class="panel panel-default">
-                    <div class="panel-body" >
-                        <div class="row">
-                            <div class="col-md-12">
-                                {!! Form::model($deposit, ['route' => ['deposits.update', $deposit->id], 'method' => 'patch']) !!}
-                                  @include('locations.deposits.fields',['action' => "edit"])
-                                {!! Form::close() !!}
-                            </div>
+                <div class="panel-body" >
+                    <div class="row">
+                        <div class="col-md-12">
+                            {!! Form::model($deposit, ['route' => ['deposits.update', $deposit->id], 'method' => 'patch']) !!}
+                                @include('locations.deposits.fields',['action' => "edit"])
+                            {!! Form::close() !!}
                         </div>
                     </div>
                 </div>

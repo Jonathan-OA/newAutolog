@@ -10,8 +10,8 @@
                    <ul class="nav nav-tabs">
                         <!-- Textos baseados no arquivo de linguagem -->
                         <li class="active-l"><a href="#">@lang('models.label_layouts')</a></li>
-                        <li><a href="{!! route('productTypes.index') !!}">@lang('models.label_types')</a></li>
-                        <li><a href="{!! route('groups.index') !!}">@lang('models.printer_types')</a></li>
+                        <li><a href="{!! route('labelTypes.index') !!}">@lang('models.label_types')</a></li>
+                        <li><a href="{!! route('printerTypes.index') !!}">@lang('models.printer_types')</a></li>
                     </ul>
                 </div>
                 <div class="row">
@@ -21,9 +21,13 @@
                         <div id="msg_excluir"></div>
                         <div class="row buttons_grid">
                             <a class="btn btn-success"  href="{!! route('labelLayouts.create') !!}">@lang('buttons.add')</a>
+                            <!-- Visualizar Logs  -->
+                            <a class="icon_logs" href="{!! url('logs/label_layouts_') !!}" aria-label="@lang('buttons.logs')" data-microtip-position="left" role="tooltip">
+                                <img class='icon' src='{{asset('/icons/logs.png') }}'>
+                            </a>
                         </div>
                         <div class="panel-body">
-                            @include('label_layouts.table')
+                            @include('print.label_layouts.table')
                         </div>
                     </div>
                 </div>
@@ -57,9 +61,9 @@
                     sPrevious: "@lang('models.previous')",
                 }
             },
-            columns: [ { data: 'code' },
-                       { data: 'label_type_code' },
-                       { data: 'printer_type_code' },
+            columns: [ { data: 'code', className: "td_center" },
+                       { data: 'label_type_code', className: "td_center" },
+                       { data: 'printer_type_code', className: "td_center" },
                        { data: 'description' },
                        { data: null,
                          className: "th_grid",

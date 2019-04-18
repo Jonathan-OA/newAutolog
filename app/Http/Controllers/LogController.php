@@ -31,13 +31,14 @@ class LogController extends AppBaseController
      * @param Request $request
      * @return Response
      */
-    public function index(Request $request)
+    public function index($operation = '', Request $request)
     {
         $this->logRepository->pushCriteria(new RequestCriteria($request));
         $logs = $this->logRepository->all();
 
         return view('logs.index')
-            ->with('logs', $logs);
+            ->with('logs', $logs)
+            ->with('operation', $operation);
     }
 
     /**

@@ -5,21 +5,25 @@
         <div class="col-md-12 pad-ct">
             <div class="panel panel-default" >
                 <div class="panel-heading">
-                   <!-- Texto baseado no arquivo de linguagem -->
-                   @lang('models.operations') 
+                   <!-- Botão de Voltar e Título baseado no arquivo de linguagem -->
+                   <a href="{{ URL::previous() }}" aria-label="@lang('buttons.back')" data-microtip-position="bottom" role="tooltip">
+                        <img  class="icon_menu" src="{{asset('/icons/voltar.png') }}"/>
+                    </a>  @lang('models.operations') 
                 </div>
-                <div class="panel panel-default">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <!-- Alerta de erro / sucesso -->
-                            @include('flash::message')
-                            <div id="msg_excluir"></div>
-                            <div class="row buttons_grid">
-                                <a class="btn btn-success"  href="{!! route('operations.create') !!}">@lang('buttons.add')</a>
-                            </div>
-                            <div class="panel-body">
-                                @include('operations.table')
-                            </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <!-- Alerta de erro / sucesso -->
+                        @include('flash::message')
+                        <div id="msg_excluir"></div>
+                        <div class="row buttons_grid">
+                            <a class="btn btn-success"  href="{!! route('operations.create') !!}">@lang('buttons.add')</a>
+                            <!-- Visualizar Logs  -->
+                            <a class="icon_logs" href="{!! url('logs/operations_') !!}" aria-label="@lang('buttons.logs')" data-microtip-position="left" role="tooltip">
+                                <img class='icon' src='{{asset('/icons/logs.png') }}'>
+                            </a>
+                        </div>
+                        <div class="panel-body">
+                            @include('operations.table')
                         </div>
                     </div>
                 </div>

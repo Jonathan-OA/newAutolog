@@ -6,14 +6,12 @@
                 <div class="panel-heading">
                     @lang('models.tasks') 
                 </div>
-                <div class="panel panel-default">
-                    <div class="panel-body" >
-                        <div class="row">
-                            <div class="col-md-12">
-                                {!! Form::model($task, ['route' => ['tasks.update', $task->id], 'method' => 'patch']) !!}
-                                  @include('tasks.fields',['action' => "edit"])
-                                {!! Form::close() !!}
-                            </div>
+                <div class="panel-body" >
+                    <div class="row">
+                        <div class="col-md-12">
+                            {!! Form::model($task, ['route' => ['tasks.update', $task->id], 'method' => 'patch']) !!}
+                                @include('tasks.fields',['action' => "edit"])
+                            {!! Form::close() !!}
                         </div>
                     </div>
                 </div>

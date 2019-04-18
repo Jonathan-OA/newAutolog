@@ -12,17 +12,19 @@
                          <li><a href="{!! route('userTypes.index') !!}">@lang('models.user_types')</a></li> 
                     </ul>
                 </div>
-                <div class="panel panel-default">
-                    <div class="row">
-                        <div class="col-md-12">
-                            @include('flash::message')
-                            <div id="msg_excluir"></div>
-                            <div class="row buttons_grid">
-                                <a class="btn btn-success"  href="{!! route('users.create') !!}">@lang('buttons.add')</a>
-                            </div>
-                            <div class="panel-body">
-                                @include('users.table')
-                            </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        @include('flash::message')
+                        <div id="msg_excluir"></div>
+                        <div class="row buttons_grid">
+                            <a class="btn btn-success"  href="{!! route('users.create') !!}">@lang('buttons.add')</a>
+                            <!-- Visualizar Logs  -->
+                            <a class="icon_logs" href="{!! url('logs/users_') !!}" aria-label="@lang('buttons.logs')" data-microtip-position="left" role="tooltip">
+                                <img class='icon' src='{{asset('/icons/logs.png') }}'>
+                            </a>
+                        </div>
+                        <div class="panel-body">
+                            @include('users.table')
                         </div>
                     </div>
                 </div>

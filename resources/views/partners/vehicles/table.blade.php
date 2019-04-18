@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-md-12 pad-ct">
         <div class="" style="margin: 0 15px 0 15px">
-        <table class="table table-bordered" id="vehicles-table" cellspacing="0" width="100%">
+        <table class="table table-bordered  table-striped" id="vehicles-table" cellspacing="0" width="100%">
             <thead>
                 <th class="th_grid">@lang('models.courier_id') </th>
                 <th class="th_grid">@lang('models.vehicle_type_id') </th>

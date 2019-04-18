@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-md-12 pad-ct">
         <div class="" style="margin: 0 15px 0 15px">
-        <table class="table table-bordered" id="locations-table" cellspacing="0" width="100%">
+        <table class="table table-bordered  table-striped" id="locations-table" cellspacing="0" width="100%">
             <thead>
                  <th class="th_grid">@lang('models.code') </th>
                 <th class="th_grid">@lang('models.barcode') </th>

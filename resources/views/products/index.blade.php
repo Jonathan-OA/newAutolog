@@ -22,7 +22,11 @@
                         <div id="msg_excluir"></div>
                         <div class="row buttons_grid">
                             <a class="btn btn-success"  href="{!! route('products.create') !!}">@lang('buttons.add')</a>
-                            </div>
+                            <!-- Visualizar Logs  -->
+                            <a class="icon_logs" href="{!! url('logs/products_') !!}" aria-label="@lang('buttons.logs')" data-microtip-position="left" role="tooltip">
+                                <img class='icon' src='{{asset('/icons/logs.png') }}'>
+                            </a>
+                        </div>
                         <div class="panel-body">
                             @include('products.table')
                         </div>
@@ -59,11 +63,11 @@
                     sPrevious: "@lang('models.previous')",
                 }
             },
-            columns: [  { data: 'code' },
+            columns: [  { data: 'code', className: "td_center" },
                         { data: 'description' },
-                        { data: 'product_type_code' },
-                        { data: 'group_code' },
-                        { data: 'subgroup_code' },
+                        { data: 'product_type_code', className: "td_center" },
+                        { data: 'group_code', className: "td_center" },
+                        { data: 'subgroup_code', className: "td_center" },
                         { data: null,
                           className: "th_grid",
                           defaultContent: "<button id='detail' aria-label='@lang('buttons.packings')' data-microtip-position='left' role='tooltip' style='margin-right: 3px' ><img class='icon' src='{{asset('/icons/embalagens3.png') }}'></button><button id='edit' aria-label='@lang('buttons.edit')' data-microtip-position='left' role='tooltip' ><img class='icon' src='{{asset('/icons/editar.png') }}'></button><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='{{asset('/icons/remover.png') }}'></button>",

@@ -14,18 +14,16 @@
                         <li class="active-l"><a href="#">@lang('models.vehicles')</a></li>
                     </ul>
                 </div>
-                <div class="panel panel-default">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <!-- Alerta de erro / sucesso -->
-                            @include('flash::message')
-                            <div id="msg_excluir"></div>
-                            <div class="row buttons_grid">
-                                <a class="btn btn-success"  href="{!! route('vehicles.create') !!}">@lang('buttons.add')</a>
-                            </div>
-                            <div class="panel-body">
-                                @include('partners.vehicles.table')
-                            </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <!-- Alerta de erro / sucesso -->
+                        @include('flash::message')
+                        <div id="msg_excluir"></div>
+                        <div class="row buttons_grid">
+                            <a class="btn btn-success"  href="{!! route('vehicles.create') !!}">@lang('buttons.add')</a>
+                        </div>
+                        <div class="panel-body">
+                            @include('partners.vehicles.table')
                         </div>
                     </div>
                 </div>

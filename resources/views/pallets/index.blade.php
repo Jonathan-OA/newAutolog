@@ -6,21 +6,25 @@
         <div class="col-md-12 pad-ct">
             <div class="panel panel-default" >
                 <div class="panel-heading">
-                   <!-- Texto baseado no arquivo de linguagem -->
-                   @lang('models.pallets') 
+                   <!-- Botão de Voltar e Título baseado no arquivo de linguagem -->
+                   <a href="{{ URL::previous() }}" aria-label="@lang('buttons.back')" data-microtip-position="bottom" role="tooltip">
+                        <img  class="icon_menu" src="{{asset('/icons/voltar.png') }}"/>
+                    </a>  @lang('models.pallets')
                 </div>
-                <div class="panel panel-default">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <!-- Alerta de erro / sucesso -->
-                            @include('flash::message')
-                            <div id="msg_excluir"></div>
-                            <div class="row buttons_grid">
-                                <a class="btn btn-success"  href="{!! route('pallets.create') !!}">@lang('buttons.add')</a>
-                            </div>
-                            <div class="panel-body">
-                                @include('pallets.table')
-                            </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <!-- Alerta de erro / sucesso -->
+                        @include('flash::message')
+                        <div id="msg_excluir"></div>
+                        <div class="row buttons_grid">
+                            <a class="btn btn-success"  href="{!! route('pallets.create') !!}">@lang('buttons.add')</a>
+                            <!-- Visualizar Logs  -->
+                            <a class="icon_logs" href="{!! url('logs/pallets_') !!}" aria-label="@lang('buttons.logs')" data-microtip-position="bottom" role="tooltip">
+                                <img class='icon' src='{{asset('/icons/logs.png') }}'>
+                            </a>
+                        </div>
+                        <div class="panel-body">
+                            @include('pallets.table')
                         </div>
                     </div>
                 </div>

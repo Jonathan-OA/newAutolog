@@ -36,7 +36,7 @@ class LabelTypeController extends AppBaseController
         $this->labelTypeRepository->pushCriteria(new RequestCriteria($request));
         $labelTypes = $this->labelTypeRepository->all();
 
-        return view('label_types.index')
+        return view('print.label_types.index')
             ->with('labelTypes', $labelTypes);
     }
 
@@ -50,7 +50,7 @@ class LabelTypeController extends AppBaseController
         //Valida se usuário possui permissão para acessar esta opção
         if(App\Models\User::getPermission('label_types_add',Auth::user()->user_type_code)){
 
-            return view('label_types.create');
+            return view('print.label_types.create');
 
         }else{
             //Sem permissão
@@ -94,7 +94,7 @@ class LabelTypeController extends AppBaseController
             return redirect(route('labelTypes.index'));
         }
 
-        return view('label_types.show')->with('labelType', $labelType);
+        return view('print.label_types.show')->with('labelType', $labelType);
     }
 
     /**
@@ -117,7 +117,7 @@ class LabelTypeController extends AppBaseController
                 return redirect(route('labelTypes.index'));
             }
 
-            return view('label_types.edit')->with('labelType', $labelType);
+            return view('print.label_types.edit')->with('labelType', $labelType);
         
         }else{
             //Sem permissão

@@ -31,6 +31,7 @@ return [
     'msg_return' => 'Deseja retornar este documento?',
     'send' => 'Enviar',
     'close' => 'Fechar',
+    'back' => 'Voltar',
     'permissions' => 'Permissões',
     'activities' => 'Atividades',
     'stock_transfer' => 'Transferência Manual',
@@ -43,5 +44,8 @@ return [
     'refresh' => 'Atualizar Grid',
     'msg_wave' => 'Deseja liberar uma Onda com os documentos selecionados?',
     'traceability' => 'Rastreabilidade',
+    'logs' => 'Verificar Logs',
+    'support' => 'Enviar registro de Problema / Melhoria do Sistema',
+    'android' => 'Baixar aplicativo Android',
 
 ];

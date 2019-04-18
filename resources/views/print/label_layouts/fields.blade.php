@@ -46,6 +46,9 @@
 </div>
 <div class="col-md-6">
     <!-- Div para pré visualização da ETQ -->
+    <span aria-label="@lang('infos.labellayouts.commands')" data-microtip-position="bottom" role="tooltip">
+            <img class='icon' src='{{asset('/icons/information.png') }}' >
+        </span>
     {!! Form::label('viewer', Lang::get('models.viewer').':') !!}
     <div style="max-height: 231px" >
         <img id="viewer" height="231px"/>

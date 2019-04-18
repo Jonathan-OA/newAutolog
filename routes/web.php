@@ -335,6 +335,7 @@ Route::group(['middleware' => 'auth'], function() {
 
 
     Route::get('logs/datatable', 'LogController@getData');
+    Route::get('logs/{operation?}', 'LogController@index');
     Route::resource('logs', 'LogController');
 
 
@@ -381,6 +382,18 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('liberationStatus/datatable', 'LiberationStatusController@getData');
     Route::resource('liberationStatus', 'LiberationStatusController');
 
+    Route::get('printerTypes/datatable', 'PrinterTypeController@getData');
+    Route::resource('printerTypes', 'PrinterTypeController');
+
+    Route::get('printerTypes/datatable', 'PrinterTypeController@getData');
+    Route::resource('printerTypes', 'PrinterTypeController');
+
+    Route::get('labelLayouts/datatable', 'LabelLayoutController@getData');
+    Route::resource('labelLayouts', 'LabelLayoutController');
+
+    Route::get('print', 'LabelLayoutController@index');
+
+
 
 });
 
@@ -391,11 +404,3 @@ Route::group(['middleware' => 'auth'], function() {
 
 
 
-Route::get('printerTypes/datatable', 'PrinterTypeController@getData');
-Route::resource('printerTypes', 'PrinterTypeController');
-
-Route::get('printerTypes/datatable', 'PrinterTypeController@getData');
-Route::resource('printerTypes', 'PrinterTypeController');
-
-Route::get('labelLayouts/datatable', 'LabelLayoutController@getData');
-Route::resource('labelLayouts', 'LabelLayoutController');

@@ -36,7 +36,7 @@ class LabelLayoutController extends AppBaseController
         $this->labelLayoutRepository->pushCriteria(new RequestCriteria($request));
         $labelLayouts = $this->labelLayoutRepository->all();
 
-        return view('label_layouts.index')
+        return view('print.label_layouts.index')
             ->with('labelLayouts', $labelLayouts);
     }
 
@@ -50,7 +50,7 @@ class LabelLayoutController extends AppBaseController
         //Valida se usuário possui permissão para acessar esta opção
         if(App\Models\User::getPermission('label_layouts_add',Auth::user()->user_type_code)){
 
-            return view('label_layouts.create');
+            return view('print.label_layouts.create');
 
         }else{
             //Sem permissão
@@ -94,7 +94,7 @@ class LabelLayoutController extends AppBaseController
             return redirect(route('labelLayouts.index'));
         }
 
-        return view('label_layouts.show')->with('labelLayout', $labelLayout);
+        return view('print.label_layouts.show')->with('labelLayout', $labelLayout);
     }
 
     /**
@@ -117,7 +117,7 @@ class LabelLayoutController extends AppBaseController
                 return redirect(route('labelLayouts.index'));
             }
 
-            return view('label_layouts.edit')->with('labelLayout', $labelLayout);
+            return view('print.label_layouts.edit')->with('labelLayout', $labelLayout);
         
         }else{
             //Sem permissão
@@ -146,7 +146,7 @@ class LabelLayoutController extends AppBaseController
 
         //Grava log
         $requestF = $request->all();
-        $descricao = 'Alterou LabelLayout ID: '.$id.' - '.$requestF['code'];
+        $descricao = 'Alterou Layout de Etiqueta ID: '.$id.' - '.$requestF['code'].' Imp: '.$requestF['printer_type_code'];
         $log = App\Models\Log::wlog('label_layouts_edit', $descricao);
 
 

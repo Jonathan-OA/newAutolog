@@ -17,18 +17,20 @@
                          <li  class="active-l"><a href="#">@lang('models.deposit_types')</a></li>
                     </ul>
                 </div>
-                <div class="panel panel-default">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <!-- Alerta de erro / sucesso -->
-                            @include('flash::message')
-                            <div id="msg_excluir"></div>
-                            <div class="row buttons_grid">
-                                <a class="btn btn-success"  href="{!! route('depositTypes.create') !!}">@lang('buttons.add')</a>
-                            </div>
-                            <div class="panel-body">
-                                @include('locations.deposit_types.table')
-                            </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <!-- Alerta de erro / sucesso -->
+                        @include('flash::message')
+                        <div id="msg_excluir"></div>
+                        <div class="row buttons_grid">
+                            <a class="btn btn-success"  href="{!! route('depositTypes.create') !!}">@lang('buttons.add')</a>
+                            <!-- Visualizar Logs  -->
+                            <a class="icon_logs" href="{!! url('logs/deposit_types_') !!}" aria-label="@lang('buttons.logs')" data-microtip-position="left" role="tooltip">
+                                <img class='icon' src='{{asset('/icons/logs.png') }}'>
+                            </a>
+                        </div>
+                        <div class="panel-body">
+                            @include('locations.deposit_types.table')
                         </div>
                     </div>
                 </div>

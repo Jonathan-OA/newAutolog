@@ -1,3 +1,4 @@
+
 @extends('layouts.app')
 
 @section('content')
@@ -5,8 +6,13 @@
         <div class="col-md-12 pad-ct">
             <div class="panel panel-default" >
                 <div class="panel-heading">
-                   <!-- Texto baseado no arquivo de linguagem -->
-                   @lang('models.label_types') 
+                  <!-- Abas -->
+                  <ul class="nav nav-tabs">
+                        <!-- Textos baseados no arquivo de linguagem -->
+                        <li><a href="{!! route('labelLayouts.index') !!}">@lang('models.label_layouts')</a></li>
+                        <li><a href="{!! route('labelTypes.index') !!}">@lang('models.label_types')</a></li>
+                        <li class="active-l"><a href="#">@lang('models.printer_types')</a></li>
+                    </ul>
                 </div>
                 <div class="row">
                     <div class="col-md-12">
@@ -14,10 +20,14 @@
                         @include('flash::message')
                         <div id="msg_excluir"></div>
                         <div class="row buttons_grid">
-                            <a class="btn btn-success"  href="{!! route('labelTypes.create') !!}">@lang('buttons.add')</a>
+                            <a class="btn btn-success"  href="{!! route('printerTypes.create') !!}">@lang('buttons.add')</a>
+                            <!-- Visualizar Logs  -->
+                            <a class="icon_logs" href="{!! url('logs/printer_types_') !!}" aria-label="@lang('buttons.logs')" data-microtip-position="left" role="tooltip">
+                                <img class='icon' src='{{asset('/icons/logs.png') }}'>
+                            </a>
                         </div>
                         <div class="panel-body">
-                            @include('label_types.table')
+                            @include('print.printer_types.table')
                         </div>
                     </div>
                 </div>
@@ -31,10 +41,10 @@
     $(function() {
         
         //Parâmetros para criação da datatable
-        table = $("#labelTypes-table").DataTable({
+        table = $("#printerTypes-table").DataTable({
             scrollX: true,
             scrollY: "47vh",
-            ajax: 'labelTypes/datatable',
+            ajax: 'printerTypes/datatable',
             autoWidth: true,
             fixedColumns:   {
                 leftColumns: 0,
@@ -51,7 +61,7 @@
                     sPrevious: "@lang('models.previous')",
                 }
             },
-            columns: [ { data: 'code' },
+            columns: [ { data: 'code', className: "td_center" },
                        { data: 'description' },
                        { data: null,
                          className: "th_grid",
@@ -61,19 +71,19 @@
       });
 
       //Funções dos botões de editar e excluir
-      $('#labelTypes-table tbody').on( 'click', 'button', function () {
+      $('#printerTypes-table tbody').on( 'click', 'button', function () {
             var data = table.row( $(this).parents('tr') ).data();
             var id = $(this).attr('id');
             if(id == 'edit'){
                 //Editar Registro
-                window.location.href = "{!! URL::to('labelTypes/"+data.id+"/edit') !!}";
+                window.location.href = "{!! URL::to('printerTypes/"+data.id+"/edit') !!}";
             }else{
                 //Excluir Registro
                 if(confirm('@lang("buttons.msg_remove")')){
                     //Token obrigatório para envio POST
                     var tk = $('meta[name="csrf-token"]').attr('content');
                     $.ajax({
-                        url: 'labelTypes/'+data.id,
+                        url: 'printerTypes/'+data.id,
                         type: 'post',
                         data: {_method: 'delete', _token :tk},
                         success: function(scs){ 

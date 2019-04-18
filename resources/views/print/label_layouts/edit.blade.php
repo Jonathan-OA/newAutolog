@@ -10,7 +10,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             {!! Form::model($labelLayout, ['route' => ['labelLayouts.update', $labelLayout->id], 'method' => 'patch']) !!}
-                                @include('label_layouts.fields',['action' => "edit"])
+                                @include('print.label_layouts.fields',['action' => "edit"])
                             {!! Form::close() !!}
                         </div>
                     </div>
@@ -22,6 +22,8 @@
 @section('scripts')
 <script>
    $(function() {
+        //Ao carregar a tela, processa a API para mostrar a pré visualização da tela 
+        //Ao editar tbm atualiza a imagem.
         viewLabel();
        $("#commands").change(function(){
          viewLabel();

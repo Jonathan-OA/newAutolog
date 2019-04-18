@@ -11,7 +11,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 {!! Form::model($labelType, ['route' => ['labelTypes.update', $labelType->id], 'method' => 'patch']) !!}
-                                  @include('label_types.fields',['action' => "edit"])
+                                  @include('print.label_types.fields',['action' => "edit"])
                                 {!! Form::close() !!}
                             </div>
                         </div>

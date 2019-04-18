@@ -12,7 +12,7 @@
                         <div class="col-md-12">
                             {!! Form::open(['route' => 'printerTypes.store']) !!}
                             <div class="form-group">
-                                @include('printer_types.fields')
+                                @include('print.printer_types.fields')
                             </div>
                             {!! Form::close() !!}
                         </div>

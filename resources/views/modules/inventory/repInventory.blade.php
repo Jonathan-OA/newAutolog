@@ -15,50 +15,48 @@
                    <!-- Texto baseado no arquivo de linguagem -->
                    @lang('reports.reportInv') 
                 </div>
-                <div class="panel pbread panel-default">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <!-- Alerta de erro / sucesso -->
-                            @include('flash::message')
-                            <div id="msg_excluir"></div>
-                            <div class="panel-body">
-                                <div class="row">
-                                    <div class="col-md-12 pad-ct">
-                                        <div class="" style="margin: 0 15px 0 15px">
-                                        <table class="table table-bordered table-striped" id="relInv-table" cellspacing="0" width="100%">
-                                            <thead>
-                                                <th class="th_grid">@lang('models.deposit_code') </th>
-                                                <th class="th_grid">@lang('models.location_code') </th>
-                                                <th class="th_grid">@lang('models.product_code') </th>
-                                                <th class="th_grid">@lang('models.pallet_id') </th>
-                                                <th class="th_grid">@lang('models.label_id') </th>
-                                                <th class="th_grid">@lang('models.qty_wms') </th>
-                                                <th class="th_grid">@lang('models.uom_code') </th>
-                                                <th class="th_grid">@lang('models.1acount') </th>
-                                                <th class="th_grid">@lang('models.2acount') </th>
-                                                <th class="th_grid">@lang('models.3acount') </th>
-                                                <th class="th_grid">@lang('models.4acount') </th>
-                                            </thead>
-                                            <tbody>
-                                                @foreach($inventory_items as $item)
-                                                <!-- Hidden pois o que mostra as informações é o ajax / datatable -->
-                                                <tr class="hidden">
-                                                    <td>{!! $item->deposit_code !!}</td>
-                                                    <td>{!! $item->location_code !!}</td>
-                                                    <td>{!! $item->product_code !!}</td>
-                                                    <td>{!! $item->plt_barcode !!}</td>
-                                                    <td>{!! $item->label_barcode !!}</td>
-                                                    <td>{!! $item->qty_wms !!}</td>
-                                                    <td>{!! $item->uom_code !!}</td>
-                                                    <td>{!! $item->qty1 !!}</td>
-                                                    <td>{!! $item->qty2 !!}</td>
-                                                    <td>{!! $item->qty3 !!}</td>
-                                                    <td>{!! $item->qty4 !!}</td>
-                                                </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                        </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <!-- Alerta de erro / sucesso -->
+                        @include('flash::message')
+                        <div id="msg_excluir"></div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-12 pad-ct">
+                                    <div class="" style="margin: 0 15px 0 15px">
+                                    <table class="table table-bordered table-striped" id="relInv-table" cellspacing="0" width="100%">
+                                        <thead>
+                                            <th class="th_grid">@lang('models.deposit_code') </th>
+                                            <th class="th_grid">@lang('models.location_code') </th>
+                                            <th class="th_grid">@lang('models.product_code') </th>
+                                            <th class="th_grid">@lang('models.pallet_id') </th>
+                                            <th class="th_grid">@lang('models.label_id') </th>
+                                            <th class="th_grid">@lang('models.qty_wms') </th>
+                                            <th class="th_grid">@lang('models.uom_code') </th>
+                                            <th class="th_grid">@lang('models.1acount') </th>
+                                            <th class="th_grid">@lang('models.2acount') </th>
+                                            <th class="th_grid">@lang('models.3acount') </th>
+                                            <th class="th_grid">@lang('models.4acount') </th>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($inventory_items as $item)
+                                            <!-- Hidden pois o que mostra as informações é o ajax / datatable -->
+                                            <tr class="hidden">
+                                                <td>{!! $item->deposit_code !!}</td>
+                                                <td>{!! $item->location_code !!}</td>
+                                                <td>{!! $item->product_code !!}</td>
+                                                <td>{!! $item->plt_barcode !!}</td>
+                                                <td>{!! $item->label_barcode !!}</td>
+                                                <td>{!! $item->qty_wms !!}</td>
+                                                <td>{!! $item->uom_code !!}</td>
+                                                <td>{!! $item->qty1 !!}</td>
+                                                <td>{!! $item->qty2 !!}</td>
+                                                <td>{!! $item->qty3 !!}</td>
+                                                <td>{!! $item->qty4 !!}</td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
                                     </div>
                                 </div>
                             </div>

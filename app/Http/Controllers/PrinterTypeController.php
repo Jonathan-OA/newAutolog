@@ -36,7 +36,7 @@ class PrinterTypeController extends AppBaseController
         $this->printerTypeRepository->pushCriteria(new RequestCriteria($request));
         $printerTypes = $this->printerTypeRepository->all();
 
-        return view('printer_types.index')
+        return view('print.printer_types.index')
             ->with('printerTypes', $printerTypes);
     }
 
@@ -50,7 +50,7 @@ class PrinterTypeController extends AppBaseController
         //Valida se usuário possui permissão para acessar esta opção
         if(App\Models\User::getPermission('printer_types_add',Auth::user()->user_type_code)){
 
-            return view('printer_types.create');
+            return view('print.printer_types.create');
 
         }else{
             //Sem permissão
@@ -94,7 +94,7 @@ class PrinterTypeController extends AppBaseController
             return redirect(route('printerTypes.index'));
         }
 
-        return view('printer_types.show')->with('printerType', $printerType);
+        return view('print.printer_types.show')->with('printerType', $printerType);
     }
 
     /**
@@ -117,7 +117,7 @@ class PrinterTypeController extends AppBaseController
                 return redirect(route('printerTypes.index'));
             }
 
-            return view('printer_types.edit')->with('printerType', $printerType);
+            return view('print.printer_types.edit')->with('printerType', $printerType);
         
         }else{
             //Sem permissão

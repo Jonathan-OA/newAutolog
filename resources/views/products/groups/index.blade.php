@@ -22,6 +22,10 @@
                         <div id="msg_excluir"></div>
                         <div class="row buttons_grid">
                             <a class="btn btn-success"  href="{!! route('groups.create') !!}">@lang('buttons.add')</a>
+                            <!-- Visualizar Logs  -->
+                            <a class="icon_logs" href="{!! url('logs/groups_') !!}" aria-label="@lang('buttons.logs')" data-microtip-position="left" role="tooltip">
+                                <img class='icon' src='{{asset('/icons/logs.png') }}'>
+                            </a>
                         </div>
                         <div class="panel-body">
                             @include('products.groups.table')
@@ -58,9 +62,10 @@
                     sPrevious: "@lang('models.previous')",
                 }
             },
-            columns: [  { data: 'code' },
+            columns: [  { data: 'code', className: "td_center" },
                         { data: 'description' },
-                        { data: 'product_type_code' },
+                        { data: 'product_type_code', className: "td_center" },
+                        { data: 'label_type_code', className: "td_center" },
                         { data: null,
                          className: "th_grid",
                          defaultContent: "<button id='edit' aria-label='@lang('buttons.edit')' data-microtip-position='left' role='tooltip' ><img class='icon' src='{{asset('/icons/editar.png') }}'></button><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='{{asset('/icons/remover.png') }}'></button>",

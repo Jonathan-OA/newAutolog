@@ -15,18 +15,20 @@
                    <!-- Texto baseado no arquivo de linguagem -->
                    @lang('models.packings') - {!! $product_code  !!}
                 </div>
-                <div class="panel pbread panel-default">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <!-- Alerta de erro / sucesso -->
-                            @include('flash::message')
-                            <div id="msg_excluir"></div>
-                            <div class="row buttons_grid">
-                                <a class="btn btn-success"  href="{!! action('PackingController@create',$product_code) !!}">@lang('buttons.add')</a>
-                            </div>
-                            <div class="panel-body">
-                                @include('packings.table')
-                            </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <!-- Alerta de erro / sucesso -->
+                        @include('flash::message')
+                        <div id="msg_excluir"></div>
+                        <div class="row buttons_grid">
+                            <a class="btn btn-success"  href="{!! action('PackingController@create',$product_code) !!}">@lang('buttons.add')</a>
+                            <!-- Visualizar Logs  -->
+                            <a class="icon_logs" href="{!! url('logs/packings_') !!}" aria-label="@lang('buttons.logs')" data-microtip-position="left" role="tooltip">
+                                <img class='icon' src='{{asset('/icons/logs.png') }}'>
+                            </a>
+                        </div>
+                        <div class="panel-body">
+                            @include('packings.table')
                         </div>
                     </div>
                 </div>

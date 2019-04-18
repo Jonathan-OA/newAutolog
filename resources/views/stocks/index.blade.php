@@ -5,22 +5,26 @@
         <div class="col-md-12 pad-ct">
             <div class="panel panel-default" >
                 <div class="panel-heading">
-                   <!-- Texto baseado no arquivo de linguagem -->
-                   @lang('models.stocks') 
+                   <!-- Botão de Voltar e Título baseado no arquivo de linguagem -->
+                   <a href="{{ URL::previous() }}" aria-label="@lang('buttons.back')" data-microtip-position="bottom" role="tooltip">
+                        <img  class="icon_menu" src="{{asset('/icons/voltar.png') }}"/>
+                    </a>  @lang('models.stocks')
                 </div>
-                <div class="panel panel-default">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <!-- Alerta de erro / sucesso -->
-                            @include('flash::message')
-                            <div id="msg_excluir"></div>
-                            <div class="row buttons_grid">
-                                <!-- <a class="btn btn-success"  href="{!! route('stocks.create') !!}">@lang('buttons.add')</a> -->
-                                <a class="btn btn-success"  href="entradaManual">Ent. Manual</a>
-                            </div>
-                            <div class="panel-body">
-                                @include('stocks.table')
-                            </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <!-- Alerta de erro / sucesso -->
+                        @include('flash::message')
+                        <div id="msg_excluir"></div>
+                        <div class="row buttons_grid">
+                                <!-- Entrada Manual  -->
+                            <a class="btn btn-success"  href="entradaManual">Ent. Manual</a>
+                            <!-- Visualizar Logs  -->
+                            <a class="icon_logs" href="{!! url('logs/stocks_') !!}" aria-label="@lang('buttons.logs')" data-microtip-position="bottom" role="tooltip">
+                                <img class='icon' src='{{asset('/icons/logs.png') }}'>
+                            </a>
+                        </div>
+                        <div class="panel-body">
+                            @include('stocks.table')
                         </div>
                     </div>
                 </div>

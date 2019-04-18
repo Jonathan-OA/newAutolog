@@ -8,60 +8,58 @@
                    <!-- Texto baseado no arquivo de linguagem -->
                    @lang('models.entradaManual') 
                 </div>
-                <div class="panel panel-default">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="panel-body">
-                                <!-- Campos para preenchimento -->
-                                <div class="form_fields">
-                                    @include('adminlte-templates::common.errors')
-                                     <!-- Alerta de erro / sucesso -->
-                                    @include('flash::message')
-                                    <div id="msg_excluir"></div>
-                                    {!! Form::label('pallet_barcode', Lang::get('models.pallet').':') !!}
-                                    {!! Form::text('pallet_barcode', null, ['class' => 'form-control']) !!}
-                                    {!! Form::label('barcode', Lang::get('models.barcode').':') !!}
-                                    {!! Form::text('barcode', null, ['class' => 'form-control']) !!}
-                                    {!! Form::open(['route' => 'stocks.store', 'id' => 'entForm']) !!} 
-                                    <!-- Só mostra demais campos quando ler um barcode correto --> 
-                                    <div id="hidden" class="hidden">    
-                                        <div class="form-group">
-                                            {!! Form::label('product_code', Lang::get('models.product_code').':') !!}
-                                            {!! Form::text('product_code', null, ['class' => 'form-control', 'readonly']) !!}
-                                            <div class="col-md-6">
-                                                {!! Form::label('qty', Lang::get('models.qty').':') !!}
-                                                {!! Form::text('qty', null, ['class' => 'form-control']) !!}
-                                            </div>
-                                            <div class="col-md-6">
-                                                {!! Form::label('uom_code', Lang::get('models.uom_code').':') !!}
-                                                {!! Form::text('uom_code', null, ['class' => 'form-control', 'readonly']) !!}
-                                            </div>
-                                            <div class="col-md-6">
-                                                {!! Form::label('prev_qty', Lang::get('models.prev_qty').':') !!}
-                                                {!! Form::text('prev_qty', null, ['class' => 'form-control']) !!}    
-                                            </div>
-                                            <div class="col-md-6">
-                                                {!! Form::label('prev_uom_code', Lang::get('models.prev_uom_code').':') !!}
-                                                {!! Form::text('prev_uom_code', null, ['class' => 'form-control', 'readonly']) !!}
-                                            </div>
-                                                {!! Form::label('location_code', Lang::get('models.location_code').':') !!}
-                                                {!! Form::text('location_code', null, ['class' => 'form-control', 'id' => 'autocomplete', 'table' => 'locations']) !!}
-                                                <!-- Campos não visiveis para o usuario -->
-                                                {{ Form::hidden('company_id', Auth::user()->company_id) }}
-                                                {{ Form::hidden('user_id', Auth::user()->id) }}
-                                                {{ Form::hidden('label_id', '', array('id' => 'label_id')) }}
-                                                {{ Form::hidden('task_id', '') }}
-                                                {{ Form::hidden('pltbarcode', '', array('id' => 'pltbarcode')) }}
-                                                {{ Form::hidden('pallet_id', '', array('id' => 'pallet_id')) }}
-                                                {{ Form::hidden('finality_code', 'SALDO') }}
-                                                {{ Form::hidden('operation_code', 'stocks_add') }}
-                                        </div>  
-                                    </div> 
-                                </div>
-                                {!! Form::submit(Lang::get('buttons.save'), ['class' => 'btn btn-primary']) !!}
-                                <a href="{!! route('stocks.index') !!}" class="btn btn-default">@lang('buttons.cancel')</a>
-                                {!! Form::close() !!}
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel-body">
+                            <!-- Campos para preenchimento -->
+                            <div class="form_fields">
+                                @include('adminlte-templates::common.errors')
+                                    <!-- Alerta de erro / sucesso -->
+                                @include('flash::message')
+                                <div id="msg_excluir"></div>
+                                {!! Form::label('pallet_barcode', Lang::get('models.pallet').':') !!}
+                                {!! Form::text('pallet_barcode', null, ['class' => 'form-control']) !!}
+                                {!! Form::label('barcode', Lang::get('models.barcode').':') !!}
+                                {!! Form::text('barcode', null, ['class' => 'form-control']) !!}
+                                {!! Form::open(['route' => 'stocks.store', 'id' => 'entForm']) !!} 
+                                <!-- Só mostra demais campos quando ler um barcode correto --> 
+                                <div id="hidden" class="hidden">    
+                                    <div class="form-group">
+                                        {!! Form::label('product_code', Lang::get('models.product_code').':') !!}
+                                        {!! Form::text('product_code', null, ['class' => 'form-control', 'readonly']) !!}
+                                        <div class="col-md-6">
+                                            {!! Form::label('qty', Lang::get('models.qty').':') !!}
+                                            {!! Form::text('qty', null, ['class' => 'form-control']) !!}
+                                        </div>
+                                        <div class="col-md-6">
+                                            {!! Form::label('uom_code', Lang::get('models.uom_code').':') !!}
+                                            {!! Form::text('uom_code', null, ['class' => 'form-control', 'readonly']) !!}
+                                        </div>
+                                        <div class="col-md-6">
+                                            {!! Form::label('prev_qty', Lang::get('models.prev_qty').':') !!}
+                                            {!! Form::text('prev_qty', null, ['class' => 'form-control']) !!}    
+                                        </div>
+                                        <div class="col-md-6">
+                                            {!! Form::label('prev_uom_code', Lang::get('models.prev_uom_code').':') !!}
+                                            {!! Form::text('prev_uom_code', null, ['class' => 'form-control', 'readonly']) !!}
+                                        </div>
+                                            {!! Form::label('location_code', Lang::get('models.location_code').':') !!}
+                                            {!! Form::text('location_code', null, ['class' => 'form-control', 'id' => 'autocomplete', 'table' => 'locations']) !!}
+                                            <!-- Campos não visiveis para o usuario -->
+                                            {{ Form::hidden('company_id', Auth::user()->company_id) }}
+                                            {{ Form::hidden('user_id', Auth::user()->id) }}
+                                            {{ Form::hidden('label_id', '', array('id' => 'label_id')) }}
+                                            {{ Form::hidden('task_id', '') }}
+                                            {{ Form::hidden('pltbarcode', '', array('id' => 'pltbarcode')) }}
+                                            {{ Form::hidden('pallet_id', '', array('id' => 'pallet_id')) }}
+                                            {{ Form::hidden('finality_code', 'SALDO') }}
+                                            {{ Form::hidden('operation_code', 'stocks_add') }}
+                                    </div>  
+                                </div> 
                             </div>
+                            {!! Form::submit(Lang::get('buttons.save'), ['class' => 'btn btn-primary']) !!}
+                            <a href="{!! route('stocks.index') !!}" class="btn btn-default">@lang('buttons.cancel')</a>
+                            {!! Form::close() !!}
                         </div>
                     </div>
                 </div>

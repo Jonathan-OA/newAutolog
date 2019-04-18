@@ -26,7 +26,9 @@ class Group extends Model
         'company_id',
         'code',
         'description',
-        'product_type_code'
+        'product_type_code',
+        'label_type_code',
+        'trf_movement'
     ];
 
     /**
@@ -40,7 +42,7 @@ class Group extends Model
         'code' => 'string',
         'description' => 'string',
         'product_type_code' => 'string',
-        'trf_movement' => 'string',
+        'trf_movement' => 'integer',
         'label_type_code' => 'string'
     ];
 

@@ -16,6 +16,7 @@ return [
     'param_product'             => 'Permite ler apenas produtos que foram selecionados no inventário.',
     'param_location'            => 'Permite ler apenas endereços que foram selecionados no inventário.',
     'param_productdef'          => 'Produto padrão para as contagens do inventário:',
+    'param_locationdef'         => 'Endereço padrão para as contagens do inventário:',
 
     /*
     |
@@ -38,8 +39,9 @@ return [
     |
     */
 
-    'groups.trf_movement'              => 'Caso preenchido, exporta o apontamento/movimentação desse grupo com este valor para o erp/sistema.',    
-    'products.origin'              => 'Caso o produto possua grade, indica o código origem (Tamanhos / cores diferentes, por exemplo)',    
+    'groups.trf_movement'       => 'Caso preenchido, exporta o apontamento/movimentação desse grupo com este valor para o erp/sistema.',    
+    'products.origin'           => 'Caso o produto possua grade, indica o código origem (Tamanhos / cores diferentes, por exemplo)',    
+    'labellayouts.commands'     => 'Este recurso utiliza a API externa Labelary, que pode não funcionar corretamente em algum momento.',    
     
 
 ];

@@ -5,18 +5,18 @@
         <div class="col-md-12 pad-ct">
             <div class="panel panel-default" >
                 <div class="panel-heading">
-                   <!-- Texto baseado no arquivo de linguagem -->
-                   @lang('models.logs') 
+                  <!-- Botão de Voltar e Título baseado no arquivo de linguagem -->
+                  <a href="{{ URL::previous() }}" aria-label="@lang('buttons.back')" data-microtip-position="bottom" role="tooltip">
+                        <img  class="icon_menu" src="{{asset('/icons/voltar.png') }}"/>
+                    </a>  @lang('models.logs')
                 </div>
-                <div class="panel panel-default">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <!-- Alerta de erro / sucesso -->
-                            @include('flash::message')
-                            <div id="msg_excluir"></div>
-                            <div class="panel-body">
-                                @include('logs.table')
-                            </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <!-- Alerta de erro / sucesso -->
+                        @include('flash::message')
+                        <div id="msg_excluir"></div>
+                        <div class="panel-body">
+                            @include('logs.table')
                         </div>
                     </div>
                 </div>
@@ -33,7 +33,7 @@
         table = $("#logs-table").DataTable({
             scrollX: true,
             scrollY: "60vh",
-            ajax: 'logs/datatable',
+            ajax: "{!! URL::to('logs/datatable') !!}",
             autoWidth: true,
             fixedColumns:   {
                 leftColumns: 0,
@@ -50,12 +50,18 @@
                     sPrevious: "@lang('models.previous')",
                 }
             },
-            columns: [ { data: 'description' },
-                       { data: 'code' },
+            columns: [ { data: 'code' },
                        { data: 'operation_code' },
+                       { data: 'description' },
                        { data: 'created_at'}],
             "order": [[ 3, "desc" ]]
       });
+
+      //Se veio com a rota logs/operation?, filtra os registros pelo valor informado
+      var oper = '{{($operation)}}';
+      if(oper.length > 0){
+        table.search( '{{$operation}}').draw();
+      }
 
       //Funções dos botões de editar e excluir
       $('#logs-table tbody').on( 'click', 'button', function () {

@@ -75,12 +75,21 @@
         {{ Form::radio('vlocation', '0' , true) }} @lang('models.no')
         <br>
     </span>
+    <!-- Parâmetros Específicos para o Inventário Padrão (Produto e Endereço Default) -->
     <span id="parameters_inv" style="display: none">
         <span aria-label="@lang('infos.param_productdef')" data-microtip-position="right" role="tooltip">
             <img class='icon' src='{{asset('/icons/information.png') }}' >
         </span>
+        <!-- Produto Default) -->
         {!! Form::label('productdef', Lang::get('parameters.param_productdef')) !!} 
         {!! Form::text('productdef', null, ['class' => 'form-control', 'id' => 'autocomplete', 'table' => 'products']) !!}
+        <span aria-label="@lang('infos.param_locationdef')" data-microtip-position="right" role="tooltip">
+            <img class='icon' src='{{asset('/icons/information.png') }}' >
+        </span>
+        <!-- Endereço Default) -->
+        {!! Form::label('locationdef', Lang::get('parameters.param_locationdef')) !!} 
+        {!! Form::text('locationdef', null, ['class' => 'form-control', 'id' => 'autocomplete1', 'table' => 'locations']) !!}
+        
     </span>
 </div>
 

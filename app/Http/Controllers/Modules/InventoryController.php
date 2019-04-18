@@ -74,7 +74,8 @@ class InventoryController extends AppBaseController
         //O tratamento é feito no app coletor
         $parameters = "550_contagens=".$input['counts'].";550_valida_saldo=".
                       $input['vstock'].";550_valida_endereco=".$input['vlocation'].
-                      ";550_valida_produto=".$input['vproduct'].";550_produto_default=".$input['productdef'];
+                      ";550_valida_produto=".$input['vproduct'].";550_produto_default=".$input['productdef'].
+                      ";550_endereco_default=".$input['locationdef'];
 
         $input['comments'] = $parameters;
         $deposits = (empty($input['deposits']))? '' : $input['deposits'];

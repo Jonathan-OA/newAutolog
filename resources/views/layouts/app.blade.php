@@ -61,12 +61,14 @@
                             <div class="loader"></div>
                     </div>
                 </div>
-                <div class="lay_menu_sup">
+                <!-- Botão de Suporte -->
+                <div class="lay_menu_sup" aria-label="@lang('buttons.support')" data-microtip-position="right" role="tooltip">
                         <a class="btn btn-support" id="button-suporte" data-toggle="modal" data-target="#supportModal" title="Suporte"> @lang('models.support') 
                             <img class="icon" src="{{ asset('/icons/suporte.png') }}" alt="Suporte" >
                         </a>            
                 </div>
-                <div class="lay_menu_sup">
+                <!-- Botão de download Android -->
+                <div class="lay_menu_sup" aria-label="@lang('buttons.android')" data-microtip-position="right" role="tooltip"> 
                     <a class="btn btn-support" href="{{ asset('/apk/AUTOLOGWMS.apk') }}" id="button-android" title="Download APK Android">
                         <img class="icon" src="{{ asset('/icons/android.png') }}" alt="Suporte" >
                     </a>            

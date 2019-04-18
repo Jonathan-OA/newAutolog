@@ -15,20 +15,18 @@
                    <!-- Texto baseado no arquivo de linguagem -->
                    @lang('models.user_permissions') - @lang('models.user_type_code'): {{$userTypeCode}}
                 </div>
-                <div class="panel pbread panel-default">
-                    <div class="row">
-                        <div class="col-md-12">
-                            @include('flash::message')
-                            <div id="msg_excluir"></div>
-                            <div class="panel-body">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        {!! Form::open(['route' => 'userPermissions.store']) !!}
-                                            <div class="form-group">
-                                                 @include('users.user_permissions.show_operations')
-                                            </div>
-                                        {!! Form::close() !!}
-                                    </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        @include('flash::message')
+                        <div id="msg_excluir"></div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    {!! Form::open(['route' => 'userPermissions.store']) !!}
+                                        <div class="form-group">
+                                                @include('users.user_permissions.show_operations')
+                                        </div>
+                                    {!! Form::close() !!}
                                 </div>
                             </div>
                         </div>

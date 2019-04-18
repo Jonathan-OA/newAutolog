@@ -22,6 +22,10 @@
                         <div id="msg_excluir"></div>
                         <div class="row buttons_grid">
                             <a class="btn btn-success"  href="{!! route('productTypes.create') !!}">@lang('buttons.add')</a>
+                            <!-- Visualizar Logs  -->
+                            <a class="icon_logs" href="{!! url('logs/product_types_') !!}" aria-label="@lang('buttons.logs')" data-microtip-position="left" role="tooltip">
+                                <img class='icon' src='{{asset('/icons/logs.png') }}'>
+                            </a>
                         </div>
                         <div class="panel-body">
                             @include('products.product_types.table')
