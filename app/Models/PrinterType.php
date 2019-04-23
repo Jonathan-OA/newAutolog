@@ -62,7 +62,6 @@ class PrinterType extends Model
      //Retorna todos os printer_types disponíveis
      public static function getPrinterTypes(){
         return PrinterType::selectRaw("code,CONCAT(code,' - ',description) as description_f")
-                      ->where('company_id', Auth::user()->company_id)
                       ->pluck('description_f','code');
     }
 

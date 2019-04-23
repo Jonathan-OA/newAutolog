@@ -202,4 +202,13 @@ class LabelLayoutController extends AppBaseController
     {
         return Datatables::of(App\Models\LabelLayout::where('company_id', Auth::user()->company_id))->make(true);
     }
+
+    /**
+     * Retorna os tipos de impressora cadastrados para um tipo de etiqueta
+     *
+     */
+    public function getPrinters($label_type_code)
+    {
+        return App\Models\LabelLayout::getPrinters($label_type_code);
+    }
 }

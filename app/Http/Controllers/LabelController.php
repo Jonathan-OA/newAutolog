@@ -36,8 +36,11 @@ class LabelController extends AppBaseController
         $this->labelRepository->pushCriteria(new RequestCriteria($request));
         $labels = $this->labelRepository->findByField('company_id', Auth::user()->company_id);
 
+        $printerTypes = App\Models\PrinterType::getPrinterTypes();
+
         return view('labels.index')
-            ->with('labels', $labels);
+            ->with('labels', $labels)
+            ->with('printerTypes', $printerTypes);
     }
 
     /**

@@ -79,11 +79,33 @@ class LabelLayout extends Model
 
     
 
-     //Retorna todos os label_layouts disponíveis
-     public static function getLabelLayouts(){
-        return LabelLayout::selectRaw("code,CONCAT(code,' - ',description) as description_f")
-                      ->where('company_id', Auth::user()->company_id)
-                      ->pluck('description_f','code');
+    /**
+     * Retorna os comandos de impressão de um layout de etiqueta para um tipo de impressora especifico
+     *
+     * @var array
+     */
+     public static function getCommands($label_type_code, $printer_type){
+        return LabelLayout::select('commands')
+                    ->where('company_id', Auth::user()->company_id)
+                    ->where('label_type_code', $label_type_code)
+                    ->where('printer_type_code', $printer_type)
+                    ->get();
+    }
+
+    /**
+     * Retorna os tipos de impressora cadastrados para um tipo de etiqueta especifico
+     *
+     * @var array
+     */
+    public static function getPrinters($label_type_code){
+
+        $label_type_code = strtoupper($label_type_code);
+
+        return LabelLayout::selectRaw("printer_type_code,CONCAT(printer_type_code,' - ',printer_types.description) as description_f")
+                          ->join('printer_types', 'printer_types.code', 'label_layouts.printer_type_code')
+                          ->where('company_id', Auth::user()->company_id)
+                          ->where('label_type_code', $label_type_code)
+                          ->pluck('description_f','printer_type_code');
     }
 
 

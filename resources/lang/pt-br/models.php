@@ -323,7 +323,9 @@ return [
     'no' => 'Não',
     'reports' => 'Relatórios',
     'traceability' => 'Rastreabilidade ',
-    'viewer' => 'Pré-Visualização '
+    'viewer' => 'Pré-Visualização ',
+    'print' => 'Impressão de Etiquetas ',
+    'printer' => 'Impressora '
     
 
 

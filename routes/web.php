@@ -389,6 +389,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::resource('printerTypes', 'PrinterTypeController');
 
     Route::get('labelLayouts/datatable', 'LabelLayoutController@getData');
+    Route::get('labelLayouts/{label_type}/printers', 'LabelLayoutController@getPrinters');
     Route::resource('labelLayouts', 'LabelLayoutController');
 
     Route::get('print', 'LabelLayoutController@index');
