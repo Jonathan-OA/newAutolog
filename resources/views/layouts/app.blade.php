@@ -112,6 +112,7 @@
         var APP_URL = {!! json_encode(url('/')) !!}
     </script>
     @yield('scripts')
+    @yield('scripts_print')
 
 </body>
 </html>

@@ -211,4 +211,19 @@ class LabelLayoutController extends AppBaseController
     {
         return App\Models\LabelLayout::getPrinters($label_type_code);
     }
+
+     /**
+     * Retorna os comandos de impressão para um tipo de etiqueta / tipo de impressora 
+     *
+     */
+    public function getCommands($label_type_code, $printer_type_code)
+    {
+        $comm = App\Models\LabelLayout::getCommands($label_type_code,$printer_type_code);
+        //Se não encontrou, retorna erro
+        if(count($comm) == 0){
+            $comm['error'] = 1;
+            $comm['msg'] = Lang::get('validation.label_commands');
+        }
+        return $comm;
+    }
 }

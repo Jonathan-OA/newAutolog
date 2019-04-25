@@ -83,8 +83,8 @@
 {!! Form::number('level', null, ['class' => 'form-control']) !!}
 
 <!-- Layout Code Field -->
-{!! Form::label('layout_code', Lang::get('models.layout_code').':') !!}
-{!! Form::text('layout_code', null, ['class' => 'form-control']) !!}
+{!! Form::label('label_type_code', Lang::get('models.label_type_code').':') !!}
+{!! Form::text('label_type_code', null, ['class' => 'form-control','id' => 'autocomplete3', 'table' => 'label_types']) !!}
 
 <!-- Weight Field -->
 {!! Form::label('weight', Lang::get('models.weight').':') !!}
@@ -95,8 +95,8 @@
 {!! Form::number('width', null, ['class' => 'form-control']) !!}
 
 <!-- Lenght Field -->
-{!! Form::label('lenght', Lang::get('models.lenght').':') !!}
-{!! Form::number('lenght', null, ['class' => 'form-control']) !!}
+{!! Form::label('length', Lang::get('models.length').':') !!}
+{!! Form::number('length', null, ['class' => 'form-control']) !!}
 
 <!-- Text1 Field -->
 {!! Form::label('obs1', Lang::get('models.obs1').':') !!}

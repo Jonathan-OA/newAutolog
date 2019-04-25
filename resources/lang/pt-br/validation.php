@@ -105,6 +105,7 @@ return [
     'support_success'               => 'Mensagem enviada! Em breve nossa equipe lhe responderá. ',
     'inv_stock'               => 'Item / Endereço possui Reserva ou Empenho. ',
     'inv_exists'               => 'Item / Endereço já inserido no Documento. ',
+    'label_commands'               => 'Nenhum layout localizado para esta etiqueta/impressora. ',
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Language Lines

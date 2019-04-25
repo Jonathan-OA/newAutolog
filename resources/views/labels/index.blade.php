@@ -26,9 +26,7 @@
                                 <img class='icon' src='{{asset('/icons/logs.png') }}'>
                             </a>
                             <!-- Botão de Imprimir  -->
-                            <a class="btn btn-support" id="button-print" data-toggle="modal" data-target="#printModal" title="Imprimir"> 
-                                <img class="icon" src="{{ asset('/icons/printer.png') }}" alt="Imprimir" >
-                            </a>       
+                                 
                         </div>
                         <div class="panel-body">
                             @include('labels.table')
@@ -80,7 +78,7 @@
                         },
                         { data: null,
                          className: "th_grid",
-                         defaultContent: "<button id='trace' aria-label='@lang('buttons.traceability')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='{{asset('/icons/detalhes2.png') }}'></button><button id='edit' aria-label='@lang('buttons.edit')' data-microtip-position='left' role='tooltip' ><img class='icon' src='{{asset('/icons/editar.png') }}'></button><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='{{asset('/icons/remover.png') }}'></button>",
+                         defaultContent: "<button id='button-print' class='bprint' data-toggle='modal' data-target='#printModal' aria-label='@lang('buttons.print')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='{{asset('/icons/printer.png') }}'></button><button id='trace' aria-label='@lang('buttons.traceability')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='{{asset('/icons/detalhes2.png') }}'></button><button id='edit' aria-label='@lang('buttons.edit')' data-microtip-position='left' role='tooltip' ><img class='icon' src='{{asset('/icons/editar.png') }}'></button><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='{{asset('/icons/remover.png') }}'></button>",
                          width: "90px" 
                         }],
       });
@@ -108,10 +106,10 @@
 
         }
       )
-
+      var data;
       //Funções dos botões de editar e excluir
       $('#labels-table tbody').on( 'click', 'button', function () {
-            var data = table.row( $(this).parents('tr') ).data();
+             data = table.row( $(this).parents('tr') ).data();
             var id = $(this).attr('id');
             if(id == 'edit'){
                 //Editar Registro
@@ -119,7 +117,12 @@
             }else if(id == 'trace'){
                 //Rastreabilidade
                 window.location.href = "{!! URL::to('labels/"+data.id+"/traceability') !!}";
-            }else{
+            }else if(id == 'button-print'){
+                //Atribui o tipo de etiqueta no input hidden do layout print.blade.php
+                //Para que os comandos possam ser identificados
+                $('#label_type_code').val(data.label_type_code);
+
+            }else if(id == 'remove'){
                 //Excluir Registro
                 if(confirm('@lang("buttons.msg_remove")')){
                     //Token obrigatório para envio POST
