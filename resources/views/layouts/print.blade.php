@@ -55,6 +55,23 @@
             var ip = $('#ip_local').val();
             console.log(ip);
 
+            //Carrega impressoras para o tipo de etiqueta
+            $.ajax({
+                url: "labelLayouts/"+label_type+"/printers",
+                method: "GET"
+            }).done(function(options) {
+                $.each(options, function(index,value){
+                    $("#printer_types").append('<option value="'+index+'">'+value+'</option>');
+                })
+            }).fail(function() {
+                //Não foram encontradas impressoras cadastradas para este tipo
+                var msg = "@lang('validation.label_types')";
+                alert(msg);
+                $('#msg_excluir').html('<div class="alert alert-info">@lang('infos.print_label_type')</div>');
+                //Fecha Modal
+                $('#printModal').modal('toggle');
+            });
+
             //Lista impressoras disponíveis
             $.ajax({
                 url: "http://localhost:9101/printers",
@@ -66,24 +83,14 @@
                     $("#printers").append('<option value="'+value[key]+'">'+key+'</option>');
                 })
             }).fail(function(jqXHR, textStatus) {
-                alert( "Não foi possível encontrar o servidor de Impressão." );
+                var msg = "@lang('validation.print_server')";
+                alert(msg);
+                $('#msg_excluir').html('<div class="alert alert-info">@lang('infos.print_server') <a href="#">Clique Aqui</a></div>');
                 //Fecha Modal
                 $('#printModal').modal('toggle');
             });
 
-            //Carrega impressoras para o tipo de etiqueta
-            $.ajax({
-                url: "labelLayouts/"+label_type+"/printers",
-                method: "GET"
-            }).done(function(options) {
-                $.each(options, function(index,value){
-                    $("#printer_types").append('<option value="'+index+'">'+value+'</option>');
-                })
-            }).fail(function() {
-                alert( "Não foi possível encontrar tipos de impressoras cadastrados" );
-                //Fecha Modal
-                $('#printModal').modal('toggle');
-            });
+            
 
         })
 
@@ -108,6 +115,8 @@
                         method: "POST",
                         data: comm
                     }).done(function(result) {
+                        //Falha na impressão
+                        var msg = "@lang('validation.label_print')";
                         //Fecha Modal 
                         $('#printModal').modal('toggle');
                         console.log(result);

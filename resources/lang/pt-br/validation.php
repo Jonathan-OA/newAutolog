@@ -106,6 +106,10 @@ return [
     'inv_stock'               => 'Item / Endereço possui Reserva ou Empenho. ',
     'inv_exists'               => 'Item / Endereço já inserido no Documento. ',
     'label_commands'               => 'Nenhum layout localizado para esta etiqueta/impressora. ',
+    'print_server'               => 'Não foi possível encontrar o servidor de Impressão. ',
+    'label_types'               => 'Não foi possível encontrar tipos de impressoras cadastrados. ',
+    'label_print'               => 'Não foi possível realizar a impressão. Valide as impressoras disponíveis. ',
+
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Language Lines

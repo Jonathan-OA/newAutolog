@@ -32,6 +32,8 @@ return [
     'return_doc'                => 'Documento :doc retornado com sucesso!',
     'return_docs'               => 'Documentos retornados com sucesso!',
     'select_wave'               => 'Documentos selecionados para Onda:',
+    'print_server'              => 'Problemas para visualizar as impressoras disponíveis? ',
+    'print_label_type'          => 'Confira o tipo de etiqueta cadastrada para este lote / produto, e se ela possui impressoras cadastradas.',
     
     /*
     |

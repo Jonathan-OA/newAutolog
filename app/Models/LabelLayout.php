@@ -77,6 +77,23 @@ class LabelLayout extends Model
         
     ];
 
+    /**
+     * Variáveis disponíveis para substituição nos layouts
+     *
+     * @var array
+     */
+    public static $variables = array('DOCNUM' => array(
+                                     'size' => '10',
+                                     'table' => 'documents', 
+                                     'field' => 'number'),
+                                     'CLIENTE' => array(
+                                     'size' => '10',
+                                     'table' => 'customers', 
+                                     'field' => 'name'),
+                                     'UMVLONG' => array(
+                                     'size' => '10',
+                                     'table' => 'labels', 
+                                     'field' => 'barcode'));
     
 
     /**
@@ -91,6 +108,82 @@ class LabelLayout extends Model
                     ->where('printer_type_code', $printer_type)
                     ->get();
     }
+
+     /**
+     * Substitui o layout da etiqueta pelas variáveis
+     *
+     *
+     * @var array
+     */
+    public static function subCommands($label_commands, $table_base, $params){
+        // $table_base indica a tabela principal para buscar os valores
+        // $params é um array  que pode conter os seguintes parâmetros como índices:
+        // 'label_id', 'location_code', 'pallet_id', 'operation_code', 'document_id'
+
+        $variablesList = App\Models\LabelLayout::$variables;
+
+        //Pega todas as variaveis do layout
+        preg_match_all("/%(.*?)%/", $labelLayout->commands, $matches);   
+        $variables = $matches[1];
+        foreach($variables as $val){
+            echo '----'.$val.'---- ';
+            if(!array_key_exists($val,$variablesList)){
+                echo 'Não Existe;';
+            }else{
+                echo 'Existe';
+            }
+        }
+
+
+        switch($table_base){
+            case 'documents':
+            $infos = DB::table('documents')
+                       ->leftJoin('customers', function ($join) {
+                            $join->on('customers.code','documents.customer_code')
+                                 ->whereColumn('customers.company_id','documents.company_id');
+                       })
+                       ->leftJoin('suppliers', function ($join) {
+                            $join->on('suppliers.code','documents.supplier_code')
+                                 ->whereColumn('suppliers.company_id','documents.company_id');
+                       })
+                       ->leftJoin('couriers', function ($join) {
+                            $join->on('couriers.code','documents.courier_code')
+                                 ->whereColumn('couriers.company_id','documents.company_id');
+                       })
+                       ->where('documents.id', $params['document_id'])
+                       ->get();
+
+            break;
+            case 'locations':
+
+
+            break;
+            case 'pallets':
+
+
+            break;
+            case 'labels':
+
+
+            break;
+
+
+
+        }
+       
+        ->where(function ($query) {
+            if(trim($GLOBALS['tipoEstq']) <> ''){
+                 $query->where('locations.stock_type_code',$GLOBALS['tipoEstq']);
+            }
+         });
+
+        return LabelLayout::select('commands')
+                    ->where('company_id', Auth::user()->company_id)
+                    ->where('label_type_code', $label_type_code)
+                    ->where('printer_type_code', $printer_type)
+                    ->get();
+    }
+
 
     /**
      * Retorna os tipos de impressora cadastrados para um tipo de etiqueta especifico
