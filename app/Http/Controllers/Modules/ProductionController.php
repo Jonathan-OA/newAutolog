@@ -149,6 +149,28 @@ class ProductionController extends AppBaseController
     }
 
 
+    /**
+     * Mostra o formulário para impressão de etiquetas de produção
+     *
+     * @return Response
+     */
+
+    public function showPrint($document_id)
+    {
+        //Valida se usuário possui permissão para acessar esta opção
+        if(App\Models\User::getPermission('documents_prod_print',Auth::user()->user_type_code)){
+            $document = $this->documentRepository->findWithoutFail($document_id);
+            $documentItems = App\Models\DocumentItem::getInfosForPrint($document_id);
+
+            return view('modules.production.printLabels')->with('document',$document)
+                                                         ->with('documentItems', $documentItems);
+        }else{
+            //Sem permissão
+            Flash::error(Lang::get('validation.permission'));
+            return redirect(url('production'));
+        }
+
+    }
 
     //--------------------------------------------------------------------------------------------
     //                                     Funções de Itens
@@ -261,6 +283,10 @@ class ProductionController extends AppBaseController
         return redirect(url('production/'.$requestF['document_id'].'/items'));
 
     }
+
+     
+
+
 
     public function getItems($document_id){
         $documents = App\Models\DocumentItem::where('document_id',$document_id)->get();

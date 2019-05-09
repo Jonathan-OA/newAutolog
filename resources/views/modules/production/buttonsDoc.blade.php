@@ -10,6 +10,10 @@
 
         <!-- Funções para status 0 -->
         <span ng-if="row.document_status_id == 0">
+            <!-- Imprimir Etiquetas (Apenas status 0) -->
+            <button ng-click="callRoute('./production/'+row.id+'/print')" class="icon_action" aria-label="@lang('buttons.print_labels')" data-microtip-position="left" role="tooltip">
+                <img class='icon' src='{{ asset('/icons/printer.png') }}'> 
+            </button>
             <!-- Liberar (Apenas status 0) -->
             <button ng-click="callRoute('./document/liberate/prod', 1, 'post')" class="icon_action" aria-label="@lang('buttons.liberate')" data-microtip-position="left" role="tooltip">
                 <img class='icon' src='{{ asset('/icons/liberar.png') }}'> 
@@ -21,6 +25,10 @@
             <!-- Cancelar (Apenas status 0) -->
             <button ng-click="callRouteConfirm('./document/cancel/prod', 1,'@lang('buttons.msg_cancel')','post')" class="icon_action" aria-label="@lang('buttons.cancel')" data-microtip-position="left" role="tooltip">
                 <img class='icon' src='{{ asset('/icons/cancelar.png') }}'> 
+            </button>
+             <!-- Imprimir Documento (Apenas status 0) -->
+             <button ng-click="callRoute('./document/liberate/prod', 1, 'post')" class="icon_action" aria-label="@lang('buttons.print_doc')" data-microtip-position="left" role="tooltip">
+                <img class='icon' src='{{ asset('/icons/printer_doc.png') }}'> 
             </button>
         </span>
         

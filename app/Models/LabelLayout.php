@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Eloquent as Model;
 use Auth;
+use DB;
 
 
 /**
@@ -82,18 +83,18 @@ class LabelLayout extends Model
      *
      * @var array
      */
-    public static $variables = array('DOCNUM' => array(
-                                     'size' => '10',
-                                     'table' => 'documents', 
-                                     'field' => 'number'),
+    public static $variables = array('PRDCAD' => array(
+                                        'size' => '10',
+                                        'table' => 'products', 
+                                        'field' => 'code'),
                                      'CLIENTE' => array(
-                                     'size' => '10',
-                                     'table' => 'customers', 
-                                     'field' => 'name'),
+                                        'size' => '10',
+                                        'table' => 'customers', 
+                                        'field' => 'name'),
                                      'UMVLONG' => array(
-                                     'size' => '10',
-                                     'table' => 'labels', 
-                                     'field' => 'barcode'));
+                                        'size' => '10',
+                                        'table' => 'labels', 
+                                        'field' => 'barcode'));
     
 
     /**
@@ -115,73 +116,37 @@ class LabelLayout extends Model
      *
      * @var array
      */
-    public static function subCommands($label_commands, $table_base, $params){
-        // $table_base indica a tabela principal para buscar os valores
-        // $params é um array  que pode conter os seguintes parâmetros como índices:
-        // 'label_id', 'location_code', 'pallet_id', 'operation_code', 'document_id'
+    public static function subCommands($label_commands, $infos){
 
-        $variablesList = App\Models\LabelLayout::$variables;
-
-        //Pega todas as variaveis do layout
-        preg_match_all("/%(.*?)%/", $labelLayout->commands, $matches);   
+        //Pega todas as variaveis presentes no  layout
+        preg_match_all("/%(.*?)%/", $label_commands, $matches);   
         $variables = $matches[1];
-        foreach($variables as $val){
-            echo '----'.$val.'---- ';
-            if(!array_key_exists($val,$variablesList)){
-                echo 'Não Existe;';
-            }else{
-                echo 'Existe';
+
+        //Pega informações das variaveis presentes no layout e que estão cadastradas no banco(Label_Variables)
+        $variablesList = LabelVariable::getLabelVariables($variables);
+
+        //Loop nas variaveis q estão no layout e no banco
+        foreach($variablesList as $val){
+            //Nome da Variável
+            $name = $val['code'];
+            //Tabela e campo de onde deve ser retirado seu valor (que vem no resultado da query $info)
+            $field =  $val['table'].'.'.$val['field'];
+            //Tamanho limite da Variável
+            $size = $val['size'];
+            //Ínicio do corte onde o tamanho $size deve ser aplicado.
+            $size_start = $val['size_start'];
+
+            //Valor: Buscando o Field cadastrado e cortando na qde correta de caracteres
+            $value = substr($infos[0]->$field,$size_start,$size);    
+
+            if($value != ''){
+                //Se o valor existir, realiza a substituição
+                $label_commands = str_replace('%'.$name.'%',$value,$label_commands);
             }
+            
         }
-
-
-        switch($table_base){
-            case 'documents':
-            $infos = DB::table('documents')
-                       ->leftJoin('customers', function ($join) {
-                            $join->on('customers.code','documents.customer_code')
-                                 ->whereColumn('customers.company_id','documents.company_id');
-                       })
-                       ->leftJoin('suppliers', function ($join) {
-                            $join->on('suppliers.code','documents.supplier_code')
-                                 ->whereColumn('suppliers.company_id','documents.company_id');
-                       })
-                       ->leftJoin('couriers', function ($join) {
-                            $join->on('couriers.code','documents.courier_code')
-                                 ->whereColumn('couriers.company_id','documents.company_id');
-                       })
-                       ->where('documents.id', $params['document_id'])
-                       ->get();
-
-            break;
-            case 'locations':
-
-
-            break;
-            case 'pallets':
-
-
-            break;
-            case 'labels':
-
-
-            break;
-
-
-
-        }
-       
-        ->where(function ($query) {
-            if(trim($GLOBALS['tipoEstq']) <> ''){
-                 $query->where('locations.stock_type_code',$GLOBALS['tipoEstq']);
-            }
-         });
-
-        return LabelLayout::select('commands')
-                    ->where('company_id', Auth::user()->company_id)
-                    ->where('label_type_code', $label_type_code)
-                    ->where('printer_type_code', $printer_type)
-                    ->get();
+        print_r($label_commands);
+        //return $infos;
     }
 
 

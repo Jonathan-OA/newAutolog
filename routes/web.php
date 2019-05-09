@@ -23,6 +23,7 @@ Route::group(['middleware' => 'auth'], function() {
     // ----------------------------------------------------------------------------------------------
     // Modulo de Produção
     // ----------------------------------------------------------------------------------------------
+    Route::get('production/{document_id}/print', 'Modules\ProductionController@showPrint'); //Mostra grid de impressão
     Route::get('production/{document_id}/items', 'Modules\ProductionController@showItems'); //Mostra grid de itens
     Route::get('production/{document_id}/items/create', 'Modules\ProductionController@createItem'); //Form de criação de itens
     Route::get('production/{document_id}/items/{document_item_id}/edit', 'Modules\ProductionController@editItem'); //Form de edição de itens
@@ -406,3 +407,7 @@ Route::group(['middleware' => 'auth'], function() {
 
 
 
+
+
+Route::get('labelVariables/datatable', 'LabelVariableController@getData');
+Route::resource('labelVariables', 'LabelVariableController');

@@ -104,7 +104,43 @@ class DocumentItem extends Model
         
     ];
 
-    
+    /**
+     * Função que retorna informações para impressão (em formato de array)
+     *
+     * @param document_id
+     * @var array
+     */
+    public static function getInfosForPrint($document_id){
+
+        return DocumentItem::select('document_items.id','document_items.company_id','document_id','document_items.product_code',
+                                    'qty','document_items.uom_code','document_status_id','batch','batch_supplier',
+                                    'serial_number','qty_conf','qty_ship','qty_reject','invoice','invoice_serial_number',
+                                    'sequence_item','umvcad_id','location_code','source','document_items.obs1',
+                                    'document_items.obs2','document_items.obs3','document_items.obs4','document_items.obs5',
+                                    'document_items.created_at', 'document_status.description','packings_imp.prev_qty','packings_imp.prim_qty',
+                                    'packings_imp.uom_code as uom_code_print','packings_imp.create_label','packings_imp.conf_batch', 'packings_imp.conf_serial',
+                                    'packings_imp.conf_batch_supplier','packings_imp.conf_due_date')
+                            ->join('document_status','document_status.id','document_items.document_status_id')
+                            ->join('products', function ($join) {
+                                $join->on('products.code','document_items.product_code')
+                                    ->whereColumn('products.company_id','document_items.company_id');
+                            })
+                            ->join('packings', function ($join) {
+                                $join->on('packings.product_code','document_items.product_code')
+                                    ->whereColumn('packings.company_id','document_items.company_id')
+                                    ->whereColumn('packings.uom_code','document_items.uom_code');
+                            })
+                            ->leftJoin('packings as packings_imp', function ($join) {
+                                $join->on('packings_imp.product_code','document_items.product_code')
+                                    ->whereColumn('packings_imp.company_id','document_items.company_id')
+                                    ->where('packings_imp.print_label',1);
+                            })
+                            ->where('document_items.company_id', Auth::user()->company_id)
+                            ->where('document_id', $document_id)
+                            ->get()
+                            ->toArray();
+
+    }
 
      //Retorna todos os itens disponíveis em um documento desconsiderando o status do parâmetro
      public static function getItens($document_id, $statusDsc = ''){

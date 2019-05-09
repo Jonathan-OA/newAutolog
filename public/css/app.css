@@ -207,7 +207,7 @@
     }
     
     tbody td {
-        vertical-align: middle;
+        vertical-align: middle !important;
     }
     
     .ui-grid-canvas,

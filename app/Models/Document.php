@@ -526,5 +526,106 @@ class Document extends Model
         
     }
 
+    /**
+     * Função que retorna informações para impressão (em formato de array)
+     *
+     * @param document_id
+     * @var array
+     */
+    public static function getInfosForPrint($document_id){
+
+       $infos = Document::select('documents.id as documents.id','documents.company_id as documents.company_id',
+                                 'number as documents.number','document_type_code as documents.document_type_code',
+                                 'documents.invoice as documents.invoice','documents.serial_number as documents.serial_number',
+                                 'emission_date as documents.emission_date','start_date as documents.start_date',
+                                 'end_date as documents.end_date', 'wave as documents.wave','total_volumes as documents.total_volumes',
+                                 'total_weight as documents.total_weight','documents.document_status_id as documents.document_status_id',
+                                 'total_net_weigth as documents.total_net_weigth','priority as documents.priority','comments as documents.comments',
+                                 'documents.obs1 as documents.obs1','documents.obs2 as documents.obs2','documents.obs3 as documents.obs3',
+                                 'documents.user_id as documents.user_id','document_status.description',
+
+                                 'customer_code as documents.customer_code','customers.name as customers.name',
+                                 'customers.trading_name as customers.trading_name','customers.cnpj as customers.cnpj',
+                                 'customers.state_registration as customers.state_registration','customers.address as customers.address',
+                                 'customers.number as customers.number','customers.neighbourhood as customers.neighbourhood',
+                                 'customers.city as customers.city','customers.state as customers.state',
+                                 'customers.country as customers.country','customers.state as customers.zip_code',
+                                 'customers.phone1 as customers.phone1','customers.phone2 as customers.phone2',
+
+                                 'supplier_code as documents.supplier_code','suppliers.name as suppliers.name',
+                                 'suppliers.trading_name as suppliers.trading_name','suppliers.cnpj as suppliers.cnpj',
+                                 'suppliers.state_registration as suppliers.state_registration','suppliers.address as suppliers.address',
+                                 'suppliers.number as suppliers.number','suppliers.neighbourhood as suppliers.neighbourhood',
+                                 'suppliers.city as suppliers.city','suppliers.state as suppliers.state',
+                                 'suppliers.country as suppliers.country','suppliers.state as suppliers.zip_code',
+                                 'suppliers.phone1 as suppliers.phone1','suppliers.phone2 as suppliers.phone2',
+
+                                 'courier_code as documents.courier_code','couriers.name as couriers.name',
+                                 'couriers.trading_name as couriers.trading_name','couriers.cnpj as couriers.cnpj',
+                                 'couriers.state_registration as couriers.state_registration','couriers.address as couriers.address',
+                                 'couriers.number as couriers.number','couriers.neighbourhood as couriers.neighbourhood',
+                                 'couriers.city as couriers.city','couriers.state as couriers.state',
+                                 'couriers.country as couriers.country','couriers.state as couriers.zip_code',
+                                 'couriers.phone1 as couriers.phone1','couriers.phone2 as couriers.phone2',
+
+                                 'drivers.name as drivers.name','drivers.license as drivers.license','drivers.phone as drivers.phone',
+
+                                 'vehicles.number_plate as vehicles.number_plate',
+
+                                 DB::raw("COUNT(DISTINCT document_items.id) as total_items"),
+                                 DB::raw("SUM(Document_items.qty) as total_qty"),
+                                 DB::raw("ROUND(SUM(CASE WHEN document_items.qty_conf IS NULL THEN 0 ELSE document_items.qty_conf END)/SUM(document_items.qty)*100,0) as total_conf"))
+                        
+                        ->join('document_types', 'documents.document_type_code', '=', 'document_types.code')
+                        ->join('document_status', 'document_status.id', '=', 'documents.document_status_id')
+                        ->leftJoin('inventory_status', 'inventory_status.id', '=', 'documents.inventory_status_id')
+                        ->leftJoin('document_items', function ($join) {
+                            $join->on('documents.id', '=', 'document_items.document_id')
+                                 ->where('document_items.document_status_id','<>', 9);
+                        })
+                        ->leftJoin('customers', function ($join) {
+                            $join->on('customers.code','documents.customer_code')
+                                ->whereColumn('customers.company_id','documents.company_id');
+                        })
+                        ->leftJoin('suppliers', function ($join) {
+                            $join->on('suppliers.code','documents.supplier_code')
+                                ->whereColumn('suppliers.company_id','documents.company_id');
+                        })
+                        ->leftJoin('couriers', function ($join) {
+                            $join->on('couriers.code','documents.courier_code')
+                                ->whereColumn('couriers.company_id','documents.company_id');
+                        })
+                        ->leftJoin('drivers', 'drivers.id', 'documents.driver_id')
+                        ->leftJoin('vehicles', 'vehicles.id', 'docum ents.vehicle_id')
+                        ->where([
+                                 ['documents.company_id', Auth::user()->company_id],
+                                 ['documents.id', $document_id]                        
+                        ])
+                       ->groupBy('documents.id','documents.company_id ','documents.number','documents.document_type_code',
+                                 'customer_code','supplier_code','courier_code','number_plate','driver.name','driver.license',
+                                 'driver.license','invoice','serial_number','emission_date','start_date','end_date','wave',
+                                 'total_volumes','total_weight','document_status_id','total_net_weigth','priority','comments','user_id',
+                                 'document_status.description','documents.obs1','documents.obs2','documents.obs3',
+                                 'customers.name','customers.trading_name','customers.cnpj','customers.state_registration',
+                                 'customers.address','customers.number','customers.neighbourhood', 'customers.zip_code', 
+                                 'customers.phone1','customers.phone2','customers.country','customers.state','customers.city',
+                                 'couriers.name','couriers.trading_name','couriers.cnpj','couriers.state_registration',
+                                 'couriers.address','couriers.number','couriers.neighbourhood', 'couriers.zip_code', 
+                                 'couriers.phone1','couriers.phone2','couriers.country','couriers.state','couriers.city',
+                                 'suppliers.name','suppliers.trading_name','suppliers.cnpj','suppliers.state_registration',
+                                 'suppliers.address','suppliers.number','suppliers.neighbourhood', 'suppliers.zip_code', 
+                                 'suppliers.phone1','suppliers.phone2','suppliers.country','suppliers.state','suppliers.city')
+                       ->orderBy('documents.id', 'desc')
+                       ->get();
+        
+        //Formata os campos de data
+        $infos->start_date->format('d/m/Y'); //Data de Inicio
+        $infos->end_date->format('d/m/Y'); //Data de Finalização
+        $infos->emission_date->format('d/m/Y'); //Data de Emissão
+
+        return $infos;
+
+    }
+
     
 }

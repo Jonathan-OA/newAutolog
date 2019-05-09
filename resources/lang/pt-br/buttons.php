@@ -48,5 +48,7 @@ return [
     'support' => 'Enviar registro de Problema / Melhoria do Sistema',
     'android' => 'Baixar aplicativo Android',
     'print' => 'Imprimir',
+    'print_labels' => 'Imprimir Etiquetas',
+    'print_doc' => 'Imprimir Documento',
 
 ];

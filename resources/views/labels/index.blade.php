@@ -25,8 +25,6 @@
                             <a class="icon_logs" href="{!! url('logs/labels_') !!}" aria-label="@lang('buttons.logs')" data-microtip-position="left" role="tooltip">
                                 <img class='icon' src='{{asset('/icons/logs.png') }}'>
                             </a>
-                            <!-- Botão de Imprimir  -->
-                                 
                         </div>
                         <div class="panel-body">
                             @include('labels.table')
@@ -121,7 +119,6 @@
                 //Atribui o tipo de etiqueta no input hidden do layout print.blade.php
                 //Para que os comandos possam ser identificados
                 $('#label_type_code').val(data.label_type_code);
-
             }else if(id == 'remove'){
                 //Excluir Registro
                 if(confirm('@lang("buttons.msg_remove")')){

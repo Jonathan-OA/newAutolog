@@ -111,7 +111,7 @@ class LabelLayoutController extends AppBaseController
 
             $labelLayout = $this->labelLayoutRepository->findWithoutFail($id);
 
-            $etq = App\Models\LabelLayout::subCommands($labelLayout->commands, 'documents', []);
+            $etq = App\Models\LabelLayout::subCommands($labelLayout->commands, 'labels', ['label_id' => 1]);
 
             if (empty($labelLayout)) {
                 Flash::error(Lang::get('validation.not_found'));

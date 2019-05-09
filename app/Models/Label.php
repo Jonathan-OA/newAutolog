@@ -69,7 +69,7 @@ class Label extends Model
         'barcode' => 'string',
         'product_code' => 'string',
         'uom_code' => 'string',
-        'prim_uom_code' => 'string',
+        'prim_uom_code' => 'stdring',
         'serial_number' => 'string',
         'batch' => 'string',
         'batch_supplier' => 'string',
@@ -115,10 +115,54 @@ class Label extends Model
                        ->get();
     }
 
-    
 
-     //Retorna todos os labels disponíveis
-     public static function getLabels(){
+    /**
+     * Função que retorna informações para impressão (em formato de array)
+     *
+     * @param label_id
+     * @var array
+     */
+    public static function getInfosForPrint($label_id){
+
+        $infos = Label::select('labels.barcode as labels.barcode', 'labels.qty as labels.qty',
+                               'labels.uom_code as labels.uom_code','labels.prim_qty as labels.prim_qty',
+                               'labels.prim_uom_code as labels.prim_uom_code','labels.batch as labels.batch',
+                               'labels.batch_supplier as labels.batch_supplier','labels.serial_number as labels.serial_number',
+                               'labels.prod_date as labels.prod_date','labels.due_date as labels.due_date',
+                               'labels.width as labels.width','labels.length as labels.length',
+                               'labels.obs1 as labels.obs1','labels.obs2 as labels.obs2',
+                               'labels.obs3 as labels.obs3','labels.obs4 as labels.obs4',
+                               'label_status.description as label_status.description',
+                               'labels_origin.barcode as labels.origin','documents.number as documents.number',
+                               'documents.document_type as documents.document_type','products.code as products.code',
+                               'products.description as  products.description')
+                           ->join('products', function ($join) {
+                                    $join->on('products.code','labels.product_code')
+                                        ->whereColumn('products.company_id','labels.company_id');
+                            })
+                           ->join('label_status', 'label_status.id', 'labels.label_status_id')
+                           ->leftJoin('labels_origin', 'labels_origin.id', 'labels.origin')
+                           ->leftJoin('documents', 'documents.id', 'labels.document_id')
+                           ->leftJoin('document_items', 'document_items.id', 'labels.document_item_id')
+                           ->leftJoin('customers', function ($join) {
+                                $join->on('customers.code','documents.customer_code')
+                                    ->whereColumn('customers.company_id','documents.company_id');
+                           })
+                           ->where('labels.id', $label_id)
+                           ->where('labels.label_status_id','<>','9')
+                           ->get()
+                           ->toArray(); 
+        
+        //Formata os campos de data
+        $infos->due_date->format('d/m/Y'); //Validade
+        $infos->prod_date->format('d/m/Y'); //Produção
+
+        return $infos;
+
+    }
+
+    //Retorna todos os labels disponíveis
+    public static function getLabels(){
         return Label::selectRaw("code,CONCAT(code,' - ',description) as description_f")
                       ->where('company_id', Auth::user()->company_id)
                       ->pluck('description_f','code');

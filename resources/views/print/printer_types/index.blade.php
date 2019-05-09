@@ -12,6 +12,7 @@
                         <li><a href="{!! route('labelLayouts.index') !!}">@lang('models.label_layouts')</a></li>
                         <li><a href="{!! route('labelTypes.index') !!}">@lang('models.label_types')</a></li>
                         <li class="active-l"><a href="#">@lang('models.printer_types')</a></li>
+                        <li><a href="{!! route('labelVariables.index') !!}">@lang('models.label_variables')</a></li>
                     </ul>
                 </div>
                 <div class="row">

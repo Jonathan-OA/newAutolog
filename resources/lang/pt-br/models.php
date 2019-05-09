@@ -85,6 +85,7 @@ return [
     'inventory_status' => 'Status de Inventário',
     'printer_types' => 'Tipos de Impressora',
     'label_layouts' => 'Layouts de Etiqueta',
+    'label_variables' => 'Variáveis de Etiqueta',
 
     
     //Columns
@@ -263,8 +264,11 @@ return [
     'partial_lib' => 'Liberação de Saldo Parcial',
     'lib_deposits' => 'Depósitos Válidos',
     'qty_conf' => 'Quantidade Conferida',
+    'qty_doc' => 'Qde. Solicitada',
     'qty_ship' => 'Quantidade Embarcada',
     'qty_reject' => 'Quantidade Rejeitada',
+    'qty_print' => 'A Imprimir',
+    'qty_printed' => 'Impressas',
     'invoice' => 'Nota Fiscal',
     'invoice_serial_number' => ' N. Série da Nota Fiscal',
     'created_at' => 'Data',
@@ -292,6 +296,10 @@ return [
     'printer_type_code' => 'Tipo de Impressora',
     'commands' => 'Comandos de Impressão',
     'across' => 'Carreiras',
+    'size' => 'Tamanho Máximo',
+    'size_start' => 'Posição de Início',
+    'table' => 'Tabela',
+    'field' => 'Campo',
     
     
     //PlaceHolders

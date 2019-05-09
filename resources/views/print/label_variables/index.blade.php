@@ -6,13 +6,12 @@
         <div class="col-md-12 pad-ct">
             <div class="panel panel-default" >
                 <div class="panel-heading ptabs">
-                   <!-- Abas -->
-                   <ul class="nav nav-tabs">
+                    <ul class="nav nav-tabs">
                         <!-- Textos baseados no arquivo de linguagem -->
-                        <li class="active-l"><a href="#">@lang('models.label_layouts')</a></li>
+                        <li><a href="{!! route('labelLayouts.index') !!}">@lang('models.label_layouts')</a></li>
                         <li><a href="{!! route('labelTypes.index') !!}">@lang('models.label_types')</a></li>
                         <li><a href="{!! route('printerTypes.index') !!}">@lang('models.printer_types')</a></li>
-                        <li><a href="{!! route('labelVariables.index') !!}">@lang('models.label_variables')</a></li>
+                        <li class="active-l"><a href="#">@lang('models.label_variables')</a></li>
                     </ul>
                 </div>
                 <div class="row">
@@ -21,14 +20,10 @@
                         @include('flash::message')
                         <div id="msg_excluir"></div>
                         <div class="row buttons_grid">
-                            <a class="btn btn-success"  href="{!! route('labelLayouts.create') !!}">@lang('buttons.add')</a>
-                            <!-- Visualizar Logs  -->
-                            <a class="icon_logs" href="{!! url('logs/label_layouts_') !!}" aria-label="@lang('buttons.logs')" data-microtip-position="left" role="tooltip">
-                                <img class='icon' src='{{asset('/icons/logs.png') }}'>
-                            </a>
+                            <a class="btn btn-success"  href="{!! route('labelVariables.create') !!}">@lang('buttons.add')</a>
                         </div>
                         <div class="panel-body">
-                            @include('print.label_layouts.table')
+                            @include('print.label_variables.table')
                         </div>
                     </div>
                 </div>
@@ -42,10 +37,10 @@
     $(function() {
         
         //Parâmetros para criação da datatable
-        table = $("#labelLayouts-table").DataTable({
+        table = $("#labelVariables-table").DataTable({
             scrollX: true,
             scrollY: "47vh",
-            ajax: 'labelLayouts/datatable',
+            ajax: 'labelVariables/datatable',
             autoWidth: true,
             fixedColumns:   {
                 leftColumns: 0,
@@ -62,36 +57,32 @@
                     sPrevious: "@lang('models.previous')",
                 }
             },
-            columns: [ { data: 'code', className: "td_center" },
-                       { data: 'label_type_code', className: "td_center" },
-                       { data: 'printer_type_code', className: "td_center" },
-                       { data: 'description' },
+            columns: [ {data: 'code'},
+                       {data: 'description'},
+                       {data: 'size'},
+                       {data: 'table'},
+                       {data: 'field'},
                        { data: null,
                          className: "th_grid",
                          defaultContent: "<button id='edit' aria-label='@lang('buttons.edit')' data-microtip-position='left' role='tooltip' ><img class='icon' src='{{asset('/icons/editar.png') }}'></button><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='{{asset('/icons/remover.png') }}'></button>",
                          width: "90px" 
                         }],
-            "rowCallback": function( row, data, index ) {
-                    if ( data.status == 0 ) {
-                        $(row).addClass('redClass');
-                    }
-            }
       });
 
       //Funções dos botões de editar e excluir
-      $('#labelLayouts-table tbody').on( 'click', 'button', function () {
+      $('#labelVariables-table tbody').on( 'click', 'button', function () {
             var data = table.row( $(this).parents('tr') ).data();
             var id = $(this).attr('id');
             if(id == 'edit'){
                 //Editar Registro
-                window.location.href = "{!! URL::to('labelLayouts/"+data.id+"/edit') !!}";
+                window.location.href = "{!! URL::to('labelVariables/"+data.id+"/edit') !!}";
             }else{
                 //Excluir Registro
                 if(confirm('@lang("buttons.msg_remove")')){
                     //Token obrigatório para envio POST
                     var tk = $('meta[name="csrf-token"]').attr('content');
                     $.ajax({
-                        url: 'labelLayouts/'+data.id,
+                        url: 'labelVariables/'+data.id,
                         type: 'post',
                         data: {_method: 'delete', _token :tk},
                         success: function(scs){ 
