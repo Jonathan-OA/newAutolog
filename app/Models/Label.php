@@ -90,6 +90,18 @@ class Label extends Model
         
     ];
 
+     /**
+     * Função que cria uma label de acordo com os parâmetros informados
+     *
+     * @var array
+     */
+    public static function create($infos){
+        print_r($infos);
+
+
+
+    }
+
 
     /**
      * Função de Rastreabilidade de Etiquetas

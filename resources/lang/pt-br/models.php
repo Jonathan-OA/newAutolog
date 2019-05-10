@@ -333,7 +333,8 @@ return [
     'traceability' => 'Rastreabilidade ',
     'viewer' => 'Pré-Visualização ',
     'print' => 'Impressão de Etiquetas ',
-    'printer' => 'Impressora '
+    'printer' => 'Impressora',
+    'total' => 'Total '
     
 
 

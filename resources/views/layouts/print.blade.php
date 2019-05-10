@@ -1,5 +1,10 @@
-<!-- layout da modal para realizar impressões -->
+<!-- Layout da modal para realizar impressões -->
+<!-- Caso a variável $print seja verdadeira, envia o conteúdo de impressao ($filePrint) para a impressora -->
+@if(!empty($print) && $print == true)
+<div class="modal-dialog" role="document" onload="printLabel()">
+@else
 <div class="modal-dialog" role="document">
+@endif
     <div class="modal-content">
         <div class="modal-header">
                 <div class="panel-default" >
@@ -11,13 +16,9 @@
         <div class="modal-body">
             <div class="row">
                 <div class="col-md-12">
-                    {!! Form::open(['id' => 'formPrint']) !!}
                     <div class="form-group">
                                 <!-- Código da empresa -->
                                 <input id='company_id' name='company_id' type='hidden' value='{!! Auth::user()->company_id !!}'>
-                                
-                                <!-- Tipo da Etiqueta -->
-                                <input id='label_type_code' name='label_type_code' type='hidden' value=''>
 
                                 <!-- IP Local -->
                                 <input id='ip_local' name='ip_local' type='hidden' value='{{ $_SERVER['REMOTE_ADDR'] }}'>
@@ -41,7 +42,6 @@
                 </div>
             </div>
         </div>
-        {!! Form::close() !!}
     </div>
 </div>
 @section('scripts_print')
@@ -53,11 +53,12 @@
 
             label_type = $('#label_type_code').val();
             var ip = $('#ip_local').val();
-            console.log(ip);
+            console.log(label_type);
 
             //Carrega impressoras para o tipo de etiqueta
+            //PrintServer TWX
             $.ajax({
-                url: "labelLayouts/"+label_type+"/printers",
+                url: "{!! URL::to('labelLayouts/"+label_type+"/printers') !!}",
                 method: "GET"
             }).done(function(options) {
                 $.each(options, function(index,value){
@@ -67,12 +68,13 @@
                 //Não foram encontradas impressoras cadastradas para este tipo
                 var msg = "@lang('validation.label_types')";
                 alert(msg);
-                $('#msg_excluir').html('<div class="alert alert-info">@lang('infos.print_label_type')</div>');
+                //$('#msg_excluir').html('<div class="alert alert-info">@lang('infos.print_label_type')</div>');
                 //Fecha Modal
-                $('#printModal').modal('toggle');
+                //$('#printModal').modal('toggle');
             });
 
             //Lista impressoras disponíveis
+            //PrintServer TWX
             $.ajax({
                 url: "http://localhost:9101/printers",
                 method: "POST",
@@ -95,13 +97,15 @@
         })
 
         //Ao clicar em imprimir, busca os comandos de impressão 
-        $('#formPrint').submit( function(event){
+        function printLabel(){
+            var filePrint = "{{((empty($filePrint))?'':$filePrint)}}";
+            console.log(filePrint);
             var printer_type = $('#printer_types').val();
             var printer_name = $('#printers').val();
             var comm;
             //Busca comandos de impressão para o tipo de etiqueta / impressora
             $.ajax({
-                url: "labelLayouts/"+label_type+"/"+printer_type+"/commands",
+                url: "{!! URL::to('labelLayouts/"+label_type+"/"+printer_type+"/commands') !!}",
                 method: "GET"
             }).done(function(result) {
                 if(result['error'] == 1){
@@ -123,9 +127,8 @@
                     })
                 }
             })
-
             event.preventDefault();
-        })
+        }
         
 
         

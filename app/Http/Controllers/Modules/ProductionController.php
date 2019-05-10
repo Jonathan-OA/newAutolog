@@ -155,7 +155,7 @@ class ProductionController extends AppBaseController
      * @return Response
      */
 
-    public function showPrint($document_id)
+    public function showPrint($document_id, $filePrint = '', $print = false)
     {
         //Valida se usuário possui permissão para acessar esta opção
         if(App\Models\User::getPermission('documents_prod_print',Auth::user()->user_type_code)){
@@ -169,6 +169,64 @@ class ProductionController extends AppBaseController
             Flash::error(Lang::get('validation.permission'));
             return redirect(url('production'));
         }
+
+    }
+
+
+    /**
+     * Cria labels e redireciona para impressão
+     *
+     * @param CreateLabelRequest $request
+     *
+     * @return Response
+     */
+    public function print(Request $request)
+    {
+        $input = $request->all(); 
+
+        $printer_type = $input['printer_type_code'];    //Tipo
+        $printer = $input['printer'];                   //Fila
+        $label_type_code = $input['label_type_code'];   //Tipo de etiqueta
+
+        $document = $this->documentRepository->findWithoutFail($input['document_id']);     //Documento
+
+        //Busca comandos de impressão para a ETIQUETA / TIPO DE IMPRESSORA
+        $comm = App\Models\LabelLayout::getCommands($label_type_code, $printer_type);
+        
+        //Loop nas linhas informadas na impressão
+        foreach($input['infos'] as $line ){
+
+            //Pega informações da UOM (GERA_ID, CONFIRMA_LOTE, ETC..)
+            $level = App\Models\Packing::getLevel($line['product_code'], $line['uom_code']);
+
+            if(count($level) > 0 && !empty($level['print_label'])){
+
+                 //Valida cadastro Print_Label (GERA_ID)
+                if($level['print_label'] == 1){
+
+                    //Loop para gerar a quantidade de etiquetas informadas no campo aImprimir
+                    for($i;$i <= $line['qty_print']; $i++){
+                        $label_id = '';
+                    }
+                }else{
+                    //Cria uma etiqueta e imprime o número de cópias
+                    $label_id = '';
+
+                }
+            }else{
+                //Unidade / Produto não cadastrados na tabela de embalagens
+            }
+           
+        }
+
+        return redirect()->back()->with('filePrint',$comm)
+        ->with('print',true)->withInput();
+        
+        /*return view('modules.production.printLabels')->with('document',$document)
+                                                     ->with('filePrint',$comm)
+                                                     ->with('print',true)
+                                                     ->with('request', $request)*/
+
 
     }
 

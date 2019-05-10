@@ -103,7 +103,29 @@ class Packing extends Model
         
     ];
 
-    
+    /**
+     * Função que retorna as informações de embalagem para uma UOM específica
+     * Parâmetros: Código do produto e o código da unidade
+     * @var array
+     */
+    public static function getLevel($product_code, $uom_code, $company_id = ''){
+
+        $company_id = (trim($company_id == ''))?Auth::user()->company_id: $company_id;
+
+        $level = Packing::select('level','uom_code','prev_qty','prev_level','val_integer', 'prim_qty',
+                                  'print_label', 'conf_batch', 'conf_batch_supplier','conf_serial',
+                                  'conf_width','conf_length', 'conf_due_date','conf_prod_date' )
+                        ->join('uoms','uoms.code','packings.uom_code')
+                        ->where('company_id', Auth::user()->company_id)
+                        ->where('product_code', $product_code)
+                        ->where('uom_code', $uom_code)
+                        ->get()
+                        ->toArray();
+
+        return $level;
+    }
+
+
 
      /**
      * Função retorna os detalhes dos níveis de embalagem de um produto

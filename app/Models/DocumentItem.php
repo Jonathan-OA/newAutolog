@@ -118,7 +118,8 @@ class DocumentItem extends Model
                                     'sequence_item','umvcad_id','location_code','source','document_items.obs1',
                                     'document_items.obs2','document_items.obs3','document_items.obs4','document_items.obs5',
                                     'document_items.created_at', 'document_status.description','packings_imp.prev_qty','packings_imp.prim_qty',
-                                    'packings_imp.uom_code as uom_code_print','packings_imp.create_label','packings_imp.conf_batch', 'packings_imp.conf_serial',
+                                    'packings_imp.conf_length','packings_imp.conf_width','packings_imp.uom_code as uom_code_print',
+                                    'packings_imp.create_label','packings_imp.conf_batch', 'packings_imp.conf_serial',
                                     'packings_imp.conf_batch_supplier','packings_imp.conf_due_date')
                             ->join('document_status','document_status.id','document_items.document_status_id')
                             ->join('products', function ($join) {
