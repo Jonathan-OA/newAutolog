@@ -107,7 +107,8 @@ class LabelLayout extends Model
                     ->where('company_id', Auth::user()->company_id)
                     ->where('label_type_code', $label_type_code)
                     ->where('printer_type_code', $printer_type)
-                    ->get();
+                    ->get()
+                    ->toArray()[0]['commands'];
     }
 
      /**
@@ -145,8 +146,8 @@ class LabelLayout extends Model
             }
             
         }
-        print_r($label_commands);
-        //return $infos;
+        //print_r($label_commands);exit;
+        return $label_commands;
     }
 
 

@@ -1,5 +1,8 @@
 @extends('layouts.app')
 @section('content')
+{{Session::get('filePrint')}}
+{{Session::get('print')}}
+
     <!-- BreadCrumb - Trilha  -->
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -16,9 +19,13 @@
                 <div class="panel-body" >
                     <div class="row">
                         <div class="col-md-12">
+                            
                             <div class="form_fields form_bread">
+                                <!-- Alerta de erro / sucesso -->
+                                <div id="msg_excluir"></div>
+                                
                                 {!! Form::open(['route' => 'production.print']) !!}
-
+        
                                 <!-- Modal de Impressão -->
                                 <div class="modal fade" id="printModal" tabindex="-1" role="dialog"  aria-hidden="true">
                                     @include('layouts.print')

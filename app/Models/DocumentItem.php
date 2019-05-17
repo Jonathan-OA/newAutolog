@@ -131,7 +131,7 @@ class DocumentItem extends Model
                                     ->whereColumn('packings.company_id','document_items.company_id')
                                     ->whereColumn('packings.uom_code','document_items.uom_code');
                             })
-                            ->leftJoin('packings as packings_imp', function ($join) {
+                            ->Join('packings as packings_imp', function ($join) {
                                 $join->on('packings_imp.product_code','document_items.product_code')
                                     ->whereColumn('packings_imp.company_id','document_items.company_id')
                                     ->where('packings_imp.print_label',1);

@@ -1,10 +1,11 @@
 <!-- Layout da modal para realizar impressões -->
 <!-- Caso a variável $print seja verdadeira, envia o conteúdo de impressao ($filePrint) para a impressora -->
-@if(!empty($print) && $print == true)
-<div class="modal-dialog" role="document" onload="printLabel()">
-@else
-<div class="modal-dialog" role="document">
+@if(!empty(Session::get('print')))
+    <script onload="printLabel('{{Session::get('filePrint')}}')"> </script>
 @endif
+
+<div class="modal-dialog" role="document">
+
     <div class="modal-content">
         <div class="modal-header">
                 <div class="panel-default" >
@@ -16,6 +17,8 @@
         <div class="modal-body">
             <div class="row">
                 <div class="col-md-12">
+                     <!-- Alerta de erro / sucesso -->
+                     <div id="msg_print"></div>
                     <div class="form-group">
                                 <!-- Código da empresa -->
                                 <input id='company_id' name='company_id' type='hidden' value='{!! Auth::user()->company_id !!}'>
@@ -38,7 +41,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">@lang('buttons.cancel')</button>
-                    {!! Form::submit(Lang::get('buttons.print'), ['class' => 'btn btn-primary']) !!}
+                    {!! Form::button(Lang::get('buttons.print'), ['class' => 'btn btn-primary', 'id' => 'formPrint']) !!}
                 </div>
             </div>
         </div>
@@ -53,8 +56,6 @@
 
             label_type = $('#label_type_code').val();
             var ip = $('#ip_local').val();
-            console.log(label_type);
-
             //Carrega impressoras para o tipo de etiqueta
             //PrintServer TWX
             $.ajax({
@@ -96,41 +97,47 @@
 
         })
 
-        //Ao clicar em imprimir, busca os comandos de impressão 
-        function printLabel(){
-            var filePrint = "{{((empty($filePrint))?'':$filePrint)}}";
-            console.log(filePrint);
-            var printer_type = $('#printer_types').val();
-            var printer_name = $('#printers').val();
-            var comm;
-            //Busca comandos de impressão para o tipo de etiqueta / impressora
-            $.ajax({
-                url: "{!! URL::to('labelLayouts/"+label_type+"/"+printer_type+"/commands') !!}",
-                method: "GET"
-            }).done(function(result) {
-                if(result['error'] == 1){
-                    //Não encontrou os comandos de impressão
-                    alert(result['msg']);
-                }else{
-                    comm = result[0]['commands'];
-                    //Chama a rota de impressão no servidor passando como parametro na url o nome e como dado POST os comandos
-                    $.ajax({
-                        url: "http://localhost:9101/printer/"+printer_name,
-                        method: "POST",
-                        data: comm
-                    }).done(function(result) {
-                        //Falha na impressão
-                        var msg = "@lang('validation.label_print')";
-                        //Fecha Modal 
-                        $('#printModal').modal('toggle');
-                        console.log(result);
-                    })
-                }
-            })
-            event.preventDefault();
-        }
-        
 
+        $('#formPrint').click(function(event){
+            
+            event.preventDefault();
+
+            printer = $("#printers").val();
+            
+            //Pega os dados do formulário preenchido (etiquetas, lotes, produtos, etc.)
+            //e envia via ajax para impressão
+            var formData = $('form').serialize();
+            //Primeiro ajax envia o formulário com os dados da etiqueta / documento para realizar a substituição 
+            //das variaveis nos layouts
+            $.ajax({
+                url: "{!! URL::to('production/print') !!}",
+                method: "POST",
+                data: formData,
+                success: function (fileCommands) {
+                    //Segundo ajax envia o conteúdo para impressão
+                    $.ajax({
+                        url: "http://localhost:9101/printer/"+printer,
+                        method: "POST",
+                        data: fileCommands,
+                        success: function (data) {
+                             //Mostra mensagem de sucesso
+                            $('.alert').remove();
+                            $('#msg_excluir').html('<div class="alert alert-success">Impressão realizada na fila '+printer+'</div>');
+                            //Fecha Modal
+                            $('#printModal').modal('toggle');
+                        },
+                        error: function(){
+                             //Mostra mensagem de erro
+                             $('#msg_print .alert').remove();
+                             $('#msg_print').html('<div class="alert alert-danger">Fila '+printer+' não disponível para impressão.</div>');
+                            
+                        }
+                    });
+                }
+            });
+            
+
+        })
         
     })
 

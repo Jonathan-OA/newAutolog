@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
+
 use Eloquent as Model;
 use Auth;
+use App\Repositories\LabelRepository;
 
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Class Label
@@ -19,6 +20,7 @@ class Label extends Model
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
+    private $labelRepository;
 
     protected $dates = ['due_date','prod_date','deleted_at','ripeness_date','critical_date1','critical_date2','critical_date3',];
 
@@ -40,6 +42,7 @@ class Label extends Model
         'batch_supplier',
         'prod_date',
         'due_date',
+        'user_id',
         'ripeness_date',
         'critical_date1',
         'critical_date2',
@@ -95,11 +98,22 @@ class Label extends Model
      *
      * @var array
      */
-    public static function create($infos){
-        print_r($infos);
+    public static function createLabel($infos){
+        $infos['company_id'] = Auth::user()->company_id;
+        $infos['barcode'] = Auth::user()->id.date('YmsHis'); //Padrão do Barcode é Usuario + Data
+        $infos['user_id'] = Auth::user()->id;
+        $infos['qty'] = (empty($infos['qty']))? 1 : $infos['qty'];
+        $infos['prim_qty'] = (empty($infos['prim_qty']))? 1 : $infos['prim_qty'];
 
-
-
+        //Classe pai Model::create()
+        $label = parent::create($infos);
+        if($label){
+            //Cria barcode com ID completando com zeros (totalizando 13)
+            $label->barcode = str_pad($label->id,13,'0',STR_PAD_LEFT);
+            $label->save();
+        }
+        
+        return $label;
     }
 
 
@@ -134,42 +148,92 @@ class Label extends Model
      * @param label_id
      * @var array
      */
-    public static function getInfosForPrint($label_id){
+    public static function getInfosForPrint($label_id, $variablesList = array()){
 
-        $infos = Label::select('labels.barcode as labels.barcode', 'labels.qty as labels.qty',
-                               'labels.uom_code as labels.uom_code','labels.prim_qty as labels.prim_qty',
-                               'labels.prim_uom_code as labels.prim_uom_code','labels.batch as labels.batch',
-                               'labels.batch_supplier as labels.batch_supplier','labels.serial_number as labels.serial_number',
-                               'labels.prod_date as labels.prod_date','labels.due_date as labels.due_date',
-                               'labels.width as labels.width','labels.length as labels.length',
-                               'labels.obs1 as labels.obs1','labels.obs2 as labels.obs2',
-                               'labels.obs3 as labels.obs3','labels.obs4 as labels.obs4',
-                               'label_status.description as label_status.description',
-                               'labels_origin.barcode as labels.origin','documents.number as documents.number',
-                               'documents.document_type as documents.document_type','products.code as products.code',
-                               'products.description as  products.description')
-                           ->join('products', function ($join) {
-                                    $join->on('products.code','labels.product_code')
-                                        ->whereColumn('products.company_id','labels.company_id');
+        if(count($variablesList) == 0){
+            $infos = Label::select('labels.barcode as labels.barcode', 'labels.qty as labels.qty',
+                                   'labels.uom_code as labels.uom_code','labels.prim_qty as labels.prim_qty',
+                                   'labels.prim_uom_code as labels.prim_uom_code','labels.batch as labels.batch',
+                                   'labels.batch_supplier as labels.batch_supplier','labels.serial_number as labels.serial_number',
+                                   'labels.prod_date as labels.prod_date','labels.due_date as labels.due_date',
+                                   'labels.width as labels.width','labels.length as labels.length',
+                                   'labels.obs1 as labels.obs1','labels.obs2 as labels.obs2',
+                                   'labels.obs3 as labels.obs3','labels.obs4 as labels.obs4',
+                                   'label_status.description as label_status.description',
+                                   'labels_origin.barcode as labels.origin','documents.number as documents.number',
+                                   'documents.document_type_code as documents.document_type_code','products.code as products.code',
+                                   'products.description as  products.description')
+                            ->join('products', function ($join) {
+                                        $join->on('products.code','labels.product_code')
+                                            ->whereColumn('products.company_id','labels.company_id');
+                                })
+                            ->join('label_status', 'label_status.id', 'labels.label_status_id')
+                            ->leftJoin('labels as labels_origin', 'labels_origin.id', 'labels.origin')
+                            ->leftJoin('documents', 'documents.id', 'labels.document_id')
+                            ->leftJoin('document_items', 'document_items.id', 'labels.document_item_id')
+                            ->leftJoin('customers', function ($join) {
+                                    $join->on('customers.code','documents.customer_code')
+                                        ->whereColumn('customers.company_id','documents.company_id');
                             })
-                           ->join('label_status', 'label_status.id', 'labels.label_status_id')
-                           ->leftJoin('labels_origin', 'labels_origin.id', 'labels.origin')
-                           ->leftJoin('documents', 'documents.id', 'labels.document_id')
-                           ->leftJoin('document_items', 'document_items.id', 'labels.document_item_id')
-                           ->leftJoin('customers', function ($join) {
-                                $join->on('customers.code','documents.customer_code')
-                                    ->whereColumn('customers.company_id','documents.company_id');
-                           })
-                           ->where('labels.id', $label_id)
-                           ->where('labels.label_status_id','<>','9')
-                           ->get()
-                           ->toArray(); 
-        
-        //Formata os campos de data
-        $infos->due_date->format('d/m/Y'); //Validade
-        $infos->prod_date->format('d/m/Y'); //Produção
+                            ->where('labels.id', $label_id)
+                            ->where('labels.label_status_id','<>','9')
+                            ->get(); 
+        }else{
+            //Faz loop na lista de variáveis para montar o select dinâmico e um array com as tabelas para os joins
+            $selectFields = '';
+            $arrayTables = array();
+            foreach($variablesList as $val){
+                $selectFields .= $val['table'].'.'.$val['field']." as ".$val['table'].'.'.$val['field']."','";
+                $arrayTables[] = $val['table'];
+            }
 
-        return $infos;
+            //Retira última vírgula
+            $selectFields = substr($selectFields,0,-1);
+            $infos = Label::select($selectFields)
+                            ->join('products', function ($join) {
+                                        $join->on('products.code','labels.product_code')
+                                            ->whereColumn('products.company_id','labels.company_id');
+                            });
+
+            //Realiza os joins de acordo com as tabelas informadas no cadastro das variáveis                
+            if(in_array('documents', $arrayTables)){
+                $infos->leftJoin('documents', 'documents.id', 'labels.document_id');
+            }
+
+            if(in_array('document_items', $arrayTables)){
+                $infos->leftJoin('document_items', 'document_items.id', 'labels.document_item_id');
+            }
+            
+            if(in_array('label_status', $arrayTables)){
+                $infos->join('label_status', 'label_status.id', 'labels.label_status_id');
+            }
+
+            if(in_array('labels_origin', $arrayTables)){
+                $infos->leftJoin('labels as labels_origin', 'labels_origin.id', 'labels.origin');
+            }
+            
+
+            if(in_array('customers', $arrayTables)){
+                $infos->leftJoin('customers', function ($join) {
+                            $join->on('customers.code','documents.customer_code')
+                                 ->whereColumn('customers.company_id','documents.company_id');
+                });
+            }
+
+
+            $infos->where('labels.id', 1)
+                  ->where('labels.label_status_id','<>','9')
+                  ->get()
+                  ->toArray();
+
+                  //print_r($infos);exit;
+
+        }
+        //Formata os campos de data
+        //$infos->labels.due_date->format('d/m/Y'); //Validade
+        //$infos->labels.prod_date->format('d/m/Y'); //Produção
+        
+        return $infos;   
 
     }
 

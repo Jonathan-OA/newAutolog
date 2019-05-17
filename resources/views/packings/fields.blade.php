@@ -37,6 +37,12 @@
 {!! Form::label('prev_level', Lang::get('models.prev_level').':') !!}
 {!! Form::number('prev_level', null, ['class' => 'form-control']) !!}
 
+<!-- Prim Qty Field -->
+{!! Form::label('prim_qty', Lang::get('models.prim_qty').':') !!}
+{!! Form::number('prim_qty', null, ['class' => 'form-control', 'step' => '0.000001', 'placeholder' => '0,000000']) !!}
+
+
+
 <!-- Label Type Code Field -->
 {!! Form::label('label_type_code', Lang::get('models.label_type_code').':') !!}
 {!! Form::text('label_type_code', null, ['class' => 'form-control','id' => 'autocomplete1', 'table' => 'label_types']) !!}

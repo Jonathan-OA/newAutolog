@@ -57,7 +57,7 @@ class Packing extends Model
         'barcode',
         'prev_qty',
         'prev_level',
-        'prim_level',
+        'prim_qty',
         'label_type_code',
         'total_weight',
         'total_net_weight',

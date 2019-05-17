@@ -192,26 +192,40 @@ class ProductionController extends AppBaseController
 
         //Busca comandos de impressão para a ETIQUETA / TIPO DE IMPRESSORA
         $comm = App\Models\LabelLayout::getCommands($label_type_code, $printer_type);
-        
+
+        //'Arquivo' com todos os comandos substituidos
+        $fileComm = '';
+
         //Loop nas linhas informadas na impressão
         foreach($input['infos'] as $line ){
 
             //Pega informações da UOM (GERA_ID, CONFIRMA_LOTE, ETC..)
             $level = App\Models\Packing::getLevel($line['product_code'], $line['uom_code']);
 
-            if(count($level) > 0 && !empty($level['print_label'])){
+            if(count($level) > 0 && !empty($level[0]['print_label'])){
 
                  //Valida cadastro Print_Label (GERA_ID)
-                if($level['print_label'] == 1){
-
+                if($level[0]['print_label'] == 1){
+                    
                     //Loop para gerar a quantidade de etiquetas informadas no campo aImprimir
-                    for($i;$i <= $line['qty_print']; $i++){
-                        $label_id = '';
+                    for($i = 0;$i < $line['qty_print']; $i++){
+                        $label = $label = App\Models\Label::createLabel($line);
+                        //Pega as informações necessárias para impressão
+                        $infos = App\Models\Label::getInfosForPrint($label->id);
+                        //Substitui as Variáveis no layout
+                        $label_commands = App\Models\LabelLayout::subCommands($comm, $infos);
+                        //Adiciona no 'arquivo'
+                        $fileComm .= $label_commands;
                     }
                 }else{
                     //Cria uma etiqueta e imprime o número de cópias
-                    $label_id = '';
-
+                    $label = $label = App\Models\Label::createLabel($line);
+                    //Pega as informações necessárias para impressão
+                    $infos = App\Models\Label::getInfosForPrint($label->id);
+                    //Substitui as Variáveis no layout
+                    $label_commands = App\Models\LabelLayout::subCommands($comm, $infos);
+                    //Adiciona no 'arquivo'
+                    $fileComm .= $label_commands;
                 }
             }else{
                 //Unidade / Produto não cadastrados na tabela de embalagens
@@ -219,13 +233,12 @@ class ProductionController extends AppBaseController
            
         }
 
-        return redirect()->back()->with('filePrint',$comm)
-        ->with('print',true)->withInput();
-        
-        /*return view('modules.production.printLabels')->with('document',$document)
-                                                     ->with('filePrint',$comm)
-                                                     ->with('print',true)
-                                                     ->with('request', $request)*/
+        //Retorna para a tela de etiquetas passando o arquivo a ser impresso
+        return $fileComm;
+        //return redirect()->back()->with('filePrint',$fileComm)
+        //->with('print',true)
+        //->with('document',$document)
+        //->withInput();
 
 
     }
