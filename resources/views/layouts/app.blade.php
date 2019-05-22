@@ -56,7 +56,7 @@
                     @include('layouts.support')
                 </div>
                 <!-- Modal do Ícone de Loading -->
-                <div class="modal fade" id="loadingModal" tabindex="-1" role="dialog"  aria-hidden="true">
+                <div class="modal fade" id="loadingModal" tabindex="-2" role="dialog"  aria-hidden="true">
                     <div class="modal-dialog" id="loading" role="document">
                             <div class="loader"></div>
                     </div>

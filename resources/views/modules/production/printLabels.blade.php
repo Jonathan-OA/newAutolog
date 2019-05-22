@@ -1,7 +1,5 @@
 @extends('layouts.app')
 @section('content')
-{{Session::get('filePrint')}}
-{{Session::get('print')}}
 
     <!-- BreadCrumb - Trilha  -->
     <nav aria-label="breadcrumb">
@@ -39,7 +37,7 @@
                                 <!-- -->
 
                                 <div class="" style="margin: 0 15px 0 15px">
-                                    <table class="table table-bordered table-striped" id="modules-table" cellspacing="0" width="100%">
+                                    <table class="table table-bordered table-striped" id="print-table" cellspacing="0" width="100%">
                                         <thead>
                                             <th class="th_grid">!</th>
                                             <th class="th_grid">@lang('models.product_code')</th>
@@ -77,9 +75,9 @@
                                                 <tr>
                                                     <td align="center">
                                                         <!-- Ícone de Atenção para campos obrigatórios -->
-                                                        <span id="requiredFields" aria-label="@lang('infos.required_fields')" data-microtip-position="right" role="tooltip">
+                                                        <a href="#" id="requiredFields" aria-label="@lang('infos.required_fields')" data-microtip-position="right" role="tooltip">
                                                                 <img class='icon' src='{{asset('/icons/warning.png') }}' >
-                                                        </span>
+                                                        </a>
                                                     </td>
                                                     <td align="center">
                                                         <!-- Código do Produto -->
@@ -124,33 +122,38 @@
                                                     </td>
                                                     <td>
                                                         <!-- Lote -->
-                                                        <div class="form-control {{ (($rBatch == '')?'input_error':'')}}" >
+                                                        <!-- old() pega o valor informado anteriormente pelo usuario ou o valor padrão (do banco) -->
+                                                        <div class="form-control {{ (($rBatch == '' && old("infos.$lineNum.batch", $item['batch']) == '')?'required input_error':'')}}" >
                                                             <input type="text" name="infos[{{$lineNum}}][batch]" value="{{ old("infos.$lineNum.batch", $item['batch'])}}" 
                                                             size="10" maxlength="20" {{$rBatch}}>
                                                         </div>
                                                     </td>
                                                     <td>
                                                         <!-- Lote Fornecedor-->
-                                                        <div class="form-control {{ (($rBatchSup == '')?'input_error':'')}}">
+                                                        <!-- old() pega o valor informado anteriormente pelo usuario ou o valor padrão (do banco) -->
+                                                        <div class="form-control {{ (($rBatchSup == '' && old("infos.$lineNum.batch_supplier", $item['batch_supplier']) == '')?'required input_error':'')}}">
                                                             <input type="text" name="infos[{{$lineNum}}][batch_supplier]" value="{{ old("infos.$lineNum.batch_supplier", $item['batch_supplier'])}}"
                                                              size="10" maxlength="20" {{$rBatchSup}}>
                                                         </div>
                                                     </td>
                                                     <td>
                                                         <!-- Data de Validade -->
-                                                        <div class="form-control {{ (($rDueDate == '')?'input_error':'')}}">
+                                                        <!-- old() pega o valor informado anteriormente pelo usuario ou o valor padrão (do banco) -->
+                                                        <div class="form-control {{ (($rDueDate == '' && old("infos.$lineNum.due_date") == '')?'required input_error':'')}}">
                                                             <input type="date" name="infos[{{$lineNum}}][due_date]" value="{{ old("infos.$lineNum.due_date")}}" size="6" {{$rDueDate}}>
                                                         </div>
                                                     </td>
                                                     <td>
                                                         <!-- Comprimento -->
-                                                        <div class="form-control {{ (($rLength == '')?'input_error':'')}}">
+                                                        <!-- old() pega o valor informado anteriormente pelo usuario ou o valor padrão (do banco) -->
+                                                        <div class="form-control {{ (($rLength == '' && old("infos.$lineNum.length") == '')?'required input_error':'')}}">
                                                             <input type="number" name="infos[{{$lineNum}}][length]" value="{{ old("infos.$lineNum.length", 0)}}" step="0.000001" size="6" maxlength="16" {{$rLength}}>
                                                         </div>
                                                     </td>
                                                     <td>
                                                         <!-- Largura -->
-                                                        <div class="form-control {{ (($rWidth == '')?'input_error':'')}}">
+                                                        <!-- old() pega o valor informado anteriormente pelo usuario ou o valor padrão (do banco) -->
+                                                        <div class="form-control {{ (($rWidth == '' && old("infos.$lineNum.width") == '')?'required input_error':'')}}">
                                                             <input type="number" name="infos[{{$lineNum}}][width]"  value="{{ old("infos.$lineNum.width", 0)}}" size="6" step="0.000001"  maxlength="16" {{$rWidth}}>
                                                         </div>
                                                     </td>
@@ -182,8 +185,7 @@
                                 </div>
                                
                             </div>
-                            {!! Form::submit(Lang::get('buttons.print'), ['class' => 'btn btn-primary']) !!}
-                            <a href="#" data-toggle='modal' data-target='#printModal' class="btn btn-primary">@lang('buttons.print')</a>
+                            <a href="#" id="buttonPrint" data-toggle='modal' data-target='#printModal' class="btn btn-primary">@lang('buttons.print')</a>
                             {!! Form::close() !!}
                         </div>
                     </div>
@@ -195,7 +197,7 @@
 @section('scripts')
     <script>
         $(function() {
-           
+            //Funções ao preencher um campo de input
             $("input").on('keyup change',function () {
                 var tr = $(this).closest('tr');
                 var divInput = $(this).closest('div');
@@ -206,6 +208,7 @@
                     var qty_print = parseFloat(tr.find('input#qty_print').val());
                     var prim_qty = parseFloat(tr.find('input#prim_qty').val());
                     var total = qty_print * prim_qty;
+                    //Atribui valor a coluna correta
                     tr.find('td.total').html(total);
                 }
 
@@ -219,13 +222,36 @@
                 if($(this).val() != ''){
                     divInput.removeClass('input_error');
                     if(tr.find('div.input_error').length == 0){
-                        tr.find('span#requiredFields').hide();
+                        tr.find('a#requiredFields').hide();
                     }else{
-                        tr.find('span#requiredFields').show();
+                        tr.find('a#requiredFields').show();
                     }
+                }else if(divInput.hasClass('required')){
+                    //Se o campo foi limpo e é um campo obrigatório (classe required), volta a classe q informa erro
+                    divInput.addClass('input_error');
                 }
                 
+            })
 
+            //Ao clicar no icone de atenção na linha, da o focus no próximo input que precisa preencher
+            $("#requiredFields").on('click',function () {
+                var tr = $(this).closest('tr');
+                //input com a classe input_error
+                tr.find('div.input_error input').focus();
+            })
+
+            //Ao clicar em imprimir, valida se todos os campos foram preenchidos (se existir a classe input_error)
+            $("#buttonPrint").on('click',function (event) {
+                $('#msg_print .alert').remove();
+                if($('#print-table').find('div.input_error').length > 0){
+
+                    //Mensagem de erro
+                    $('#msg_excluir .alert').remove();
+                    $('#msg_excluir').html('<div class="alert alert-danger">@lang('infos.required_fields')</div>');
+                    event.stopPropagation();
+
+                }
+                
             })
 
         })

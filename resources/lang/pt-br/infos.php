@@ -35,7 +35,8 @@ return [
     'print_server'              => 'Problemas para visualizar as impressoras disponíveis? ',
     'print_label_type'          => 'Confira o tipo de etiqueta cadastrada para este lote / produto, e se ela possui impressoras cadastradas.',
     'required_fields'           => 'Atenção aos campos obrigatórios não preenchidos! (Inputs com bordas vermelhas)',
-    
+    'print_success'             => 'Impressão realizada na fila :printer [:qty Etiqueta(s)].',
+    'print_error'               => 'Fila :printer não disponível para impressão.',
     /*
     |
     | Textos relacionados ao ícone de informação sobre um campo de uma tabela
