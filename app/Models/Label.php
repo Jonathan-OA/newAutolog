@@ -99,14 +99,16 @@ class Label extends Model
      * @var array
      */
     public static function createLabel($infos){
+        
         $infos['company_id'] = Auth::user()->company_id;
         $infos['barcode'] = Auth::user()->id.date('YmsHis'); //Padrão do Barcode é Usuario + Data
         $infos['user_id'] = Auth::user()->id;
         $infos['qty'] = (empty($infos['qty']))? 1 : $infos['qty'];
         $infos['prim_qty'] = (empty($infos['prim_qty']))? 1 : $infos['prim_qty'];
-
+        
         //Classe pai Model::create()
         $label = parent::create($infos);
+        
         if($label){
             //Cria barcode com ID completando com zeros (totalizando 13)
             $label->barcode = str_pad($label->id,13,'0',STR_PAD_LEFT);

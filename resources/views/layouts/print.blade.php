@@ -5,10 +5,8 @@
         <div class="modal-header">
                 <div class="panel-default" >
                     <div class="panel-heading">
-                        @lang('models.print') 
-                        <a class="btn btn-printConfig" href="#" id="button-printConfig" title="Habilitar Impressoras">
-                            <img class="icon" src="{{ asset('/icons/config.png') }}" alt="Habilitar Impressoras" >
-                        </a>        
+                        <!-- Título baseado no arquivo de linguagem -->
+                        @lang('models.print')    
                     </div>
                 </div>
         </div>
@@ -18,19 +16,19 @@
                      <!-- Alerta de erro / sucesso -->
                      <div id="msg_print"></div>
                     <div class="form-group">
-                                <!-- Código da empresa -->
-                                <input id='company_id' name='company_id' type='hidden' value='{!! Auth::user()->company_id !!}'>
+                        <!-- Código da empresa -->
+                        <input id='company_id' name='company_id' type='hidden' value='{!! Auth::user()->company_id !!}'>
 
-                                <!-- IP Local -->
-                                <input id='ip_local' name='ip_local' type='hidden' value='{{ $_SERVER['REMOTE_ADDR'] }}'>
+                        <!-- IP Local -->
+                        <input id='ip_local' name='ip_local' type='hidden' value='{{ $_SERVER['REMOTE_ADDR'] }}'>
 
-                                <!-- Fila -->
-                                {!! Form::label('printer', Lang::get('models.printer').':') !!}
-                                {!! Form::select('printer',  array() , NULL,  ['id' => 'printers', 'class' => 'form-control', 'readonly']) !!}
-                                
-                                <!-- Tipo de Impressora -->
-                                {!! Form::label('printer_type_code', Lang::get('models.printer_type_code').':') !!}
-                                {!! Form::select('printer_type_code',  array(), NULL , ['id' => 'printer_types','class' => 'form-control', 'readonly']) !!}
+                        <!-- Fila -->
+                        {!! Form::label('printer', Lang::get('models.printer').':') !!}
+                        {!! Form::select('printer',  array() , NULL,  ['id' => 'printers', 'class' => 'form-control', 'readonly']) !!}
+                        
+                        <!-- Tipo de Impressora -->
+                        {!! Form::label('printer_type_code', Lang::get('models.printer_type_code').':') !!}
+                        {!! Form::select('printer_type_code',  array(), NULL , ['id' => 'printer_types','class' => 'form-control', 'readonly']) !!}
                     </div>
                 </div>
             </div>
@@ -48,9 +46,31 @@
 @section('scripts_print')
 <script>
     $(function() {
+
+        //Valida se o IP do parametro print_server ($print_server) esta acessível, para assumir como o padrão
+        //Timeout de 2 segundos
+        //Global: False para não mostrar icone de loading
+        var ip_server = "http://localhost:9101";
+        $.ajax({
+            url: "http://{{$print_server}}:9101/printers",
+            global: false,
+            timeout: 2000,
+        }).always(function(jqXHR, textStatus) {
+            if (textStatus == 'success') {
+                //Existe
+                ip_server = "http://{{$print_server}}:9101";
+            }else{
+                //Servidor indisponivel
+                var ip = "{{$print_server}}";
+                $('#msg_excluir .alert').remove();
+                $('#msg_excluir').html('<div class="alert alert-info">@lang('infos.print_server', ["ip" => "'+ip+'"])</div>');
+            } 
+        });
+        //
+
         var label_type;
         //Chama ao clicar no botão para abrir a modal (primeiro botão de imprimir)
-        $('#printModal').on('shown.bs.modal', function(){
+        $('#printModal').on('shown.bs.modal', function(event){
 
             label_type = $('#label_type_code').val();
             var ip = $('#ip_local').val();
@@ -81,13 +101,23 @@
             //Lista impressoras disponíveis
             //PrintServer TWX
             $.ajax({
-                url: "http://localhost:9101/printers",
+                url: ip_server+"/printers",
                 method: "POST",
                 timeout: 4000 //Timeout de 4 Segundos
             }).done(function(options) {
-                //Pega variável salva no browser com a ultima fila utilizada
-                var lastPrinter = localStorage.getItem("AutologWMS_LastPrinter");
 
+                //Valida se existe mais impressoras configuradas alem da TST (Primeira Vez após instalar o PrintServer)
+                if(options.printers.length == 1 && options.printers[0]['TST'] == 'TST'){
+                    //Envia para a página de configuração
+                    window.open('{!! URL::to('printConfig') !!}', '_blank');
+                    //Fecha modal e cancela o resto do processamento
+                    $('#printModal').modal('toggle');
+                    event.stopPropagation();
+                }
+                
+                //Pega variável salva no browser com a ultima fila utilizada
+                var lastPrinter = localStorage.getItem("AUTOLOGWMS_LastPrinter");
+                
                 //Loop no resultado para montar o select
                 $.each(options['printers'], function(index,value){
                     var key = Object.keys(value)[0];
@@ -97,6 +127,11 @@
                         $("#printers").append('<option value="'+value[key]+'">'+key+'</option>');
                     }
                 })
+
+                //Sugestão de link para configurar impressoras disponíveis
+                $('#msg_print .alert').remove();
+                $('#msg_print').html('<div class="alert alert-info">@lang('infos.printers_config') <a href="{!! URL::to('printConfig') !!}" target="_blank" >Clique Aqui</a></div>');
+                
             }).fail(function(jqXHR, textStatus) {
                 //Erro de nenhuma impressora encontrada (Print Server pode estar desativado)
                 var msg = "@lang('validation.print_server')";
@@ -135,7 +170,7 @@
                     success: function (fileCommands) {
                         //Segundo ajax envia o conteúdo para impressão
                         $.ajax({
-                            url: "http://localhost:9101/printer/"+printer,
+                            url: ip_server+"/printer/"+printer,
                             method: "POST",
                             data: fileCommands,
                             success: function (data) {
@@ -144,17 +179,24 @@
                                 $('#msg_excluir').html('<div class="alert alert-success">@lang('infos.print_success',["printer" => "'+printer+'", "qty" => "'+qty_print+'"])</div>');
                                 
                                 //Salva última fila utilizada para otimizar tempos futuros
-                                localStorage.setItem("AutologWMS_LastPrinter", printer);
+                                localStorage.setItem("AUTOLOGWMS_LastPrinter", printer);
 
                                 //Fecha Modal
                                 $('#printModal').modal('toggle');
                             },
                             error: function(){
-                                //Mostra mensagem de erro
+                                console.log(fileCommands);
+                                //Mostra mensagem de erro (Fila não disponível para impressão)
                                 $('#msg_print .alert').remove();
-                                $('#msg_print').html('<div class="alert alert-danger">@lang('infos.print_error',["printer" => "'+printer+'"])<</div>');
+                                $('#msg_print').html('<div class="alert alert-danger">@lang('infos.print_error',["printer" => "'+printer+'"])</div>');
                             }
                         });
+                    },
+                    error: function(error){
+                        //Mostra mensagem de erro (Erro ao gerar impressão. Contate o SUPORTE para obter ajuda)
+                        $('#msg_print .alert').remove();
+                        $('#msg_print').html('<div class="alert alert-danger">@lang('infos.print_error_def')</div>');
+
                     }
                 });
             }
@@ -168,14 +210,6 @@
             $("#printers").html("");
         })
 
-        $('#button-printConfig').click(function(){
-            $.ajax({url: "http://localhost:9101/allPrinters",
-                    method: "POST",
-                    success: function (data) {
-                        console.log(data);
-                    }
-            })
-        })
         
     })
 

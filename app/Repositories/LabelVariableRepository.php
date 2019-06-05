@@ -25,7 +25,8 @@ class LabelVariableRepository extends BaseRepository
         'size',
         'size_start',
         'table',
-        'field'
+        'field',
+        'decimal_places'
     ];
 
     /**

@@ -37,6 +37,12 @@ return [
     'required_fields'           => 'Atenção aos campos obrigatórios não preenchidos! (Inputs com bordas vermelhas)',
     'print_success'             => 'Impressão realizada na fila :printer [:qty Etiqueta(s)].',
     'print_error'               => 'Fila :printer não disponível para impressão.',
+    'print_error_def'           => 'Erro ao gerar impressão. Contate o SUPORTE para obter ajuda.',
+    'print_select'              => 'Selecione as impressoras que estão ativas e devem ser listadas nos módulos de impressão.',
+    'printers_config'           => 'Deseja habilitar outras filas para impressão? ',
+    'printers_list'             => 'A impressora desejada não está sendo listada? Verifique se a mesma esta instalada / visível no Windows.',
+    'print_server'              => 'Não encontramos o aplicativo de impressão no IP :ip. Verifique se o mesmo está iniciado em seu computador.',
+
     /*
     |
     | Textos relacionados ao ícone de informação sobre um campo de uma tabela

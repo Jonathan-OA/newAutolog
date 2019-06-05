@@ -4,7 +4,7 @@
     <!-- BreadCrumb - Trilha  -->
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{!! route('production.index') !!}">@lang('models.production')</a></li>
+        <li class="breadcrumb-item"><a href="{!! route('receipt.index') !!}">@lang('models.receipt')</a></li>
         <li class="breadcrumb-item active" aria-current="page">@lang('buttons.print')</li>
         </ol>
     </nav>
@@ -22,7 +22,7 @@
                                 <!-- Alerta de erro / sucesso -->
                                 <div id="msg_excluir"></div>
                                 
-                                {!! Form::open(['route' => 'production.print']) !!}
+                                {!! Form::open(['route' => 'receipt.print']) !!}
         
                                 <!-- Modal de Impressão -->
                                 <div class="modal fade" id="printModal" tabindex="-1" role="dialog"  aria-hidden="true">

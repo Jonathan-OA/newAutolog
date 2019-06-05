@@ -157,7 +157,8 @@ class Packing extends Model
 
 
      //Retorna todos as embalagens disponíveis para o produto
-     public static function getPackings($produto){
+     //Filtros opcionais: create_label(GERAID) e print_label(GERAETQ)
+     public static function getPackings($produto, $create_label = '', $print_label = ''){
         return Packing::selectRaw("uom_code,CONCAT(level,' - ',uom_code) as description_f")
                         ->where('company_id', Auth::user()->company_id)
                         ->where('product_code', $produto)

@@ -50,5 +50,6 @@ return [
     'print' => 'Imprimir',
     'print_labels' => 'Imprimir Etiquetas',
     'print_doc' => 'Imprimir Documento',
+    'print_config' => 'Configurar Impressoras Disponíveis',
 
 ];

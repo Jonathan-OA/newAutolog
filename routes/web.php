@@ -32,6 +32,18 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('production/storeItem', 'Modules\ProductionController@storeItem')->name('production.storeItem');; //Cria item
     Route::resource('production', 'Modules\ProductionController'); //Ações de documentos de produção
     // ----------------------------------------------------------------------------------------------
+    // Modulo de Recebimento
+    // ----------------------------------------------------------------------------------------------
+    Route::get('receipt/{document_id}/print', 'Modules\ReceiptController@showPrint'); //Mostra grid de impressão
+    Route::post('receipt/print', 'Modules\ReceiptController@print')->name('receipt.print'); //Cria Etiquetas e envia para impressão
+    Route::get('receipt/{document_id}/items', 'Modules\ReceiptController@showItems'); //Mostra grid de itens
+    Route::get('receipt/{document_id}/items/create', 'Modules\ReceiptController@createItem'); //Form de criação de itens
+    Route::get('receipt/{document_id}/items/{document_item_id}/edit', 'Modules\ReceiptController@editItem'); //Form de edição de itens
+    Route::patch('receipt/updateItem/{document_item_id}', 'Modules\ReceiptController@updateItem')->name('receipt.updateItem'); //Atualiza item
+    Route::post('receipt/storeItem', 'Modules\ReceiptController@storeItem')->name('receipt.storeItem'); //Cria item
+    Route::resource('receipt', 'Modules\ReceiptController'); //Ações de documentos de Recebimento
+    
+    // ----------------------------------------------------------------------------------------------
     // Modulo de Transferência
     // ----------------------------------------------------------------------------------------------
     Route::get('transfer/{document_id}/items', 'Modules\TransferController@showItems'); //Mostra grid de itens
@@ -62,6 +74,8 @@ Route::group(['middleware' => 'auth'], function() {
     //Rota que cancela documento(s)
     Route::post('/document/cancel/{module?}', 'DocumentController@cancel');
 
+    //Lista impressoras disponiveis com base no servidor de impressão
+    Route::get('printConfig', 'PrintConfigController@index');
 
     //BOTÕES
     Route::get('getButtons/{modulo}', 'ButtonsController@getButtons');

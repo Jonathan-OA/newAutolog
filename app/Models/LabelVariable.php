@@ -42,7 +42,8 @@ class LabelVariable extends Model
         'size',
         'size_start',
         'table',
-        'field'
+        'field',
+        'decimal_places'
     ];
 
     /**
@@ -56,7 +57,8 @@ class LabelVariable extends Model
         'size' => 'integer',
         'size_start' => 'integer',
         'table' => 'string',
-        'field' => 'string'
+        'field' => 'string',
+        'decimal_places' => 'integer'
     ];
 
     /**

@@ -31,7 +31,8 @@ class CreateLabelVariableRequest extends FormRequest
             'table' => 'required|string|max:20',
             'field' => 'required|string|max:20',
             'size' => 'required|integer',
-            'size_start' => 'required|integer'
+            'size_start' => 'required|integer',
+            'decimal_places' => 'integer'
             
         ];
     }

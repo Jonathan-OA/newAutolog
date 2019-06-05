@@ -136,11 +136,20 @@ class LabelLayout extends Model
             $size = $val['size'];
             //Ínicio do corte onde o tamanho $size deve ser aplicado.
             $size_start = $val['size_start'];
-
-            //Valor: Buscando o Field cadastrado e cortando na qde correta de caracteres
-            $value = substr($infos[0]->$field,$size_start,$size);    
+            
+            //Valor: Buscando o Field cadastrado
+            $value = $infos[0]->$field;
 
             if($value != ''){
+                //Se é uma string, cortando na qde correta de caracteres.
+                //Se é número, corta na qde de casas decimais (trunca, sem arredondar).
+                if(is_numeric($value)){
+                    $value = bcdiv($value,1,$val['decimal_places']); //Trunca
+                    $value = number_format($value,$val['decimal_places'],",","."); //Formata
+                }else{
+                    $value = substr($infos[0]->$field,$size_start,$size);    
+                }
+
                 //Se o valor existir, realiza a substituição
                 $label_commands = str_replace('%'.$name.'%',$value,$label_commands);
             }

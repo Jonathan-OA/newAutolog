@@ -334,6 +334,7 @@ return [
     'viewer' => 'Pré-Visualização ',
     'print' => 'Impressão de Etiquetas ',
     'printer' => 'Impressora',
+    'printConfig' => 'Configuração de Impressoras',
     'total' => 'Total '
     
 

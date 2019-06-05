@@ -6,6 +6,7 @@
                 <th class="th_grid">@lang('models.code') </th>
                 <th class="th_grid">@lang('models.description') </th>
                 <th class="th_grid">@lang('models.val_integer') </th>
+                <th class="th_grid">@lang('models.decimal_places') </th>
                 <th class="th_grid">@lang('models.action')</th>
             </thead>
             <tbody>
@@ -14,6 +15,7 @@
                     <td>{!! $uom->code !!}</td>
                     <td>{!! $uom->description !!}</td>
                     <td>{!! $uom->val_integer !!}</td>
+                    <td>{!! $uom->decimal_places !!}</td>
                 </tr>
             @endforeach
             </tbody>

@@ -162,8 +162,12 @@ class ProductionController extends AppBaseController
             $document = $this->documentRepository->findWithoutFail($document_id);
             $documentItems = App\Models\DocumentItem::getInfosForPrint($document_id);
 
+            //Busca parâmetro print_server com o IP do servidor de impressão da rede
+            $print_server = App\Models\Parameter::getParam('print_server', 'localhost');
+
             return view('modules.production.printLabels')->with('document',$document)
-                                                         ->with('documentItems', $documentItems);
+                                                         ->with('documentItems', $documentItems)
+                                                         ->with('print_server', $print_server);
         }else{
             //Sem permissão
             Flash::error(Lang::get('validation.permission'));
@@ -174,7 +178,7 @@ class ProductionController extends AppBaseController
 
 
     /**
-     * Cria labels e redireciona para impressão
+     * Cria labels e retorna arquivo de impressão
      *
      * @param CreateLabelRequest $request
      *
@@ -199,6 +203,8 @@ class ProductionController extends AppBaseController
         //Loop nas linhas informadas na impressão
         foreach($input['infos'] as $line ){
 
+            $line['document_id'] = $input['document_id'];
+            
             //Pega informações da UOM (GERA_ID, CONFIRMA_LOTE, ETC..)
             $level = App\Models\Packing::getLevel($line['product_code'], $line['uom_code']);
 
@@ -233,12 +239,8 @@ class ProductionController extends AppBaseController
            
         }
 
-        //Retorna para a tela de etiquetas passando o arquivo a ser impresso
+        //Retorna para o arquivo com as variáveis já substituídas
         return $fileComm;
-        //return redirect()->back()->with('filePrint',$fileComm)
-        //->with('print',true)
-        //->with('document',$document)
-        //->withInput();
 
 
     }

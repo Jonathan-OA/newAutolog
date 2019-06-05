@@ -1,6 +1,6 @@
-//Geração dos Grids de Produção
+//Geração dos Grids de Recebimento
 //Alteração das tags padrão do Angular de {{ }} para {% %}
-var app = angular.module('grid_prod', ['ui.grid', 'ui.grid.selection',
+var app = angular.module('grid_rec', ['ui.grid', 'ui.grid.selection',
     'ui.grid.pagination', 'ui.grid.saveState',
     'ui.grid.moveColumns', 'ui.grid.autoResize',
     'ui.grid.resizeColumns', 'ui.grid.exporter'
@@ -126,7 +126,7 @@ app.run(['$rootScope', function($rootScope) {
         } else {
             $http({
                 method: 'GET',
-                url: 'api/grid/Producao'
+                url: 'api/grid/Recebimento'
             }).then(function(data) {
                 $scope.gridApi.saveState.restore($scope, data);
             });
@@ -153,7 +153,7 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
             onRegisterApi: function(gridApi) {
                 $scope.gridApi = gridApi;
                 $timeout(function() {
-                    $scope.restoreState('AUTOLOGWMS_GridProd');
+                    $scope.restoreState('AUTOLOGWMS_GridRec');
                 }, 50);
                 //Chama a função que preenche o grid
                 $scope.getFirstData();
@@ -165,7 +165,7 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
                         //Variavel de controle para buscar o filtro externo apenas uma vez
                         $scope.hasFilter = true;
                         //Busca os dados novamente sem filtro de quantidade
-                        $http.get('api/documents/030')
+                        $http.get('api/documents/010')
                             .then(function(response) {
                                 $scope.gridOptions.data = response.data;
                             });
@@ -206,7 +206,7 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
                 { name: 'Itens', field: 'total_items', type: 'number' },
                 { name: 'Cliente', field: 'customer_code' },
                 {
-                    name: 'Produção',
+                    name: 'Recebimento',
                     field: 'total_conf',
                     cellTemplate: '<div class="ui-grid-cell-contents" ><div class="progress"><div class="progress-bar bg-success" role="progressbar" style="width: {{row.entity.total_conf}}%;" aria-valuenow="{{row.entity.total_conf}}" aria-valuemin="0" aria-valuemax="100">{{row.entity.total_conf}}%</div></div></div></div>'
                 },
@@ -259,7 +259,7 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
         $scope.getFirstData = function() {
             $http({
                 method: 'GET',
-                url: 'api/documents/030/3000'
+                url: 'api/documents/010/3000'
             }).then(function(success) {
                 $scope.gridOptions.data = success.data;
             }, function(error) {
@@ -341,7 +341,7 @@ app.controller('DetCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '
             onRegisterApi: function(gridApiDet) {
                 $scope.gridApiDet = gridApiDet;
                 $timeout(function() {
-                    $scope.restoreState('AUTOLOGWMS_GridProd_Det');
+                    $scope.restoreState('AUTOLOGWMS_GridRec_Det');
                 }, 50);
             },
             enableGridMenu: true,

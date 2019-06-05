@@ -83,6 +83,10 @@
         align-items: center
     }
     
+    #loadingModal {
+        z-index: 1100 !important;
+    }
+    
     @keyframes spin {
         0% {
             transform: rotate(0deg);
@@ -440,8 +444,33 @@
         position: absolute;
         z-index: 2;
     }
+    /* ------------------------------------------------*/
+    /*  Impressão  */
+    /* ------------------------------------------------*/
+    
+    .printConfig {
+        padding: 10px 15px;
+        border-bottom: 1px solid black;
+        border-right: 1px solid black;
+    }
+    
+    .alert-info a {
+        color: #31708f !important;
+        text-decoration: underline !important;
+    }
+    
+    td .form-control {
+        display: block;
+        height: 24px;
+        padding: 1px 4px;
+    }
+    
+    td .form-control input[type=number] {
+        width: 100%;
+    }
     /* -------------------------------------------------
     /* TABELA DINAMICA (TRANSFERENCIA MANUAL, ETC...) */
+    /* ------------------------------------------------*/
     
     .table-din thead,
     .table-din tbody,
