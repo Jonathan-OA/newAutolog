@@ -24,6 +24,7 @@ Route::group(['middleware' => 'auth'], function() {
     // Modulo de Produção
     // ----------------------------------------------------------------------------------------------
     Route::get('production/{document_id}/print', 'Modules\ProductionController@showPrint'); //Mostra grid de impressão
+    Route::get('production/{document_id}/liberate', 'Modules\ProductionController@showLibLocation'); //Mostra Tela de Endereço para Liberação
     Route::post('production/print', 'Modules\ProductionController@print')->name('production.print'); //Cria Etiquetas e envia para impressão
     Route::get('production/{document_id}/items', 'Modules\ProductionController@showItems'); //Mostra grid de itens
     Route::get('production/{document_id}/items/create', 'Modules\ProductionController@createItem'); //Form de criação de itens

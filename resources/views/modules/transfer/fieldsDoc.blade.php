@@ -15,14 +15,14 @@
 
     <!-- Document Type Code Field -->
     {!! Form::label('document_type_code', Lang::get('models.document_type_code').':') !!}
-    {!! Form::select('document_type_code', $document_types,(!empty($document->document_type_code)) ? $document->document_type_code : '', ['class' => 'form-control']) !!}
+    {!! Form::select('document_type_code', $document_types,(!empty($document->document_type_code)) ? $document->document_type_code : '', ['class' => 'form-control', 'id' = 'document_type_code']) !!}
 
     <!-- Number Field -->
     {!! Form::label('number', Lang::get('models.number').':') !!}
     @if(!empty($action) && $action == 'edit')
-        {!! Form::text('number', null, ['class' => 'form-control', 'readonly']) !!}
+        {!! Form::text('number', null, ['class' => 'form-control', 'readonly', 'id' = 'document_number']) !!}
     @else
-        {!! Form::text('number', null, ['class' => 'form-control']) !!}
+        {!! Form::text('number', null, ['class' => 'form-control', 'id' = 'document_number']) !!}
     @endif
     
     <!-- Customer Code Field -->

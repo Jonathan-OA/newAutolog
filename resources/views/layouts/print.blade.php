@@ -139,7 +139,7 @@
                 $('#msg_print').html('<div class="alert alert-info">'+msg+'</div>');
                 //Sugestão de link com FAQ para configurar impressão
                 $('#msg_excluir .alert').remove();
-                $('#msg_excluir').html('<div class="alert alert-info">@lang('infos.print_server') <a href="#">Clique Aqui</a></div>');
+                $('#msg_excluir').html('<div class="alert alert-info">@lang('infos.print_server') <a href="#">Ajuda</a></div>');
             });
         })
 

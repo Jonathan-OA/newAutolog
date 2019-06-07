@@ -38,7 +38,23 @@
                 $('#parameters').show();
                 $('#parameters_inv').hide();
             }
+            //Valida se o número é criado automaticamente ou não
+            valNumAutomatic();
         })
+
+        
+        //Valida se o número é criado automaticamente ou não (cadastro do tipo de produto - num_automatic)
+        function valNumAutomatic(){
+            var value = $("#document_type_code").val();
+            if(docTypesInfos[value]['num_automatic'] === true){
+                $("#document_number").attr('readonly', 'true');
+                $("#document_number").val('Gerado Automaticamente');
+            }else{
+                $("#document_number").removeAttr('readonly');
+                $("#document_number").val('');
+            }
+        }
+
        
     })
     </script>    

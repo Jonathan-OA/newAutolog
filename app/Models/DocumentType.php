@@ -74,17 +74,46 @@ class DocumentType extends Model
 
     
 
-    //Retorna todos os document_types disponíveis 
+    /**
+     * Retorna os tipos de documentos de acordo com o movimento (listagem de inputs)
+     *
+     * @return Response
+     */
     public static function getDocumentTypes($moviment_code = ''){
         $GLOBALS['mov'] = $moviment_code;
-        return DocumentType::selectRaw("code,CONCAT(code,' - ',description) as description_f")
+        return DocumentType::selectRaw("code,CONCAT(code,' - ',description) as description_f, num_automatic")
                      ->where(function ($query) {
                        if(!empty($GLOBALS['mov'])){
                            $query->where('moviment_code',$GLOBALS['mov']);
                        }
                       })
-                     ->pluck('description_f','code');
+                     ->pluck('description_f','code','num_automatic');
    }
+
+   /**
+     * Retorna os tipos de documentos onde o indice é o Código do tipo
+     *
+     * @return Response
+     */
+   public static function getDocumentTypesArray($moviment_code = ''){
+        $GLOBALS['mov'] = $moviment_code;
+        $ret = [];
+        $docTypes =  DocumentType::where(function ($query) {
+                                    if(!empty($GLOBALS['mov'])){
+                                        $query->where('moviment_code',$GLOBALS['mov']);
+                                    }
+                                })
+                                ->get();
+        foreach($docTypes as $docType){
+            //Cria array de retorno onde indice principal é o tipo de documento
+            $ret[$docType['code']] = ['lib_automatic' => $docType['lib_automatic'], 'lib_location' => $docType['lib_location'],
+                                      'num_automatic' => $docType['num_automatic'], 'print_labels' => $docType['print_labels'],
+                                      'partial_lib' => $docType['partial_lib'], 'lib_deposits' => $docType['lib_deposits'],
+                                      'moviment_code' => $docType['moviment_code']];
+        }
+
+        return $ret;
+    }
 
    public static function getMoviment($document_type_code){
     return DocumentType::select("moviment_code")

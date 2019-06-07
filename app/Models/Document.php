@@ -16,7 +16,7 @@ class Document extends Model
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
-    protected $dates = ['created_at','updated_at','emission_date','start_date','end_date'];
+    protected $dates = ['created_at','updated_at','emission_date','start_date','end_date','billing_date', 'delivery_date'];
 
 
     protected $fillable = [
@@ -31,6 +31,8 @@ class Document extends Model
         'emission_date',
         'start_date',
         'end_date',
+        'delivery_date',
+        'billing_date',
         'wave',
         'total_volumes',
         'total_weight',
@@ -81,7 +83,8 @@ class Document extends Model
                                  'documents.document_status_id','total_net_weigth','priority','comments','user_id',
                                  'documents.created_at','documents.updated_at','moviment_code', 'document_status.description',
                                  'inventory_status.description as inv_description', 'inventory_status_id', DB::raw("COUNT(DISTINCT document_items.id) as total_items"),
-                                 DB::raw("ROUND(SUM(CASE WHEN document_items.qty_conf IS NULL THEN 0 ELSE document_items.qty_conf END)/SUM(document_items.qty)*100,0) as total_conf"))
+                                 DB::raw("ROUND(SUM(CASE WHEN document_items.qty_conf IS NULL THEN 0 ELSE document_items.qty_conf END)/SUM(document_items.qty)*100,0) as total_conf"),
+                                 'documents.delivery_date','documents.billing_date', 'document_types.lib_location', 'document_types.print_labels')
                         ->join('document_types', 'documents.document_type_code', '=', 'document_types.code')
                         ->join('document_status', 'document_status.id', '=', 'documents.document_status_id')
                         ->leftJoin('inventory_status', 'inventory_status.id', '=', 'documents.inventory_status_id')
@@ -98,7 +101,8 @@ class Document extends Model
                                 'emission_date','start_date','end_date','wave','total_volumes','total_weight',
                                 'document_status_id','total_net_weigth','priority','comments','user_id',
                                 'documents.created_at','documents.updated_at','moviment_code', 'document_status.description',
-                                'inventory_status.description', 'inventory_status_id')
+                                'inventory_status.description', 'inventory_status_id',  'document_types.lib_location', 'document_types.print_labels',
+                                'documents.delivery_date','documents.billing_date')
                        ->orderBy('documents.id', 'desc')
                        ->take($qty)
                        ->get();
@@ -118,7 +122,7 @@ class Document extends Model
                                  ['document_type_code', $document_type_code],
                                  ['number', $number]
                             ])
-                            ->whereNotIn('document_status_id',['7','8','9'])
+                            ->whereNotIn('document_status_id',['7','8','9','12'])
                             ->count();
         return $docCount;
     }
@@ -621,6 +625,7 @@ class Document extends Model
         //Formata os campos de data
         $infos->start_date->format('d/m/Y'); //Data de Inicio
         $infos->end_date->format('d/m/Y'); //Data de Finalização
+        $infos->emission_date->format('d/m/Y'); //Data de Emissão
         $infos->emission_date->format('d/m/Y'); //Data de Emissão
 
         return $infos;

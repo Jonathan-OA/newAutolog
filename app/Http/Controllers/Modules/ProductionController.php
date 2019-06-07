@@ -48,10 +48,14 @@ class ProductionController extends AppBaseController
     {
         //Valida se usuário possui permissão para acessar esta opção
         if(App\Models\User::getPermission('documents_prod_add',Auth::user()->user_type_code)){
+            
             //Busca os tipos de documentos para o movimento de produção
             $document_types = App\Models\DocumentType::getDocumentTypes('030');
+            //Busca informações do tipo de documento (liberação automatica, depositos, tela de impressão..)
+            $document_types_infos = App\Models\DocumentType::getDocumentTypesArray('030');
 
-            return view('modules.production.createDocument')->with('document_types',$document_types);
+            return view('modules.production.createDocument')->with('document_types',$document_types)
+                                                            ->with('document_types_infos',$document_types_infos);
         }else{
             //Sem permissão
             Flash::error(Lang::get('validation.permission'));
@@ -242,6 +246,31 @@ class ProductionController extends AppBaseController
         //Retorna para o arquivo com as variáveis já substituídas
         return $fileComm;
 
+
+    }
+
+    /**
+     * Mostra a tela de endereço para liberação
+     *
+     * @return Response
+     */
+
+    public function showLibLocation($document_id)
+    {
+        //Valida se usuário possui permissão para acessar esta opção
+        if(App\Models\User::getPermission('documents_prod_lib',Auth::user()->user_type_code)){
+            //Pega o Documento
+            $document = $this->documentRepository->findWithoutFail($document_id);
+        
+           
+
+            return view('modules.production.libLocation')->with('document',$document)
+                                                         ->with('locations', '');
+        }else{
+            //Sem permissão
+            Flash::error(Lang::get('validation.permission'));
+            return redirect(url('production'));
+        }
 
     }
 

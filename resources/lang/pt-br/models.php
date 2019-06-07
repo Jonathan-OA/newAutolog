@@ -315,6 +315,7 @@ return [
     'transfer' => 'Módulo de Transferência',  
     'document_edit' => 'Documento: ',  
     'document_create' => 'Criação de Documento',  
+    'document_lib' => 'Liberação de Documento',  
     'item_create' => 'Criação de Item',  
     'item_edit' => 'Edição de Item',  
     'items' => 'Itens',
