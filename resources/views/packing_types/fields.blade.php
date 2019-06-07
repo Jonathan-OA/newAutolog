@@ -1,6 +1,10 @@
 <div class="form_fields">
 @include('adminlte-templates::common.errors')
 
+<!-- Company Id Field -->
+<input id='company_id' name='company_id' type='hidden' value='{!! Auth::user()->company_id !!}'>
+
+
 <!-- Code Field -->
 {!! Form::label('code', Lang::get('models.code').':') !!}
 @if(isset($action) && $action == 'edit')
@@ -11,9 +15,13 @@
     {!! Form::text('code', null, ['class' => 'form-control']) !!}  
 @endif
 
-<!-- Description Field -->
+<!-- Label_Type_Code Field -->
 {!! Form::label('description', Lang::get('models.description').':') !!}
 {!! Form::text('description', null, ['class' => 'form-control']) !!}
+
+<!-- Description Field -->
+{!! Form::label('label_type_code', Lang::get('models.label_type_code').':') !!}
+{!! Form::text('label_type_code', null, ['class' => 'form-control', 'id' => 'autocomplete', 'table' => 'label_types']) !!}
 
 <!-- Tare Field -->
 {!! Form::label('tare', Lang::get('models.tare').':') !!}

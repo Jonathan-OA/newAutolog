@@ -21,8 +21,10 @@ class PackingTypeRepository extends BaseRepository
      */
     protected $fieldSearchable = [
         'code',
+        'company_id',
         'description',
         'tare',
+        'label_type_code',
         'capacity_kg',
         'capacity_m3',
         'capacity_un',

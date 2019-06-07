@@ -33,8 +33,10 @@ class PackingType extends Model
 	
     public $fillable = [
         'code',
+        'company_id',
         'description',
         'tare',
+        'label_type_code',
         'capacity_kg',
         'capacity_m3',
         'capacity_un',
@@ -51,6 +53,7 @@ class PackingType extends Model
     protected $casts = [
         'id' => 'integer',
         'code' => 'string',
+        'label_type_code' => 'string',
         'description' => 'string'
     ];
 

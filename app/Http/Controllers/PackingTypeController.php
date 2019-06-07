@@ -34,7 +34,7 @@ class PackingTypeController extends AppBaseController
     public function index(Request $request)
     {
         $this->packingTypeRepository->pushCriteria(new RequestCriteria($request));
-        $packingTypes = $this->packingTypeRepository->all();
+        $packingTypes = $this->packingTypeRepository->findByField('company_id', Auth::user()->company_id);
 
         return view('packing_types.index')
             ->with('packingTypes', $packingTypes);
@@ -200,6 +200,6 @@ class PackingTypeController extends AppBaseController
      */
     public function getData()
     {
-        return Datatables::of(App\Models\PackingType::all())->make(true);
+        return Datatables::of(App\Models\PackingType::where('company_id', Auth::user()->company_id))->make(true);
     }
 }
