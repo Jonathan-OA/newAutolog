@@ -8,6 +8,12 @@
                 <div class="panel-heading">
                     @lang('models.production')
                 </div>
+                <!-- Modal de Impressão de Documento-->
+                <!-- Passa como parâmetro para a modal o nome do módulo para indicar o controller para acessar as funções -->
+                <div class="modal fade" id="printModal" tabindex="-1" role="dialog"  aria-hidden="true">
+                    @include('layouts.printDoc', ['module' => 'production'])
+                </div>
+                <!-- -->
                 <div class="row">
                     <div class="col-md-12">
                         <!-- Alerta de erro / sucesso -->

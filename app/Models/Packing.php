@@ -130,15 +130,29 @@ class Packing extends Model
      /**
      * Função retorna os detalhes dos níveis de embalagem de um produto
      * Parâmetros: Código do produto e o ID da empresa / filial logada
+     * Filtros opcionais: create_label(GERAID) e print_label(GERAETQ)
      * @var array
      */
-    public static function getLevels($product_code, $company_id = ''){
+    public static function getLevels($product_code, $print_label = '', $create_label = '', $company_id = ''){
         
+        $GLOBALS['create_label'] = $create_label;
+        $GLOBALS['print_label'] = $print_label;
+
         $company_id = (trim($company_id == ''))?Auth::user()->company_id: $company_id;
         $levels = Packing::select('level','uom_code','prev_qty','prev_level','val_integer', 'prim_qty')
                          ->join('uoms','uoms.code','packings.uom_code')
                          ->where('company_id', Auth::user()->company_id)
                          ->where('product_code', $product_code)
+                         ->where(function ($query) {
+                            if(trim($GLOBALS['create_label']) <> ''){
+                                 $query->where('create_label',$GLOBALS['create_label']);
+                            }
+                         })
+                         ->where(function ($query) {
+                            if(trim($GLOBALS['print_label']) <> ''){
+                                 $query->where('print_label',$GLOBALS['print_label']);
+                            }
+                         })
                          ->get()
                          ->toArray();
 
@@ -157,8 +171,7 @@ class Packing extends Model
 
 
      //Retorna todos as embalagens disponíveis para o produto
-     //Filtros opcionais: create_label(GERAID) e print_label(GERAETQ)
-     public static function getPackings($produto, $create_label = '', $print_label = ''){
+     public static function getPackings($produto){
         return Packing::selectRaw("uom_code,CONCAT(level,' - ',uom_code) as description_f")
                         ->where('company_id', Auth::user()->company_id)
                         ->where('product_code', $produto)

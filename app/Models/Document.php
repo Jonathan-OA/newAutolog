@@ -84,7 +84,7 @@ class Document extends Model
                                  'documents.created_at','documents.updated_at','moviment_code', 'document_status.description',
                                  'inventory_status.description as inv_description', 'inventory_status_id', DB::raw("COUNT(DISTINCT document_items.id) as total_items"),
                                  DB::raw("ROUND(SUM(CASE WHEN document_items.qty_conf IS NULL THEN 0 ELSE document_items.qty_conf END)/SUM(document_items.qty)*100,0) as total_conf"),
-                                 'documents.delivery_date','documents.billing_date', 'document_types.lib_location', 'document_types.print_labels')
+                                 'documents.delivery_date','documents.billing_date', 'document_types.lib_location', 'document_types.print_labels','document_types.label_type_code')
                         ->join('document_types', 'documents.document_type_code', '=', 'document_types.code')
                         ->join('document_status', 'document_status.id', '=', 'documents.document_status_id')
                         ->leftJoin('inventory_status', 'inventory_status.id', '=', 'documents.inventory_status_id')
@@ -102,7 +102,7 @@ class Document extends Model
                                 'document_status_id','total_net_weigth','priority','comments','user_id',
                                 'documents.created_at','documents.updated_at','moviment_code', 'document_status.description',
                                 'inventory_status.description', 'inventory_status_id',  'document_types.lib_location', 'document_types.print_labels',
-                                'documents.delivery_date','documents.billing_date')
+                                'documents.delivery_date','documents.billing_date','document_types.label_type_code')
                        ->orderBy('documents.id', 'desc')
                        ->take($qty)
                        ->get();
@@ -539,14 +539,14 @@ class Document extends Model
     public static function getInfosForPrint($document_id){
 
        $infos = Document::select('documents.id as documents.id','documents.company_id as documents.company_id',
-                                 'number as documents.number','document_type_code as documents.document_type_code',
+                                 'documents.number as documents.number','document_type_code as documents.document_type_code',
                                  'documents.invoice as documents.invoice','documents.serial_number as documents.serial_number',
                                  'emission_date as documents.emission_date','start_date as documents.start_date',
                                  'end_date as documents.end_date', 'wave as documents.wave','total_volumes as documents.total_volumes',
                                  'total_weight as documents.total_weight','documents.document_status_id as documents.document_status_id',
                                  'total_net_weigth as documents.total_net_weigth','priority as documents.priority','comments as documents.comments',
                                  'documents.obs1 as documents.obs1','documents.obs2 as documents.obs2','documents.obs3 as documents.obs3',
-                                 'documents.user_id as documents.user_id','document_status.description',
+                                 'documents.user_id as documents.user_id','document_status.description','delivery_date as documents.delivery_date',
 
                                  'customer_code as documents.customer_code','customers.name as customers.name',
                                  'customers.trading_name as customers.trading_name','customers.cnpj as customers.cnpj',
@@ -577,7 +577,7 @@ class Document extends Model
                                  'vehicles.number_plate as vehicles.number_plate',
 
                                  DB::raw("COUNT(DISTINCT document_items.id) as total_items"),
-                                 DB::raw("SUM(Document_items.qty) as total_qty"),
+                                 DB::raw("SUM(document_items.qty) as total_qty"),
                                  DB::raw("ROUND(SUM(CASE WHEN document_items.qty_conf IS NULL THEN 0 ELSE document_items.qty_conf END)/SUM(document_items.qty)*100,0) as total_conf"))
                         
                         ->join('document_types', 'documents.document_type_code', '=', 'document_types.code')
@@ -600,16 +600,16 @@ class Document extends Model
                                 ->whereColumn('couriers.company_id','documents.company_id');
                         })
                         ->leftJoin('drivers', 'drivers.id', 'documents.driver_id')
-                        ->leftJoin('vehicles', 'vehicles.id', 'docum ents.vehicle_id')
+                        ->leftJoin('vehicles', 'vehicles.id', 'documents.vehicle_id')
                         ->where([
                                  ['documents.company_id', Auth::user()->company_id],
                                  ['documents.id', $document_id]                        
                         ])
-                       ->groupBy('documents.id','documents.company_id ','documents.number','documents.document_type_code',
-                                 'customer_code','supplier_code','courier_code','number_plate','driver.name','driver.license',
-                                 'driver.license','invoice','serial_number','emission_date','start_date','end_date','wave',
-                                 'total_volumes','total_weight','document_status_id','total_net_weigth','priority','comments','user_id',
-                                 'document_status.description','documents.obs1','documents.obs2','documents.obs3',
+                       ->groupBy('documents.id','documents.company_id','documents.number','documents.document_type_code',
+                                 'customer_code','supplier_code','courier_code','number_plate','drivers.name','drivers.license',
+                                 'drivers.license','documents.invoice','documents.serial_number','documents.emission_date','documents.start_date','end_date','wave',
+                                 'total_volumes','total_weight','documents.document_status_id','total_net_weigth','priority','documents.comments',
+                                 'documents.user_id','document_status.description','documents.obs1','documents.obs2','documents.obs3',
                                  'customers.name','customers.trading_name','customers.cnpj','customers.state_registration',
                                  'customers.address','customers.number','customers.neighbourhood', 'customers.zip_code', 
                                  'customers.phone1','customers.phone2','customers.country','customers.state','customers.city',
@@ -618,15 +618,18 @@ class Document extends Model
                                  'couriers.phone1','couriers.phone2','couriers.country','couriers.state','couriers.city',
                                  'suppliers.name','suppliers.trading_name','suppliers.cnpj','suppliers.state_registration',
                                  'suppliers.address','suppliers.number','suppliers.neighbourhood', 'suppliers.zip_code', 
-                                 'suppliers.phone1','suppliers.phone2','suppliers.country','suppliers.state','suppliers.city')
+                                 'suppliers.phone1','suppliers.phone2','suppliers.country','suppliers.state','suppliers.city',
+                                 'documents.delivery_date')
                        ->orderBy('documents.id', 'desc')
                        ->get();
         
         //Formata os campos de data
-        $infos->start_date->format('d/m/Y'); //Data de Inicio
-        $infos->end_date->format('d/m/Y'); //Data de Finalização
-        $infos->emission_date->format('d/m/Y'); //Data de Emissão
-        $infos->emission_date->format('d/m/Y'); //Data de Emissão
+        
+        //$infos->start_date->format('d/m/Y'); //Data de Inicio
+        //$infos->{'documents.end_date'}->format('d/m/Y'); //Data de Finalização
+        //$infos->{'documents.emission_date'}->format('d/m/Y'); //Data de Emissão
+        //$infos->{'documents.delivery_date'}->format('d/m/Y'); //Data de Entrega
+        //$infos->delivery_date->format('d/m/Y'); //Data de Entrega
 
         return $infos;
 

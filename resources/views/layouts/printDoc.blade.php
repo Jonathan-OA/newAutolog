@@ -6,7 +6,7 @@
                 <div class="panel-default" >
                     <div class="panel-heading">
                         <!-- Título baseado no arquivo de linguagem -->
-                        @lang('models.print')    
+                        @lang('models.print_doc')    
                     </div>
                 </div>
         </div>
@@ -47,34 +47,38 @@
 <script>
     $(function() {
 
-        //Valida se o IP do parametro print_server ($print_server) esta acessível, para assumir como o padrão
-        //Timeout de 2 segundos
-        //Global: False para não mostrar icone de loading
-        var ip_server = "http://localhost:9101";
-        $.ajax({
-            url: "http://{{$print_server}}:9101/printers",
-            global: false,
-            timeout: 2000,
-        }).always(function(jqXHR, textStatus) {
-            if (textStatus == 'success') {
-                //Existe
-                ip_server = "http://{{$print_server}}:9101";
-            }else{
-                //Servidor indisponivel
-                var ip = "{{$print_server}}";
-                $('#msg_excluir .alert').remove();
-                $('#msg_excluir').html('<div class="alert alert-info">@lang('infos.print_server', ["ip" => "'+ip+'"])</div>');
-            } 
-        });
-        //
-
 
         var label_type;
+        var document_id;
+
+        var ip_server = "http://localhost:9101";
+        var serverPrint = "http://{{$print_server}}:9101";
+
         //Chama ao clicar no botão para abrir a modal (primeiro botão de imprimir)
         $('#printModal').on('shown.bs.modal', function(event){
 
-            //Tenta pegar o valor do tipo de etiqueta do form
-            label_type = $('#label_type_code').val();
+            //Valida se o IP do parametro print_server ($print_server) esta acessível, para assumir como o padrão
+            //Timeout de 2 segundos
+            //Global: False para não mostrar icone de loading
+            $.ajax({
+                url: "http://{{$print_server}}:9101/printers",
+                global: false,
+                timeout: 2000,
+            }).always(function(jqXHR, textStatus) {
+                if (textStatus == 'success') {
+                    ip_server = "http://{{$print_server}}:9101";
+                }
+            });
+            //
+
+            try{
+                //Etiqueta e document_id enviados por parâmetro para a modal 
+                //(origem: buttonsDoc - Valores: data-label_type e data-document_id)
+                label_type = event.relatedTarget.dataset.label_type;
+                document_id = event.relatedTarget.dataset.document_id;
+            }catch(err){
+                console.log(err);
+            }
             
             var ip = $('#ip_local').val();
 
@@ -142,36 +146,35 @@
                 $('#msg_print').html('<div class="alert alert-info">'+msg+'</div>');
                 //Sugestão de link com FAQ para configurar impressão
                 $('#msg_excluir .alert').remove();
-                $('#msg_excluir').html('<div class="alert alert-info">@lang('infos.print_server') <a href="#">Ajuda</a></div>');
+                $('#msg_excluir').html('<div class="alert alert-info">@lang('infos.print_server', ['ip' => $print_server]) <a href="#">Ajuda</a></div>');
             });
         })
-
+        
+        //BOTÃO IMPRIMIR
         //Ao clicar no botão Imprimir (depois de selecionar fila e tipo de impressora)
         $('#formPrint').click(function(event){
             event.preventDefault();
 
-            //Pega quantidade
-            qty_print = $("#qty_print").val();
+            //Token para acessar sem erros as rotas posts
+            let tk = $('meta[name="csrf-token"]').attr('content');
 
             //Pega impressora selecionada
             printer = $("#printers").val();
 
             //Pega tipo de impressora selecionada
-            printer_type = $("#printer_type_code").val();
+            printer_type = $("#printer_types").val();
 
-            if(printer_type != '' && printer != '' && qty_print > 0){
-                //Pega os dados do formulário preenchido (etiquetas, lotes, produtos, etc.)
-                //e envia via ajax para impressão
-                var formData = $('form').serialize();
+            if(printer_type != '' && printer != ''){
 
-                //Primeiro ajax envia o formulário com os dados da etiqueta / documento para realizar a substituição 
-                //das variaveis nos layouts. Função print() no controler $moduleController.
+                //Primeiro ajax envia o os dados do documento para realizar a substituição 
+                //das variaveis no layout. Função printDoc() no controler $moduleController.
                 //$module =  recebido como parâmetro na modal que indica o controller que devemos acessar
                 //as funções de busca e substituição
+                
                 $.ajax({
-                    url: "{!! URL::to($module.'/print') !!}",
+                    url: "{!! URL::to($module.'/printDoc') !!}",
                     method: "POST",
-                    data: formData,
+                    data: {label_type, document_id, printer, printer_type, _token: tk},
                     success: function (fileCommands) {
                         //Segundo ajax envia o conteúdo para impressão
                         $.ajax({
@@ -181,7 +184,7 @@
                             success: function (data) {
                                 //Mostra mensagem de sucesso
                                 $('.alert').remove();
-                                $('#msg_excluir').html('<div class="alert alert-success">@lang('infos.print_success',["printer" => "'+printer+'", "qty" => "'+qty_print+'"])</div>');
+                                $('#msg_excluir').html('<div class="alert alert-success">@lang('infos.print_success',["printer" => "'+printer+'", "qty" => "1"])</div>');
                                 
                                 //Salva última fila utilizada para otimizar tempos futuros
                                 localStorage.setItem("AUTOLOGWMS_LastPrinter", printer);

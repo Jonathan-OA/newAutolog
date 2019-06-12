@@ -334,6 +334,7 @@ return [
     'traceability' => 'Rastreabilidade ',
     'viewer' => 'Pré-Visualização ',
     'print' => 'Impressão de Etiquetas ',
+    'print_doc' => 'Imprimir Documento ',
     'printer' => 'Impressora',
     'printConfig' => 'Configuração de Impressoras',
     'total' => 'Total '

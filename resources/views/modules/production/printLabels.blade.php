@@ -25,8 +25,9 @@
                                 {!! Form::open(['route' => 'production.print']) !!}
         
                                 <!-- Modal de Impressão -->
+                                <!-- Passa como parâmetro para a modal o nome do módulo para indicar o controller para acessar as funções -->
                                 <div class="modal fade" id="printModal" tabindex="-1" role="dialog"  aria-hidden="true">
-                                    @include('layouts.print')
+                                    @include('layouts.print', ['module' => 'production'])
 
                                     <!-- Tipo de Etiqueta a Ser gerada -->
                                     <input id="label_type_code" type="hidden" name="label_type_code" value="PRDCAD">
@@ -103,9 +104,13 @@
                                                         </div>
                                                     </td>
                                                     <td>
-                                                        <!-- Unidade Principal  -->
+                                                        <!-- Unidade de Impressão  -->
                                                         <div class="form-control">
-                                                            <input type="text" name="infos[{{$lineNum}}][uom_code]" value="{{$item['uom_code_print']}}" maxlength="4" size="4" readonly >
+                                                            <select name="infos[{{$lineNum}}][uom_code]">
+                                                                    @foreach ($uomPrints[$item['product_code']] as $uom => $info)
+                                                                        <option value = "{{$uom}}">{{$uom}}</option>
+                                                                    @endforeach
+                                                            </select>
                                                         </div>
                                                     </td>
                                                     <td>

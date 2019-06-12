@@ -31,7 +31,11 @@ class ProductionController extends AppBaseController
     }
 
     public function index(){
-        return view('modules.production.gridDoc'); 
+
+        //Busca parâmetro print_server com o IP do servidor de impressão da rede
+        $print_server = App\Models\Parameter::getParam('print_server', 'localhost');
+
+        return view('modules.production.gridDoc')->with('print_server',$print_server); 
     }
 
     //--------------------------------------------------------------------------------------------
@@ -165,12 +169,44 @@ class ProductionController extends AppBaseController
         if(App\Models\User::getPermission('documents_prod_print',Auth::user()->user_type_code)){
             $document = $this->documentRepository->findWithoutFail($document_id);
             $documentItems = App\Models\DocumentItem::getInfosForPrint($document_id);
-
+            $uomPrints = array();
+            //Pega níveis com impressão ativa
+            foreach($documentItems as $item){
+                $uomPrints[$item['product_code']] = App\Models\Packing::getLevels($item['product_code'], 1);
+            }
+            
             //Busca parâmetro print_server com o IP do servidor de impressão da rede
             $print_server = App\Models\Parameter::getParam('print_server', 'localhost');
 
             return view('modules.production.printLabels')->with('document',$document)
                                                          ->with('documentItems', $documentItems)
+                                                         ->with('print_server', $print_server)
+                                                         ->with('uomPrints', $uomPrints);
+        }else{
+            //Sem permissão
+            Flash::error(Lang::get('validation.permission'));
+            return redirect(url('production'));
+        }
+
+    }
+
+    /**
+     * Mostra a tela para impressão de etiquetas de documento
+     *
+     * @return Response
+     */
+
+    public function showPrintDoc($document_id)
+    {
+        //Valida se usuário possui permissão para acessar esta opção
+        if(App\Models\User::getPermission('documents_prod_print',Auth::user()->user_type_code)){
+            $document = $this->documentRepository->findWithoutFail($document_id);
+            $documentItems = App\Models\DocumentItem::getInfosForPrint($document_id);
+
+            //Busca parâmetro print_server com o IP do servidor de impressão da rede
+            $print_server = App\Models\Parameter::getParam('print_server', 'localhost');
+
+            return view('modules.production.printDoc')->with('document',$document)
                                                          ->with('print_server', $print_server);
         }else{
             //Sem permissão
@@ -182,7 +218,7 @@ class ProductionController extends AppBaseController
 
 
     /**
-     * Cria labels e retorna arquivo de impressão
+     * Cria labels e retorna arquivo de impressão das labels com as variaveis substituidas
      *
      * @param CreateLabelRequest $request
      *
@@ -195,8 +231,6 @@ class ProductionController extends AppBaseController
         $printer_type = $input['printer_type_code'];    //Tipo
         $printer = $input['printer'];                   //Fila
         $label_type_code = $input['label_type_code'];   //Tipo de etiqueta
-
-        $document = $this->documentRepository->findWithoutFail($input['document_id']);     //Documento
 
         //Busca comandos de impressão para a ETIQUETA / TIPO DE IMPRESSORA
         $comm = App\Models\LabelLayout::getCommands($label_type_code, $printer_type);
@@ -246,6 +280,40 @@ class ProductionController extends AppBaseController
         //Retorna para o arquivo com as variáveis já substituídas
         return $fileComm;
 
+
+    }
+
+    
+    /**
+     * Retorna arquivo de impressão de documento com as variaveis substituidas
+     *
+     * @param  $request
+     *
+     * @return Response
+     */
+    public function printDoc(Request $request)
+    {
+        $input = $request->all(); 
+
+        $printer_type = $input['printer_type'];    //Tipo
+        $printer = $input['printer'];                   //Fila
+        $label_type_code = $input['label_type'];   //Tipo de etiqueta
+
+        //Busca comandos de impressão para a ETIQUETA / TIPO DE IMPRESSORA
+        $comm = App\Models\LabelLayout::getCommands($label_type_code, $printer_type);
+
+        //'Arquivo' com todos os comandos substituidos
+        $fileComm = '';
+
+        //Pega as informações necessárias para impressão
+        $infos = App\Models\Document::getInfosForPrint($input['document_id']);
+        //Substitui as Variáveis no layout
+        $label_commands = App\Models\LabelLayout::subCommands($comm, $infos);
+        //Adiciona no 'arquivo'
+        $fileComm .= $label_commands;
+
+        //Retorna para o arquivo com as variáveis já substituídas
+        return $fileComm;
 
     }
 

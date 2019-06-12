@@ -23,10 +23,6 @@
 {!! Form::label('size_start', Lang::get('models.size_start').':') !!}
 {!! Form::number('size_start', (empty($labelVariable->size_start))?0:$labelVariable->size_start, ['class' => 'form-control']) !!}
 
-<!-- Size Start Field -->
-{!! Form::label('size_start', Lang::get('models.size_start').':') !!}
-{!! Form::number('size_start', (empty($labelVariable->size_start))?0:$labelVariable->size_start, ['class' => 'form-control']) !!}
-
 <!-- Decimal Places Field -->
 {!! Form::label('decimal_places', Lang::get('models.decimal_places').':') !!}
 {!! Form::select('decimal_places', [ 0 => 'Nenhuma', 1 => '1', 2 => '2', 3 => '3', 4 => '4', 5 => '5'], (!empty($labelVariable->decimal_places)) ? $labelVariable->decimal_places : '', ['class' => 'form-control', 'id' => 'decimal_places']) !!}

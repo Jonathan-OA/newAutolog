@@ -20,6 +20,12 @@
 {!! Form::label('moviment_code', Lang::get('models.moviment_code').':') !!}
 {!! Form::text('moviment_code', null, ['class' => 'form-control', 'id' => 'autocomplete', 'table' => 'moviments']) !!}
 
+
+<!-- Label Type Code Field -->
+{!! Form::label('label_type_code', Lang::get('models.label_type_code').':') !!}
+{!! Form::text('label_type_code', null, ['class' => 'form-control', 'id' => 'autocomplete2', 'table' => 'label_types']) !!}
+
+
 <!-- Lib Automatic Field -->
 {!! Form::label('lib_automatic', Lang::get('models.lib_automatic').':') !!}
 <div class="onoffswitch">
@@ -79,6 +85,8 @@
 {!! Form::label('lib_deposits', Lang::get('models.lib_deposits').':') !!}
 {!! Form::text('lib_deposits', null, ['class' => 'form-control','id' => 'autocomplete1', 'table' => 'deposits', 'multiple']) !!}
 </div>
+
+
 
 <!-- Submit Field -->
 {!! Form::submit(Lang::get('buttons.save'), ['class' => 'btn btn-primary']) !!}
