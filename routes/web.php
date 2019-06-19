@@ -238,12 +238,13 @@ Route::group(['middleware' => 'auth'], function() {
     Route::resource('documentTypes', 'DocumentTypeController');
 
     Route::get('packings/{datatable}', 'PackingController@getData');
-    Route::resource('packings', 'PackingController');
+    //Route::resource('packings', 'PackingController');
 
     Route::get('packings/datatable/{code}', 'PackingController@getData');
     Route::resource('packings', 'PackingController',['except' => 'create']);
     Route::get('packings/ix/{code}', 'PackingController@index');
     Route::get('packings/create/{code}', 'PackingController@create');
+    Route::get('packings/{product}/{uom}', 'PackingController@getLevel'); //Traz infos da unidade
 
     Route::get('activities/datatable/{task_id}', 'ActivityController@getData');
     Route::resource('activities', 'ActivityController',['except' => 'create']);

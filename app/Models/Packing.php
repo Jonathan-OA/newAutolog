@@ -137,9 +137,12 @@ class Packing extends Model
         
         $GLOBALS['create_label'] = $create_label;
         $GLOBALS['print_label'] = $print_label;
-
+        $ret = [];
+        
         $company_id = (trim($company_id == ''))?Auth::user()->company_id: $company_id;
-        $levels = Packing::select('level','uom_code','prev_qty','prev_level','val_integer', 'prim_qty')
+        $levels = Packing::select('level','uom_code','prev_qty','prev_level','val_integer', 'prim_qty',
+                                  'conf_length','conf_width','create_label','conf_batch', 'conf_serial',
+                                  'conf_batch_supplier','conf_due_date')
                          ->join('uoms','uoms.code','packings.uom_code')
                          ->where('company_id', Auth::user()->company_id)
                          ->where('product_code', $product_code)
@@ -161,7 +164,10 @@ class Packing extends Model
             //val_integer = Valida se a unidade só aceita valores inteiros
             $ret[$level['uom_code']] = ['level' => $level['level'], 'prev_qty' => $level['prev_qty'],
                                         'prev_level' => $level['prev_level'], 'int' => $level['val_integer'],
-                                        'prim_qty' => $level['prim_qty']];
+                                        'prim_qty' => $level['prim_qty'],'conf_length' => $level['conf_length'],
+                                        'conf_width' => $level['conf_width'],'create_label' => $level['create_label'],
+                                        'conf_batch' => $level['conf_batch'],'conf_serial' => $level['conf_serial'],
+                                        'conf_batch_supplier' => $level['conf_batch_supplier'],'conf_due_date' => $level['conf_due_date'],];
         }
 
         return $ret;

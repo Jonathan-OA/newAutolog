@@ -118,10 +118,11 @@ class DocumentItem extends Model
                                     'document_items.batch_supplier','document_items.serial_number','qty_conf','qty_ship','qty_reject','invoice','invoice_serial_number',
                                     'sequence_item','umvcad_id','location_code','source','document_items.obs1',
                                     'document_items.obs2','document_items.obs3','document_items.obs4','document_items.obs5',
-                                    'document_items.created_at', 'document_status.description','packings_imp.prev_qty','packings_imp.prim_qty',
-                                    'packings_imp.conf_length','packings_imp.conf_width','packings_imp.uom_code as uom_code_print',
-                                    'packings_imp.create_label','packings_imp.conf_batch', 'packings_imp.conf_serial',
-                                    'packings_imp.conf_batch_supplier','packings_imp.conf_due_date', DB::raw("COUNT(distinct labels.id) as total_labels"))
+                                    'document_items.created_at', 'document_status.description', DB::raw("COUNT(distinct labels.id) as total_labels"),
+                                    DB::raw("(SELECT pack_imp.UOM_CODE FROM packings pack_imp 
+                                              WHERE pack_imp.company_id = products.company_id and
+                                                    pack_imp.product_code = products.code and
+                                                    pack_imp.print_label= 1 LIMIT 1) as uom_print"))
                             ->join('document_status','document_status.id','document_items.document_status_id')
                             ->join('products', function ($join) {
                                 $join->on('products.code','document_items.product_code')
@@ -131,11 +132,6 @@ class DocumentItem extends Model
                                 $join->on('packings.product_code','document_items.product_code')
                                     ->whereColumn('packings.company_id','document_items.company_id')
                                     ->whereColumn('packings.uom_code','document_items.uom_code');
-                            })
-                            ->Join('packings as packings_imp', function ($join) {
-                                $join->on('packings_imp.product_code','document_items.product_code')
-                                    ->whereColumn('packings_imp.company_id','document_items.company_id')
-                                    ->where('packings_imp.print_label',1);
                             })
                             ->leftJoin('labels', function ($join) {
                                 $join->on('labels.document_id','document_items.document_id')
@@ -150,10 +146,7 @@ class DocumentItem extends Model
                                       'document_items.serial_number','qty_conf','qty_ship','qty_reject','invoice','invoice_serial_number',
                                       'sequence_item','umvcad_id','location_code','source','document_items.obs1',
                                       'document_items.obs2','document_items.obs3','document_items.obs4','document_items.obs5',
-                                      'document_items.created_at', 'document_status.description','packings_imp.prev_qty','packings_imp.prim_qty',
-                                      'packings_imp.conf_length','packings_imp.conf_width','packings_imp.uom_code',
-                                      'packings_imp.create_label','packings_imp.conf_batch', 'packings_imp.conf_serial',
-                                      'packings_imp.conf_batch_supplier','packings_imp.conf_due_date')
+                                      'document_items.created_at', 'document_status.description')
                             ->get()
                             ->toArray();
 

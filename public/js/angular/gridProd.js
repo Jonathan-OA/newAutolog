@@ -62,11 +62,18 @@ app.run(['$rootScope', function($rootScope) {
 
     //Ação ao clicar na linha do grid
     $rootScope.clickRowRS = function(row, col, $event, $scope, $animate, $compile, $timeout) {
+
+        //$rootScope.page = documents: veio do grid de documentos
+        //$rootScope.page = items : veio do grid de itens
+        $scopeC = ($rootScope.page == 'documents') ? $scope.gridApi : $scope.gridApiDet;
+
         //Só mostra a lista de botões se não estiver no modo ONDA
-        if (!$scope.gridApi.grid.options.multiSelect) {
+        if (!$scopeC.grid.options.multiSelect) {
 
             //Limpa a linhas e Seleciona a linha clicada
-            $scope.gridApi.selection.clearSelectedRows();
+            //if ($rootScope.page == 'documents') {
+            $scopeC.selection.clearSelectedRows();
+            // }
             row.isSelected = true;
 
             //Apaga outras caixas de botões que existirem
@@ -76,8 +83,8 @@ app.run(['$rootScope', function($rootScope) {
             $scope.row.status_inv = row.entity.inventory_status_id;
             $scope.row.status_doc = row.entity.document_status_id;
             //Pega id da ultima coluna
-            var ultCol = $scope.gridApi.grid.columns[$scope.gridApi.grid.columns.length - 1].uid;
-            var penultCol = $scope.gridApi.grid.columns[$scope.gridApi.grid.columns.length - 2].uid;
+            var ultCol = $scopeC.grid.columns[$scopeC.grid.columns.length - 1].uid;
+            var penultCol = $scopeC.grid.columns[$scopeC.grid.columns.length - 2].uid;
             //Pega posição a esquerda do elemento clicado
             var left = $($event.currentTarget).position().left;
             if (col.uid != ultCol && col.uid != penultCol) {
@@ -143,6 +150,7 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
         $scope.hasFilter = false;
         $scope.docsSelected = 0;
         $scope.clickFilter = 0;
+        $rootScope.page = 'documents';
         $scope.gridOptions = {
             enableFullRowSelection: false,
             enableRowSelection: false,
@@ -329,11 +337,14 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
 ]);
 
 //Grid de detalhes dos documentos
-app.controller('DetCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '$timeout', '$interval',
-    function($rootScope, $scope, $http, uiGridConstants, $timeout, $interval) {
+app.controller('DetCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '$timeout', '$interval', '$animate', '$compile',
+    function($rootScope, $scope, $http, uiGridConstants, $timeout, $interval, $animate, $compile) {
         $scope.gridDetalhes = {};
         $scope.gridDetalhes.data = [];
+        $rootScope.page = 'items';
         $scope.gridDetalhes = {
+            enableRowSelection: false,
+            rowSelection: true,
             enableFullRowSelection: false,
             multiSelect: false,
             enableFiltering: false,
@@ -356,7 +367,8 @@ app.controller('DetCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '
                 { name: 'Status', field: 'document_status_id', cellTemplate: '<div class="ui-grid-cell-contents"><div class="grid_cell stat{{grid.getCellValue(row, col)}}"><p>{{row.entity.description}}</p></div></div>' }
             ],
             enablePaginationControls: false,
-            paginationPageSize: 18
+            paginationPageSize: 18,
+            rowTemplate: '<div ng-click="grid.appScope.clickRow(row, col, $event)" ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.uid" class="ui-grid-cell" ng-class="col.colIndex()" ui-grid-cell></div>',
         };
 
         $scope.callRoute = function(route, async = 0) {

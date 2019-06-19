@@ -171,17 +171,31 @@ class ProductionController extends AppBaseController
             $documentItems = App\Models\DocumentItem::getInfosForPrint($document_id);
             $uomPrints = array();
             //Pega níveis com impressão ativa
+            //Índice será o código do produto e o valor será um subarray com todas as informações dos UOMs
+            //Ex: ['UN' => ['conf_batch' = 1, 'conf_serial' = 0]]
+            $prdsError = '';
             foreach($documentItems as $item){
                 $uomPrints[$item['product_code']] = App\Models\Packing::getLevels($item['product_code'], 1);
+                if(count($uomPrints[$item['product_code']]) == 0 ){
+                    //Produto não possui impressão ativa em nenhum nivel
+                    $prdsError.= "{$item['product_code']},";
+                }
             }
-            
-            //Busca parâmetro print_server com o IP do servidor de impressão da rede
-            $print_server = App\Models\Parameter::getParam('print_server', 'localhost');
 
-            return view('modules.production.printLabels')->with('document',$document)
-                                                         ->with('documentItems', $documentItems)
-                                                         ->with('print_server', $print_server)
-                                                         ->with('uomPrints', $uomPrints);
+            if(trim($prdsError) == ''){
+                //Busca parâmetro print_server com o IP do servidor de impressão da rede
+                $print_server = App\Models\Parameter::getParam('print_server', 'localhost');
+
+                return view('modules.production.printLabels')->with('document',$document)
+                                                            ->with('documentItems', $documentItems)
+                                                            ->with('print_server', $print_server)
+                                                            ->with('uomPrints', $uomPrints);
+            }else{
+                //Documento não possui itens com impressão ativa
+                $prdsError = substr($prdsError,0,-1);
+                Flash::error(Lang::get('validation.print_labels',['products' => $prdsError]));
+                return redirect(url('production'));
+            }
         }else{
             //Sem permissão
             Flash::error(Lang::get('validation.permission'));

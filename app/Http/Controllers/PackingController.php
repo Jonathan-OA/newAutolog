@@ -209,6 +209,20 @@ class PackingController extends AppBaseController
         }    
     }
 
+    
+    /**
+     * Retorna todas as informações de uma embalagem / produto específicos
+     *
+     * @param  string $product_code,$uom_code
+     *
+     * @return Response
+     */
+    public function getLevel($product_code, $uom_code)
+    {
+        return App\Models\Packing::getLevel($product_code, $uom_code);
+
+    }
+
     /**
      * Get data from model 
      *

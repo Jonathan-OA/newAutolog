@@ -111,6 +111,7 @@ return [
     'label_print'               => 'Não foi possível realizar a impressão. Valide as impressoras disponíveis. ',
     'printers_success'          => 'Impressoras habilitadas com sucesso. ',
     'printers_error'            => 'Erro ao habilitar impressoras. Verifique o servidor de impressão. ',
+    'print_labels'              => 'Os seguintes itens não possuem embalagens com impressão ativa: :products',
 
     /*
     |--------------------------------------------------------------------------
