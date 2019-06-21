@@ -33,11 +33,11 @@ class CustomerController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $this->customerRepository->pushCriteria(new RequestCriteria($request));
-        $customers = $this->customerRepository->all();
+        //$this->customerRepository->pushCriteria(new RequestCriteria($request));
+        //$customers = $this->customerRepository->all();
+        //Load dos itens é feito por datatable no index.blade.php
 
-        return view('partners.customers.index')
-            ->with('customers', $customers);
+        return view('partners.customers.index');
     }
 
     /**

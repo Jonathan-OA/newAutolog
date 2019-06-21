@@ -33,11 +33,11 @@ class SupplierController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $this->supplierRepository->pushCriteria(new RequestCriteria($request));
-        $suppliers = $this->supplierRepository->findByField('company_id', Auth::user()->company_id);
+        //$this->supplierRepository->pushCriteria(new RequestCriteria($request));
+        //$suppliers = $this->supplierRepository->findByField('company_id', Auth::user()->company_id);
+        //Load dos itens é feito por datatable no index.blade.php
 
-        return view('partners.suppliers.index')
-            ->with('suppliers', $suppliers);
+        return view('partners.suppliers.index');
     }
 
     /**

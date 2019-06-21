@@ -11,15 +11,13 @@
                 <th class="th_grid">@lang('models.action')</th>
             </thead>
             <tbody>
-            @foreach($products as $product)
                 <tr>
-                    <td>{!! $product->code !!}</td>
-                    <td>{!! $product->description !!}</td>
-                    <td>{!! $product->product_type_code !!}</td>
-                    <td>{!! $product->group_code !!}</td>
-                    <td>{!! $product->subgroup_code !!}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                 </tr>
-            @endforeach
             </tbody>
         </table>
         </div>

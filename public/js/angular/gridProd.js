@@ -14,14 +14,18 @@ app.config(['$qProvider', function($qProvider) {
     $qProvider.errorOnUnhandledRejections(false);
 }]);
 
-//Funções reaproveitadas no grid de documentos e no grid de itens
+//Funções reaproveitadas no grid de documentos e no grid de itens ROWSCOOPE
 app.run(['$rootScope', function($rootScope) {
 
     //Função que chama as rotas do laravel
     $rootScope.callRouteRS = function(route, async = 0, typeAjax = "get", $scope) {
 
+        //$rootScope.page = documents: veio do grid de documentos
+        //$rootScope.page = items : veio do grid de itens
+        $scopeC = ($rootScope.page == 'documents') ? $scope.gridApi : $scope.gridApiDet;
+
         //Pega todos os documentos selecionados para mandar como post
-        var documentsSelected = $scope.gridApi.selection.getSelectedRows();
+        var documentsSelected = $scopeC.selection.getSelectedRows();
 
         //async = 1 executa a função da URL sem sair da tela
         if (async == 1) {
@@ -52,7 +56,7 @@ app.run(['$rootScope', function($rootScope) {
             $('#options').remove();
 
             //Desabilita o modo Onda caso esteja ativado
-            if ($scope.gridApi.grid.options.multiSelect) $scope.toggleMultiSelect();
+            if ($scopeC.grid.options.multiSelect) $scope.toggleMultiSelect();
 
         } else {
             //Entra na rota passada por parâmetro
@@ -335,10 +339,9 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
         });
     }
 ]);
-
 //Grid de detalhes dos documentos
-app.controller('DetCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '$timeout', '$interval', '$animate', '$compile',
-    function($rootScope, $scope, $http, uiGridConstants, $timeout, $interval, $animate, $compile) {
+app.controller('DetCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '$timeout', '$animate', '$compile', '$filter',
+    function($rootScope, $scope, $http, uiGridConstants, $timeout, $animate, $compile, $filter) {
         $scope.gridDetalhes = {};
         $scope.gridDetalhes.data = [];
         $rootScope.page = 'items';
@@ -371,12 +374,20 @@ app.controller('DetCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '
             rowTemplate: '<div ng-click="grid.appScope.clickRow(row, col, $event)" ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.uid" class="ui-grid-cell" ng-class="col.colIndex()" ui-grid-cell></div>',
         };
 
-        $scope.callRoute = function(route, async = 0) {
+        $scope.callRouteConfirm = function(route, async = 0, msg, type = "get") {
+            if (confirm(msg)) {
+                //Chama função global que chama uma rota ao clicar no botão
+                $rootScope.callRouteRS(route, async, type, $scope);
+            }
+        }
+
+        $scope.callRoute = function(route, async = 0, type = "get") {
             //Chama função global que chama uma rota ao clicar no botão
-            $rootScope.callRouteRS(route, async, $scope);
+            $rootScope.callRouteRS(route, async, type, $scope);
         }
 
         $scope.clickRow = function(row, col, $event) {
+
             //Chama função global que manipula o click na linha do grid
             $rootScope.clickRowRS(row, col, $event, $scope, $animate, $compile, $timeout);
         }

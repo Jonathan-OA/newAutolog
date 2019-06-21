@@ -10,14 +10,12 @@
                 <th class="th_grid">@lang('models.action')</th>
             </thead>
             <tbody>
-            @foreach($suppliers as $supplier)
                 <tr>
-                    <td>{!! $supplier->code !!}</td>
-                    <td>{!! $supplier->name !!}</td>
-                    <td>{!! $supplier->trading_name !!}</td>
-                    <td>{!! $supplier->cnpj !!}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                 </tr>
-            @endforeach
             </tbody>
         </table>
         </div>
