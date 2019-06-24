@@ -51,7 +51,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('transfer/{document_id}/items', 'Modules\TransferController@showItems'); //Mostra grid de itens
     Route::get('transfer/{document_id}/items/create', 'Modules\TransferController@createItem'); //Form de criação de itens
     Route::get('transfer/{document_id}/items/{document_item_id}/edit', 'Modules\TransferController@editItem'); //Form de edição de itens
-    Route::patch('transfer/updateItem/{document_item_id}', 'Modules\TransferController@updateItem')->name('production.updateItem');; //Atualiza item
+    Route::patch('transfer/updateItem/{document_item_id}', 'Modules\TransferController@updateItem')->name('transfer.updateItem');; //Atualiza item
     Route::post('transfer/storeItem', 'Modules\TransferController@storeItem')->name('transfer.storeItem');; //Cria item
     Route::resource('transfer', 'Modules\TransferController'); //Ações de documentos de transferencia
     Route::get('stockTransfer', 'Modules\TransferController@stockTransfer'); //Tela de Transferência Manual
