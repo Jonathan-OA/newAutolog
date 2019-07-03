@@ -384,7 +384,16 @@ class ProductionController extends AppBaseController
         //Valida se usuário possui permissão para acessar esta opção
         if(App\Models\User::getPermission('documents_prod_item_add',Auth::user()->user_type_code)){
             $document = $this->documentRepository->findWithoutFail($document_id);
-            return view('modules.production.createItem')->with('document',$document);
+
+            if($document->document_status_id <> 0){
+                //Não pode editar documento já liberado
+                
+                Flash::error(Lang::get('validation.status_doc'));
+                return redirect(url('production/'.$document_id.'/items'));
+            }else{
+                return view('modules.production.createItem')->with('document',$document);
+            }
+            
         }else{
             //Sem permissão
             Flash::error(Lang::get('validation.permission'));

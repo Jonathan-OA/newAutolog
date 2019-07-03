@@ -169,11 +169,11 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
                 }, 50);
                 //Chama a função que preenche o grid
                 $scope.getFirstData();
-                //Caso o filtro não retorne nenhuma informação, busca todos os documentos
+                //Caso o filtro não retorne nenhuma informação, busca todos os documentos (se não estiver no modo onda)
                 $scope.gridApi.core.on.rowsRendered($scope, function() {
                     var qty_lines = $scope.gridApi.core.getVisibleRows($scope.gridApi.grid).length;
 
-                    if (qty_lines == 0 && $scope.gridOptions.enableFiltering && !$scope.hasFilter) {
+                    if (qty_lines == 0 && $scope.gridOptions.enableFiltering && !$scope.hasFilter && !$scope.gridApi.grid.options.multiSelect) {
                         //Variavel de controle para buscar o filtro externo apenas uma vez
                         $scope.hasFilter = true;
                         //Busca os dados novamente sem filtro de quantidade
@@ -191,7 +191,11 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
                         $rootScope.$broadcast('scrolled');
                     }
                 });
-
+                //Quando seleciona uma linha, incrementa qde de documentos (onda)
+                $scope.gridApi.selection.on.rowSelectionChanged($scope, function(rows) {
+                    $scope.docsSelected = $scope.gridApi.selection.getSelectedRows().length;
+                });
+                //Quando seleciona todos, incrementa qde de documentos (onda)
                 $scope.gridApi.selection.on.rowSelectionChangedBatch($scope, function(rows) {
                     $scope.docsSelected = $scope.gridApi.selection.getSelectedRows().length;
                 });
@@ -200,7 +204,7 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
             },
             enableGridMenu: true,
             columnDefs: [
-                { name: 'Número', field: 'number' },
+                { name: 'Número', field: 'number', type: 'number' },
                 { name: 'Tipo', field: 'document_type_code' },
                 {
                     name: 'Status',
@@ -220,7 +224,8 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
                 {
                     name: 'Produção',
                     field: 'total_conf',
-                    cellTemplate: '<div class="ui-grid-cell-contents" ><div class="progress"><div class="progress-bar bg-success" role="progressbar" style="width: {{row.entity.total_conf}}%;" aria-valuenow="{{row.entity.total_conf}}" aria-valuemin="0" aria-valuemax="100">{{row.entity.total_conf}}%</div></div></div></div>'
+                    type: 'number',
+                    cellTemplate: '<div class="ui-grid-cell-contents" ><div class="progress"><div class="progress-bar bg-success" role="progressbar" style="width: {{row.entity.total_conf}}%;max-width: 100% !important;" aria-valuenow="{{row.entity.total_conf}}" aria-valuemin="0" aria-valuemax="100">{{row.entity.total_conf}}%</div></div></div></div>'
                 },
                 { name: 'Onda', field: 'wave' },
                 { name: 'Emissão', field: 'emission_date', type: 'date', cellFilter: "dateFilter" },

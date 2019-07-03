@@ -83,7 +83,7 @@ class Document extends Model
                                  'documents.document_status_id','total_net_weigth','priority','comments','user_id',
                                  'documents.created_at','documents.updated_at','moviment_code', 'document_status.description',
                                  'inventory_status.description as inv_description', 'inventory_status_id', DB::raw("COUNT(DISTINCT document_items.id) as total_items"),
-                                 DB::raw("ROUND(SUM(CASE WHEN document_items.qty_conf IS NULL THEN 0 ELSE document_items.qty_conf END)/SUM(document_items.qty)*100,0) as total_conf"),
+                                 DB::raw("IFNULL(ROUND(SUM(CASE WHEN document_items.qty_conf IS NULL THEN 0 ELSE document_items.qty_conf END)/SUM(document_items.qty)*100,0),0) as total_conf"),
                                  'documents.delivery_date','documents.billing_date', 'document_types.lib_location', 'document_types.print_labels','document_types.label_type_code')
                         ->join('document_types', 'documents.document_type_code', '=', 'document_types.code')
                         ->join('document_status', 'document_status.id', '=', 'documents.document_status_id')

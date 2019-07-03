@@ -112,6 +112,7 @@ return [
     'printers_success'          => 'Impressoras habilitadas com sucesso. ',
     'printers_error'            => 'Erro ao habilitar impressoras. Verifique o servidor de impressão. ',
     'print_labels'              => 'Os seguintes itens não possuem embalagens com impressão ativa: :products',
+    'status_doc'                => 'Não é possível realizar esta ação com o documento já iniciado.',
 
     /*
     |--------------------------------------------------------------------------

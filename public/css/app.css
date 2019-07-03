@@ -7,6 +7,9 @@
         src: url('fonts/sifonn.otf');
     }
     /* --------------------------------------------*/
+    /*               Média Queries                 */
+    /* --------------------------------------------*/
+    /* --------------------------------------------*/
     /*               Layout Principal              */
     /* --------------------------------------------*/
     
@@ -178,7 +181,7 @@
     .pad-ct {
         padding-left: 12px;
         padding-right: 12px;
-        padding-top: 8px;
+        padding-top: 1vh;
     }
     
     .panel-heading,
@@ -193,7 +196,7 @@
     }
     
     .pbread {
-        height: 85.5vh !important;
+        height: 87vh !important;
     }
     
     .nav-tabs>li>a {
@@ -279,7 +282,11 @@
     
     .breadcrumb {
         margin-bottom: 0px;
-        margin-top: 5px;
+        margin-top: 1vh;
+        display: flex;
+        padding: 0px 15px !important;
+        height: 4vh !important;
+        align-items: center;
     }
     
     .options {

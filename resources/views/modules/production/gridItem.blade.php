@@ -20,7 +20,8 @@
                         <!-- Alerta de erro / sucesso -->
                         @include('flash::message')
                         <div class="row buttons_grid">
-                                <div class="icon_grid" aria-label="@lang('buttons.add')" data-microtip-position="bottom" role="tooltip">
+                                <!-- Adicionar novo item (somente para status pendente) -->
+                                <div class="icon_grid" ng-show="({{$document->document_status_id}} == 0)" aria-label="@lang('buttons.add')" data-microtip-position="bottom" role="tooltip">
                                     <a href="{!! url('production/'.$document->id.'/items/create') !!}">
                                         <img class='icon' src='{{asset('/icons/add.png') }}'>
                                     </a>
