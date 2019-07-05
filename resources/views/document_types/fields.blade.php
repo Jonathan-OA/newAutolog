@@ -26,6 +26,12 @@
 {!! Form::text('label_type_code', null, ['class' => 'form-control', 'id' => 'autocomplete2', 'table' => 'label_types']) !!}
 
 
+<!-- Operation Code Field -->
+{!! Form::label('operation_code', Lang::get('models.operation_code_doc').':') !!}
+{!! Form::text('operation_code', null, ['class' => 'form-control', 'id' => 'autocomplete3', 'table' => 'operations']) !!}
+
+
+
 <!-- Lib Automatic Field -->
 {!! Form::label('lib_automatic', Lang::get('models.lib_automatic').':') !!}
 <div class="onoffswitch">
@@ -65,6 +71,17 @@
     <input type="hidden" name="print_labels"  value="0" >
     {{ Form::checkbox('print_labels', 1, (!empty($documentType->print_labels)) ? $documentType->print_labels : 0 ,['class' => 'onoffswitch-checkbox', 'id' => 'print_labels']) }}
     <label class="onoffswitch-label" for="print_labels">
+        <span class="onoffswitch-inner"></span>
+        <span class="onoffswitch-switch"></span>
+    </label>
+</div>
+
+<!-- Print Labels Doc Field -->
+{!! Form::label('print_labels_doc', Lang::get('models.print_labels_doc').':') !!}
+<div class="onoffswitch">
+    <input type="hidden" name="print_labels_doc"  value="0" >
+    {{ Form::checkbox('print_labels_doc', 1, (!empty($documentType->print_labels_doc)) ? $documentType->print_labels_doc : 0 ,['class' => 'onoffswitch-checkbox', 'id' => 'print_labels_doc']) }}
+    <label class="onoffswitch-label" for="print_labels_doc">
         <span class="onoffswitch-inner"></span>
         <span class="onoffswitch-switch"></span>
     </label>

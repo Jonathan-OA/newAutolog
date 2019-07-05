@@ -40,9 +40,11 @@ class DocumentType extends Model
         'lib_location',
         'num_automatic',
         'print_labels',
+        'print_labels_doc',
         'partial_lib',
         'lib_deposits',
-        'label_type_code'
+        'label_type_code',
+        'operation_code'
     ];
 
     /**
@@ -58,9 +60,11 @@ class DocumentType extends Model
         'lib_location' => 'boolean',
         'num_automatic' => 'boolean',
         'print_labels' => 'boolean',
+        'print_labels_doc' => 'boolean',
         'partial_lib' => 'boolean',
         'lib_deposits' => 'string',
-        'label_type_code' => 'string'
+        'label_type_code' => 'string',
+        'operation_code' => 'string'
     ];
 
     /**
@@ -72,7 +76,8 @@ class DocumentType extends Model
         'code' => 'required|string|unique:document_types,code|max:5',
         'description' => 'required|string|max:50',
         'moviment_code' => 'required|string|exists:moviments,code|max:5',
-        'label_type_code' => '|string|exists:label_types,code|max:10',
+        'label_type_code' => 'string|exists:label_types,code|max:10',
+        'operation_code' => 'string|exists:operations,code|max:30',
     ];
 
     

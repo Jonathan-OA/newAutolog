@@ -261,6 +261,8 @@ return [
     'lib_location' => 'Lib. com End. Destino',
     'num_automatic' => 'Numeração Automática na Criação',
     'print_labels' => 'Tela de Impressão de Etiquetas',
+    'print_labels_doc' => 'Tela de Impressão de Documento',
+    'operation_code_doc' => 'Tarefa Principal a ser Criada na Liberação',
     'partial_lib' => 'Liberação de Saldo Parcial',
     'lib_deposits' => 'Depósitos Válidos',
     'qty_conf' => 'Quantidade Conferida',

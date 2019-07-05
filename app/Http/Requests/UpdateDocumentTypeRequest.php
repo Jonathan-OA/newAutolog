@@ -31,7 +31,8 @@ class UpdateDocumentTypeRequest extends FormRequest
             'code' => 'required|string|unique:document_types,code,'.$this->get('id').',id|max:5',
             'description' => 'required|string|max:50',
             'moviment_code' => 'required|string|exists:moviments,code|max:5',
-            'label_type_code' => 'string|exists:label_types,code,company_id,'.Auth::user()->company_id.'|max:10',
-            ];
+            'label_type_code' => 'nullable|string|exists:label_types,code,company_id,'.Auth::user()->company_id.'|max:10',
+            'operation_code' => 'nullable|string|exists:operations,code|max:30',    
+        ];
     }
 }

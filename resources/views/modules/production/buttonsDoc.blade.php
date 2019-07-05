@@ -40,9 +40,9 @@
             <button ng-click="callRouteConfirm('./document/cancel/prod', 1,'@lang('buttons.msg_cancel')','post')" class="icon_action" aria-label="@lang('buttons.cancel')" data-microtip-position="bottom" role="tooltip">
                 <img class='icon' src='{{ asset('/icons/cancelar.png') }}'> 
             </button>
-             <!-- Imprimir Documento (Apenas status 0 e Tipo de Documento com print_labels ativo) -->
+             <!-- Imprimir Documento (Apenas status 0 e Tipo de Documento com print_labels_doc ativo) -->
              <!-- Passa o tipo de etiqueta para a modal de impressão (data-labe_type) -->
-             <span ng-if="row.print_labels == 1">
+             <span ng-if="row.print_labels_doc == 1">
                 <button href="#" data-toggle="modal" data-target="#printModal"  
                     data-label_type="{%row.label_type_code%}"
                     data-document_id="{%row.id%}"

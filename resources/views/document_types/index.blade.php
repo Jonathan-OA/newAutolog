@@ -63,20 +63,15 @@
             columns: [  { data: 'code', className: 'td_center' },
                         { data: 'description' },
                         { data: 'moviment_code', className: 'td_center' },
-                        { data: 'lib_automatic', className: 'td_center' },
+                        { data: 'operation_code', className: 'td_center' },
                         { data: 'lib_location', className: 'td_center' },
                         { data: 'print_labels', className: 'td_center' },
+                        { data: 'print_labels_doc', className: 'td_center' },
                         { data: null,
                          className: "th_grid",
                          defaultContent: "<button id='edit' aria-label='@lang('buttons.edit')' data-microtip-position='left' role='tooltip' ><img class='icon' src='{{asset('/icons/editar.png') }}'></button><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='{{asset('/icons/remover.png') }}'></button><button id='rules' aria-label='@lang('buttons.rules')' data-microtip-position='left' role='tooltip'><img class='icon' src='{{asset('/icons/rules.png') }}'></button>"
                         }],
             "rowCallback": function( row, data, index ) {
-                    //Se ativo, coloca icone de habilitado
-                    if ( data.lib_automatic == 1 ) {
-                        $('td:eq(3)', row).html( "<img class='icon' src='{{asset('/icons/checked.png') }}'>" );
-                    }else{
-                        $('td:eq(3)', row).html('');
-                    }
                     //Se ativo, coloca icone de habilitado
                     if ( data.lib_location == 1 ) {
                         $('td:eq(4)', row).html( "<img class='icon' src='{{asset('/icons/checked.png') }}'>" )
@@ -88,6 +83,12 @@
                         $('td:eq(5)', row).html( "<img class='icon' src='{{asset('/icons/checked.png') }}'>" )
                     }else{
                         $('td:eq(5)', row).html('');
+                    }
+                    //Se ativo, coloca icone de habilitado
+                    if ( data.print_labels_doc == 1 ) {
+                        $('td:eq(6)', row).html( "<img class='icon' src='{{asset('/icons/checked.png') }}'>" )
+                    }else{
+                        $('td:eq(6)', row).html('');
                     }
                 }
       });

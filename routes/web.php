@@ -34,6 +34,20 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('production/storeItem', 'Modules\ProductionController@storeItem')->name('production.storeItem');; //Cria item
     Route::resource('production', 'Modules\ProductionController'); //Ações de documentos de produção
     // ----------------------------------------------------------------------------------------------
+    // Modulo de Separação
+    // ----------------------------------------------------------------------------------------------
+    Route::get('separation/{document_id}/print', 'Modules\SeparationController@showPrint'); //Mostra grid de impressão de etiquetas
+    Route::get('separation/{document_id}/liberate', 'Modules\SeparationController@showLibLocation'); //Mostra Tela de Endereço para Liberação
+    Route::post('separation/print', 'Modules\SeparationController@print')->name('separation.print'); //Cria Etiquetas e retorna o arquivo de impressão com as variaveis preenchidas
+    Route::post('separation/printDoc', 'Modules\SeparationController@printDoc')->name('separation.printDoc'); //Retorna o arquivo de impressão de documento
+    Route::get('separation/{document_id}/items', 'Modules\SeparationController@showItems'); //Mostra grid de itens
+    Route::get('separation/{document_id}/items/create', 'Modules\SeparationController@createItem'); //Form de criação de itens
+    Route::get('separation/{document_id}/items/{document_item_id}/edit', 'Modules\SeparationController@editItem'); //Form de edição de itens
+    Route::patch('separation/updateItem/{document_item_id}', 'Modules\SeparationController@updateItem')->name('separation.updateItem');; //Atualiza item
+    Route::post('separation/storeItem', 'Modules\SeparationController@storeItem')->name('production.storeItem');; //Cria item
+    Route::resource('separation', 'Modules\SeparationController'); //Ações de documentos de separação
+    
+    // ----------------------------------------------------------------------------------------------
     // Modulo de Recebimento
     // ----------------------------------------------------------------------------------------------
     Route::get('receipt/{document_id}/print', 'Modules\ReceiptController@showPrint'); //Mostra grid de impressão
