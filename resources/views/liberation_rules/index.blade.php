@@ -15,18 +15,16 @@
                    <!-- Texto baseado no arquivo de linguagem -->
                    @lang('models.liberation_rules') - {!! $moviment_code !!}
                 </div>
-                <div class="panel pbread panel-default">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <!-- Alerta de erro / sucesso -->
-                            @include('flash::message')
-                            <div id="msg_excluir"></div>
-                            <div class="row buttons_grid">
-                                <a class="btn btn-success"  href="{!! URL::to('liberationRules/create/'.$moviment_code) !!}">@lang('buttons.add')</a>
-                            </div>
-                            <div class="panel-body">
-                                @include('liberation_rules.table')
-                            </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <!-- Alerta de erro / sucesso -->
+                        @include('flash::message')
+                        <div id="msg_excluir"></div>
+                        <div class="row buttons_grid">
+                            <a class="btn btn-success"  href="{!! URL::to('liberationRules/create/'.$moviment_code) !!}">@lang('buttons.add')</a>
+                        </div>
+                        <div class="panel-body">
+                            @include('liberation_rules.table')
                         </div>
                     </div>
                 </div>
@@ -61,7 +59,6 @@
                 }
             },
             columns: [  { data: 'code', className: 'td_center'  },
-                        { data: 'moviment_code', className: 'td_center'  },
                         { data: 'description' },
                         { data: 'enabled', className: 'td_center'  },
                         { data: null,

@@ -23,6 +23,10 @@
 <!-- Url Field -->
 {!! Form::label('url', Lang::get('models.url').':') !!}
 {!! Form::text('url', null, ['class' => 'form-control']) !!}
+
+<!-- Moviment Code Field -->
+{!! Form::label('moviment_code', Lang::get('models.moviment_code').':') !!}
+{!! Form::text('moviment_code', null, ['class' => 'form-control', 'id' => 'autocomplete', 'table' => 'moviments']) !!}
 </div>
 
 <!-- Submit Field -->

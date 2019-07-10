@@ -25,6 +25,7 @@ return [
     */
     
     'actions_grid'              => 'Permite salvar / restaurar alterações realizadas no grid de documentos',
+    'actions_grid_det'          => 'Permite salvar / restaurar alterações realizadas no grid de detalhes de documentos',
     'liberation_inv'            => 'Documento :doc liberado com sucesso! ( :cont Contagem )',
     'liberation_doc'            => 'Documento :doc liberado com sucesso!',
     'cancel_doc'                => 'Documento :doc cancelado com sucesso!',

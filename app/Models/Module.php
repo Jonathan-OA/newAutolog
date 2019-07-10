@@ -27,7 +27,8 @@ class Module extends Model
         'name',
         'enabled',
         'icon',
-        'url'
+        'url',
+        'moviment_code'
     ];
 
     /**
@@ -42,7 +43,8 @@ class Module extends Model
         'enabled' => 'boolean',
         'name' => 'string',
         'icon' => 'string',
-        'url' => 'string'
+        'url' => 'string',
+        'moviment_code' => 'string'
     ];
 
     /**
@@ -51,7 +53,10 @@ class Module extends Model
      * @var array
      */
     public static $rules = [
-        
+        'module' => 'required|max:20',
+        'submodule' => 'max:20',
+        'moviment_code' => 'nullable|exists:moviments,code|max:5',
+
     ];
 
     //Retorna todos os módulos disponíveis

@@ -20,6 +20,12 @@ $(document).ready(function(e) {
 
     })
 
+    //Fecha caixa com botões do grid (se abertos)
+    $('.buttons_grid').click(function() {
+        $('#options').remove();
+    })
+
+
     var id = "";
 
     function split(val) {

@@ -116,32 +116,62 @@ app.run(['$rootScope', function($rootScope) {
     }
 
     //Salva grid modificado
-    $rootScope.saveStateRS = function($scope, name, $http) {
-        var datas = $scope.gridApi.saveState.save();
-        localStorage.setItem(name, JSON.stringify(datas));
+    $rootScope.saveStateRS = function($scope, $http) {
+
+        //$rootScope.page = documents: veio do grid de documentos
+        //$rootScope.page = items : veio do grid de itens
+        if ($rootScope.page == 'documents') {
+            $scopeC = $scope.gridApi;
+            $url = 'api/grid';
+        } else {
+            $scopeC = $scope.gridApiDet;
+            $url = '../../api/grid';
+        }
+        var datas = $scopeC.saveState.save();
+        //Salva na sessão
+        localStorage.setItem($scope.gridCode, JSON.stringify(datas));
+        //Salva no banco
         $http({
             method: 'POST',
-            url: 'api/grid'
-        }).then(function(data) {
-            $scope.PostDataResponse = data;
+            url: $url,
+            data: { 'config': datas, 'code': $scope.gridCode }
+        }).then(function(res) {
+            //Mostra mensagem de sucesso ou erro
+            $('.alert').remove();
+            $('#msg_excluir').html('<div class="alert alert-' + res.data[0] + '">' + res.data[1] + '</div>');
+            $('.alert').html(res.data[1]);
         }, function(error) {
             console.log("Erro ao buscar Grid Salvo");
         });
     }
 
     //Restaura grid salvo anteriormente
-    $rootScope.restoreStateRS = function($scope, name, $http) {
-        var columns = localStorage.getItem(name);
-        if (columns) {
-            $scope.gridApi.saveState.restore($scope, JSON.parse(columns));
+    $rootScope.restoreStateRS = function($scope, $http) {
+
+        //$rootScope.page = documents: veio do grid de documentos
+        //$rootScope.page = items : veio do grid de itens
+        if ($rootScope.page == 'documents') {
+            $scopeC = $scope.gridApi;
+            $url = 'api/grid/';
         } else {
+            $scopeC = $scope.gridApiDet;
+            $url = '../../api/grid/';
+        }
+
+        var columns = localStorage.getItem($scope.gridCode);
+        if (columns) {
+            $scopeC.saveState.restore($scope, JSON.parse(columns));
+        } else {
+            //Se não encontrou a configuração na sessão, busca no banco
             $http({
                 method: 'GET',
-                url: 'api/grid/Producao'
+                url: $url + $scope.gridCode
             }).then(function(data) {
-                $scope.gridApi.saveState.restore($scope, data);
+                $scopeC.saveState.restore($scope, data);
             });
         }
+
+        $('.alert').remove();
     }
 
 }]);
@@ -151,6 +181,8 @@ app.run(['$rootScope', function($rootScope) {
 //Grid de documentos
 app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '$timeout', '$animate', '$compile', '$filter',
     function($rootScope, $scope, $http, uiGridConstants, $timeout, $animate, $compile, $filter) {
+        //Código do grid a ser salvo / recuperado no banco
+        $scope.gridCode = 'AUTOLOGWMS_GridProd';
         $scope.hasFilter = false;
         $scope.docsSelected = 0;
         $scope.clickFilter = 0;
@@ -162,10 +194,12 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
             multiSelect: false,
             enableFiltering: false,
             fastWatch: true,
+            enableColumnResizing: true,
+            enableHorizontalScrollbar: true,
             onRegisterApi: function(gridApi) {
                 $scope.gridApi = gridApi;
                 $timeout(function() {
-                    $scope.restoreState('AUTOLOGWMS_GridProd');
+                    $scope.restoreState($scope.gridCode);
                 }, 50);
                 //Chama a função que preenche o grid
                 $scope.getFirstData();
@@ -204,12 +238,13 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
             },
             enableGridMenu: true,
             columnDefs: [
-                { name: 'Número', field: 'number', type: 'number' },
-                { name: 'Tipo', field: 'document_type_code' },
+                { name: 'Número', field: 'number', type: 'number', minWidth: 120 },
+                { name: 'Tipo', field: 'document_type_code', minWidth: 100 },
                 {
                     name: 'Status',
                     field: 'document_status_id',
                     display: 'description',
+                    minWidth: 150,
                     filter: {
                         noTerm: true,
                         type: uiGridConstants.filter.SELECT,
@@ -219,20 +254,21 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
                     },
                     cellTemplate: '<div class="ui-grid-cell-contents" ><div class="grid_cell stat{{grid.getCellValue(row, col)}}"> <p>{{row.entity.description}}</p></div></div>'
                 },
-                { name: 'Itens', field: 'total_items', type: 'number' },
-                { name: 'Cliente', field: 'customer_code' },
+                { name: 'Itens', field: 'total_items', type: 'number', width: 70, enableColumnResizing: false },
+                { name: 'Cliente', field: 'customer', minWidth: 220 },
                 {
                     name: 'Produção',
                     field: 'total_conf',
+                    minWidth: 110,
                     type: 'number',
                     cellTemplate: '<div class="ui-grid-cell-contents" ><div class="progress"><div class="progress-bar bg-success" role="progressbar" style="width: {{row.entity.total_conf}}%;max-width: 100% !important;" aria-valuenow="{{row.entity.total_conf}}" aria-valuemin="0" aria-valuemax="100">{{row.entity.total_conf}}%</div></div></div></div>'
                 },
-                { name: 'Onda', field: 'wave' },
-                { name: 'Emissão', field: 'emission_date', type: 'date', cellFilter: "dateFilter" },
+                { name: 'Onda', field: 'wave', minWidth: 150 },
+                { name: 'Emissão', field: 'emission_date', type: 'date', cellFilter: "dateFilter", minWidth: 100, enableColumnResizing: false },
 
-                { name: 'Transportadora', field: 'courier_code' },
-                { name: 'Início', field: 'start_date', type: 'date', cellFilter: "dateFilter" },
-                { name: 'Finalização', field: 'end_date', type: 'date', cellFilter: "dateFilter" }
+                { name: 'Transportadora', field: 'courier', minWidth: 220 },
+                { name: 'Início', field: 'start_date', type: 'date', cellFilter: "dateFilterHr", minWidth: 130, enableColumnResizing: false },
+                { name: 'Finalização', field: 'end_date', type: 'date', cellFilter: "dateFilterHr", minWidth: 130, enableColumnResizing: false }
             ],
             enablePaginationControls: true,
             paginationPageSizes: [25, 50, 75],
@@ -263,13 +299,13 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
 
 
         //Salva o grid atual em uma variavel de sessão e banco (ajax)
-        $scope.saveState = function(name) {
-            $rootScope.saveStateRS($scope, name, $http);
+        $scope.saveState = function() {
+            $rootScope.saveStateRS($scope, $http);
         };
 
         //Restaura o grid salvo em sessão ou banco (ajax)
-        $scope.restoreState = function(name) {
-            $rootScope.restoreStateRS($scope, name, $http);
+        $scope.restoreState = function() {
+            $rootScope.restoreStateRS($scope, $http);
         };
 
         //Carrega grid com os 3 mil ultimos documentos
@@ -306,6 +342,7 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
             if ($scope.gridApi.grid.options.multiSelect) {
                 $scope.gridOptions.enableFiltering = true;
                 $scope.gridApi.grid.columns[3].filters[0].term = 0;
+                $('#options').remove(); //Fecha caixa com botões se houver alguma aberta
             } else {
                 $scope.gridOptions.enableFiltering = false;
                 $scope.gridApi.grid.columns[3].filters[0].term = '';
@@ -347,6 +384,8 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
 //Grid de detalhes dos documentos
 app.controller('DetCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '$timeout', '$animate', '$compile', '$filter',
     function($rootScope, $scope, $http, uiGridConstants, $timeout, $animate, $compile, $filter) {
+        //Código do grid a ser salvo / recuperado no banco
+        $scope.gridCode = 'AUTOLOGWMS_GridProd_Det';
         $scope.gridDetalhes = {};
         $scope.gridDetalhes.data = [];
         $rootScope.page = 'items';
@@ -360,7 +399,7 @@ app.controller('DetCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '
             onRegisterApi: function(gridApiDet) {
                 $scope.gridApiDet = gridApiDet;
                 $timeout(function() {
-                    $scope.restoreState('AUTOLOGWMS_GridProd_Det');
+                    $scope.restoreState($scope.gridCode);
                 }, 50);
             },
             enableGridMenu: true,
@@ -399,13 +438,13 @@ app.controller('DetCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '
 
 
         //Salva o grid atual em uma variavel de sessão e banco (ajax)
-        $scope.saveState = function(name) {
-            $rootScope.saveStateRS($scope, name, $http);
+        $scope.saveState = function() {
+            $rootScope.saveStateRS($scope, $http);
         };
 
         //Restaura o grid salvo em sessão ou banco (ajax)
-        $scope.restoreState = function(name) {
-            $rootScope.restoreStateRS($scope, name, $http);
+        $scope.restoreState = function() {
+            $rootScope.restoreStateRS($scope, $http);
         };
 
         //Carrega a tabela quando clicar nos detalhes do documento
@@ -437,6 +476,17 @@ app.filter('dateFilter', function() {
     return function(value) {
         if (value) {
             return moment(value).format('DD/MM/YY');
+        } else {
+            return '';
+        }
+    };
+})
+
+//Filtro para converter data e hora
+app.filter('dateFilterHr', function() {
+    return function(value) {
+        if (value) {
+            return moment(value).format('DD/MM/YY hh:mm');
         } else {
             return '';
         }

@@ -28,8 +28,7 @@ class Grid extends Model
 	
     public $fillable = [
         'company_id',
-        'module',
-        'submodule',
+        'code',
         'columns'
     ];
 
@@ -41,8 +40,7 @@ class Grid extends Model
     protected $casts = [
         'id' => 'integer',
         'company_id' => 'integer',
-        'module' => 'string',
-        'submodule' => 'string',
+        'code' => 'string',
         'columns' => 'string'
     ];
 

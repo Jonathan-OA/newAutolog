@@ -22,6 +22,7 @@ class MenuMid
                              ->orwhere('submodule', '')
                              ->get();
             $cont = 1;
+            print_r($modulos);
             foreach($modulos as $mod){
                 $nickname = 'Nick'.$cont;
                 $menu->add($mod->name, array('class' => 'menu_ext', 'nickname' => $nickname))

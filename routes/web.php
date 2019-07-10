@@ -108,8 +108,8 @@ Route::group(['middleware' => 'auth'], function() {
         return App\Models\InventoryItem::getItens($document_id, $stsDsc);
     });
     Route::get('/api/itemsProd/{document}', 'Modules\ProductionController@getItems');
-    Route::post('/api/grid/', 'Modules\Geral\GridController@setColumns');
-    Route::get('/api/grid/{module}', 'Modules\Geral\GridController@getColumns');
+    Route::post('/api/grid/', 'GridController@setColumns');
+    Route::get('/api/grid/{module}', 'GridController@getColumns');
     Route::get('/api/operations/{module}', 'Modules\Geral\Operation@getOperations');
 
     //Retorna informações de um gráfico cadastrado

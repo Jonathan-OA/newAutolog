@@ -77,9 +77,9 @@ class Document extends Model
      */
 
     public static function getDocuments($moviment_code, $qty){
-        $docs = Document::select('documents.id','documents.company_id','number','document_type_code','customer_code',
-                                 'supplier_code','courier_code','vehicle_id','driver_id','documents.invoice','documents.serial_number',
-                                 'emission_date','start_date','end_date','wave','total_volumes','total_weight',
+        $docs = Document::select('documents.id','documents.company_id','documents.number','document_type_code',DB::raw("CONCAT(customer_code,' - ',customers.trading_name) as customer"),
+                                  DB::raw("CONCAT(supplier_code,' - ',suppliers.trading_name) as supplier"),DB::raw("CONCAT(courier_code,' - ',couriers.trading_name) as courier"),
+                                  'vehicle_id','driver_id','documents.invoice','documents.serial_number','emission_date','start_date','end_date','wave','total_volumes','total_weight',
                                  'documents.document_status_id','total_net_weigth','priority','comments','user_id',
                                  'documents.created_at','documents.updated_at','moviment_code', 'document_status.description',
                                  'inventory_status.description as inv_description', 'inventory_status_id', DB::raw("COUNT(DISTINCT document_items.id) as total_items"),
@@ -88,6 +88,18 @@ class Document extends Model
                                  'document_types.print_labels_doc')
                         ->join('document_types', 'documents.document_type_code', '=', 'document_types.code')
                         ->join('document_status', 'document_status.id', '=', 'documents.document_status_id')
+                        ->leftJoin('customers', function ($joint) {
+                            $joint->on('customers.code', '=', 'documents.customer_code')
+                                 ->whereColumn('customers.company_id','documents.company_id');
+                        })
+                        ->leftJoin('suppliers', function ($join) {
+                            $join->on('suppliers.code', '=', 'documents.supplier_code')
+                                 ->whereColumn('suppliers.company_id','documents.company_id');
+                        })
+                        ->leftJoin('couriers', function ($join) {
+                            $join->on('couriers.code', '=', 'documents.courier_code')
+                                 ->whereColumn('couriers.company_id','documents.company_id');
+                        })
                         ->leftJoin('inventory_status', 'inventory_status.id', '=', 'documents.inventory_status_id')
                         ->leftJoin('document_items', function ($join) {
                             $join->on('documents.id', '=', 'document_items.document_id')
@@ -97,7 +109,7 @@ class Document extends Model
                                  ['documents.company_id', Auth::user()->company_id],
                                  ['document_types.moviment_code', $moviment_code]                        
                        ])
-                       ->groupBy('documents.id','company_id','number','document_type_code','customer_code',
+                       ->groupBy('documents.id','documents.company_id','documents.number','document_type_code','customer_code',
                                 'supplier_code','courier_code','vehicle_id','driver_id','invoice','serial_number',
                                 'emission_date','start_date','end_date','wave','total_volumes','total_weight',
                                 'document_status_id','total_net_weigth','priority','comments','user_id',

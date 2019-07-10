@@ -215,6 +215,8 @@
 @section('scripts')
     <script>
         $(function() {
+
+
             //Funções ao preencher um campo de input
             $("input").on('keyup change',function () {
                 var tr = $(this).closest('tr');
@@ -225,9 +227,9 @@
                 if(id == 'qty_print' || id == 'prim_qty'){
                     var qty_print = parseFloat(tr.find('input#qty_print').val());
                     var prim_qty = parseFloat(tr.find('input#prim_qty').val());
-                    var total = qty_print * prim_qty;
+                    var total = (qty_print * prim_qty).toFixed(6);
                     //Atribui valor a coluna correta
-                    tr.find('td.total').html(total);
+                    tr.find('td.total').html(total.replace('.',','));
                 }
 
                 if(id == 'qty_print' || id == 'prim_qty'){

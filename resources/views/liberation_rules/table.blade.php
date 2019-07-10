@@ -4,7 +4,6 @@
         <table class="table table-bordered table-striped" id="liberationRules-table" cellspacing="0" width="100%">
             <thead>
                 <th class="th_grid">@lang('models.code') </th>
-                <th class="th_grid">@lang('models.moviment_code') </th>
                 <th class="th_grid">@lang('models.description') </th>
                 <th class="th_grid">@lang('models.enabled') </th>
                 <th class="th_grid">@lang('models.action')</th>
@@ -13,7 +12,6 @@
             @foreach($liberationRules as $liberationRule)
                 <tr>
                     <td>{!! $liberationRule->code !!}</td>
-                    <td>{!! $liberationRule->moviment_code !!}</td>
                     <td>{!! $liberationRule->description !!}</td>
                     <td>{!! $liberationRule->enabled !!}</td>
                 </tr>

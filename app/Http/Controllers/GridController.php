@@ -78,26 +78,6 @@ class GridController extends AppBaseController
     }
 
     /**
-     * Display the specified Grid.
-     *
-     * @param  int $id
-     *
-     * @return Response
-     */
-    public function show($id)
-    {
-        $grid = $this->gridRepository->findWithoutFail($id);
-
-        if (empty($grid)) {
-            Flash::error(Lang::get('validation.not_found'));
-
-            return redirect(route('grids.index'));
-        }
-
-        return view('grids.show')->with('grid', $grid);
-    }
-
-    /**
      * Show the form for editing the specified Grid.
      *
      * @param  int $id
@@ -192,6 +172,57 @@ class GridController extends AppBaseController
             Flash::error(Lang::get('validation.permission'));
             return array(1,Lang::get('validation.permission'));
         }    
+    }
+
+
+    /**
+     * Recupera as configurações salvas de um grid para um determinado modulo
+     *
+     * @param  string $code
+     *
+     * @return Response
+     */
+    function getColumns($code){
+        $grid = App\Models\Grid::where('code', $code)
+                       ->where('company_id', Auth::user()->company_id)
+                       ->first();
+        return json_decode($grid->columns, true);
+    }
+    
+    /**
+     * Seta as configurações salvas de um grid para um determinado modulo
+     *
+     * @param  string $code, $string $columns
+     *
+     * @return Response
+     */
+    function setColumns(Request $request){
+
+        $input = $request->all();
+        $code = $input['code'];
+        $columns = $input['config'];
+        if(App\Models\User::getPermission('grids_edit',Auth::user()->user_type_code)){
+            
+            $grid = App\Models\Grid::where('code', $code)
+                        ->where('company_id', Auth::user()->company_id)
+                        ->first();
+            if(!isset($grid)){
+                //Grid ainda não existe
+                $grid = new App\Models\Grid();
+                $grid->company_id = Auth::user()->company_id;
+                $grid->code = $code;
+            }
+
+            $grid->columns = json_encode($columns);
+            if($grid->save()){
+                Flash::success(Lang::get('validation.grid_success'));
+                return array('success',Lang::get('validation.grid_success'));
+            }
+        }else{
+            //Sem permissão
+            Flash::error(Lang::get('validation.permission'));
+            return array('danger',Lang::get('validation.permission'));
+        }
     }
 
     /**
