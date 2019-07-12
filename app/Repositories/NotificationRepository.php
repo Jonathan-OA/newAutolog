@@ -8,7 +8,7 @@ use InfyOm\Generator\Common\BaseRepository;
 /**
  * Class NotificationRepository
  * @package App\Repositories
- * @version August 16, 2018, 10:24 am -03
+ * @version July 10, 2019, 5:34 pm -03
  *
  * @method Notification findWithoutFail($id, $columns = ['*'])
  * @method Notification find($id, $columns = ['*'])
@@ -20,7 +20,9 @@ class NotificationRepository extends BaseRepository
      * @var array
      */
     protected $fieldSearchable = [
-        'message'
+        'user_id',
+        'message',
+        'visualized'
     ];
 
     /**

@@ -99,7 +99,7 @@
                     $('#msg_print').html('<div class="alert alert-info">'+msg+'</div>');
                 }
             }).fail(function() {
-                //Erro na Busca do Servidos
+                //Erro na Busca do Servidor
                 var msg = "@lang('validation.label_types')";
                 $('#msg_print .alert').remove();
                 $('#msg_print').html('<div class="alert alert-info">'+msg+' (Ajax)</div>');
@@ -115,11 +115,8 @@
 
                 //Valida se existe mais impressoras configuradas alem da TST (Primeira Vez após instalar o PrintServer)
                 if(options.printers.length == 1 && options.printers[0]['TST'] == 'TST'){
-                    //Envia para a página de configuração
+                    //Abre a página de configuração em outra aba
                     window.open('{!! URL::to('printConfig') !!}', '_blank');
-                    //Fecha modal e cancela o resto do processamento
-                    $('#printModal').modal('toggle');
-                    event.stopPropagation();
                 }
                 
                 //Pega variável salva no browser com a ultima fila utilizada

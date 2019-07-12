@@ -34,7 +34,7 @@ class NotificationController extends AppBaseController
     public function index(Request $request)
     {
         $this->notificationRepository->pushCriteria(new RequestCriteria($request));
-        $notifications = $this->notificationRepository->findByField('company_id', Auth::user()->company_id);
+        $notifications = $this->notificationRepository->all();
 
         return view('notifications.index')
             ->with('notifications', $notifications);

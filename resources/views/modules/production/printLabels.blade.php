@@ -141,7 +141,7 @@
                                                     <td>
                                                         <!-- Lote -->
                                                         <!-- old() pega o valor informado anteriormente pelo usuario ou o valor padrão (do banco) -->
-                                                        <div class="form-control {{(trim($rBatch) == '')? 'input_error' : ''}}" >
+                                                        <div class="form-control {{(trim($rBatch) == '')? ((trim($item['batch']) == '')?'input_error required':'required') : ''}}" >
                                                         <input type="text" name="infos[{{$lineNum}}][batch]" value="{{ old("infos.$lineNum.batch", $item['batch'])}}" 
                                                             size="10" maxlength="20" {{$rBatch}}>
                                                         </div>
@@ -149,7 +149,7 @@
                                                     <td>
                                                         <!-- Lote Fornecedor-->
                                                         <!-- old() pega o valor informado anteriormente pelo usuario ou o valor padrão (do banco) -->
-                                                        <div class="form-control {{(trim($rBatchSup) == '')? 'input_error' : ''}}">
+                                                        <div class="form-control {{(trim($rBatchSup) == '')? ((trim($item['batch_supplier']) == '')?'input_error required':'required') : ''}}" >
                                                             <input type="text" name="infos[{{$lineNum}}][batch_supplier]" value="{{ old("infos.$lineNum.batch_supplier", $item['batch_supplier'])}}"
                                                              size="10" maxlength="20"  {{$rBatchSup}}>
                                                         </div>

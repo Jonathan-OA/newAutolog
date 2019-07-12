@@ -111,6 +111,8 @@ app.run(['$rootScope', function($rootScope) {
         } else {
             //Seleciona linha
             row.isSelected = !row.isSelected;
+            //Atualiza qde de documentos selecionados na onda
+            $scope.docsSelected = $scope.gridApi.selection.getSelectedRows().length;
         }
 
     }

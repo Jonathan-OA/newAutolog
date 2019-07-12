@@ -1,3 +1,4 @@
+
 @extends('layouts.app')
 
 @section('content')
@@ -51,8 +52,7 @@
                     sPrevious: "@lang('models.previous')",
                 }
             },
-            columns: [ { data: 'message' },
-               
+            columns: [ $FIELDS_DATATABLE$
                        { data: null,
                          className: "th_grid",
                          defaultContent: "<button id='edit' aria-label='@lang('buttons.edit')' data-microtip-position='left' role='tooltip' ><img class='icon' src='{{asset('/icons/editar.png') }}'></button><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='{{asset('/icons/remover.png') }}'></button>",

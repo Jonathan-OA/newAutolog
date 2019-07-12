@@ -114,8 +114,8 @@
                     //Envia para a página de configuração
                     window.open('{!! URL::to('printConfig') !!}', '_blank');
                     //Fecha modal e cancela o resto do processamento
-                    $('#printModal').modal('toggle');
-                    event.stopPropagation();
+                    //$('#printModal').modal('toggle');
+                    //event.stopPropagation();
                 }
                 
                 //Pega variável salva no browser com a ultima fila utilizada

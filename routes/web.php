@@ -443,3 +443,6 @@ Route::group(['middleware' => 'auth'], function() {
 
 Route::get('labelVariables/datatable', 'LabelVariableController@getData');
 Route::resource('labelVariables', 'LabelVariableController');
+
+Route::get('notifications/datatable', 'NotificationController@getData');
+Route::resource('notifications', 'NotificationController');
