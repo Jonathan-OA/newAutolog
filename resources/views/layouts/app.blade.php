@@ -67,12 +67,6 @@
                             <img class="icon" src="{{ asset('/icons/suporte.png') }}" alt="Suporte" >
                         </a>            
                 </div>
-                <!-- Botão de download Android -->
-                <div class="lay_menu_sup" aria-label="@lang('buttons.android')" data-microtip-position="right" role="tooltip"> 
-                    <a class="btn btn-support" href="{{ asset('/apk/AUTOLOGWMS.apk') }}" id="button-android" title="Download APK Android">
-                        <img class="icon" src="{{ asset('/icons/android.png') }}" alt="Suporte" >
-                    </a>            
-                </div>
 
                 <!-- Modal de notificações -->
                 <div class="modal fade" id="notificationModal" tabindex="-1" role="dialog"  aria-hidden="true">

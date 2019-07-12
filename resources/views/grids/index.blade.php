@@ -53,10 +53,8 @@
                     sPrevious: "@lang('models.previous')",
                 }
             },
-            columns: [ { data: 'company_id' },
-                { data: 'module' },
-                { data: 'submodule' },
-                { data: 'columns' },
+            columns: [{ data: 'code' },
+                      { data: 'columns' },
                
                        { data: null,
                          className: "th_grid",

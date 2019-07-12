@@ -136,7 +136,7 @@ app.run(['$rootScope', function($rootScope) {
         $http({
             method: 'POST',
             url: $url,
-            data: { 'config': datas, 'code': $scope.gridCode }
+            data: { 'config': JSON.stringify(datas), 'code': $scope.gridCode }
         }).then(function(res) {
             //Mostra mensagem de sucesso ou erro
             $('.alert').remove();
@@ -168,8 +168,8 @@ app.run(['$rootScope', function($rootScope) {
             $http({
                 method: 'GET',
                 url: $url + $scope.gridCode
-            }).then(function(data) {
-                $scopeC.saveState.restore($scope, data);
+            }).then(function(res) {
+                $scopeC.saveState.restore($scope, res.data);
             });
         }
 
