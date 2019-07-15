@@ -50,6 +50,7 @@ $(document).ready(function(e) {
 
             campo = this.element.attr('name');
             var table = $('#' + id).attr('table');
+
             //Valida se este input esta atrelado ao valor de um input anterior para buscar como filtro 
             //Tag: id_dep (Contendo o id do input atrelado)
             //(Ex: Depart -> Deposi)
@@ -57,10 +58,12 @@ $(document).ready(function(e) {
                 var inputDepend = $('#' + id).attr('id_dep');
                 var valDepend = $('#' + inputDepend).val();
                 var tableDep = $('#' + inputDepend).attr('table');
+                var filters = $('#' + id).attr('filters');
 
             } catch (err) {
                 var valDepend = '';
                 var tableDep = '';
+                var filters = '';
             }
 
             //Se o input esta com readonly, não lista as opções
@@ -75,7 +78,8 @@ $(document).ready(function(e) {
                         table: table,
                         tableDep: tableDep,
                         valDep: valDepend,
-                        field: campo
+                        field: campo,
+                        filters
                     },
                     success: function(data) {
                         response(data);

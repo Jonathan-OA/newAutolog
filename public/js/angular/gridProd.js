@@ -173,7 +173,7 @@ app.run(['$rootScope', function($rootScope) {
             });
         }
 
-        $('.alert').remove();
+        //$('.alert').remove();
     }
 
 }]);
@@ -241,7 +241,7 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
             enableGridMenu: true,
             columnDefs: [
                 { name: 'Número', field: 'number', type: 'number', minWidth: 120 },
-                { name: 'Tipo', field: 'document_type_code', minWidth: 100 },
+                { name: 'Tipo', field: 'document_type_code', width: 70, enableColumnResizing: false },
                 {
                     name: 'Status',
                     field: 'document_status_id',
@@ -266,6 +266,7 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
                     cellTemplate: '<div class="ui-grid-cell-contents" ><div class="progress"><div class="progress-bar bg-success" role="progressbar" style="width: {{row.entity.total_conf}}%;max-width: 100% !important;" aria-valuenow="{{row.entity.total_conf}}" aria-valuemin="0" aria-valuemax="100">{{row.entity.total_conf}}%</div></div></div></div>'
                 },
                 { name: 'Onda', field: 'wave', minWidth: 150 },
+                { name: 'Máquina', field: 'location_code', minWidth: 100 },
                 { name: 'Emissão', field: 'emission_date', type: 'date', cellFilter: "dateFilter", minWidth: 100, enableColumnResizing: false },
 
                 { name: 'Transportadora', field: 'courier', minWidth: 220 },
@@ -273,7 +274,7 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
                 { name: 'Finalização', field: 'end_date', type: 'date', cellFilter: "dateFilterHr", minWidth: 130, enableColumnResizing: false }
             ],
             enablePaginationControls: true,
-            paginationPageSizes: [25, 50, 75],
+            paginationPageSizes: [40, 80, 120],
             rowTemplate: '<div ng-click="grid.appScope.clickRow(row, col, $event)" ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.uid" class="ui-grid-cell" ng-class="col.colIndex()" ui-grid-cell></div>',
 
         };
@@ -359,16 +360,19 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
             $scope.clickFilter = !$scope.clickFilter;
             //Limpa as linhas selecionadas
             $scope.gridApi.selection.clearSelectedRows();
+
             if (!$scope.gridApi.grid.options.multiSelect) {
                 //Limpa o filtro caso exista e a Onda não esteja ativada
                 $scope.gridApi.grid.columns[3].filters[0].term = '';
                 $scope.gridOptions.enableFiltering = !$scope.gridOptions.enableFiltering;
                 $scope.gridApi.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
             } else {
+                $scope.gridApi.grid.columns[3].enableFiltering = false;
                 $scope.gridApi.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
                 if (!$scope.clickFilter) {
                     $scope.gridOptions.enableFiltering = !$scope.gridOptions.enableFiltering;
                     $scope.gridApi.grid.columns[3].filters[0].term = 0;
+
                     $scope.gridApi.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
                     $scope.gridOptions.enableFiltering = !$scope.gridOptions.enableFiltering;
                 }

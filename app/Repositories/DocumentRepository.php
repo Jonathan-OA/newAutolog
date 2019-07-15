@@ -40,7 +40,10 @@ class DocumentRepository extends BaseRepository
         'priority',
         'comments',
         'document_type_code',
-        'user_id'
+        'user_id',
+        'location_code',
+        'number_origin',
+        'document_type_origin'
     ];
 
     /**

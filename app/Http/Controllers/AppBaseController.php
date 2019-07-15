@@ -43,13 +43,15 @@ class AppBaseController extends Controller
      */
 
     public function autocomplete(){
-
+        
         //Busca na tabela $table os registros com o código $term e o filtro $valDep (Caso seja um valor atrelado)
         $term = Input::get('term'); //String de pesquisa
         $table = Input::get('table'); //Tabela Atual
         $tableDep = Input::get('tableDep'); //Valor de um input dependente
         $field = (trim($tableDep) == '' || Input::get('field') == substr($table,0,-1).'_code')? 'code' : Input::get('field'); //Nome do Campo de Busca
-        
+        $filters = Input::get('filters'); //Filtros do select
+        $termFilters = array();
+
         //Caso seja campos de Origem/Destino, considera o campo code
         if(strpos($field,'orig') !== false || strpos($field,'dest') !== false ){
             $field = 'code';
@@ -58,8 +60,10 @@ class AppBaseController extends Controller
             $field = substr($field,5);
         }
 
-        
-     
+        //Quebra os filtros que vem no padrão CAMPO:VALOR;CAMPO:VALOR;
+        if(!empty($filters)){
+            $termFilters = explode(";",$filters); //Resultado: Array onde cada item é CAMPO:VALOR
+        }
 
         $GLOBALS['valDep'] = Input::get('valDep');
         $GLOBALS['campoDep'] = substr($tableDep,0,-1).'_code';
@@ -68,19 +72,28 @@ class AppBaseController extends Controller
         
         //Só busca caso a tabela tenha o campo Company_Id
         $GLOBALS['hasComp'] = (Schema::hasColumn($table, 'company_id'))?1:0;
+        $GLOBALS['filters'] =  $termFilters;
+
         $queries = DB::table($table)
             ->where($field, 'LIKE', '%'.$term.'%')
             ->where(function ($query) {
                         if($GLOBALS['hasComp'] == 1){
                             $query->where('company_id',Auth::user()->company_id);
                         }
+                        //Loop em todos os filtros passados como parametro
+                        if(count($GLOBALS['filters']) > 0){
+                            foreach($GLOBALS['filters'] as $filter){
+                                $field = explode(":",$filter)[0]; //Antes dos : fica o nome da coluna
+                                $value = explode(":",$filter)[1]; //Deposi dos : fica o valor
+                                //Complementa a query
+                                $query->where($field,$value);
+                            }
+                        }
+                        //Valida se o select deve considerar campo atrelado como filtro
+                        if(trim($GLOBALS['valDep']) <> ''){
+                            $query->where($GLOBALS['campoDep'],$GLOBALS['valDep']);
+                        }
                    })
-            ->where(function ($query) {
-                    //Valida se o select deve considerar campo atrelado como filtro
-                    if(trim($GLOBALS['valDep']) <> ''){
-                        $query->where($GLOBALS['campoDep'],$GLOBALS['valDep']);
-                    }
-            })
             ->orderBy($field, 'asc')
             ->take(12)->get();
 

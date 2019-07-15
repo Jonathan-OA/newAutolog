@@ -42,9 +42,16 @@ class DocumentController extends Controller
         //Recebe as informações do(s) documento(s) || Normal = 1 , Onda = Vários
         $documents = $input['documents'];
 
+        //Endereço / Máquina destino
+        if(!empty($input['location_code'])){
+            $location_code = $input['location_code'];
+        }else{
+            $location_code = '';
+        }
+
         //Valida se usuário possui permissão para liberar documento (ex: documents_prod_lib)
         if(App\Models\User::getPermission('documents_'.$module.'_lib',Auth::user()->user_type_code)){
-            $libDoc = App\Models\Document::liberate($documents, $module, $isWave); 
+            $libDoc = App\Models\Document::liberate($documents, $module, $isWave, $location_code); 
             if($libDoc['erro'] <> 0){
                 //Erro na liberação
                 Flash::error($libDoc['msg']);

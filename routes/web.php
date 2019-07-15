@@ -25,6 +25,7 @@ Route::group(['middleware' => 'auth'], function() {
     // ----------------------------------------------------------------------------------------------
     Route::get('production/{document_id}/print', 'Modules\ProductionController@showPrint'); //Mostra grid de impressão de etiquetas
     Route::get('production/{document_id}/liberate', 'Modules\ProductionController@showLibLocation'); //Mostra Tela de Endereço para Liberação
+    Route::post('production/{document_id}/liberate', 'Modules\ProductionController@storeLibLocation'); //Salva Endereço para Liberação e chama regras de liberação
     Route::post('production/print', 'Modules\ProductionController@print')->name('production.print'); //Cria Etiquetas e retorna o arquivo de impressão com as variaveis preenchidas
     Route::post('production/printDoc', 'Modules\ProductionController@printDoc')->name('production.printDoc'); //Retorna o arquivo de impressão de documento
     Route::get('production/{document_id}/items', 'Modules\ProductionController@showItems'); //Mostra grid de itens

@@ -10,11 +10,11 @@
                 <div class="panel-body" >
                     <div class="row">
                         <div class="col-md-12">
-                            {!! Form::open(['route' => 'production.store']) !!}
+                            {!! Form::open(['url' => 'production/'.$document->id.'/liberate']) !!}
                             <div class="form-group">
                                 <!-- Location Field -->
                                 {!! Form::label('location_code', Lang::get('models.dest_location_code').':') !!}
-                                {!! Form::text('location_code', null, ['class' => 'form-control','id' => 'autocomplete', 'table' => 'locations']) !!}
+                                {!! Form::text('location_code', null, ['class' => 'form-control', 'required', 'id' => 'autocomplete', 'table' => 'locations', 'filters' => 'SECTOR_CODE:PROD']) !!}
                             </div>
                             
                             <!-- Submit Field -->

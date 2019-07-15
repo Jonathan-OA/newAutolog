@@ -356,6 +356,48 @@ class ProductionController extends AppBaseController
 
     }
 
+    /**
+     * Salva endereço de liberação/máquina e chama rotas de liberação
+     *
+     * @return Response
+     */
+
+    public function storeLibLocation($document_id, Request $request)
+    {
+        //Valida se usuário possui permissão para acessar esta opção
+        if(App\Models\User::getPermission('documents_prod_lib',Auth::user()->user_type_code)){
+            //Pega o Documento
+            $document = $this->documentRepository->findWithoutFail($document_id)->toArray();
+            $input = $request->all(); 
+
+            //Cria array no formato q a função de liberação reconhece
+            $document['moviment_code'] = '030';
+            $documents = array($document);
+
+            
+            //Realiza a liberação do documento
+            $libDoc = App\Models\Document::liberate($documents, 'prod',0, $input['location_code']); 
+
+            if($libDoc['erro'] <> 0){
+                //Erro na liberação
+                Flash::error($libDoc['msg']);
+            }else{
+                //Sucesso na liberação
+                Flash::success($libDoc['msg']);
+            }
+
+            return redirect(route('production.index'));
+            
+
+           //return view('modules.production.gridDoc');
+        }else{
+            //Sem permissão
+            Flash::error(Lang::get('validation.permission'));
+            return redirect(url('production'));
+        }
+
+    }
+
     //--------------------------------------------------------------------------------------------
     //                                     Funções de Itens
     //--------------------------------------------------------------------------------------------

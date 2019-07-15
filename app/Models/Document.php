@@ -43,7 +43,10 @@ class Document extends Model
         'priority',
         'comments',
         'document_type_code',
-        'user_id'
+        'user_id',
+        'location_code',
+        'number_origin',
+        'document_type_origin'
     ];
 
     /**
@@ -58,7 +61,10 @@ class Document extends Model
         'document_status_id' => 'integer',
         'customer_code' => 'string',
         'courier_code' => 'string',
-        'supplier_code' => 'string'
+        'supplier_code' => 'string',
+        'location_code' => 'string',
+        'number_origin' => 'string',
+        'document_type_origin' => 'string',
     ];
 
     /**
@@ -85,7 +91,7 @@ class Document extends Model
                                  'inventory_status.description as inv_description', 'inventory_status_id', DB::raw("COUNT(DISTINCT document_items.id) as total_items"),
                                  DB::raw("IFNULL(ROUND(SUM(CASE WHEN document_items.qty_conf IS NULL THEN 0 ELSE document_items.qty_conf END)/SUM(document_items.qty)*100,0),0) as total_conf"),
                                  'documents.delivery_date','documents.billing_date', 'document_types.lib_location', 'document_types.print_labels','document_types.label_type_code',
-                                 'document_types.print_labels_doc')
+                                 'document_types.print_labels_doc','documents.location_code', 'documents.number_origin', 'documents.document_type_origin')
                         ->join('document_types', 'documents.document_type_code', '=', 'document_types.code')
                         ->join('document_status', 'document_status.id', '=', 'documents.document_status_id')
                         ->leftJoin('customers', function ($joint) {
@@ -115,7 +121,8 @@ class Document extends Model
                                 'document_status_id','total_net_weigth','priority','comments','user_id',
                                 'documents.created_at','documents.updated_at','moviment_code', 'document_status.description',
                                 'inventory_status.description', 'inventory_status_id',  'document_types.lib_location', 'document_types.print_labels',
-                                'documents.delivery_date','documents.billing_date','document_types.label_type_code','document_types.print_labels_doc')
+                                'documents.delivery_date','documents.billing_date','document_types.label_type_code','document_types.print_labels_doc',
+                                'documents.location_code', 'documents.number_origin', 'documents.document_type_origin')
                        ->orderBy('documents.id', 'desc')
                        ->take($qty)
                        ->get();
@@ -147,7 +154,7 @@ class Document extends Model
      * @var array
      */
 
-    public static function liberate($documents, $module, $isWave = 0){
+    public static function liberate($documents, $module, $isWave = 0, $location_code = ''){
 
         //Busca qual a classe e o retorno para buscar as regras de liberação 
         $rc = App\Models\Moviment::getClass($documents[0]['moviment_code']);
@@ -220,7 +227,8 @@ class Document extends Model
                 $updDoc = Document::where('company_id', Auth::user()->company_id)
                                    ->where('id', $document_id)
                                    ->where('document_status_id', 0)
-                                   ->update(['document_status_id' => 1]);
+                                   ->update(['document_status_id' => 1,
+                                             'location_code' => $location_code]);
 
             }
             
@@ -427,6 +435,7 @@ class Document extends Model
 
             if(!empty($docT)){
                 $docT->document_status_id = 0;
+                $docT->location_code = NULL;
                 $docT->wave = NULL;
                 $docT->save();
                 //Apaga informaçoes da tabela de liberação
