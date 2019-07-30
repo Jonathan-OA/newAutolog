@@ -48,6 +48,17 @@
 {!! Form::label('subgroup_code', Lang::get('models.subgroup_code').':') !!}
 {!! Form::text('subgroup_code', null, ['class' => 'form-control']) !!}
 
+<!-- Inspection Field -->
+{!! Form::label('inspection', Lang::get('models.inspection').':') !!}
+<div class="onoffswitch">
+    <input type="hidden" name="inspection"  value="0" >
+    {{ Form::checkbox('inspection', 1, (!empty($product->inspection)) ? $product->inspection : 0 ,['class' => 'onoffswitch-checkbox', 'id' => 'inspection']) }}
+    <label class="onoffswitch-label" for="inspection">
+        <span class="onoffswitch-inner"></span>
+        <span class="onoffswitch-switch"></span>
+    </label>
+</div>
+
 <!-- Margin Div Field -->
 {!! Form::label('margin_div', Lang::get('models.margin_div').':') !!}
 {!! Form::number('margin_div', null, ['class' => 'form-control']) !!}

@@ -302,6 +302,8 @@ return [
     'size_start' => 'Posição de Início',
     'table' => 'Tabela',
     'field' => 'Campo',
+    'inspection' => 'Inspeção',
+    'finalization' => 'Finalização Hab.',
     
     
     //PlaceHolders

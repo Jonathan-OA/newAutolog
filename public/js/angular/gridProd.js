@@ -268,7 +268,7 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
                 { name: 'Onda', field: 'wave', minWidth: 150 },
                 { name: 'Máquina', field: 'location_code', minWidth: 100 },
                 { name: 'Emissão', field: 'emission_date', type: 'date', cellFilter: "dateFilter", minWidth: 100, enableColumnResizing: false },
-
+                { name: 'Fin. Hab.', field: 'finalization', minWidth: 100, cellTemplate: '<div class="ui-grid-cell-contents" ><img ng-show="{{row.entity.finalization}}" class="icon" src="icons/checked.png"></div>' },
                 { name: 'Transportadora', field: 'courier', minWidth: 220 },
                 { name: 'Início', field: 'start_date', type: 'date', cellFilter: "dateFilterHr", minWidth: 130, enableColumnResizing: false },
                 { name: 'Finalização', field: 'end_date', type: 'date', cellFilter: "dateFilterHr", minWidth: 130, enableColumnResizing: false }

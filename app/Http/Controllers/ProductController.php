@@ -126,7 +126,7 @@ class ProductController extends AppBaseController
             //Tipos de produtos e grupos para o droplist
             $prd_types = App\Models\ProductType::getProductTypes();
             $groups = App\Models\Group::getGroups();
-
+            
             return view('products.edit')->with('product', $product)
                                         ->with('prd_types', $prd_types)
                                         ->with('groups',$groups);

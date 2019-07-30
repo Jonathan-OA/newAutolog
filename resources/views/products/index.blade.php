@@ -68,14 +68,20 @@
                         { data: 'product_type_code', className: "td_center" },
                         { data: 'group_code', className: "td_center" },
                         { data: 'subgroup_code', className: "td_center" },
+                        { data: 'inspection', className: "td_center" },
                         { data: null,
                           className: "th_grid",
-                          defaultContent: "<button id='detail' aria-label='@lang('buttons.packings')' data-microtip-position='left' role='tooltip' style='margin-right: 3px' ><img class='icon' src='{{asset('/icons/embalagens3.png') }}'></button><button id='edit' aria-label='@lang('buttons.edit')' data-microtip-position='left' role='tooltip' ><img class='icon' src='{{asset('/icons/editar.png') }}'></button><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='{{asset('/icons/remover.png') }}'></button>",
+                          defaultContent: "<button id='edit' aria-label='@lang('buttons.edit')' data-microtip-position='left' role='tooltip' ><img class='icon' src='{{asset('/icons/editar.png') }}'></button><button id='detail' aria-label='@lang('buttons.packings')' data-microtip-position='left' role='tooltip' style='margin-right: 3px' ><img class='icon' src='{{asset('/icons/embalagens3.png') }}'></button><button id='remove' aria-label='@lang('buttons.remove')' data-microtip-position='bottom' role='tooltip'><img class='icon' src='{{asset('/icons/remover.png') }}'></button>",
                           width: "90px" 
                         }],
                         "rowCallback": function( row, data, index ) {
                               if ( data.status == 0 ) {
                                 $(row).addClass('redClass');
+                              }
+                              if ( data.inspection == 1 ) {
+                                $('td:eq(5)', row).html( "<img class='icon' src='{{asset('/icons/checked.png') }}'>" )
+                              }else{
+                                $('td:eq(5)', row).html( "");
                               }
                         }
       });

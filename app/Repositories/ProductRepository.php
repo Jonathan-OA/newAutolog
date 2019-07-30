@@ -28,6 +28,7 @@ class ProductRepository extends BaseRepository
         'critical_date2',
         'critical_date3',
         'ripeness_date',
+        'inspection',
         'obs1',
         'obs2',
         'obs3',
