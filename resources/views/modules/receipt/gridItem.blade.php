@@ -8,7 +8,7 @@
         <li class="breadcrumb-item active" aria-current="page">@lang('buttons.detail')</li>
         </ol>
     </nav>
-    <div class="row" ng-app="grid_prod">
+    <div class="row" ng-app="grid_rec">
         <div class="col-md-12 pad-ct">
             <!-- Grid de Detalhes  -->
             <div class="panel  pbread panel-default" ng-controller="DetCtrl" ng-init="showGrid('{{ $document->id }}','{{ $document->number }}')">
@@ -20,7 +20,8 @@
                         <!-- Alerta de erro / sucesso -->
                         @include('flash::message')
                         <div class="row buttons_grid">
-                                <div class="icon_grid" aria-label="@lang('buttons.add')" data-microtip-position="bottom" role="tooltip">
+                                <!-- Adicionar novo item (somente para status pendente) -->
+                                <div class="icon_grid" ng-show="({{$document->document_status_id}} == 0)" aria-label="@lang('buttons.add')" data-microtip-position="bottom" role="tooltip">
                                     <a href="{!! url('receipt/'.$document->id.'/items/create') !!}">
                                         <img class='icon' src='{{asset('/icons/add.png') }}'>
                                     </a>
@@ -29,10 +30,15 @@
                         <div class="panel-body">
                             <div ui-grid="gridDetalhes" ui-grid-auto-resize  ui-grid-resize-columns ui-grid-selection ui-grid-pagination ui-grid-move-columns ui-grid-save-state >
                             </div>
-                                <!-- Botões com as opções para cada documento -->
-                                @include('modules.receipt.buttonsItem')
-                            <button id="save" type="button" class="btn btn-success" ng-click="saveState('Autolog_GridProd_Det')">Save</button>
-                            <button id="restore" type="button" class="btn btn-success" ng-click="restoreState('Autolog_GridProd_Det')">Restore</button>
+                            <!-- Botões com as opções para cada documento -->
+                            @include('modules.receipt.buttonsItem')
+                            <div class="actionsGrid">
+                                <span aria-label="@lang('infos.actions_grid_det')" data-microtip-position="right" role="tooltip">
+                                        <img class='icon' src='{{asset('/icons/information.png') }}' >
+                                </span>
+                                <button id="save" type="button" class="btn btn-success" ng-click="saveState()">Salvar Grid</button>
+                                <button id="restore" type="button" class="btn btn-success" ng-click="restoreState()">Restaurar Grid</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -41,5 +47,6 @@
     </div>
 @endsection
 @section('scripts')
+    <script src="../../js/ui-grid/ui-grid.selection.min.js"></script>
     <script src="../../js/angular/gridProd.js"></script>
 @endsection

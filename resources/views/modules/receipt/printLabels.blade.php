@@ -25,8 +25,9 @@
                                 {!! Form::open(['route' => 'receipt.print']) !!}
         
                                 <!-- Modal de Impressão -->
+                                <!-- Passa como parâmetro para a modal o nome do módulo para indicar o controller para acessar as funções -->
                                 <div class="modal fade" id="printModal" tabindex="-1" role="dialog"  aria-hidden="true">
-                                    @include('layouts.print')
+                                    @include('layouts.print', ['module' => 'receipt'])
 
                                     <!-- Tipo de Etiqueta a Ser gerada -->
                                     <input id="label_type_code" type="hidden" name="label_type_code" value="PRDCAD">
@@ -63,14 +64,23 @@
                                                 @endphp
                                             @foreach ($documentItems as $item)
                                                 @php
-                                                    //Valida as linhas q tem obrigação de preencher lote, data de validade, etc.
-                                                    $rBatch = ($item['conf_batch'] <> 0)? '' : 'readonly'; //Lote
-                                                    $rBatchSup = ($item['conf_batch_supplier'] <> 0)? '' : 'readonly'; //Lote Fornec
-                                                    $rSerial = ($item['conf_serial'] <> 0)? '' : 'readonly'; //Serial Number
-                                                    $rDueDate = ($item['conf_due_date'] <> 0)? '' : 'readonly'; //Validade
-                                                    $rLength = ($item['conf_length'] <> 0)? '' : 'readonly'; //Comprimento
-                                                    $rWidth = ($item['conf_width'] <> 0)? '' : 'readonly';  //Largura
-                                                @endphp
+                                                    //Valida as linhas q tem obrigação de preencher lote, data de validade... 
+                                                    //para a primeira UOM do produto com print_label ativa ($item['uom_print']))
+                                                    //Ao selecionar outra no grid, chama a função updateRowInputs
+                                                    if(count($uomPrints[$item['product_code']]) <> 0){
+                                                        $uomPrint = $uomPrints[$item['product_code']][$item['uom_print']];
+                                                        $rBatch = ($uomPrint['conf_batch'] <> 0)? '' : 'readonly'; //Lote
+                                                        $rBatchSup = ($uomPrint['conf_batch_supplier'] <> 0)? '' : 'readonly'; //Lote Fornec
+                                                        $rSerial = ($uomPrint['conf_serial'] <> 0)? '' : 'readonly'; //Serial Number
+                                                        $rDueDate = ($uomPrint['conf_due_date'] <> 0)? '' : 'readonly'; //Validade
+                                                        $rLength = ($uomPrint['conf_length'] <> 0)? '' : 'readonly'; //Comprimento
+                                                        $rWidth = ($uomPrint['conf_width'] <> 0)? '' : 'readonly';  //Largura
+                                                    }else{
+                                                        $rBatch = $rBatchSup = $rSerial = $rDueDate = $rLength = $rWidth = 0;
+                                                        $uomPrint = $uomPrints[$item['product_code']];
+                                                        $uomPrint['prim_qty'] = 1; 
+                                                    }
+                                                    @endphp
 
                                                 <tr>
                                                     <td align="center">
@@ -103,16 +113,20 @@
                                                         </div>
                                                     </td>
                                                     <td>
-                                                        <!-- Unidade Principal  -->
+                                                        <!-- Unidade de Impressão  -->
                                                         <div class="form-control">
-                                                            <input type="text" name="infos[{{$lineNum}}][uom_code]" value="{{$item['uom_code_print']}}" maxlength="4" size="4" readonly >
+                                                            <select name="infos[{{$lineNum}}][uom_code]" onchange="updateRowInputs(this, {{$lineNum}}, '{{$item['product_code']}}')">
+                                                                    @foreach ($uomPrints[$item['product_code']] as $uom => $info)
+                                                                        <option value = "{{$uom}}" {{($uom == $item['uom_print'])? 'selected' : ''}}>{{$uom}}</option>
+                                                                    @endforeach
+                                                            </select>
                                                         </div>
                                                     </td>
                                                     <td>
                                                         <!-- Quantidade Primária -->
                                                         <div class="form-control">
                                                             <input id="prim_qty" type="number"  name="infos[{{$lineNum}}][prim_qty]" size="8"
-                                                             maxlength="16" step="0.000001"  value="{{ old("infos.$lineNum.prim_qty", $item['prim_qty'])}}">
+                                                             maxlength="16" step="0.000001"  value="{{ old("infos.$lineNum.prim_qty",$uomPrint['prim_qty'])}}">
                                                         </div>
                                                     </td>
                                                     <td>
@@ -122,42 +136,42 @@
                                                     </td>
                                                     <td class="total" align="right">
                                                         <!-- Total -->
-                                                        {{($item['prim_qty']*1)}}
+                                                        {{($uomPrint['prim_qty'] * 1)}}
                                                     </td>
                                                     <td>
                                                         <!-- Lote -->
                                                         <!-- old() pega o valor informado anteriormente pelo usuario ou o valor padrão (do banco) -->
-                                                        <div class="form-control {{ (($rBatch == '' && old("infos.$lineNum.batch", $item['batch']) == '')?'required input_error':'')}}" >
-                                                            <input type="text" name="infos[{{$lineNum}}][batch]" value="{{ old("infos.$lineNum.batch", $item['batch'])}}" 
+                                                        <div class="form-control {{(trim($rBatch) == '')? ((trim($item['batch']) == '')?'input_error required':'required') : ''}}" >
+                                                        <input type="text" name="infos[{{$lineNum}}][batch]" value="{{ old("infos.$lineNum.batch", $item['batch'])}}" 
                                                             size="10" maxlength="20" {{$rBatch}}>
                                                         </div>
                                                     </td>
                                                     <td>
                                                         <!-- Lote Fornecedor-->
                                                         <!-- old() pega o valor informado anteriormente pelo usuario ou o valor padrão (do banco) -->
-                                                        <div class="form-control {{ (($rBatchSup == '' && old("infos.$lineNum.batch_supplier", $item['batch_supplier']) == '')?'required input_error':'')}}">
+                                                        <div class="form-control {{(trim($rBatchSup) == '')? ((trim($item['batch_supplier']) == '')?'input_error required':'required') : ''}}" >
                                                             <input type="text" name="infos[{{$lineNum}}][batch_supplier]" value="{{ old("infos.$lineNum.batch_supplier", $item['batch_supplier'])}}"
-                                                             size="10" maxlength="20" {{$rBatchSup}}>
+                                                             size="10" maxlength="20"  {{$rBatchSup}}>
                                                         </div>
                                                     </td>
                                                     <td>
                                                         <!-- Data de Validade -->
                                                         <!-- old() pega o valor informado anteriormente pelo usuario ou o valor padrão (do banco) -->
-                                                        <div class="form-control {{ (($rDueDate == '' && old("infos.$lineNum.due_date") == '')?'required input_error':'')}}">
+                                                        <div class="form-control {{(trim($rDueDate) == '')? 'input_error' : ''}}">
                                                             <input type="date" name="infos[{{$lineNum}}][due_date]" value="{{ old("infos.$lineNum.due_date")}}" size="6" {{$rDueDate}}>
                                                         </div>
                                                     </td>
                                                     <td>
                                                         <!-- Comprimento -->
                                                         <!-- old() pega o valor informado anteriormente pelo usuario ou o valor padrão (do banco) -->
-                                                        <div class="form-control {{ (($rLength == '' && old("infos.$lineNum.length") == '')?'required input_error':'')}}">
+                                                        <div class="form-control {{(trim($rLength) == '')? 'input_error' : ''}}">
                                                             <input type="number" name="infos[{{$lineNum}}][length]" value="{{ old("infos.$lineNum.length", 0)}}" step="0.000001" size="6" maxlength="16" {{$rLength}}>
                                                         </div>
                                                     </td>
                                                     <td>
                                                         <!-- Largura -->
                                                         <!-- old() pega o valor informado anteriormente pelo usuario ou o valor padrão (do banco) -->
-                                                        <div class="form-control {{ (($rWidth == '' && old("infos.$lineNum.width") == '')?'required input_error':'')}}">
+                                                        <div class="form-control {{(trim($rWidth) == '')? 'input_error' : ''}}">
                                                             <input type="number" name="infos[{{$lineNum}}][width]"  value="{{ old("infos.$lineNum.width", 0)}}" size="6" step="0.000001"  maxlength="16" {{$rWidth}}>
                                                         </div>
                                                     </td>
@@ -201,6 +215,8 @@
 @section('scripts')
     <script>
         $(function() {
+
+
             //Funções ao preencher um campo de input
             $("input").on('keyup change',function () {
                 var tr = $(this).closest('tr');
@@ -211,9 +227,9 @@
                 if(id == 'qty_print' || id == 'prim_qty'){
                     var qty_print = parseFloat(tr.find('input#qty_print').val());
                     var prim_qty = parseFloat(tr.find('input#prim_qty').val());
-                    var total = qty_print * prim_qty;
+                    var total = (qty_print * prim_qty).toFixed(6);
                     //Atribui valor a coluna correta
-                    tr.find('td.total').html(total);
+                    tr.find('td.total').html(total.replace('.',','));
                 }
 
                 if(id == 'qty_print' || id == 'prim_qty'){
@@ -257,8 +273,89 @@
                 }
                 
             })
-
+        
         })
+
+        //
+        //Função que atualiza campos obrigatórios de acordo com o nível de embalagem selecionado
+         updateRowInputs = async (elem, lineNum, product) => {
+            var uom = $(elem).val();
+            await $.ajax("{!! URL::to('packings/"+product+"/"+uom+"') !!}"
+                        ).done(function(result) {
+                            //console.log(result);
+                            //Lote obrigatório
+                            if((result[0].conf_batch) == 1){
+                                //Bordas vermelhas
+                                $('input[name="infos['+lineNum+'][batch]"]').parent().addClass('input_error');
+                                $('input[name="infos['+lineNum+'][batch]"]').prop('readonly', false);
+                            }else{
+                                //Tira a opção de alteração
+                                //Bordas vermelhas
+                                $('input[name="infos['+lineNum+'][batch]"]').parent().removeClass('input_error');
+                                $('input[name="infos['+lineNum+'][batch]"]').prop('readonly', true);
+                                $('input[name="infos['+lineNum+'][batch]"]').val('');
+                            }
+
+                            //Lote fornecedor obrigatório
+                            if((result[0].conf_batch_supplier) == 1){
+                                //Bordas vermelhas
+                                $('input[name="infos['+lineNum+'][batch_supplier]"]').parent().addClass('input_error');
+                                $('input[name="infos['+lineNum+'][batch_supplier]"]').prop('readonly', false);
+                            }else{
+                                //Tira a opção de alteração
+                                //Bordas vermelhas
+                                $('input[name="infos['+lineNum+'][batch_supplier]"]').parent().removeClass('input_error');
+                                $('input[name="infos['+lineNum+'][batch_supplier]"]').prop('readonly', true);
+                                $('input[name="infos['+lineNum+'][batch_supplier]"]').val('');
+                            }
+
+                             //Data de validade obrigatória
+                             if((result[0].conf_due_date) == 1){
+                                //Bordas vermelhas
+                                $('input[name="infos['+lineNum+'][due_date]"]').parent().addClass('input_error');
+                                $('input[name="infos['+lineNum+'][due_date]"]').prop('readonly', false);
+                            }else{
+                                //Tira a opção de alteração
+                                //Bordas vermelhas
+                                $('input[name="infos['+lineNum+'][due_date]"]').parent().removeClass('input_error');
+                                $('input[name="infos['+lineNum+'][due_date]"]').val('');
+                                $('input[name="infos['+lineNum+'][due_date]"]').prop('readonly', true);
+                                
+                            }
+
+                            //Largura obrigatória
+                              if((result[0].conf_length) == 1){
+                                //Bordas vermelhas
+                                $('input[name="infos['+lineNum+'][length]"]').parent().addClass('input_error');
+                                $('input[name="infos['+lineNum+'][length]"]').prop('readonly', false);
+                            }else{
+                                //Tira a opção de alteração
+                                //Bordas vermelhas
+                                $('input[name="infos['+lineNum+'][length]"]').parent().removeClass('input_error');
+                                $('input[name="infos['+lineNum+'][length]"]').prop('readonly', true);
+                                $('input[name="infos['+lineNum+'][length]"]').val(0);
+                            }
+
+                            //Comprimento obrigatório
+                            if((result[0].conf_width) == 1){
+                                //Bordas vermelhas
+                                $('input[name="infos['+lineNum+'][width]"]').parent().addClass('input_error');
+                                $('input[name="infos['+lineNum+'][width]"]').prop('readonly', false);
+                            }else{
+                                //Tira a opção de alteração
+                                //Bordas vermelhas
+                                $('input[name="infos['+lineNum+'][width]"]').parent().removeClass('input_error');
+                                $('input[name="infos['+lineNum+'][width]"]').val(0);
+                                $('input[name="infos['+lineNum+'][width]"]').prop('readonly', true);
+                            }
+
+                            //Atualiza QdePrimária
+                            $('input[name="infos['+lineNum+'][prim_qty]"]').val(result[0].prim_qty);
+                            $('input[name="infos['+lineNum+'][qty_print]"]').val(1).trigger('change'); //Trigger de change para atualizar totais..
+                            $('input[name="infos['+lineNum+'][qty_print]"]').focus();
+                        });
+
+        }
     </script>
 
 @endsection

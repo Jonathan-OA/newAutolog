@@ -91,7 +91,7 @@ class RulesProduction extends Model
 
     }
 
-    //Regra que cria tarefa de produção e atualiza status
+    //Regra que cria tarefa de produção
     public static function prd002($document_id){
         
         $doc = App\Models\Document::find($document_id);

@@ -157,7 +157,7 @@ class Document extends Model
      */
 
     public static function liberate($documents, $module, $isWave = 0, $location_code = ''){
-
+        
         //Busca qual a classe e o retorno para buscar as regras de liberação 
         $rc = App\Models\Moviment::getClass($documents[0]['moviment_code']);
             
@@ -173,6 +173,10 @@ class Document extends Model
         $documentIds = array();
 
         DB::beginTransaction();
+
+        //Endereço destino na variável de sessão para ser utilizada no arquivo de regras
+        $_SESSION['location_code_lib'] = $location_code;
+
         foreach($documents as $doc){
             $erro = 0;
             $entrou = 0;
@@ -222,7 +226,7 @@ class Document extends Model
                 break;
                 $return['erro'] = 1;
             }else{
-                //Sem erros, grava log e libera o doc
+                //Sem erros, grava log e libera o doc com o endereço destino no campo location_code
                 $descricao = 'Liberou o documento: '.$doc['document_type_code'].' - '.$doc['number'];
                 $log = App\Models\Log::wlog('documents_'.$module.'_lib', $descricao, $document_id);
 
@@ -269,6 +273,8 @@ class Document extends Model
             //Desfaz tudo que foi feito e retorna a msg de erro
             DB::rollBack();
         }
+
+        unset($_SESSION['location_code_lib']);
 
         return $return;
 

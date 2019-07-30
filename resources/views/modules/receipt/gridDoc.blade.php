@@ -8,6 +8,12 @@
                 <div class="panel-heading">
                     @lang('models.receipt')
                 </div>
+                <!-- Modal de Impressão de Documento-->
+                <!-- Passa como parâmetro para a modal o nome do módulo para indicar o controller para acessar as funções -->
+                <div class="modal fade" id="printModal" tabindex="-1" role="dialog"  aria-hidden="true">
+                    @include('layouts.printDoc', ['module' => 'receipt'])
+                </div>
+                <!-- -->
                 <div class="row">
                     <div class="col-md-12">
                         <!-- Alerta de erro / sucesso -->
@@ -47,14 +53,14 @@
                         <div class="panel-body">
                             <div ui-grid="gridOptions" ui-grid-auto-resize  ui-grid-resize-columns ui-grid-selection ui-grid-pagination ui-grid-move-columns ui-grid-save-state >
                             </div>
-                                <!-- Botões com as opções para cada documento -->
-                                @include('modules.receipt.buttonsDoc')
+                            <!-- Botões com as opções para cada documento -->
+                            @include('modules.receipt.buttonsDoc')
                             <div class="actionsGrid">
                                 <span aria-label="@lang('infos.actions_grid')" data-microtip-position="right" role="tooltip">
                                         <img class='icon' src='{{asset('/icons/information.png') }}' >
                                 </span>
-                                <button id="save" type="button" class="btn btn-success" ng-click="saveState('AUTOLOGWMS_GridRec')">Salvar Grid</button>
-                                <button id="restore" type="button" class="btn btn-success" ng-click="restoreState('AAUTOLOGWMS_GridRec')">Restaurar Grid</button>
+                                <button id="save" type="button" class="btn btn-success" ng-click="saveState()">Salvar Grid</button>
+                                <button id="restore" type="button" class="btn btn-success" ng-click="restoreState()">Restaurar Grid</button>
                             </div>
                         </div>
                     </div>
@@ -65,5 +71,6 @@
 @endsection
 @section('scripts')
     <script src="js/ui-grid/ui-grid.selection.min.js"></script>
+    <script src="js/ui-grid/ui-grid.resizecolumns.min.js"></script>
     <script src="js/angular/gridRec.js"></script>
 @endsection

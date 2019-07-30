@@ -24,29 +24,29 @@
     </div>
 @endsection
 @section('scripts')
-    <script>
+<script>
         $(function() {
             //Armazena o array com informações de tdos os tipos de documentos do módulo
             var docTypesInfos = @json($document_types_infos);
-
+  
             //Valida se o número é criado automaticamente ou não
-            $("#document_type_code").on('change load',function(){
-                valNumAutomatic();
-            })
-
-            valNumAutomatic();
-
-            //Valida se o número é criado automaticamente ou não (cadastro do tipo de produto - num_automatic)
-            function valNumAutomatic(){
-                var value = $("#document_type_code").val();
-                if(docTypesInfos[value]['num_automatic'] === true){
-                    $("#document_number").attr('readonly', 'true');
-                    $("#document_number").val('Gerado Automaticamente');
-                }else{
-                    $("#document_number").removeAttr('readonly');
-                    $("#document_number").val('');
-                }
-            }
+          $("#document_type_code").on('change load',function(){
+              valNumAutomatic();
+          })
+  
+          valNumAutomatic();
+  
+          //Valida se o número é criado automaticamente ou não (cadastro do tipo de produto - num_automatic)
+          function valNumAutomatic(){
+              var value = $("#document_type_code").val();
+              if(docTypesInfos[value]['num_automatic'] === true){
+                  $("#document_number").attr('readonly', 'true');
+                  $("#document_number").val('Gerado Automaticamente');
+              }else{
+                  $("#document_number").removeAttr('readonly');
+                  $("#document_number").val('');
+              }
+          }
         })
-    </script>
+  </script>
 @endsection
