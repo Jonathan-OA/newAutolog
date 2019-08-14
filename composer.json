@@ -8,16 +8,19 @@
         "php": ">=7.0.10",
         "doctrine/dbal": "^2.0",
         "fideloper/proxy": "^4.0",
-        "infyomlabs/adminlte-templates": "5.7.x-dev",
-        "infyomlabs/laravel-generator": "5.7.x-dev",
+        "infyomlabs/adminlte-templates": "5.*",
+        "infyomlabs/laravel-generator": "5.*",
         "kodeine/laravel-acl": "^1.0@dev",
-        "laravel/framework": "5.7.*",
+        "laravel/framework": "5.*",
         "laravel/tinker": "^1.0",
         "laravelcollective/html": "^5.5.0",
         "lavary/laravel-menu": "^1.7",
         "lavela/phpjasper": "^3.0",
+        "maatwebsite/excel": "^3.1",
         "okipa/laravel-toggle-switch-button": "^1.0",
-        "yajra/laravel-datatables-buttons": "^3.2",
+        "phpoffice/phpspreadsheet": "^1.8",
+        "tijsverkoyen/css-to-inline-styles": "^2.2",
+        "yajra/laravel-datatables-buttons": "4.*",
         "yajra/laravel-datatables-oracle": "^8.4"
     },
     "require-dev": {
@@ -28,8 +31,6 @@
         "mockery/mockery": "~1.0",
         "phpunit/phpunit": "~6.0",
         "symfony/thanks": "^1.0"
-
-
     },
     "autoload": {
         "classmap": [

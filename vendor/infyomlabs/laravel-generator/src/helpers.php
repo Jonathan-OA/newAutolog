@@ -88,7 +88,7 @@ if (!function_exists('get_template_file_path')) {
 
         $templatesPath = config(
             'infyom.laravel_generator.path.templates_dir',
-            base_path('resources/infyom/infyom-generator-templates/')
+            resource_path('infyom/infyom-generator-templates/')
         );
 
         $path = $templatesPath.$templateName.'.stub';
@@ -154,25 +154,6 @@ if (!function_exists('fill_field_template')) {
         }
 
         return $template;
-    }
-}
-
-if (!function_exists('fill_template_with_field_data')) {
-    /**
-     * fill template with field data.
-     *
-     * @param array                                   $variables
-     * @param array                                   $fieldVariables
-     * @param string                                  $template
-     * @param \InfyOm\Generator\Common\GeneratorField $field
-     *
-     * @return string
-     */
-    function fill_template_with_field_data($variables, $fieldVariables, $template, $field)
-    {
-        $template = fill_template($variables, $template);
-
-        return fill_field_template($fieldVariables, $template, $field);
     }
 }
 

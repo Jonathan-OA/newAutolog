@@ -1,2 +1,1 @@
-Route::get('$MODEL_NAME_PLURAL_CAMEL$/datatable', '$PATH_PREFIX$$MODEL_NAME$Controller@getData');
 Route::resource('$MODEL_NAME_PLURAL_CAMEL$', '$PATH_PREFIX$$MODEL_NAME$Controller');

@@ -1,25 +1,24 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="row">
-        <div class="col-md-12 pad-ct">
-            <div class="panel panel-default" >
-                <div class="panel-heading">
-                    @lang('models.$MODEL_NAME_PLURAL_SNAKE$')
+    <section class="content-header">
+        <h1>
+            $MODEL_NAME_HUMAN$
+        </h1>
+    </section>
+    <div class="content">
+        @include('adminlte-templates::common.errors')
+        <div class="box box-primary">
+
+            <div class="box-body">
+                <div class="row">
+                    {!! Form::open(['route' => '$ROUTE_NAMED_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.store']) !!}
+
+                        @include('$VIEW_PREFIX$$MODEL_NAME_PLURAL_SNAKE$.fields')
+
+                    {!! Form::close() !!}
                 </div>
-                <div class="panel-body" >
-                    <div class="row">
-                        <div class="col-md-12">
-                            {!! Form::open(['route' => '$ROUTE_NAMED_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.store']) !!}
-                            <div class="form-group">
-                                @include('$VIEW_PREFIX$$MODEL_NAME_PLURAL_SNAKE$.fields')
-                            </div>
-                            {!! Form::close() !!}
-                        </div>
-                    </div>
-                </div>  
             </div>
         </div>
-
     </div>
 @endsection

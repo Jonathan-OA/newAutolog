@@ -2,7 +2,6 @@
 
 namespace InfyOm\Generator\Common;
 
-use Auth;
 use Exception;
 
 abstract class BaseRepository extends \Prettus\Repository\Eloquent\BaseRepository
@@ -10,12 +9,7 @@ abstract class BaseRepository extends \Prettus\Repository\Eloquent\BaseRepositor
     public function findWithoutFail($id, $columns = ['*'])
     {
         try {
-            $ret = $this->find($id, $columns);
-            //Valida se registro pertence a mesma filial logada (Edição e Exclusão) - Se tabela tiver o campo
-            if($ret->company_id == Auth::user()->company_id || trim($ret->company_id) == '')
-                return $this->find($id, $columns);
-            else
-                return;
+            return $this->find($id, $columns);
         } catch (Exception $e) {
             return;
         }
@@ -30,7 +24,9 @@ abstract class BaseRepository extends \Prettus\Repository\Eloquent\BaseRepositor
         $this->skipPresenter($temporarySkipPresenter);
 
         $model = $this->updateRelations($model, $attributes);
-        $model->save();
+        $model->withoutEvents(function () use ($model) {
+            $model->save();
+        });
 
         return $this->parserResult($model);
     }
@@ -44,7 +40,9 @@ abstract class BaseRepository extends \Prettus\Repository\Eloquent\BaseRepositor
         $this->skipPresenter($temporarySkipPresenter);
 
         $model = $this->updateRelations($model, $attributes);
-        $model->save();
+        $model->withoutEvents(function () use ($model) {
+            $model->save();
+        });
 
         return $this->parserResult($model);
     }

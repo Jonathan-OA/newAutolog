@@ -254,7 +254,7 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
                             { value: '8', label: 'Encerrado' }, { value: '9', label: 'Cancelado' }
                         ]
                     },
-                    cellTemplate: '<div class="ui-grid-cell-contents" ><div class="grid_cell stat{{grid.getCellValue(row, col)}}"> <p>{{row.entity.description}}</p></div></div>'
+                    cellTemplate: '<div id="teste" class="ui-grid-cell-contents" ><div class="grid_cell stat{{grid.getCellValue(row, col)}}"> <p>{{row.entity.description}}</p></div></div>'
                 },
                 { name: 'Itens', field: 'total_items', type: 'number', width: 70, enableColumnResizing: false },
                 { name: 'Cliente', field: 'customer', minWidth: 220 },
@@ -345,6 +345,7 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
             if ($scope.gridApi.grid.options.multiSelect) {
                 $scope.gridOptions.enableFiltering = true;
                 $scope.gridApi.grid.columns[3].filters[0].term = 0;
+                console.log($scope.gridApi.grid.columns[3]);
                 $('#options').remove(); //Fecha caixa com botões se houver alguma aberta
             } else {
                 $scope.gridOptions.enableFiltering = false;

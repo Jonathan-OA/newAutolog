@@ -13,6 +13,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Prettus\Repository\Criteria\RequestCriteria;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\InventoryItemsImport;
 use App;
 use Auth;
 use Flash;
@@ -246,6 +248,40 @@ class InventoryController extends AppBaseController
 
     }
 
+    /**
+     * Mostra a tela de importação de planilha para inventário
+     *
+     * @return Response
+     */
+
+    public function showImportExcel()
+    {
+        //Valida se usuário possui permissão para acessar esta opção
+        if(App\Models\User::getPermission('documents_inv_imp',Auth::user()->user_type_code)){
+
+            return view('modules.inventory.importExcel');
+        }else{
+            //Sem permissão
+            Flash::error(Lang::get('validation.permission'));
+            return redirect(url('production'));
+        }
+
+    }
+
+    /**
+     * Valida planilha excel enviada e insere os itens no inventario
+     *
+     * @return Response
+     */
+
+    public function importExcel(Request $request)
+    {
+        $input = $request->all();
+        $pathFile = $input['fileExcel']->getRealPath();
+        Excel::import(new InventoryItemsImport, $pathFile);
+
+        
+    }
 
 
     //--------------------------------------------------------------------------------------------

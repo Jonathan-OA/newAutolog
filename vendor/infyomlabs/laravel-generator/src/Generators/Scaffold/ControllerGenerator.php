@@ -31,12 +31,22 @@ class ControllerGenerator extends BaseGenerator
     public function generate()
     {
         if ($this->commandData->getAddOn('datatables')) {
-            $templateData = get_template('scaffold.controller.datatable_controller', 'laravel-generator');
+            if ($this->commandData->getOption('repositoryPattern')) {
+                $templateName = 'datatable_controller';
+            } else {
+                $templateName = 'model_datatable_controller';
+            }
 
+            $templateData = get_template("scaffold.controller.$templateName", 'laravel-generator');
             $this->generateDataTable();
         } else {
-            $templateData = get_template('scaffold.controller.controller', 'laravel-generator');
+            if ($this->commandData->getOption('repositoryPattern')) {
+                $templateName = 'controller';
+            } else {
+                $templateName = 'model_controller';
+            }
 
+            $templateData = get_template("scaffold.controller.$templateName", 'laravel-generator');
             $paginate = $this->commandData->getOption('paginate');
 
             if ($paginate) {
@@ -60,34 +70,47 @@ class ControllerGenerator extends BaseGenerator
 
         $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
-        $headerFieldTemplate = get_template('scaffold.views.datatable_column', $this->templateType);
-
-        $headerFields = [];
-
-        foreach ($this->commandData->fields as $field) {
-            if (!$field->inIndex) {
-                continue;
-            }
-            $headerFields[] = $fieldTemplate = fill_template_with_field_data(
-                $this->commandData->dynamicVars,
-                $this->commandData->fieldNamesMapping,
-                $headerFieldTemplate,
-                $field
-            );
-        }
+        $templateData = str_replace(
+            '$DATATABLE_COLUMNS$',
+            implode(','.infy_nl_tab(1, 3), $this->generateDataTableColumns()),
+            $templateData
+        );
 
         $path = $this->commandData->config->pathDataTables;
 
         $fileName = $this->commandData->modelName.'DataTable.php';
 
-        $fields = implode(','.infy_nl_tab(1, 3), $headerFields);
-
-        $templateData = str_replace('$DATATABLE_COLUMNS$', $fields, $templateData);
-
         FileUtil::createFile($path, $fileName, $templateData);
 
         $this->commandData->commandComment("\nDataTable created: ");
         $this->commandData->commandInfo($fileName);
+    }
+
+    private function generateDataTableColumns()
+    {
+        $headerFieldTemplate = get_template('scaffold.views.datatable_column', $this->templateType);
+
+        $dataTableColumns = [];
+        foreach ($this->commandData->fields as $field) {
+            if (!$field->inIndex) {
+                continue;
+            }
+
+            $fieldTemplate = fill_template_with_field_data(
+                $this->commandData->dynamicVars,
+                $this->commandData->fieldNamesMapping,
+                $headerFieldTemplate,
+                $field
+            );
+
+            if ($field->isSearchable) {
+                $dataTableColumns[] = $fieldTemplate;
+            } else {
+                $dataTableColumns[] = "'".$field->name."' => ['searchable' => false]";
+            }
+        }
+
+        return $dataTableColumns;
     }
 
     public function rollback()

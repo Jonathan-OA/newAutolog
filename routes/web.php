@@ -74,6 +74,8 @@ Route::group(['middleware' => 'auth'], function() {
     // ----------------------------------------------------------------------------------------------
     // Modulo de Inventário
     // ----------------------------------------------------------------------------------------------
+    Route::get('inventory/importExcel', 'Modules\InventoryController@showImportExcel'); //Mostra Tela de Importação Excel
+    Route::post('inventory/importExcel', 'Modules\InventoryController@importExcel'); //Mostra Tela de Importação Excel
     Route::get('inventory/{document_id}/items', 'Modules\InventoryController@showItems'); //Mostra grid de itens
     Route::match(['GET', 'POST'],'inventory/{document_id}/selectItems', 'Modules\InventoryController@selectItems'); //Form de seleção de itens para o inventário
     Route::get('inventory/{document_id}/items/{document_item_id}/edit', 'Modules\InventoryController@editItem'); //Form de edição de itens

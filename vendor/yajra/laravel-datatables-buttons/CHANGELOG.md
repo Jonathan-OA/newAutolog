@@ -1,8 +1,33 @@
 # Laravel DataTables Buttons Plugin CHANGELOG.
 
-## v3.3.1 - 01-23-2019
+## v4.6.0 - 02-27-2019
 
-- Allow Laravel 5.4 and up [#87, credits to @barryvdh.
+- Add support for dataTable 9.0 / Laravel 5.8 [#89].
+
+## v4.5.0 - 11-14-2018
+
+- Add support for html 4.0
+
+## v4.4.0 - 10-05-2018
+
+- Add option to export only visible columns. [#78], credits to @FabienLucini
+- Fix [#1558].
+
+## v4.3.0 - 09-25-2018
+
+- Allow customization of export and print columns. [#76]
+
+## v4.2.0 - 09-05-2018
+
+- Added hasScopes method. [#70], credits to @alfa6661
+
+## v4.1.0 - 09-05-2018
+
+- Add support for Laravel 5.7
+
+## v4.0.0 - 08-15-2018
+
+- Bump Laravel Excel to version 3.0
 
 ## v3.3.0 - 08-15-2018
 
@@ -129,7 +154,6 @@ ajax(), dataTable(), query(), csv(), excel(), pdf(), printPreview()
 
 - First stable release.
 
-[#87]: https://github.com/yajra/laravel-datatables-buttons/pull/87
 [#65]: https://github.com/yajra/laravel-datatables-buttons/pull/65
 [#67]: https://github.com/yajra/laravel-datatables-buttons/pull/67
 [#59]: https://github.com/yajra/laravel-datatables-buttons/pull/59
@@ -148,5 +172,10 @@ ajax(), dataTable(), query(), csv(), excel(), pdf(), printPreview()
 [#13]: https://github.com/yajra/laravel-datatables-buttons/pull/13
 [#12]: https://github.com/yajra/laravel-datatables-buttons/pull/12
 [#5]: https://github.com/yajra/laravel-datatables-buttons/pull/5
+[#70]: https://github.com/yajra/laravel-datatables-buttons/pull/70
+[#76]: https://github.com/yajra/laravel-datatables-buttons/pull/76
+[#78]: https://github.com/yajra/laravel-datatables-buttons/pull/78
+[#89]: https://github.com/yajra/laravel-datatables-buttons/pull/89
 
 [#19]: https://github.com/yajra/laravel-datatables-buttons/issues/19
+[#1558]: https://github.com/yajra/laravel-datatables/issues/1558

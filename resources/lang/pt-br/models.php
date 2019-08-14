@@ -320,6 +320,7 @@ return [
     'document_edit' => 'Documento: ',  
     'document_create' => 'Criação de Documento',  
     'document_lib' => 'Liberação de Documento',  
+    'document_imp' => 'Importação de Documento',  
     'item_create' => 'Criação de Item',  
     'item_edit' => 'Edição de Item',  
     'items' => 'Itens',
@@ -341,7 +342,8 @@ return [
     'print_doc' => 'Imprimir Documento ',
     'printer' => 'Impressora',
     'printConfig' => 'Configuração de Impressoras',
-    'total' => 'Total '
+    'total' => 'Total ',
+    'fileExcel' => 'Planilha Excel '
     
 
 

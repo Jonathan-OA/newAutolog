@@ -3,16 +3,15 @@
 namespace $NAMESPACE_MODEL$;
 
 use $NAMESPACE_MODEL_EXTEND$ as Model;
-use Auth;
-
 $SOFT_DELETE_IMPORT$
 $DOCS$
 class $MODEL_NAME$ extends Model
 {
+$SOFT_DELETE$
     public $table = '$TABLE_NAME$';
     $TIMESTAMPS$
-	$SOFT_DELETE_DATES$
-	$PRIMARY$
+$SOFT_DELETE_DATES$
+$PRIMARY$
     public $fillable = [
         $FIELDS$
     ];
@@ -36,13 +35,4 @@ class $MODEL_NAME$ extends Model
     ];
 
     $RELATIONS$
-
-     //Retorna todos os $TABLE_NAME$ disponíveis
-     public static function get$MODEL_NAME_PLURAL$(){
-        return $MODEL_NAME$::selectRaw("code,CONCAT(code,' - ',description) as description_f")
-                      ->where('company_id', Auth::user()->company_id)
-                      ->pluck('description_f','code');
-    }
-
-
 }
