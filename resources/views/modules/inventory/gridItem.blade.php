@@ -26,7 +26,7 @@
                                     </a>
                                 </div>
                         </div>
-                        <div class="panel-body">
+                        <div class="panel-body invent">
                             <div ui-grid="gridDetalhes" ui-grid-auto-resize  ui-grid-resize-columns ui-grid-selection ui-grid-pagination ui-grid-move-columns ui-grid-save-state >
                             </div>
                             <!-- Botões com as opções para cada documento -->

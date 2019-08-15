@@ -15,14 +15,14 @@
 
     <!-- Document Type Code Field -->
     {!! Form::label('document_type_code', Lang::get('models.document_type_code').':') !!}
-    {!! Form::select('document_type_code', $document_types,(!empty($document->document_type_code)) ? $document->document_type_code : '', ['class' => 'form-control','id' = 'document_type_code']) !!}
+    {!! Form::select('document_type_code', $document_types,(!empty($document->document_type_code)) ? $document->document_type_code : '', ['class' => 'form-control','id' => 'document_type_code']) !!}
 
     <!-- Number Field -->
     {!! Form::label('number', Lang::get('models.number').':') !!}
     @if(!empty($action) && $action == 'edit')
-        {!! Form::text('number', null, ['class' => 'form-control', 'readonly', 'id' = 'document_number']) !!}
+        {!! Form::text('number', null, ['class' => 'form-control', 'readonly', 'id' => 'document_number']) !!}
     @else
-        {!! Form::text('number', null, ['class' => 'form-control', 'id' = 'document_number']) !!}
+        {!! Form::text('number', null, ['class' => 'form-control', 'id' => 'document_number']) !!}
     @endif
 
     <!-- Document Status Field -->
@@ -70,7 +70,7 @@
         <span aria-label="@lang('infos.param_location')" data-microtip-position="right" role="tooltip">
             <img class='icon' src='{{asset('/icons/information.png') }}' >
         </span>
-        {!! Form::label('vlocation', Lang::get('parameters.param_stock')) !!} 
+        {!! Form::label('vlocation', Lang::get('parameters.param_location')) !!} 
         {{ Form::radio('vlocation', '1' , true) }} @lang('models.yes')
         {{ Form::radio('vlocation', '0' , true) }} @lang('models.no')
         <br>

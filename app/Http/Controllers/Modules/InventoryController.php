@@ -277,9 +277,18 @@ class InventoryController extends AppBaseController
     public function importExcel(Request $request)
     {
         $input = $request->all();
-        $pathFile = $input['fileExcel']->getRealPath();
-        Excel::import(new InventoryItemsImport, $pathFile);
 
+        //Concatena todos os parametros informados em uma string separando por ; e grava no campo comments
+        //O tratamento é feito no app coletor
+        $parameters = "550_contagens=".$input['counts'].";550_valida_saldo=".
+                      $input['vstock'].";550_valida_endereco=".$input['vlocation'].
+                      ";550_valida_produto=".$input['vproduct'];
+        $pathFile = $input['fileExcel']->getRealPath();
+        Excel::import($erro = new InventoryItemsImport($parameters), $pathFile);
+
+
+        Flash::success('Inventário criado com sucesso!');
+        return redirect(route('inventory.index'));
         
     }
 

@@ -2,12 +2,20 @@
 
 namespace App\Imports;
 use Auth;
-use App\Models\InventoryItem;
-use Illuminate\Support\Facades\Hash;
+use DB;
 use Maatwebsite\Excel\Concerns\ToArray;
 
 class InventoryItemsImport implements ToArray
 {
+    private $parameters = '';
+
+    //Parametros de inventário enviados pelo construtor no controller de inventário
+    public function __construct($parameters){
+        $this->parameters = $parameters;
+    }
+
+    
+
     /**
      * @param array $row
      *
@@ -17,6 +25,9 @@ class InventoryItemsImport implements ToArray
     {   
         $totLines = count($row) - 1;
         $cont = 0;
+        
+        //echo $this->parameters;exit; 
+        DB::beginTransaction();
         
         foreach($row as $key => $line){
             $cont++;
@@ -30,14 +41,28 @@ class InventoryItemsImport implements ToArray
             $saldo = $line[5];
             $unidade = $line[6];
 
+            //Se achar alguma linha com endereço e produto em branco, encerra o loop
+            if(trim($endere) == '' && trim($produto) == '') break;
+
+            //Primeira linha
             if($cont == 1) {
+                //Valida quantos foram criados na data atual e incrementa 
+                $cInv = \App\Models\Document::where('company_id',Auth::user()->company_id)
+                                            ->where('document_type_code', 'IVD')
+                                            ->where('number', 'like', date('Ymd').'%')
+                                            ->get()
+                                            ->count();
+                $cInv = $cInv+1;
+
                 //Cria doc de inventário
                 $inv = new \App\Models\Document(['company_id' => Auth::user()->company_id,
-                                                 'number' => date('Ymdh'),
+                                                 'number' => date('Ymd').$cInv,
                                                  'document_type_code' => 'IVD',
                                                  'document_status_id' => 0,
                                                  'inventory_status_id' => 0,
-                                                 'user_id' => Auth::user()->id
+                                                 'user_id' => Auth::user()->id,
+                                                 'emission_date' => \Carbon\Carbon::now(),
+                                                 'comments' => $this->parameters
                                                 ]);
                 if(!$inv->save()){
                     $erro = 1;
@@ -72,13 +97,13 @@ class InventoryItemsImport implements ToArray
             }
 
             //Endereço
-            if(trim($endere) <> ''){
+            if(trim($endere) <> '' && $erro == 0){
                 //Valida se existe
                 $cLocation = \App\Models\Location::where('company_id', Auth::user()->company_id)
                                                ->where('code', trim($endere))
                                                ->get()
                                                ->count();
-                if($cLocation == 0 && $erro == 0){
+                if($cLocation == 0){
                     //Insere na tabela
                     $newLoc = new \App\Models\Location(['company_id' => Auth::user()->company_id,
                                                         'code' => $endere,
@@ -101,9 +126,22 @@ class InventoryItemsImport implements ToArray
                 }                               
 
             }
+            //Unidade
+            $cUnid = \App\Models\Uom::where('code', trim($unidade))
+                                    ->get()
+                                    ->count();
+            if($cUnid == 0){
+                //Insere UOM
+                $newUom = new \App\Models\Uom([ 'code' => $unidade,
+                                                'description' => $unidade]);
+
+                if(!$newUom->save()){
+                    $erro = 1;
+                }
+            }
 
             //Produto
-            if(trim($produto) <> ''){
+            if(trim($produto) <> ''  && $erro == 0){
 
                 $cProd = \App\Models\Product::where('company_id', Auth::user()->company_id)
                                             ->where('code', trim($produto))
@@ -166,7 +204,7 @@ class InventoryItemsImport implements ToArray
                                                           'qty_wms' => $saldo,
                                                           'uom_code' => $unidade,
                                                           'inventory_status_id' => 0
-                                                            ]);
+                                                        ]);
                 if(!$invItem->save()){
                     $erro = 1;
                     break;
@@ -177,6 +215,15 @@ class InventoryItemsImport implements ToArray
 
             $cont++;
         }
-        
+        if($erro == 0){
+            DB::commit();
+        }else{
+            DB::rollback();
+            echo 'erroooo';
+        }
+
+        return $erro;
+
+
     }
 }

@@ -173,6 +173,11 @@
         width: 100%;
         height: 65vh;
     }
+
+    .invent > .ui-grid {
+        width: 100%;
+        height: 60vh;
+    }
     
     .ui-grid-row-selected {
         z-index: 1 !important;
@@ -193,6 +198,10 @@
     
     .panel {
         height: 92vh;
+    }
+
+    .panel-body{
+        padding: 5px 10px;
     }
     
     .pbread {
@@ -232,10 +241,19 @@
         text-align: center !important;
         overflow: visible !important;
     }
+
+
+    .ui-grid-row, .ui-grid-cell {
+        height: 27px !important;
+    }
+    .ui-grid-cell-contents{
+        padding: 4px !important;
+    }
+
     
     .ui-grid-header-cell {
         color: white !important;
-        font-size: 1.4rem;
+        font-size: 1.3rem;
         font-weight: normal;
         background-color: #17263d !important;
     }
@@ -314,6 +332,10 @@
     .progress-bar {
         background-color: #09678c !important;
     }
+
+    .progress{
+        margin-bottom: 0px !important;
+    }
     /* ------------------------------------------------*/
     /*  Cores relacionadas aos status dos documentos   */
     /* ------------------------------------------------*/
@@ -374,7 +396,7 @@
     }
     
     .buttons_grid {
-        margin: 14px 0 0 2%;
+        margin: 5px 0 0 2%;
     }
     
     button:focus {

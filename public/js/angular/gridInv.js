@@ -159,7 +159,7 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
                             { value: '8', label: 'Encerrado' }, { value: '9', label: 'Cancelado' }
                         ]
                     },
-                    cellTemplate: '<div class="ui-grid-cell-contents" ><div class="grid_cell stat{{grid.getCellValue(row, col)}}"> <p>{{row.entity.description}}</p></div></div>'
+                    cellTemplate: '<div class="ui-grid-cell-contents" ><div class="grid_cell stat{{grid.getCellValue(row, col)}}"> {{row.entity.description}}</div></div>'
                 },
                 { name: 'Contagem', field: 'inv_description' },
                 { name: 'Emissão', field: 'emission_date', type: 'date', cellFilter: "dateFilter" },
@@ -246,7 +246,7 @@ app.controller('DetCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '
                 { name: 'Endereço', field: 'location_code' },
                 { name: 'Item', field: 'product_code' },
                 { name: 'Quantidade', field: 'qty' },
-                { name: 'Status', field: 'description', cellTemplate: '<div class="ui-grid-cell-contents"><div class="grid_cell stat{{grid.getCellValue(row, col)}}"><p>{{row.entity.description}}</p></div></div>' }
+                { name: 'Status', field: 'description', cellTemplate: '<div class="grid_cell stat{{grid.getCellValue(row, col)}}"><div class="ui-grid-cell-contents">{{row.entity.description}}</div></div>' }
             ],
             enablePaginationControls: false,
             paginationPageSize: 18,

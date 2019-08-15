@@ -47,7 +47,8 @@ class Document extends Model
         'location_code',
         'number_origin',
         'document_type_origin',
-        'finalization'
+        'finalization',
+       'inventory_status_id',
     ];
 
     /**
