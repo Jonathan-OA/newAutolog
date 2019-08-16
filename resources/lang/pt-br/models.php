@@ -343,7 +343,7 @@ return [
     'printer' => 'Impressora',
     'printConfig' => 'Configuração de Impressoras',
     'total' => 'Total ',
-    'fileExcel' => 'Planilha Excel '
+    'fileExcel' => 'Planilha Excel ',
     
 
 

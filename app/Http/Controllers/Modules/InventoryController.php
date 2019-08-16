@@ -440,6 +440,40 @@ class InventoryController extends AppBaseController
 
     }
 
+    /**
+     * Mostra o formulário para inserção de itens 2ª e 3ª contagem
+     *
+     * @return Response
+     */
+
+    public function selectItemsCount($document_id, $invCount,  Request $request)
+    {
+        if ($request->isMethod('POST')) {
+            $input = $request->all(); 
+            $deposits = (empty($input['deposits']))? '' : $input['deposits'];
+        }else{
+            //Se não informou depósitos por padrão, não lista nada
+            $deposits = 'DEP01,DEP02,';
+        }
+        
+        //Valida se usuário possui permissão para acessar esta opção
+        if(App\Models\User::getPermission('documents_inv_item_add',Auth::user()->user_type_code)){
+            $document = $this->documentRepository->findWithoutFail($document_id);
+
+            //Pega todos os saldos para montar a tela de itens
+            $invItems = App\Models\InventoryItem::getItensForCount($document->id, $invCount);
+           
+            return view('modules.inventory.selectItems2acount')->with('document',$document)
+                                                        ->with('invItems', $invItems)
+                                                        ->with('depositAnt', '');
+        }else{
+            //Sem permissão
+            Flash::error(Lang::get('validation.permission'));
+            return redirect(url('inventory'));
+        }
+
+    }
+
     public function getItems($document_id){
         $documents = App\Models\DocumentItem::where('document_id',$document_id)->get();
         return $documents->toArray();

@@ -75,9 +75,10 @@ Route::group(['middleware' => 'auth'], function() {
     // Modulo de Inventário
     // ----------------------------------------------------------------------------------------------
     Route::get('inventory/importExcel', 'Modules\InventoryController@showImportExcel'); //Mostra Tela de Importação Excel
-    Route::post('inventory/importExcel', 'Modules\InventoryController@importExcel'); //Mostra Tela de Importação Excel
+    Route::post('inventory/importExcel', 'Modules\InventoryController@importExcel'); //Importa Excel e Cria IVD com os itens
     Route::get('inventory/{document_id}/items', 'Modules\InventoryController@showItems'); //Mostra grid de itens
     Route::match(['GET', 'POST'],'inventory/{document_id}/selectItems', 'Modules\InventoryController@selectItems'); //Form de seleção de itens para o inventário
+    Route::match(['GET', 'POST'],'inventory/{document_id}/selectItemsCount/{invCount}', 'Modules\InventoryController@selectItemsCount'); //Form de seleção de itens para segunda / terceira contagem
     Route::get('inventory/{document_id}/items/{document_item_id}/edit', 'Modules\InventoryController@editItem'); //Form de edição de itens
     Route::patch('inventory/updateItem/{document_item_id}', 'Modules\InventoryController@updateItem')->name('inventory.updateItem');; //Atualiza item
     Route::post('inventory/{document_id}/storeItem', 'Modules\InventoryController@storeItem')->name('inventory.storeItem');; //Cria item

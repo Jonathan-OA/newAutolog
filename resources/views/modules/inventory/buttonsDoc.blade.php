@@ -24,7 +24,7 @@
 
         <!-- 2ª Contagem (Status 21) -->
         <button ng-if="row.status_inv == 21" class="icon_action" 
-                ng-click="callRoute('./inventory/'+row.id+'/liberate/2', 1)" aria-label="@lang('buttons.2acont')" data-microtip-position="left" role="tooltip">
+                ng-click="callRoute('./inventory/'+row.id+'/selectItemsCount/2')" aria-label="@lang('buttons.2acont')" data-microtip-position="left" role="tooltip">
                 <img class='icon' src='{{asset('/icons/2acont.png') }}'>
         </button>
 

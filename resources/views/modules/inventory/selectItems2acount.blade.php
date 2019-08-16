@@ -4,7 +4,7 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="{!! route('inventory.index') !!}">@lang('models.inventory')</a></li>
-          <li class="breadcrumb-item active" aria-current="page">@lang('buttons.add_items')</li>
+          <li class="breadcrumb-item active" aria-current="page">@lang('buttons.2acont')</li>
         </ol>
     </nav>
     <div class="row">
@@ -35,7 +35,7 @@
                                 <div class="col-md-12">
                                     {!! Form::open(['url' => 'inventory/'.$document->id.'/storeItem']) !!}
                                         <div class="form-group" style="overflow-y: auto">
-                                                @include('modules.inventory.fieldsSelectItems')
+                                                @include('modules.inventory.fieldsSelectItemsCount')
                                         </div>
                                     {!! Form::close() !!}
                                 </div>
@@ -61,6 +61,12 @@
             }else{
                 locations.prop('checked', false);
             }
+        })
+
+        //Função para selecionar ao clicar na linha
+        $("tr").click(function(){
+            $(this).find("input[id^='V']").prop("checked", !$(this).find("input[id^='V']").prop("checked"));
+
         })
                     
     });

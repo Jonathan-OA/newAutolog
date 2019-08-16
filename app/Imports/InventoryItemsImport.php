@@ -73,6 +73,7 @@ class InventoryItemsImport implements ToArray
                 continue; 
             }
 
+            
             //Deposito
             if(trim($deposito) <> ''){
                 //Valida se existe
@@ -168,14 +169,14 @@ class InventoryItemsImport implements ToArray
                     //Barcode
                     $barcode = (trim($barcode) <> '')? $barcode : $produto;
                     if($erro == 0){
-                        $cPack = \App\Models\Packings::where('company_id', Auth::user()->company_id)
+                        $cPack = \App\Models\Packing::where('company_id', Auth::user()->company_id)
                                                      ->where('product_code', trim($produto))
                                                      ->where('barcode', trim($barcode))
                                                      ->get()
                                                      ->count();
                         if($cPack == 0){
                             //Insere embalagem
-                            $newPack = new \App\Models\Product([ 'company_id' => Auth::user()->company_id,
+                            $newPack = new \App\Models\Packing([ 'company_id' => Auth::user()->company_id,
                                                                  'product_code' => $produto,
                                                                  'barcode' => $barcode,
                                                                  'level' => '1',
