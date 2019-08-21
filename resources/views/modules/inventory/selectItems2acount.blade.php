@@ -33,7 +33,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
-                                    {!! Form::open(['url' => 'inventory/'.$document->id.'/storeItem']) !!}
+                                    {!! Form::open(['url' => 'inventory/'.$document->id.'/updateItemsNextCount']) !!}
                                         <div class="form-group" style="overflow-y: auto">
                                                 @include('modules.inventory.fieldsSelectItemsCount')
                                         </div>
@@ -52,23 +52,41 @@
     var table;
     $(function() {
         //Função para selecionar todos os endereços do depósito
-        $("input[id^='H_']").change(function(){
-            //Pega nome do depósito clicado (desconsiderando os desabilitados por conter reserva)
+        $("input[type='checkbox']").change(function(){
+            //Primeira letra do ID significa finalização ou prox contagem
+            var id = $(this).attr("id");
+            //Pega nome do depósito clicado
             var deposit = $(this).attr("value");
-            var locations = $("input[id^='V"+deposit+"']:enabled");
-            if($(this).prop('checked')){
-                locations.prop('checked', true);
+            //Pega todos os elementos com o input correto (prox ou finalização)
+            if(id.substr(0,1) == 'F'){
+                //Tira o check do outro checkbox do deposito
+                $("input[type='checkbox'][id^='P_"+deposit+"']").prop('checked', false);
             }else{
-                locations.prop('checked', false);
+                $("input[type='checkbox'][id^='F_"+deposit+"']").prop('checked', false);
             }
+
+            var locations = $("input[id^='"+id.substr(0,1)+deposit+"']");
+            
+            //Seleciona todos da coluna
+            if($(this).prop('checked')){
+                locations.prop('checked', true).trigger('change');
+            }else{
+                locations.prop('checked', false).trigger('change');
+            }
+
         })
 
-        //Função para selecionar ao clicar na linha
-        $("tr").click(function(){
-            $(this).find("input[id^='V']").prop("checked", !$(this).find("input[id^='V']").prop("checked"));
-
+        //Função para selecionar radio button ao clicar na celula
+        $(".radioClick").click(function(){
+            $(this).children('input').prop("checked", true);
         })
-                    
+
+        $("input[type='radio']").change(function(){
+            $(this).parents('tr').after('<tr><td colspan=2> </td><td>Palete: PLT 0001</td><td>Etiqueta: 000012345</td><td><input/></td></tr>');
+        })
+
+
+        
     });
 
 </script>

@@ -204,6 +204,7 @@ class InventoryItemsImport implements ToArray
                                                           'location_code' => $endere,
                                                           'qty_wms' => $saldo,
                                                           'uom_code' => $unidade,
+                                                          'prim_uom_code' => $unidade,
                                                           'inventory_status_id' => 0
                                                         ]);
                 if(!$invItem->save()){

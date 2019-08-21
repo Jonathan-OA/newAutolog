@@ -128,6 +128,11 @@ $(document).on({
     }
 });
 
+//Função que mostra a modal de carregamento quando um form é submetido
+$('form').submit(function() {
+    $('#loadingModal').modal('toggle');
+});
+
 //Função que obtem a ultima notificação criada e a ultima lida pelo usuário
 function showNotification(user_code) {
     $.ajax(APP_URL + "/notification/" + user_code)

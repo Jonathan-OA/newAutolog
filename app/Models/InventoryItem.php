@@ -72,7 +72,8 @@ class InventoryItem extends Model
         'date_3count',
         'qty_4count',
         'user_4count',
-        'date_4count'
+        'date_4count',
+        'prim_uom_code'
     ];
 
     /**
@@ -108,9 +109,9 @@ class InventoryItem extends Model
      
      public static function getItens($document_id, $statusDsc = ''){
         
-        return InventoryItem::select(DB::raw("MIN(inventory_items.id) as id "),'inventory_items.company_id',
+        return InventoryItem::select(DB::raw("MIN(inventory_items.id) as id "),'inventory_items.company_id','uom_code',
                                     'document_id','inventory_items.product_code','location_code',DB::raw("SUM(qty_wms) as qty"),
-                                    'inventory_items.created_at', 'description', 'deposit_code', 'inventory_status_id', 'uom_code')
+                                    'inventory_items.created_at', 'description', 'deposit_code', 'inventory_status_id', 'prim_uom_code')
                             ->join('inventory_status','inventory_status.id','inventory_items.inventory_status_id')
                             ->join('locations', function($join){
                                 $join->on('locations.code','inventory_items.location_code')
@@ -131,6 +132,7 @@ class InventoryItem extends Model
                                       'description',
                                       'deposit_code',
                                       'inventory_status_id',
+                                      'prim_uom_code',
                                       'uom_code')
                             ->get()
                             ->toArray();
@@ -158,7 +160,7 @@ class InventoryItem extends Model
                                     'inventory_items.document_id','inventory_items.product_code','inventory_items.location_code',DB::raw("SUM(qty_1count) as qty1"),
                                     DB::raw("SUM(qty_2count) as qty2"),DB::raw("SUM(qty_3count) as qty3"),
                                     DB::raw("SUM(qty_wms) as qty_wms"),DB::raw("SUM(qty_4count) as qty4"),'labels.barcode as label_barcode',
-                                    'inventory_items.created_at', 'description', 'deposit_code', 'inventory_status_id', 'inventory_items.uom_code')
+                                    'inventory_items.created_at', 'description', 'deposit_code', 'inventory_status_id', 'inventory_items.prim_uom_code')
                             ->join('inventory_status','inventory_status.id','inventory_items.inventory_status_id')
                             ->join('locations', function($join){
                                 $join->on('locations.code','inventory_items.location_code')
@@ -209,7 +211,7 @@ class InventoryItem extends Model
                                     DB::raw("SUM(qty_2count) as qty2"),DB::raw("SUM(qty_3count) as qty3"),
                                     DB::raw("SUM(qty_wms) as qty_wms"),DB::raw("SUM(qty_4count) as qty4"),
                                     'inventory_items.created_at', 'description', 'deposit_code', 'inventory_status_id', 
-                                    'inventory_items.uom_code')
+                                    'inventory_items.prim_uom_code')
                             ->join('inventory_status','inventory_status.id','inventory_items.inventory_status_id')
                             ->join('locations', function($join){
                                 $join->on('locations.code','inventory_items.location_code')
@@ -233,5 +235,92 @@ class InventoryItem extends Model
                             ->get();
     }
 
+     /**
+     * Finaliza o item
+     *
+     * @var document_id e @var count 
+     */
+     
+    public static function closeItem($document_id, $product, $location, $qty){
+
+        switch($count){
+            case 2:
+                $status = array(1,21);
+                break;
+            case 3:
+                $status = array(1,2,31);
+                break;
+            default:
+                $status = '';
+        }
+
+        $updItem = InventoryItem::where('company_id', Auth::user()->company_id)
+                                ->where('product_code', $product)
+                                ->where('location_code', $location)
+                                ->where('inventory_status_id', '<>', 8)
+                                ->update(['inventory_status_id' => 8,
+                                          'qty_4acont' => $location_code]);
+
+    }
+
+     /**
+     * Libera o item para a próxima contagem
+     *
+     * @var document_id e @var count 
+     */
+     
+    public static function nextCount($document_id, $product, $location, $invCount){
+        switch($invCount){
+            case 2:
+                $newInvCount = 2;
+                $status = array(1, 21);
+                $operation_code = '552';
+                break;
+            case 3:
+                $newInvCount = 3;
+                $status = array(1, 2, 31);
+                $operation_code = '553';
+                break;
+            case 4:
+                $newInvCount = 4;
+                $status = array(1, 2, 3, 41);
+                $operation_code = '554';
+                break;
+            default:
+                $status = '';
+                $operation_code = '';
+        }
+
+        try{
+            //Cria uma tarefa para cada inventory_item
+            $ret = DB::table('tasks')
+                    ->insertUsing(['company_id','operation_code','document_id','inventory_item_id',
+                                    'orig_location_code','dest_location_code','task_status_id','created_at'],
+                                    InventoryItem::where('company_id', Auth::user()->company_id)
+                                                ->where('document_id', $document_id)
+                                                ->where('product_code', $product)
+                                                ->where('location_code', $location)
+                                                ->whereIn('inventory_status_id', $status)
+                                                ->select('company_id',DB::raw("$operation_code as operation_code") ,'document_id',
+                                                            'id','location_code',
+                                                            'location_code', DB::raw("1 as task_status_id")));
+            if($ret){
+                //Atualiza inventory_items para proxima contagem
+                $updItem = InventoryItem::where('company_id', Auth::user()->company_id)
+                                        ->where('product_code', $product)
+                                        ->where('location_code', $location)
+                                        ->where('document_id', $document_id)
+                                        ->whereIn('inventory_status_id', $status)
+                                        ->update(['inventory_status_id' => $newInvCount]);
+            }
+            return 0;
+        }catch(Exception $e){
+            //ERRO
+            return 1;
+        }
+        
+
+        
+    }
 
 }
