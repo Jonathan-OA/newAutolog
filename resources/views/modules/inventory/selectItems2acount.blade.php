@@ -69,7 +69,7 @@
             
             //Seleciona todos da coluna
             if($(this).prop('checked')){
-                locations.prop('checked', true).trigger('change');
+                locations.prop('checked', true).trigger('click');
             }else{
                 locations.prop('checked', false).trigger('change');
             }
@@ -81,8 +81,32 @@
             $(this).children('input').prop("checked", true);
         })
 
-        $("input[type='radio']").change(function(){
-            $(this).parents('tr').after('<tr><td colspan=2> </td><td>Palete: PLT 0001</td><td>Etiqueta: 000012345</td><td><input/></td></tr>');
+        //Ao clicar em finalizar, busca os detalhes de cada linha produto/location 
+        $("input[type='radio'][value='F']").click(async function(){
+            var product = $(this).attr('prd'); //Produto
+            var location = $(this).attr('loc'); //Endereço
+            var count = 2;
+
+            var trRef = $(this).parents('tr');
+
+            await $.ajax({
+                url: '{!! url("/inventory/$document->id/detItemsNextCount") !!}',
+                type: 'POST',
+                data: {product, location, count, _token: $('meta[name="csrf-token"]').attr('content')},
+                success: function(data){ 
+                    data.forEach(function(line){
+                        //console.log($(this).parents('tr'));
+                        trRef.after('<tr class="lineDet"><td class="wborder" colspan=2><img src="{!! asset("/icons/right-arrow.png") !!}" /></td><td>Palete: '
+                                            +line.plt_barcode
+                                            +'</td><td>Etiqueta: '+line.label_barcode
+                                            +'</td><td>UOM: '+line.uom_code
+                                            +'</td><td>Final: <input type="number" value="'+line.qty_wms
+                                            +'"/> '+line.uom_code+'</td></tr>');
+                    })
+                }
+            })
+
+            
         })
 
 

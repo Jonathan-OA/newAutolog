@@ -189,7 +189,7 @@ class InventoryItem extends Model
     }
 
     /**
-     * Retorna os itens pendentes para abertura de proxima contagem
+     * Retorna os itens pendentes para abertura de proxima contagem (Agrupados por endereço)
      *
      * @var document_id e @var count 
      */
@@ -231,6 +231,46 @@ class InventoryItem extends Model
                                       'inventory_items.created_at',
                                       'description',
                                       'inventory_items.id')
+                            ->orderBy('deposit_code')
+                            ->get();
+    }
+
+    /**
+     * Retorna os itens pendentes para abertura de proxima contagem
+     *
+     * @var document_id e @var count 
+     */
+     
+    public static function getDetItensForCount($document_id, $product_code, $location_code, $count ){
+        switch($count){
+            case 2:
+                $status = array(1,21);
+                break;
+            case 3:
+                $status = array(1,2,31);
+                break;
+            default:
+                $status = '';
+        }
+        
+        return InventoryItem::select('inventory_items.company_id','inventory_items.document_id','inventory_items.product_code',
+                                     'inventory_items.location_code','qty_1count','qty_2count','qty_3count','qty_wms','qty_4count',
+                                     'pallets.barcode as plt_barcode','labels.barcode as label_barcode',
+                                    'inventory_items.created_at', 'description', 'deposit_code', 'inventory_status_id', 
+                                    'inventory_items.prim_uom_code','inventory_items.uom_code')
+                            ->join('inventory_status','inventory_status.id','inventory_items.inventory_status_id')
+                            ->join('locations', function($join){
+                                $join->on('locations.code','inventory_items.location_code')
+                                     ->whereColumn('locations.company_id','inventory_items.company_id');
+                            })
+                            ->leftJoin('pallets','pallets.id','inventory_items.pallet_id')
+                            ->leftJoin('labels','labels.id','inventory_items.label_id')
+                            ->where('inventory_items.company_id', Auth::user()->company_id)
+                            ->where('inventory_items.document_id', $document_id)
+                            ->where('inventory_items.inventory_status_id', '<>' ,9)
+                            ->where('inventory_items.product_code', $product_code)
+                            ->where('inventory_items.location_code', $location_code)
+                            ->whereIn('inventory_items.inventory_status_id', $status)
                             ->orderBy('deposit_code')
                             ->get();
     }

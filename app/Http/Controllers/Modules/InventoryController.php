@@ -354,6 +354,24 @@ class InventoryController extends AppBaseController
         }
     }
 
+    /**
+     * Detalha os itens para finalziar a contagem (Retorna palete, etiqueta e qdes)
+     *
+     * @return Response
+     */
+
+    public function detItemsNextCount($document_id, Request $request)
+    {
+        $input = $request->all(); 
+        //$invCount = $input['invCount'];
+        $product = $input['product'];
+        $location = $input['location'];
+        $invCount = $input['count'];
+
+        $det =  App\Models\InventoryItem::getDetItensForCount($document_id, $product, $location, $invCount);
+        return $det;
+    }
+
 
 
     //--------------------------------------------------------------------------------------------

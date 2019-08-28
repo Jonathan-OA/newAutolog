@@ -336,6 +336,20 @@
     .progress {
         margin-bottom: 0px !important;
     }
+    
+    .lineDet>td>img {
+        height: 15px;
+        float: right
+    }
+    
+    .lineDet {
+        border-top: 2px solid black;
+    }
+    
+    td .wborder {
+        border-left: 0px;
+        border-bottom: 0px;
+    }
     /* ------------------------------------------------*/
     /*  Cores relacionadas aos status dos documentos   */
     /* ------------------------------------------------*/

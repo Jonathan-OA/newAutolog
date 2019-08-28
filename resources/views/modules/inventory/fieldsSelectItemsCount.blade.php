@@ -48,7 +48,7 @@
                 <input type="radio" id="P{{$item->deposit_code}}" name="items[{{$code}}]" value="P" {{ (($item->count > 0 || $item->exs > 0) ? 'disabled' : '') }} > 
             </td>
             <td class="td_center radioClick">
-                <input type="radio" id="F{{$item->deposit_code}}" name="items[{{$code}}]" value="F" {{ (($item->count > 0 || $item->exs > 0) ? 'disabled' : '') }} > 
+            <input type="radio" id="F{{$item->deposit_code}}" prd="{{$item->product_code}}" loc="{{$item->location_code}}" name="items[{{$code}}]" value="F" {{ (($item->count > 0 || $item->exs > 0) ? 'disabled' : '') }} > 
             </td>
             <td>{!! $item->location_code !!}</td> <!--Endereço -->
             <td>{!! $item->product_code !!}</td> <!--Produto --> 
