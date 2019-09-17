@@ -172,7 +172,7 @@ class InventoryItem extends Model
                             ->where('inventory_items.document_id', $document_id)
                             ->where('inventory_items.inventory_status_id', '<>' ,9)
                             ->when($status, function ($query, $status) {
-                                if(!empty($status)){
+                                if(count($status) > 0){
                                     $query->whereIn('inventory_items.inventory_status_id', $status);
                                 }
                             })
@@ -194,7 +194,7 @@ class InventoryItem extends Model
      * @var document_id e @var count 
      */
      
-    public static function getItensForCount($document_id, $count = ''){
+    public static function getItensForCount($document_id, $count = '', $deposits = '', $divMax = '', $divMin = ''){
         switch($count){
             case 2:
                 $status = array(1,21);
@@ -206,31 +206,46 @@ class InventoryItem extends Model
                 $status = '';
         }
         
-        return InventoryItem::select('inventory_items.company_id','inventory_items.document_id','inventory_items.product_code',
-                                     'inventory_items.location_code',DB::raw("SUM(qty_1count) as qty1"),
-                                    DB::raw("SUM(qty_2count) as qty2"),DB::raw("SUM(qty_3count) as qty3"),
-                                    DB::raw("SUM(qty_wms) as qty_wms"),DB::raw("SUM(qty_4count) as qty4"),
-                                    'inventory_items.created_at', 'description', 'deposit_code', 'inventory_status_id', 
-                                    'inventory_items.prim_uom_code')
-                            ->join('inventory_status','inventory_status.id','inventory_items.inventory_status_id')
+        return InventoryItem::select('inv.company_id','inv.document_id','inv.product_code',
+                                     'inv.location_code',DB::raw("SUM(inv.qty_1count) as qty1"),
+                                    DB::raw("SUM(inv.qty_2count) as qty2"),DB::raw("SUM(inv.qty_3count) as qty3"),
+                                    DB::raw("SUM(inv.qty_wms) as qty_wms"),DB::raw("SUM(inv.qty_4count) as qty4"),
+                                    DB::raw("MIN(inv.created_at) as created_at"), 'inventory_status.description', 'deposit_code', 'inv.inventory_status_id','inv.prim_uom_code',
+                                    DB::raw("COUNT(distinct itemsFin.id) as itemsFin"),
+                                    DB::raw("SUM(CASE WHEN inv.inventory_status_id = 8 THEN IFNULL(inv.qty_4count,0) ELSE IFNULL(inv.qty_".($count-1)."count,0) END - inv.qty_wms) * products.cost as cost"))
+                            ->from('inventory_items as inv' )
+                            ->join('inventory_status','inventory_status.id','inv.inventory_status_id')
                             ->join('locations', function($join){
-                                $join->on('locations.code','inventory_items.location_code')
-                                     ->whereColumn('locations.company_id','inventory_items.company_id');
+                                $join->on('locations.code','inv.location_code')
+                                     ->whereColumn('locations.company_id','inv.company_id');
                             })
-                            ->where('inventory_items.company_id', Auth::user()->company_id)
-                            ->where('inventory_items.document_id', $document_id)
-                            ->where('inventory_items.inventory_status_id', '<>' ,9)
+                            ->join('products', function($join){
+                                $join->on('products.code','inv.product_code')
+                                     ->whereColumn('products.company_id','inv.company_id');
+                            })
+                            ->leftJoin('inventory_items as itemsFin', function($join){
+                                $join->on('itemsFin.document_id','inv.document_id')
+                                     ->whereColumn('itemsFin.product_code','inv.product_code')
+                                     ->whereColumn('itemsFin.location_code','inv.location_code')
+                                     ->where('itemsFin.inventory_status_id','8');
+                            })
+                            ->where('inv.company_id', Auth::user()->company_id)
+                            ->where('inv.document_id', $document_id)
+                            ->where('inv.inventory_status_id', '<>' ,9)
                             ->when($status, function ($query, $status) {
                                 if(!empty($status)){
-                                    $query->whereIn('inventory_items.inventory_status_id', $status);
+                                    $query->whereIn('inv.inventory_status_id', $status);
                                 }
                             })
-                            ->groupBy('inventory_items.company_id', 
-                                      'inventory_items.product_code',
+                            ->when($deposits, function ($query, $deposits) {
+                                if(!empty($deposits)){
+                                    $query->whereIn('locations.deposit_code', $deposits);
+                                }
+                            })
+                            ->groupBy('inv.company_id', 
+                                      'inv.product_code',
                                       'location_code',
-                                      'inventory_items.created_at',
-                                      'description',
-                                      'inventory_items.id')
+                                      'inventory_status.description')
                             ->orderBy('deposit_code')
                             ->get();
     }
@@ -263,6 +278,10 @@ class InventoryItem extends Model
                                 $join->on('locations.code','inventory_items.location_code')
                                      ->whereColumn('locations.company_id','inventory_items.company_id');
                             })
+                            ->join('products', function($join){
+                                $join->on('products.code','inventory_items.product_code')
+                                     ->whereColumn('products.company_id','inventory_items.company_id');
+                            })
                             ->leftJoin('pallets','pallets.id','inventory_items.pallet_id')
                             ->leftJoin('labels','labels.id','inventory_items.label_id')
                             ->where('inventory_items.company_id', Auth::user()->company_id)
@@ -276,30 +295,19 @@ class InventoryItem extends Model
     }
 
      /**
-     * Finaliza o item
+     * Finaliza o inventário do item / endereço
      *
      * @var document_id e @var count 
      */
      
-    public static function closeItem($document_id, $product, $location, $qty){
-
-        switch($count){
-            case 2:
-                $status = array(1,21);
-                break;
-            case 3:
-                $status = array(1,2,31);
-                break;
-            default:
-                $status = '';
-        }
-
+    public static function closeItem($document_id, $product, $location, $qty = 1){
+        
         $updItem = InventoryItem::where('company_id', Auth::user()->company_id)
                                 ->where('product_code', $product)
                                 ->where('location_code', $location)
                                 ->where('inventory_status_id', '<>', 8)
                                 ->update(['inventory_status_id' => 8,
-                                          'qty_4acont' => $location_code]);
+                                          'qty_4acont' => $qty]);
 
     }
 

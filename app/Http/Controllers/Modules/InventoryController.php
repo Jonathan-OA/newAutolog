@@ -299,21 +299,22 @@ class InventoryController extends AppBaseController
      */
 
     public function selectItemsNextCount($document_id, $invCount,  Request $request)
-    {
+    {   
+        $deposits = $divMax = $divMin = '';
+
+        //Se vier pelo Post, significa que é filtro
         if ($request->isMethod('POST')) {
-            $input = $request->all(); 
-            $deposits = (empty($input['deposits']))? '' : $input['deposits'];
-        }else{
-            //Se não informou depósitos por padrão, não lista nada
-            $deposits = 'DEP01,DEP02,';
+            $deposits = array_filter(explode(',',$request['filterDep']));
+            $divMax = $request['filterDiv1'];
+            $divMin = $request['filterDiv2'];
         }
-        
+
         //Valida se usuário possui permissão para acessar esta opção
         if(App\Models\User::getPermission('documents_inv_item_add',Auth::user()->user_type_code)){
             $document = $this->documentRepository->findWithoutFail($document_id);
 
             //Pega todos os saldos para montar a tela de itens
-            $invItems = App\Models\InventoryItem::getItensForCount($document->id, $invCount);
+            $invItems = App\Models\InventoryItem::getItensForCount($document->id, $invCount, $deposits, $divMax, $divMin);
            
             return view('modules.inventory.selectItems2acount')->with('document',$document)
                                                         ->with('invItems', $invItems)
@@ -344,7 +345,8 @@ class InventoryController extends AppBaseController
             if(trim($location) <> '' && trim($prod) <> ''){
                 if($type == 'F'){
                     //Finaliza
-                    echo 'Fim : '.$prod.' // '.$location.' -- ';
+                    //echo 'Fim : '.$prod.' // '.$location.' -- ';
+                    $ret = App\Models\InventoryItem::closeItem($document_id, $prod, $location);
                     
                 }elseif($type == 'P'){
                     //Próxima contagem

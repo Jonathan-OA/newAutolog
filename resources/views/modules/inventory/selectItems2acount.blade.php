@@ -20,12 +20,20 @@
                         <div id="msg_excluir"></div>
                         <div class="panel-body">
                             <div class="row">
-                                {!! Form::open(['url' => 'inventory/'.$document->id.'/selectItems']) !!}
-                                <div class="col-md-10">
-                                    <!-- Deposits Field -->
-                                    {!! Form::label('deposits', Lang::get('models.deposits').':') !!}
-                                    {!! Form::text('deposits', null, ['class' => 'form-control','id' => 'autocomplete1', 'table' => 'deposits', 'multiple']) !!}
+                                {!! Form::open(['url' => 'inventory/'.$document->id.'/selectItemsCount/2']) !!}
+                                <div class="col-md-4">
+                                    <!-- Filtros -->
+                                    {!! Form::label('filterDep', Lang::get('models.deposits').':') !!}
+                                    {!! Form::text('filterDep', null, ['class' => 'form-control','id' => 'autocomplete1', 'table' => 'deposits', 'multiple']) !!}
                                 </div>
+                                <div class="col-md-3">
+                                    {!! Form::label('filterDiv1', 'Diverg. maior que :') !!}
+                                    {!! Form::number('filterDiv1', null, ['class' => 'form-control']) !!}
+                                </div>
+                                <div class="col-md-3">
+                                        {!! Form::label('filterDiv2', 'Diverg. menor que :') !!}
+                                        {!! Form::number('filterDiv2', null, ['class' => 'form-control','id' => 'divMin']) !!}
+                                    </div>
                                 <div class="col-md-2" style="padding-top:25px">
                                     {!! Form::submit(Lang::get('buttons.filter'), ['class' => 'btn btn-primary']) !!}
                                 </div>
@@ -66,7 +74,7 @@
             }
 
             var locations = $("input[id^='"+id.substr(0,1)+deposit+"']");
-            
+
             //Seleciona todos da coluna
             if($(this).prop('checked')){
                 locations.prop('checked', true).trigger('click');
@@ -78,36 +86,48 @@
 
         //Função para selecionar radio button ao clicar na celula
         $(".radioClick").click(function(){
-            $(this).children('input').prop("checked", true);
+            $(this).children('input').prop("checked", true).trigger('change');
         })
 
-        //Ao clicar em finalizar, busca os detalhes de cada linha produto/location 
-        $("input[type='radio'][value='F']").click(async function(){
+        $("#autocomplete1").change(function(){
+            console.log($(this).val());
+        })
+        /*
+        //Funções de seleção de Prox Contagem ou Finalização
+        $("input[type='radio']").change(async function(){
+            //Value F = Finalizar; Value P = Prox Contagem
+            var value = $(this).val();
+
             var product = $(this).attr('prd'); //Produto
             var location = $(this).attr('loc'); //Endereço
-            var count = 2;
+            let code = product+location+'Det';
 
-            var trRef = $(this).parents('tr');
+            if(value == 'P'){
+                //Apaga as linhas de detalhes do item e endereço, se houver
+                $("#tr"+code).remove();
+            }else{
+                //Insere uma table com os detalhes de palete, etiqueta e quantidades
+                var count = 2;
+                var trRef = $(this).parents('tr');
 
-            await $.ajax({
-                url: '{!! url("/inventory/$document->id/detItemsNextCount") !!}',
-                type: 'POST',
-                data: {product, location, count, _token: $('meta[name="csrf-token"]').attr('content')},
-                success: function(data){ 
-                    data.forEach(function(line){
-                        //console.log($(this).parents('tr'));
-                        trRef.after('<tr class="lineDet"><td class="wborder" colspan=2><img src="{!! asset("/icons/right-arrow.png") !!}" /></td><td>Palete: '
-                                            +line.plt_barcode
-                                            +'</td><td>Etiqueta: '+line.label_barcode
-                                            +'</td><td>UOM: '+line.uom_code
-                                            +'</td><td>Final: <input type="number" value="'+line.qty_wms
-                                            +'"/> '+line.uom_code+'</td></tr>');
-                    })
-                }
-            })
+                await $.ajax({
+                    url: '{!! url("/inventory/$document->id/detItemsNextCount") !!}',
+                    type: 'POST',
+                    data: {product, location, count, _token: $('meta[name="csrf-token"]').attr('content')},
+                    success: function(data){ 
+                        //Cabeçalho
+                        trRef.after('<tr id="tr'+code+'" class="lineDet"><td class="wborder" colspan=2><img src="{!! asset("/icons/right-arrow.png") !!}" /></td><td colspan="5"><table id="'+code+'" class="table table-bordered" height="100%" width="100%"><thead><tr><th class="th_grid">Palete</th><th class="th_grid">Etiqueta</th><th class="th_grid">Saldo Final</th></tr></thead><tbody>');
 
-            
-        })
+                            //console.log($("#teste"));
+                        data.forEach(function(line){
+                            //console.log($(this).parents('tr'));
+                            $('#'+code).append('<tr><td align="center" width="30%">'+line.plt_barcode+'</td><td align="center" width="30%">'+line.label_barcode+'</td><td align="center" width="40%"><input class="form-control" type="number" value="'+line.qty_wms+'"/></td></tr>');
+                        })
+                        trRef.after('</tbody></table></td></tr>');
+                    }
+                })
+            }
+        })*/
 
 
         

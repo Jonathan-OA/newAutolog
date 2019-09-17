@@ -45,7 +45,7 @@
         @endif
         <tr>
             <td class="td_center radioClick">
-                <input type="radio" id="P{{$item->deposit_code}}" name="items[{{$code}}]" value="P" {{ (($item->count > 0 || $item->exs > 0) ? 'disabled' : '') }} > 
+                <input type="radio" id="P{{$item->deposit_code}}" prd="{{$item->product_code}}" loc="{{$item->location_code}}" name="items[{{$code}}]" value="P" {{ (($item->count > 0 || $item->exs > 0) ? 'disabled' : '') }} > 
             </td>
             <td class="td_center radioClick">
             <input type="radio" id="F{{$item->deposit_code}}" prd="{{$item->product_code}}" loc="{{$item->location_code}}" name="items[{{$code}}]" value="F" {{ (($item->count > 0 || $item->exs > 0) ? 'disabled' : '') }} > 
@@ -54,8 +54,9 @@
             <td>{!! $item->product_code !!}</td> <!--Produto --> 
             <td class="td_center">{!! (float)$item->qty_wms !!} </td> <!--Saldo --> 
             <td class="td_center">{!! (float)$item->qty1 !!} </td> <!--1ª Count --> 
-            <td class="td_center {!! (($item->qty1 - $item->qty_wms) < 0)? 'statred' : 'statgreen' !!}">
-                {!! (float)($item->qty1 - $item->qty_wms)!!} 
+            <td style="width: 30%" class="td_center {!! (($item->qty1 - $item->qty_wms) < 0)? 'statred' : 'statgreen' !!}">
+                <span >{!! (float)($item->qty1 - $item->qty_wms)!!} </span>
+                <span >R${!! (float)($item->cost)!!} </span>
             </td> <!--Div --> 
            
         </tr>

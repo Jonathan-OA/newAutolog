@@ -345,10 +345,27 @@
     .lineDet {
         border-top: 2px solid black;
     }
+
+    .lineDet table th{
+        color: black;
+        background-color: #d0d0d0 ;
+        border: 1px solid black !important;
+    }
     
     td .wborder {
         border-left: 0px;
         border-bottom: 0px;
+    }
+
+    td span{
+        float: left;
+        display: inline-block;
+        width: 50%;
+        
+    }
+
+    td span:first-child{
+        border-right: 1px solid #ddd;
     }
     /* ------------------------------------------------*/
     /*  Cores relacionadas aos status dos documentos   */
