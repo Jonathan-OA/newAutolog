@@ -317,9 +317,9 @@ class InventoryController extends AppBaseController
             $invItems = App\Models\InventoryItem::getItensForCount($document->id, $invCount, $deposits, $divMax, $divMin);
            
             return view('modules.inventory.selectItems2acount')->with('document',$document)
-                                                        ->with('invItems', $invItems)
-                                                        ->with('depositAnt', '')
-                                                        ->with('invCount', $invCount);
+                                                               ->with('invItems', $invItems)
+                                                               ->with('depositAnt', '')
+                                                               ->with('invCount', $invCount);
         }else{
             //Sem permissão
             Flash::error(Lang::get('validation.permission'));
@@ -338,6 +338,7 @@ class InventoryController extends AppBaseController
     {
         $input = $request->all(); 
         $invCount = $input['invCount'];
+
         foreach($input['items'] as $code => $type){
             $res = explode('+', $code); //o Código vem no formato produto + endereço
             $location = $res[0];
@@ -346,14 +347,30 @@ class InventoryController extends AppBaseController
                 if($type == 'F'){
                     //Finaliza
                     //echo 'Fim : '.$prod.' // '.$location.' -- ';
-                    $ret = App\Models\InventoryItem::closeItem($document_id, $prod, $location);
-                    
+                    $ret = App\Models\InventoryItem::closeItem($document_id, $prod, $location, $invCount);
                 }elseif($type == 'P'){
                     //Próxima contagem
                     $ret = App\Models\InventoryItem::nextCount($document_id, $prod, $location, $invCount);
                 }
             }
         }
+        //Valida se todos os itens pendentes foram finalados para passar para a proxima contagem
+        $invItems = App\Models\InventoryItem::getItensForCount($document_id, $invCount);
+        if(count($invItems) == 0){
+            //Muda status do documento para prox contagme
+            $document = App\Models\Document::find($document_id);
+            $document->inventory_status_id = $invCount;
+            $document->save();
+
+            //Itens atualizados com sucesso. Prox contagem liberada
+            Flash::success(Lang::get('validation.inv_items_next'), ['count' => $invCount]);
+
+        }else{
+            //Itens atualizados com sucesso
+            Flash::success(Lang::get('validation.inv_items_close'));
+        }
+        
+        return redirect(url('inventory'));
     }
 
     /**

@@ -1,6 +1,6 @@
 <div class="form_fields" style="height: 55vh;margin-top: 10px;"> 
     <input type="hidden"  name="invCount" value="{{$invCount}}">
-    <!-- Loop por todas os saldos -->     
+    <!-- Loop por todos os saldos -->     
     @foreach($invItems as $item)
         @php
             $code = $item->location_code.'+'.$item->product_code; //Código da linha é produto + endereço
@@ -55,7 +55,7 @@
             <td class="td_center">{!! (float)$item->qty_wms !!} </td> <!--Saldo --> 
             <td class="td_center">{!! (float)$item->qty1 !!} </td> <!--1ª Count --> 
             <td style="width: 30%" class="td_center {!! (($item->qty1 - $item->qty_wms) < 0)? 'statred' : 'statgreen' !!}">
-                <span >{!! (float)($item->qty1 - $item->qty_wms)!!} </span>
+                <span >{!! (float)($item->diverg)!!} </span>
                 <span >R${!! (float)($item->cost)!!} </span>
             </td> <!--Div --> 
            

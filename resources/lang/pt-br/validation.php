@@ -105,6 +105,8 @@ return [
     'support_success'           => 'Mensagem enviada! Em breve nossa equipe lhe responderá. ',
     'inv_stock'                 => 'Item / Endereço possui Reserva ou Empenho. ',
     'inv_exists'                => 'Item / Endereço já inserido no Documento. ',
+    'inv_items_next'            => 'Itens atualizados com sucesso. :count ª Contagem Liberada. ',
+    'inv_items_close'           => 'Itens atualizados com sucesso. ',
     'label_commands'            => 'Nenhum layout localizado para esta etiqueta/impressora. ',
     'print_server'              => 'Não foi possível encontrar o servidor de Impressão. ',
     'label_types'               => 'Não foi possível encontrar tipos de impressoras cadastrados. ',

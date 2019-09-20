@@ -147,11 +147,12 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
             enableGridMenu: true,
             columnDefs: [
                 { name: 'Número', field: 'number' },
-                { name: 'Tipo', field: 'document_type_code' },
+                { name: 'Tipo', field: 'document_type_code',  minWidth: 10 },
                 {
                     name: 'Status',
                     field: 'document_status_id',
                     display: 'description',
+                    minWidth: 200,
                     filter: {
                         noTerm: true,
                         type: uiGridConstants.filter.SELECT,
@@ -161,7 +162,7 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
                     },
                     cellTemplate: '<div class="ui-grid-cell-contents" ><div class="grid_cell stat{{grid.getCellValue(row, col)}}"> {{row.entity.description}}</div></div>'
                 },
-                { name: 'Contagem', field: 'inv_description' },
+                { name: 'Contagem', field: 'inv_description', minWidth: 300 },
                 { name: 'Emissão', field: 'emission_date', type: 'date', cellFilter: "dateFilter" },
                 { name: 'Início', field: 'start_date', type: 'date', cellFilter: "dateFilter" },
                 { name: 'Finalização', field: 'end_date', type: 'date', cellFilter: "dateFilter" },

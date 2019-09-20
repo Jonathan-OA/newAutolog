@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Eloquent as Model;
 use Auth;
+use Carbon\Carbon;
 use DB;
 
 
@@ -212,7 +213,8 @@ class InventoryItem extends Model
                                     DB::raw("SUM(inv.qty_wms) as qty_wms"),DB::raw("SUM(inv.qty_4count) as qty4"),
                                     DB::raw("MIN(inv.created_at) as created_at"), 'inventory_status.description', 'deposit_code', 'inv.inventory_status_id','inv.prim_uom_code',
                                     DB::raw("COUNT(distinct itemsFin.id) as itemsFin"),
-                                    DB::raw("SUM(CASE WHEN inv.inventory_status_id = 8 THEN IFNULL(inv.qty_4count,0) ELSE IFNULL(inv.qty_".($count-1)."count,0) END - inv.qty_wms) * products.cost as cost"))
+                                    DB::raw("SUM(CASE WHEN inv.inventory_status_id = 8 THEN IFNULL(inv.qty_4count,0) ELSE IFNULL(inv.qty_".($count-1)."count,0) END - inv.qty_wms) * products.cost as cost"),
+                                    DB::raw("SUM(CASE WHEN inv.inventory_status_id = 8 THEN IFNULL(inv.qty_4count,0) ELSE IFNULL(inv.qty_".($count-1)."count,0) END - inv.qty_wms)  as diverg"))
                             ->from('inventory_items as inv' )
                             ->join('inventory_status','inventory_status.id','inv.inventory_status_id')
                             ->join('locations', function($join){
@@ -300,14 +302,30 @@ class InventoryItem extends Model
      * @var document_id e @var count 
      */
      
-    public static function closeItem($document_id, $product, $location, $qty = 1){
+    public static function closeItem($document_id, $product, $location, $invCount){
+
+        switch($invCount){
+            case 2:
+                $columnQty = "qty_1count";
+                break;
+            case 3:
+                $columnQty = "qty_2count";
+                break;
+            case 4:
+                $columnQty = "qty_3count";
+                break;
+        }
+
         
         $updItem = InventoryItem::where('company_id', Auth::user()->company_id)
                                 ->where('product_code', $product)
+                                ->where('document_id', $document_id)
                                 ->where('location_code', $location)
                                 ->where('inventory_status_id', '<>', 8)
                                 ->update(['inventory_status_id' => 8,
-                                          'qty_4acont' => $qty]);
+                                          'qty_4count' => DB::raw("$columnQty"),
+                                          'date_4count' => Carbon::now(),
+                                          'user_4count' => Auth::user()->id]);
 
     }
 
@@ -343,15 +361,14 @@ class InventoryItem extends Model
             //Cria uma tarefa para cada inventory_item
             $ret = DB::table('tasks')
                     ->insertUsing(['company_id','operation_code','document_id','inventory_item_id',
-                                    'orig_location_code','dest_location_code','task_status_id','created_at'],
+                                    'orig_location_code','dest_location_code','task_status_id'],
                                     InventoryItem::where('company_id', Auth::user()->company_id)
                                                 ->where('document_id', $document_id)
                                                 ->where('product_code', $product)
                                                 ->where('location_code', $location)
                                                 ->whereIn('inventory_status_id', $status)
                                                 ->select('company_id',DB::raw("$operation_code as operation_code") ,'document_id',
-                                                            'id','location_code',
-                                                            'location_code', DB::raw("1 as task_status_id")));
+                                                            'id','location_code', 'location_code', DB::raw("1 as task_status_id")));
             if($ret){
                 //Atualiza inventory_items para proxima contagem
                 $updItem = InventoryItem::where('company_id', Auth::user()->company_id)

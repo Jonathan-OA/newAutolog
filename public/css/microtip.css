@@ -58,7 +58,7 @@
 [aria-label][role~="tooltip"]:hover:before,
 [aria-label][role~="tooltip"]:hover:after {
     opacity: 1;
-    pointer-events: auto;
+    pointer-events: none;
 }
 
 
