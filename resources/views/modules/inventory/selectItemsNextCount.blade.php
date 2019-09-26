@@ -1,10 +1,11 @@
 @extends('layouts.app')
+ <!-- $invCount contem o número referente a próxima contagem (2,3,4)  -->
 @section('content')
     <!-- BreadCrumb - Trilha  -->
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="{!! route('inventory.index') !!}">@lang('models.inventory')</a></li>
-          <li class="breadcrumb-item active" aria-current="page">@lang('buttons.2acont')</li>
+          <li class="breadcrumb-item active" aria-current="page">@lang('buttons.'.$invCount.'acont')</li>
         </ol>
     </nav>
     <div class="row">
@@ -20,7 +21,7 @@
                         <div id="msg_excluir"></div>
                         <div class="panel-body">
                             <div class="row">
-                                {!! Form::open(['url' => 'inventory/'.$document->id.'/selectItemsCount/2']) !!}
+                                {!! Form::open(['url' => 'inventory/'.$document->id.'/selectItemsCount/'.$invCount]) !!}
                                 <div class="col-md-4">
                                     <!-- Filtros -->
                                     {!! Form::label('filterDep', Lang::get('models.deposits').':') !!}

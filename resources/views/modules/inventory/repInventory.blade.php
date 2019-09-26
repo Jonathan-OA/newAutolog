@@ -32,7 +32,7 @@
                                             <th class="th_grid">@lang('models.pallet_id') </th>
                                             <th class="th_grid">@lang('models.label_id') </th>
                                             <th class="th_grid">@lang('models.qty_wms') </th>
-                                            <th class="th_grid">@lang('models.uom_code') </th>
+                                            <th class="th_grid">@lang('models.prim_uom_code') </th>
                                             <th class="th_grid">@lang('models.1acount') </th>
                                             <th class="th_grid">@lang('models.2acount') </th>
                                             <th class="th_grid">@lang('models.3acount') </th>
@@ -48,7 +48,7 @@
                                                 <td>{!! $item->plt_barcode !!}</td>
                                                 <td>{!! $item->label_barcode !!}</td>
                                                 <td>{!! $item->qty_wms !!}</td>
-                                                <td>{!! $item->uom_code !!}</td>
+                                                <td>{!! $item->prim_uom_code !!}</td>
                                                 <td>{!! $item->qty1 !!}</td>
                                                 <td>{!! $item->qty2 !!}</td>
                                                 <td>{!! $item->qty3 !!}</td>
@@ -113,7 +113,7 @@
                         { data: 'plt_barcode', className: "td_center" },
                         { data: 'label_barcode', className: "td_center" },
                         { data: 'qty_wms'},
-                        { data: 'uom_code', className: "td_center"},
+                        { data: 'prim_uom_code', className: "td_center"},
                         { data: 'qty1'},
                         { data: 'qty2'},
                         { data: 'qty3'},

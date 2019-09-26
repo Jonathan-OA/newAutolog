@@ -13,7 +13,9 @@
                         <!-- Alerta de erro / sucesso -->
                         <div id="msg_excluir"></div>
                         @include('flash::message')
+                        <!-- Botões de incluir, filtrar ,etc -->
                         <div class="row buttons_grid">
+                            <div class="col-md-10">
                                 <div class="icon_grid" aria-label="@lang('buttons.add')" data-microtip-position="bottom" role="tooltip">
                                     <a href="{!! route('inventory.create') !!}">
                                         <img class='icon' src='{{asset('/icons/add.png') }}'>
@@ -27,7 +29,15 @@
                                 <button class="icon_grid" aria-label="@lang('buttons.filter')" data-microtip-position="bottom" role="tooltip" ng-click="toggleFiltering()">
                                     <img class='icon' src='{{asset('/icons/filter.png') }}'>
                                 </button>
+                            </div>
+                            <!-- Botão de Refresh -->
+                            <div class="col-md-2">
+                                <button class="icon_grid" style="float: right" aria-label="@lang('buttons.refresh')" data-microtip-position="left" role="tooltip" ng-click="getFirstData()">
+                                    <img class='icon' src='{{asset('/icons/refresh.png') }}'>
+                                </button>
+                            </div>
                         </div>
+                        
                         <div class="panel-body">
                             <div id="gridd" ui-grid="gridOptions" ui-grid-auto-resize  ui-grid-resize-columns ui-grid-selection ui-grid-pagination ui-grid-move-columns ui-grid-save-state >
                             </div>

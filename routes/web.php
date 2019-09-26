@@ -86,6 +86,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('inventory/{document_id}/storeItem', 'Modules\InventoryController@storeItem')->name('inventory.storeItem');; //Cria item
     Route::resource('inventory', 'Modules\InventoryController'); //Ações de documentos de inventário
     Route::get('/inventory/{id}/liberate/{cont?}', 'Modules\InventoryController@liberate'); //Libera Contagem
+    Route::get('/inventory/{id}/finalize', 'Modules\InventoryController@finalize'); //Finaliza Contagem
     Route::get('/inventory/{id}/return', 'Modules\InventoryController@return'); //Retorna Inventário
     // ----------------------------------------------------------------------------------------------
     //Rota que libera documento(s)

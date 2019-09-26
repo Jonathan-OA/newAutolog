@@ -54,6 +54,10 @@ app.run(['$rootScope', function($rootScope) {
         $scope.row = row.entity;
         $scope.row.status_inv = row.entity.inventory_status_id;
         $scope.row.status_doc = row.entity.document_status_id;
+
+        //Quantidade de contagens definida no inventario
+        $scope.row.counts = row.entity.comments.slice(row.entity.comments.indexOf('550_contagens=')+14,15);
+
         //Pega id da ultima coluna
         var ultCol = $scope.gridApi.grid.columns[$scope.gridApi.grid.columns.length - 1].uid;
         var penultCol = $scope.gridApi.grid.columns[$scope.gridApi.grid.columns.length - 2].uid;
@@ -173,6 +177,12 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
             rowTemplate: '<div ng-click="grid.appScope.clickRow(row, col, $event)" ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.uid" class="ui-grid-cell" ng-class="col.colIndex()" ui-grid-cell></div>',
         };
 
+        $scope.callRouteConfirm = function(route, async = 0, msg) {
+            if (confirm(msg)) {
+                //Chama função global que chama uma rota ao clicar no botão
+                $rootScope.callRouteRS(route, async, $scope);
+            }
+        }
 
         $scope.callRoute = function(route, async = 0) {
             //Chama função global que chama uma rota ao clicar no botão

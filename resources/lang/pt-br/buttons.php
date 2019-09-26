@@ -51,5 +51,7 @@ return [
     'print_labels' => 'Imprimir Etiquetas',
     'print_doc' => 'Imprimir Documento',
     'print_config' => 'Configurar Impressoras Disponíveis',
+    'finalize_inv' => 'Finalizar Inventário',
+    'msg_finalize_inv' => 'ATENÇÃO! Deseja finalizar este Inventário?',
 
 ];

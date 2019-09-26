@@ -316,10 +316,10 @@ class InventoryController extends AppBaseController
             //Pega todos os saldos para montar a tela de itens
             $invItems = App\Models\InventoryItem::getItensForCount($document->id, $invCount, $deposits, $divMax, $divMin);
            
-            return view('modules.inventory.selectItems2acount')->with('document',$document)
-                                                               ->with('invItems', $invItems)
-                                                               ->with('depositAnt', '')
-                                                               ->with('invCount', $invCount);
+            return view('modules.inventory.selectItemsNextCount')->with('document',$document)
+                                                                 ->with('invItems', $invItems)
+                                                                 ->with('depositAnt', '')
+                                                                 ->with('invCount', $invCount);
         }else{
             //Sem permissão
             Flash::error(Lang::get('validation.permission'));
@@ -363,7 +363,7 @@ class InventoryController extends AppBaseController
             $document->save();
 
             //Itens atualizados com sucesso. Prox contagem liberada
-            Flash::success(Lang::get('validation.inv_items_next'), ['count' => $invCount]);
+            Flash::success(Lang::get('validation.inv_items_next',['count' => $invCount]) );
 
         }else{
             //Itens atualizados com sucesso
@@ -391,6 +391,19 @@ class InventoryController extends AppBaseController
         return $det;
     }
 
+
+     /**
+     * Finaliza Documento de Inventário
+     *
+     * @return Response
+     */
+
+    public function finalize($document_id)
+    {   
+        //$ret = App\Models\InventoryItem::closeItem();
+        Flash::success("Documento Finalizado com Sucesso");
+        return array('success',"Documento Finalizado com Sucesso");
+    }
 
 
     //--------------------------------------------------------------------------------------------
