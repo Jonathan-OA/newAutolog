@@ -460,7 +460,12 @@ class Document extends Model
                                                             ['finality_code', 'RESERVA']
                                                     ])->delete();     
                 
-                //Apagar tarefas
+                //Apagar tarefas não iniciadas
+                $uTsk = DB::table('tasks')->where([  
+                                                    ['company_id', Auth::user()->company_id],
+                                                    ['document_id', $document_id],
+                                                    ['task_status_id', '<', 2]
+                                                 ])->delete();     
                                                                                             
                 //Grava log
                 $descricao = 'Retornou o documento: '.$docT->document_type_code.' - '.$docT->number;

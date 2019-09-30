@@ -25,17 +25,9 @@
         {!! Form::text('number', null, ['class' => 'form-control', 'id' => 'document_number']) !!}
     @endif
     
-    <!-- Customer Code Field -->
-    {!! Form::label('customer_code', Lang::get('models.customer_code').':') !!}
-    {!! Form::text('customer_code', null, ['class' => 'form-control', 'id' => 'autocomplete', 'table' => 'customers']) !!}
-
     <!-- Supplier Code Field -->
     {!! Form::label('supplier_code', Lang::get('models.supplier_code').':') !!}
     {!! Form::text('supplier_code', null, ['class' => 'form-control', 'id' => 'autocomplete1', 'table' => 'suppliers']) !!}
-
-    <!-- Courier Code Field -->
-    {!! Form::label('courier_code', Lang::get('models.courier_code').':') !!}
-    {!! Form::text('courier_code', null, ['class' => 'form-control', 'id' => 'autocomplete2', 'table' => 'couriers']) !!}
 
     <!-- Document Status Field -->
     @if(!empty($action) && $action == 'edit')

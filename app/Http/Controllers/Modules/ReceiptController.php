@@ -54,9 +54,9 @@ class ReceiptController extends AppBaseController
         if(App\Models\User::getPermission('documents_rec_add',Auth::user()->user_type_code)){
             
             //Busca os tipos de documentos para o movimento de recebimento
-            $document_types = App\Models\DocumentType::getDocumentTypes('030');
+            $document_types = App\Models\DocumentType::getDocumentTypes('010');
             //Busca informações do tipo de documento (liberação automatica, depositos, tela de impressão..)
-            $document_types_infos = App\Models\DocumentType::getDocumentTypesArray('030');
+            $document_types_infos = App\Models\DocumentType::getDocumentTypesArray('010');
 
             return view('modules.receipt.createDocument')->with('document_types',$document_types)
                                                             ->with('document_types_infos',$document_types_infos);
@@ -106,7 +106,7 @@ class ReceiptController extends AppBaseController
             $document = $this->documentRepository->findWithoutFail($id);
             
             //Busca os tipos de documentos para o movimento de recebimento
-            $document_types = App\Models\DocumentType::getDocumentTypes('030');
+            $document_types = App\Models\DocumentType::getDocumentTypes('010');
 
             //Valida se o documento existe e se pertence a esse módulo (recebimento)
             if (empty($document) || !array_key_exists($document->document_type_code, $document_types->toArray())) {
@@ -371,7 +371,7 @@ class ReceiptController extends AppBaseController
             $input = $request->all(); 
 
             //Cria array no formato q a função de liberação reconhece
-            $document['moviment_code'] = '030';
+            $document['moviment_code'] = '010';
             $documents = array($document);
 
             

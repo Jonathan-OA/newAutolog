@@ -48,5 +48,5 @@
 @endsection
 @section('scripts')
     <script src="../../js/ui-grid/ui-grid.selection.min.js"></script>
-    <script src="../../js/angular/gridProd.js"></script>
+    <script src="../../js/angular/gridRec.js"></script>
 @endsection

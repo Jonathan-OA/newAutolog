@@ -28,7 +28,7 @@ class RulesReceipt extends Model
         //Pega informações do documento
         $document = App\Models\Document::find($document_id);
         
-        if(count($document) == 0){
+        if($document->count() == 0){
             $ret['erro'] = 1;
             $ret['msg'] = 'Erro ao Localizar Documento';
         }else{
@@ -42,7 +42,7 @@ class RulesReceipt extends Model
         $taskRec = (trim($docType[0]['operation_code']) == '') ? '679' : $docType[0]['operation_code'];
 
         //Pega endereço saldo na sessão na hora de liberação
-        $location = (isset($_SESSION['location_code_lib']) ? $_SESSION['location_code_lib'] : 'REC');
+        $location = (!empty($_SESSION['location_code_lib']) ? $_SESSION['location_code_lib'] : 'REC');
 
         //Cria tarefa e inicia
         $newTask = App\Models\Task::create($taskRec, $location, $location, $document_id);
