@@ -25,12 +25,14 @@
         <div class="row">
                 <div class="col-xs-10 col-sm-6 col-centered login_page_inputs">
                     <div class="form-group">
-                        <label for="company_id">Empresa</label>
-                        <select name="company_id" id="company_id" class="form-control">
-                            @foreach ($companies as $company)
-                               <option value={{$company->id }}> {{$company->name }} - {{$company->branch }}</option>
-                            @endforeach
-                        </select>
+                        <div class = "col-sm-6">
+                            <label for="code">Empresa</label>
+                            <input type="text" class="form-control" name="company_code"  id="company_code" placeholder="Código da Empresa" required>
+                        </div>
+                        <div class = "col-sm-6">
+                                <label for="code">Filial</label>
+                                <input type="text" class="form-control" name="company_branch"  id="company_branch" placeholder="Código da Filial" required>
+                            </div>
                     </div>
                     <div class="form-group">
                         <label for="code">Usuário</label>
@@ -54,7 +56,7 @@
         </div>
     </form>
     <footer class="login_page_rodape">
-        TWX 2018
+        TWX 2019
     </footer>
     <script src="js/vendor/jquery.js"></script>
     <script src="js/vendor/what-input.js"></script>

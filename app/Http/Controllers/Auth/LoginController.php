@@ -10,6 +10,8 @@ use Redirect;
 use Flash;
 use Lang;
 use Session;
+use Config;
+use DB;
 use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
@@ -43,6 +45,51 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    /**
+     * Função executada ao clicar no botão de Login
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  mixed  $user
+     * @return mixed
+     */
+    protected function login(Request $request)
+    {
+        $input = $request->all();
+        $company_code = $input['company_code'];
+        $company_branch = $input['company_branch'];
+
+        //Valida se a empresa existe
+        $comp = DB::table('companies')->where('code', $company_code)->count();
+        if($comp >= 1){
+            //Valida se a Filial existe e pega o nome do banco de dados
+            $brch = DB::table('companies')
+                      ->where('code', $company_code)
+                      ->where('branch', $company_branch)
+                      ->select('database_name','status')
+                      ->get();
+
+            if($brch->count() <> 0){
+                if($brch[0]->status == 1){
+                    //Existe. Atribui nova conexão de acordo com o campo database_name
+                    DB::disconnect();
+                    \Config::set('database.connections.mysql.database', $brch[0]->database_name);
+                    DB::reconnect();
+                }else{
+                    Flash::error(Lang::get('auth.status_branch'));
+                    return redirect(route('login'));
+                }
+
+            }else{
+                Flash::error(Lang::get('auth.branch'));
+                return redirect(route('login'));
+            }
+        }else{
+            Flash::error(Lang::get('auth.company'));
+            return redirect(route('login'));
+        }
+
     }
 
      /**

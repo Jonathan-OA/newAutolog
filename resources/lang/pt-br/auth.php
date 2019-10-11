@@ -14,8 +14,10 @@ return [
     */
 
     'failed' => 'Usuário e/ou Senha Inválidos',
-    'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
-    'branch' => 'Empresa / Filial inválidos para este usuário.',
-    'status' => 'Usuário inativo.'
+    'throttle' => 'Várias tentativas de login foram identificadas. Aguarde :seconds segundos.',
+    'company' => 'Código de Empresa não encontrado.',
+    'branch' => 'Filial Inválida.',
+    'status' => 'Usuário inativo.',
+    'status_branch' => 'Filial Inativa. Contate o SUPORTE.'
 
 ];
