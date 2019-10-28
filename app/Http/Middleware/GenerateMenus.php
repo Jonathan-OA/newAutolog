@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use App\Models\Module;
 use Auth;
+use DB;
 
 class GenerateMenus
 {
@@ -17,8 +18,10 @@ class GenerateMenus
      */
     public function handle($request, Closure $next)
     {
+
          //Só carrega este middleware se o usuário estiver logado
         if(Auth::check()){
+            
             \Menu::make('MyNavBar', function($menu){
                 $modulos = Module::where('enabled',1)
                                 ->where('submodule', NULL)

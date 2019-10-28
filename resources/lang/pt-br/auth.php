@@ -18,6 +18,7 @@ return [
     'company' => 'Código de Empresa não encontrado.',
     'branch' => 'Filial Inválida.',
     'status' => 'Usuário inativo.',
-    'status_branch' => 'Filial Inativa. Contate o SUPORTE.'
+    'status_branch' => 'Filial Inativa. Contate o SUPORTE.',
+    'database' => 'Banco de Dados não encontrado para esta EMPRESA / FILIAL. Contate o SUPORTE.'
 
 ];

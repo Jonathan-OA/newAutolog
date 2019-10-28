@@ -67,7 +67,22 @@ class Company extends Model
         
     ];
 
-    
+    /**
+     * Função que retorna o Company_ID no login após selecionar o banco correto
+     * Parâmetros: Code e Branch 
+     * @var array
+     */
+    public static function getCompanyID($code, $branch){
+
+        $id = Company::select('id')
+                     ->where('code', $code)
+                     ->where('branch', $branch)
+                     ->get()
+                     ->toArray();
+                     
+        return (count($id)> 0) ? $id[0]['id'] : 0; 
+
+    }
 
      //Retorna todos os companies disponíveis
      public static function getCompanies(){
