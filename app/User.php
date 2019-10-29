@@ -10,6 +10,7 @@ use Session;
 use Request;
 use Auth;
 use DB;
+use App\Models\Company;
 
 class User extends Authenticatable
 {
@@ -22,7 +23,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'company_id','code','name', 'email', 'password','user_type_code','last_notification'
+        'company_id','code','name', 'email', 'password','user_type_code','last_notification', 'company_code'
     ];
 
     /**
@@ -95,6 +96,12 @@ class User extends Authenticatable
         $this->last_login = $dataAtual->toDateTimeString();
         $this->save();
 
+    }
+
+    //Retorna os dados da filial do usuário atual
+    public function getCompanyInfo(){
+        $company = Company::where('id', $this->company_id)->get();
+        return $company[0];
     }
 
 }

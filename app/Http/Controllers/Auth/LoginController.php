@@ -183,6 +183,9 @@ class LoginController extends Controller
             Flash::error(Lang::get('auth.status'));
             return redirect(route('login'));
         }
+
+        Auth::user()->company_code = 'asdyuahsduha';
+        
         
     }
     

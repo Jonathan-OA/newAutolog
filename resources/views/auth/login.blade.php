@@ -20,7 +20,7 @@
         AUTOLOG WMS
     </div>
     </br>
-    <form class="form-horizontal" role="form" method="POST" action="{{ url('/login') }}">
+    <form id="formLogin" class="form-horizontal" role="form" method="POST" action="{{ url('/login') }}">
       {{csrf_field() }}
         <div class="row">
                 <div class="col-xs-10 col-sm-6 col-centered login_page_inputs">
@@ -58,13 +58,32 @@
     <footer class="login_page_rodape">
         TWX 2019
     </footer>
-    <script src="js/vendor/jquery.js"></script>
+    <script src="{{ asset('/js/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('/js/jquery/jquery-ui.min.js') }}"></script>
     <script src="js/vendor/what-input.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/app.js"></script>
 
     <script>
-        $(document).foundation();
+
+        $(function(){
+            //Ao dar o submit, grava as informações de empresa e filial no local storage
+            $( "#formLogin" ).submit(function( event ) {
+                localStorage.setItem("AUTOLOGWMS_CompanyCode",$('#company_code').val());
+                localStorage.setItem("AUTOLOGWMS_BranchCode",$('#company_branch').val());
+            })
+
+            //Recupera as informações de empresa e filial gravadas, para colocar nos inputs
+            if(localStorage.getItem("AUTOLOGWMS_CompanyCode")){
+                $('#company_code').val(localStorage.getItem("AUTOLOGWMS_CompanyCode"));
+                $('#company_branch').val(localStorage.getItem("AUTOLOGWMS_BranchCode"));
+                $('#code').focus();
+            }else{
+                $('#company_code').focus();
+            }
+            
+
+        })
     </script>
 
 </body>
