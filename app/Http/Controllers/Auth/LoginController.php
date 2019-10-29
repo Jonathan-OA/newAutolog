@@ -183,10 +183,17 @@ class LoginController extends Controller
             Flash::error(Lang::get('auth.status'));
             return redirect(route('login'));
         }
+        
+        
+    }
 
-        Auth::user()->company_code = 'asdyuahsduha';
-        
-        
+    //Função chamada quando da um erro ao realizar o login 
+    protected function sendFailedLoginResponse( Request $request)
+    {
+        //Limpa variavel com o database_code e seta como conexão principal a original
+        DB::setDefaultConnection('mysql');
+        Session::flush();
+        return $this->sendLoginResponse($request);
     }
     
     //Define qual campo vai ser utilizado para login
