@@ -62,6 +62,8 @@ class LoginController extends Controller
         $company_code = $input['company_code'];
         $company_branch = $input['company_branch'];
 
+        //Seta a conexão defaul como a principal
+        DB::setDefaultConnection('mysql');
 
         //LÓGICA NO LOGIN PARA DIRECIONAR PARA O BANCO CORRETO
         //Valida se a empresa existe
@@ -159,12 +161,14 @@ class LoginController extends Controller
         if($user->valQtyUsers()){
             //Se usuário já esta logado, da erro.
             if(!$user->valLogged($request->ip())){
+                Session::flush();
                 Auth::logout();
                 Flash::error(Lang::get('validation.loged'));
                 return redirect(route('login'));
             }
         }else{
             //Limite Excedido
+            Session::flush();
             Auth::logout();
             Flash::error(Lang::get('validation.qty_users'));
             return redirect(route('login'));
@@ -172,6 +176,7 @@ class LoginController extends Controller
 
         //Filial diferente da cadastrada
         if($request->company_id <> $user->company_id){
+            Session::flush();
             Auth::logout();
             Flash::error(Lang::get('auth.branch'));
             return redirect(route('login'));
@@ -179,6 +184,7 @@ class LoginController extends Controller
 
         //Usuário Inativo
         if($user->status == 0){
+            Session::flush();
             Auth::logout();
             Flash::error(Lang::get('auth.status'));
             return redirect(route('login'));
@@ -187,14 +193,6 @@ class LoginController extends Controller
         
     }
 
-    //Função chamada quando da um erro ao realizar o login 
-    protected function sendFailedLoginResponse( Request $request)
-    {
-        //Limpa variavel com o database_code e seta como conexão principal a original
-        DB::setDefaultConnection('mysql');
-        Session::flush();
-        return $this->sendLoginResponse($request);
-    }
     
     //Define qual campo vai ser utilizado para login
     public function username()
