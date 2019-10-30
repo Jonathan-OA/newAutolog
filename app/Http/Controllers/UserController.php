@@ -211,6 +211,22 @@ class UserController extends AppBaseController
         }    
     }
 
+     /**
+     * Get users online
+     *
+     */
+    public function usersOnline(){
+
+        //Pega apenas os usuarios online
+        $usersOn = App\Models\User::getOnline();
+
+        //Pega total de licenças para desktop
+        $usersDeskDisp = App\Models\Config::getConfig('usuarios_desktop');
+
+        return view('users.users_online')->with('usersOn', $usersOn)
+                                         ->with('usersDeskDisp', (int)$usersDeskDisp);
+    }
+
     /**
      * Get data from model 
      *

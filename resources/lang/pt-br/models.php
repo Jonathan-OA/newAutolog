@@ -344,6 +344,7 @@ return [
     'printConfig' => 'Configuração de Impressoras',
     'total' => 'Total ',
     'fileExcel' => 'Planilha Excel ',
+    'users_online' => 'Usuários Online',
     
 
 

@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Eloquent as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Cache;
+use Auth;
+use DB;
 
 /**
  * Class User
@@ -75,5 +78,42 @@ class User extends Model
         return $result;
 
      }
+
+     //Retorna os dados da filial do usuário atual
+    public function getCompanyInfo(){
+        $company = Company::where('id', $this->company_id)->get();
+        return $company[0];
+    }
+
+
+    // Verifica se o usuário esta logado
+    public static function isOnline($id){
+        
+        $company_code = Auth::user()->getCompanyInfo()->code;
+        return (Cache::has('user-is-online-'.$company_code.'-'.$id))? 1 : 0;
+
+    }
+
+     // Pega todos os usuarios logados
+     public static function getOnline(){
+        
+        $company_code = Auth::user()->getCompanyInfo()->code;
+
+       // return Cache::has('user-is-online-'.$company_code.'-'.$this->id);
+
+       $users = User::select('id','code','name','user_type_code')
+                    ->where('company_id', Auth::user()->company_id)
+                    ->get();
+
+        $arrayUsers = array();
+
+        foreach($users as $user){
+            if(Cache::has('user-is-online-'.$company_code.'-'.$user->id)){
+                $arrayUsers[] = $user;
+            }
+        }
+
+        return ($arrayUsers);
+    }
     
 }

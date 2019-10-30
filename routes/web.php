@@ -143,6 +143,7 @@ Route::group(['middleware' => 'auth'], function() {
 
     Route::get('users/datatable', 'UserController@getData');
     Route::get('users/updTime', 'UserController@updTime');
+    Route::get('users/online', 'UserController@usersOnline');
     Route::resource('users', 'UserController');
 
     Route::get('userTypes/datatable', 'UserTypeController@getData');

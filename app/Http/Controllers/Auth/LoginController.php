@@ -39,6 +39,9 @@ class LoginController extends Controller
     protected $redirectTo = '/home';
     protected $username = 'code';
 
+    protected $maxAttempts = 3; // Máximo de tentativas antes de bloquear o login
+    protected $decayMinutes = 1.5; // Tempo de bloqueio em minutos
+
     /**
      * Create a new controller instance.
      *
@@ -65,6 +68,15 @@ class LoginController extends Controller
         //Seta a conexão defaul como a principal
         DB::setDefaultConnection('mysql');
 
+        // Valida se bate a quantidade de tentativas de login 
+        //Caso sim, trava o login para o IP por 1 minuto
+        if ($this->hasTooManyLoginAttempts($request)) {
+            $this->fireLockoutEvent($request);
+
+            return $this->sendLockoutResponse($request);
+        }
+
+
         //LÓGICA NO LOGIN PARA DIRECIONAR PARA O BANCO CORRETO
         //Valida se a empresa existe
         $comp = DB::table('companies')->where('code', $company_code)->count();
@@ -81,6 +93,9 @@ class LoginController extends Controller
                     $query = "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME =  ?";
                     $db = DB::select($query, [$brch[0]->database_name]);
                     if(empty($db)){
+                        //Database cadastrada no banco principal não existe (companies)
+                        //Incrementa tentativas de login
+                        $this->incrementLoginAttempts($request);
                         Flash::error(Lang::get('auth.database'));
                         return redirect(route('login'));
                     }else{
@@ -109,14 +124,6 @@ class LoginController extends Controller
                         //Continua o processo original do metodo login() em AuthenticatesUser
                         $this->validateLogin($request);
 
-                        // If the class is using the ThrottlesLogins trait, we can automatically throttle
-                        // the login attempts for this application. We'll key this by the username and
-                        // the IP address of the client making these requests into this application.
-                        if ($this->hasTooManyLoginAttempts($request)) {
-                            $this->fireLockoutEvent($request);
-
-                            return $this->sendLockoutResponse($request);
-                        }
 
                         if ($this->attemptLogin($request)) {
                             return $this->sendLoginResponse($request);
@@ -131,16 +138,23 @@ class LoginController extends Controller
                     }
                 }else{
                     //Filial desativada
+                    //Incrementa tentativas de login
+                    $this->incrementLoginAttempts($request);
                     Flash::error(Lang::get('auth.status_branch'));
                     return redirect(route('login'));
                 }
 
             }else{
                 //Filial invalida
+                //Incrementa tentativas de login
+                $this->incrementLoginAttempts($request);
                 Flash::error(Lang::get('auth.branch'));
                 return redirect(route('login'));
             }
         }else{
+            //Empresa inválida
+            //Incrementa tentativas de login
+            $this->incrementLoginAttempts($request);
             Flash::error(Lang::get('auth.company'));
             return redirect(route('login'));
         }

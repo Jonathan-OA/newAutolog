@@ -11,6 +11,7 @@ use Request;
 use Auth;
 use DB;
 use App\Models\Company;
+use Cache;
 
 class User extends Authenticatable
 {
@@ -97,6 +98,7 @@ class User extends Authenticatable
         $this->save();
 
     }
+
 
     //Retorna os dados da filial do usuário atual
     public function getCompanyInfo(){

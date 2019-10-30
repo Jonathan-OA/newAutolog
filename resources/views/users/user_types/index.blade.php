@@ -10,6 +10,7 @@
                          <!-- Textos baseados no arquivo de linguagem -->
                          <li ><a href="{!! route('users.index') !!}">@lang('models.users') </a></li>
                          <li class="active-l"><a href="#">@lang('models.user_types')</a></li> 
+                         <li ><a href="{!! url('users/online') !!}">@lang('models.users_online')</a></li>  
                     </ul>
                 </div>
                 <div class="row">
