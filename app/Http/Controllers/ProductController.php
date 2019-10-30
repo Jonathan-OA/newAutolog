@@ -33,10 +33,7 @@ class ProductController extends AppBaseController
      */
     public function index(Request $request)
     {
-        //$this->productRepository->pushCriteria(new RequestCriteria($request));
-        //$products = $this->productRepository->findByField('company_id', Auth::user()->company_id);
         //Load dos itens é feito por datatable no index.blade.php
-
         return view('products.index');
     }
 

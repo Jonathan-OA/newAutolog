@@ -34,11 +34,9 @@ class UserController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $this->userRepository->pushCriteria(new RequestCriteria($request));
-        $users = $this->userRepository->findByField('company_id', Auth::user()->company_id);
+         //Load dos usuarios é feito por datatable no index.blade.php
 
-        return view('users.index')
-            ->with('users', $users);
+        return view('users.index');
     }
 
     /**

@@ -7,6 +7,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Carbon;
 use App\User;
+use Cache;
 
 class ControlLogout
 {
@@ -30,6 +31,10 @@ class ControlLogout
      */
     public function handle(Logout $event)
     {
+        //Apaga o registro q indica q este usuario esta logado no cache
+        $company_code = $event->user->getCompanyInfo()->code;
+        Cache::forget('user-is-online-'.$company_code.'-'.$event->user->id);
+
         //Pega Data Atual
         $dataAtual = Carbon\Carbon::now();
         //Subtrai 1 minuto

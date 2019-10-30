@@ -35,11 +35,9 @@ class StockController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $this->stockRepository->pushCriteria(new RequestCriteria($request));
-        $stocks = $this->stockRepository->findByField('company_id', Auth::user()->company_id);
+         //Load dos saldos é feito por datatable no index.blade.php
 
-        return view('stocks.index')
-            ->with('stocks', $stocks);
+        return view('stocks.index');
     }
 
     /**

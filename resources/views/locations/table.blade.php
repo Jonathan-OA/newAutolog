@@ -12,16 +12,14 @@
                 <th class="th_grid">@lang('models.action')</th>
             </thead>
             <tbody>
-            @foreach($locations as $location)
                 <tr>
-                    <td>{!! $location->code !!}</td>
-                    <td>{!! $location->barcode !!}</td>
-                    <td>{!! $location->department_code !!}</td>
-                    <td>{!! $location->deposit_code !!}</td>
-                    <td>{!! $location->sector_code !!}</td>
-                    <td>{!! $location->location_type_code !!}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                 </tr>
-            @endforeach
             </tbody>
         </table>
         </div>

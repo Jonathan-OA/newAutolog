@@ -33,13 +33,11 @@ class LabelController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $this->labelRepository->pushCriteria(new RequestCriteria($request));
-        $labels = $this->labelRepository->findByField('company_id', Auth::user()->company_id);
+        //Load dos labels é feito por datatable no index.blade.php
 
         $printerTypes = App\Models\PrinterType::getPrinterTypes();
 
         return view('labels.index')
-            ->with('labels', $labels)
             ->with('printerTypes', $printerTypes);
     }
 

@@ -33,11 +33,9 @@ class CourierController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $this->courierRepository->pushCriteria(new RequestCriteria($request));
-        $couriers = $this->courierRepository->all();
+         //Load dos couriers é feito por datatable no index.blade.php
 
-        return view('partners.couriers.index')
-            ->with('couriers', $couriers);
+        return view('partners.couriers.index');
     }
 
     /**
