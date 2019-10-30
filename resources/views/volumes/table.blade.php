@@ -10,14 +10,13 @@
                 <th class="th_grid">@lang('models.action')</th>
             </thead>
             <tbody>
-            @foreach($volumes as $volume)
                 <tr>
-                    <td>{!! $volume->barcode !!}</td>
-                    <td>{!! $volume->location_code !!}</td>
-                    <td>{!! $volume->packing_type_code !!}</td>
-                    <td>{!! $volume->volume_status_id !!}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                 </tr>
-            @endforeach
             </tbody>
         </table>
         </div>

@@ -33,11 +33,8 @@ class VolumeController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $this->volumeRepository->pushCriteria(new RequestCriteria($request));
-        $volumes = $this->volumeRepository->findByField('company_id', Auth::user()->company_id);
-
-        return view('volumes.index')
-            ->with('volumes', $volumes);
+         //Load dos volumes é feito por datatable no index.blade.php
+        return view('volumes.index');
     }
 
     /**

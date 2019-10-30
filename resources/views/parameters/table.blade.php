@@ -12,16 +12,15 @@
                 <th class="th_grid">@lang('models.action')</th>
             </thead>
             <tbody>
-            @foreach($parameters as $parameter)
                 <tr>
-                    <td>{!! $parameter->code !!}</td>
-                    <td>{!! $parameter->description !!}</td>
-                    <td>{!! $parameter->value !!}</td>
-                    <td>{!! $parameter->def_value !!}</td>
-                    <td>{!! $parameter->module_name !!}</td>
-                    <td>{!! $parameter->operation_code !!}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                 </tr>
-            @endforeach
             </tbody>
         </table>
         </div>

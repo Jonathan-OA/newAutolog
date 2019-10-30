@@ -13,17 +13,15 @@
                 <th class="th_grid">@lang('models.action')</th>
             </thead>
             <tbody>
-            @foreach($tasks as $task)
                 <tr>
-                    <td>{!! $task->id !!}</td>
-                    <td>{!! $task->code !!}</td>
-                    <td>{!! $task->orig_location_code !!}</td>
-                    <td>{!! $task->dest_location_code !!}</td>
-                    <td>{!! $task->start_date !!}</td>
-                    <td>{!! $task->end_date !!}</td>
-                    <td>{!! $task->task_status_id !!}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                 </tr>
-            @endforeach
             </tbody>
         </table>
         </div>

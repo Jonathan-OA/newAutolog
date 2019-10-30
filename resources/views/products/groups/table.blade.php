@@ -10,14 +10,12 @@
                 <th class="th_grid">@lang('models.action')</th>
             </thead>
             <tbody>
-            @foreach($groups as $group)
                 <tr>
-                    <td>{!! $group->code !!}</td>
-                    <td>{!! $group->description !!}</td>
-                    <td>{!! $group->product_type_code !!}</td>
-                    <td>{!! $group->label_type_code !!}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                 </tr>
-            @endforeach
             </tbody>
         </table>
         </div>

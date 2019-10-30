@@ -33,11 +33,8 @@ class ParameterController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $this->parameterRepository->pushCriteria(new RequestCriteria($request));
-        $parameters = $this->parameterRepository->all();
-
-        return view('parameters.index')
-            ->with('parameters', $parameters);
+        //Load dos parametros é feito por datatable no index.blade.php
+        return view('parameters.index');
     }
 
     /**
