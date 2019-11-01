@@ -1,0 +1,73 @@
+{
+    "name": "okipa/laravel-bootstrap-components",
+    "description": "Save time and take advantage of ready-to-use and customizable bootstrap components.",
+    "keywords": [
+        "okipa",
+        "package",
+        "laravel",
+        "bootstrap",
+        "php",
+        "components",
+        "generate",
+        "generator",
+        "generation",
+        "html"
+    ],
+    "homepage": "https://github.com/Okipa/laravel-bootstrap-components",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Arthur LORENT",
+            "email": "arthur.lorent@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "ext-json": "*",
+        "php": "^7.1",
+        "illuminate/support": "~5.5.0||~5.6.0||~5.7.0||~5.8.0||^6.0",
+        "okipa/laravel-html-helper": "^1.1.1"
+    },
+    "require-dev": {
+        "mockery/mockery": "^1.0",
+        "nunomaduro/larastan": "^0.4",
+        "orchestra/testbench": "~3.8.0||^4.0",
+        "php-coveralls/php-coveralls": "^2.1",
+        "phpmd/phpmd": "^2.7",
+        "squizlabs/php_codesniffer": "^3.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Okipa\\LaravelBootstrapComponents\\": "src/"
+        },
+        "files": [
+            "app/Helpers/componentsHelper.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Okipa\\LaravelBootstrapComponents\\Test\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": [
+            "vendor/bin/phpcbf",
+            "vendor/bin/phpcs",
+            "vendor/bin/phpmd app,config,src text phpmd.xml",
+            "vendor/bin/phpstan analyse",
+            "vendor/bin/phpunit"
+        ]
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Okipa\\LaravelBootstrapComponents\\ComponentServiceProvider"
+            ]
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

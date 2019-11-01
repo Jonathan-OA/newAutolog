@@ -1,13 +1,14 @@
 
 # Kodeine/Laravel-ACL
 
-[![Laravel](https://img.shields.io/badge/Laravel-~5.0-orange.svg?style=flat-square)](http://laravel.com)
+[![Laravel](https://img.shields.io/badge/Laravel-~6.0-green.svg?style=flat-square)](http://laravel.com)
 [![Source](http://img.shields.io/badge/source-kodeine/laravel--acl-blue.svg?style=flat-square)](https://github.com/kodeine/laravel-acl/)
-[![Build Status](http://img.shields.io/travis/kodeine/laravel--acl/master.svg?style=flat-square)](https://travis-ci.org/kodeine/laravel-acl)
-[![License](http://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](https://tldrlegal.com/license/mit-license)
-[![Total Downloads](http://img.shields.io/packagist/dt/kodeine/laravel-acl.svg?style=flat-square)](https://packagist.org/packages/kodeine/laravel-acl)
+[![Build Status](https://img.shields.io/travis/kodeine/laravel-acl/master?style=flat-square)](https://travis-ci.org/kodeine/laravel-acl)
+[![License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](https://tldrlegal.com/license/mit-license)
+[![Total Downloads](https://img.shields.io/packagist/dt/kodeine/laravel-acl.svg?style=flat-square)](https://packagist.org/packages/kodeine/laravel-acl)
 
-Laravel ACL adds role based permissions to built in Auth System of Laravel 5. ACL middleware protects routes and even crud controller methods.
+
+Laravel ACL adds role based permissions to built in Auth System of Laravel 6.0+. ACL middleware protects routes and even crud controller methods.
 
 # Table of Contents
 * [Requirements](#requirements)
@@ -20,34 +21,35 @@ Laravel ACL adds role based permissions to built in Auth System of Laravel 5. AC
 
 # <a name="requirements"></a>Requirements
 
-* This package requires PHP 5.5+
+* Version 2.x of this package requires PHP 7.2+ and Laravel 6.0+ 
+* Version 1.x requires PHP 5.6+ and Laravel 5.0+
 
 # <a name="getting-started"></a>Getting Started
 
-1. Require the package in your `composer.json` and update your dependency with `composer update`:
+Install the package using composer 
 
 ```
-"require": {
-...
-"kodeine/laravel-acl": "~1.0@dev",
-...
-},
+composer require kodeine/laravel-acl
 ```
 
-2. Add the package to your application service providers in `config/app.php`.
+If you need to support Laravel 5.x, make sure to install version 1.x
+
+```
+composer require kodeine/laravel-acl "^1.0"
+```
+
+2. If you are using Laravel before version 5.4, manually register the service provider in your config/app.php file 
 
 ```php
 'providers' => [
-
-'Illuminate\Foundation\Providers\ArtisanServiceProvider',
-'Illuminate\Auth\AuthServiceProvider',
-...
-'Kodeine\Acl\AclServiceProvider',
-
+    'Illuminate\Foundation\Providers\ArtisanServiceProvider',
+    'Illuminate\Auth\AuthServiceProvider',
+    ...
+    'Kodeine\Acl\AclServiceProvider',
 ],
 ```
 
-3. Publish the package migrations to your application and run these with `php artisan migrate.
+3. Publish the package configuartion files and add your own models to the list of ACL models"
 
 ```
 $ php artisan vendor:publish --provider="Kodeine\Acl\AclServiceProvider"
@@ -60,10 +62,8 @@ $ php artisan vendor:publish --provider="Kodeine\Acl\AclServiceProvider"
 
 ```php
 protected $routeMiddleware = [
-
-....
-'acl' => 'Kodeine\Acl\Middleware\HasPermission',
-
+    ....
+    'acl' => 'Kodeine\Acl\Middleware\HasPermission',
 ];
 ```
 
@@ -74,8 +74,16 @@ use Kodeine\Acl\Traits\HasRole;
 
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract
 {
-use Authenticatable, CanResetPassword, HasRole;
+    use Authenticatable, CanResetPassword, HasRole;
 }
+```
+
+6. Run the migrations to generate your roles and permissions tables
+
+Please note that if you are upgrading to 6.0 from a previous version, the default column type for the id on the users table has changed. On certain databases foreign keys can only be defined with matching column types. As such, you will need to change the id column on your users table to bigInteger in to user this package. 
+
+```
+php artisan migrate
 ```
 
 # <a name="documentation"></a>Documentation
@@ -84,7 +92,7 @@ Follow along the [Wiki](https://github.com/kodeine/laravel-acl/wiki) to find out
 
 # <a name="roadmap"></a>Roadmap
 
-Here's the TODO list for the next release (**2.0**).
+Here's the TODO list for the next release.
 
 * [ ] Refactoring the source code.
 * [ ] Correct all issues.
@@ -92,10 +100,16 @@ Here's the TODO list for the next release (**2.0**).
 
 # <a name="change-logs"></a>Change Logs
 
-**September 22, 2016**
+**September 14 2019**
+* [x] Updated the readme to reflect new major release
+
+**September 13, 2019**
+* [x] Added support for Laravel 6
+
+*September 22, 2016**
 * [x] Added unit tests
 
-**September 20, 2016**
+*September 20, 2016**
 * [x] Added support for Laravel 5.3
 
 *September 19, 2016*

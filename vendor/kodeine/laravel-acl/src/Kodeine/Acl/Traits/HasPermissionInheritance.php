@@ -1,5 +1,6 @@
-<?php namespace Kodeine\Acl\Traits;
+<?php
 
+namespace Kodeine\Acl\Traits;
 
 trait HasPermissionInheritance
 {
@@ -46,11 +47,7 @@ trait HasPermissionInheritance
             // process inherit_id recursively
             $inherited = $this->getRecursiveInherit($row->inherit_id, $row->slug);
             $merge = $permissions->where('name', $row->name);
-            $merge = method_exists($merge, 'pluck') ? $merge->pluck('slug', 'name') : $merge->lists('slug', 'name');
-
-                // fix for l5.1 and backward compatibility.
-            // lists() method should return as an array.
-            $merge = $this->collectionAsArray($merge);
+            $merge = $merge->pluck('slug', 'name')->all();
 
             // replace and merge permissions
             $rights = array_replace_recursive($rights, $inherited, $merge);
@@ -192,5 +189,4 @@ trait HasPermissionInheritance
 
         return (int) $permission;
     }*/
-
 }

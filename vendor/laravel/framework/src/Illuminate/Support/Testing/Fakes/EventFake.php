@@ -3,9 +3,9 @@
 namespace Illuminate\Support\Testing\Fakes;
 
 use Closure;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
 use PHPUnit\Framework\Assert as PHPUnit;
-use Illuminate\Contracts\Events\Dispatcher;
 
 class EventFake implements Dispatcher
 {
@@ -181,19 +181,6 @@ class EventFake implements Dispatcher
     public function flush($event)
     {
         //
-    }
-
-    /**
-     * Fire an event and call the listeners.
-     *
-     * @param  string|object  $event
-     * @param  mixed  $payload
-     * @param  bool  $halt
-     * @return array|null
-     */
-    public function fire($event, $payload = [], $halt = false)
-    {
-        return $this->dispatch($event, $payload, $halt);
     }
 
     /**

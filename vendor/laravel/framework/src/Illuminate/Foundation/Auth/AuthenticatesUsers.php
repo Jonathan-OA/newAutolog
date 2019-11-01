@@ -29,13 +29,14 @@ trait AuthenticatesUsers
      * @throws \Illuminate\Validation\ValidationException
      */
     public function login(Request $request)
-    { 
+    {
         $this->validateLogin($request);
 
         // If the class is using the ThrottlesLogins trait, we can automatically throttle
         // the login attempts for this application. We'll key this by the username and
         // the IP address of the client making these requests into this application.
-        if ($this->hasTooManyLoginAttempts($request)) {
+        if (method_exists($this, 'hasTooManyLoginAttempts') &&
+            $this->hasTooManyLoginAttempts($request)) {
             $this->fireLockoutEvent($request);
 
             return $this->sendLockoutResponse($request);

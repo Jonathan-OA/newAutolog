@@ -2,11 +2,11 @@
 
 namespace Illuminate\Database\Eloquent\Relations;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class HasManyThrough extends Relation
 {
@@ -209,7 +209,7 @@ class HasManyThrough extends Relation
         // relationship as this will allow us to quickly access all of the related
         // models without having to do nested looping which will be quite slow.
         foreach ($results as $result) {
-            $dictionary[$result->{$this->firstKey}][] = $result;
+            $dictionary[$result->laravel_through_key][] = $result;
         }
 
         return $dictionary;
@@ -414,7 +414,7 @@ class HasManyThrough extends Relation
             $columns = [$this->related->getTable().'.*'];
         }
 
-        return array_merge($columns, [$this->getQualifiedFirstKeyName()]);
+        return array_merge($columns, [$this->getQualifiedFirstKeyName().' as laravel_through_key']);
     }
 
     /**

@@ -2,12 +2,12 @@
 
 namespace Illuminate\Database\Eloquent\Relations;
 
-use Illuminate\Support\Str;
-use InvalidArgumentException;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Str;
+use InvalidArgumentException;
 
 class BelongsToMany extends Relation
 {
@@ -141,14 +141,39 @@ class BelongsToMany extends Relation
     public function __construct(Builder $query, Model $parent, $table, $foreignPivotKey,
                                 $relatedPivotKey, $parentKey, $relatedKey, $relationName = null)
     {
-        $this->table = $table;
         $this->parentKey = $parentKey;
         $this->relatedKey = $relatedKey;
         $this->relationName = $relationName;
         $this->relatedPivotKey = $relatedPivotKey;
         $this->foreignPivotKey = $foreignPivotKey;
+        $this->table = $this->resolveTableName($table);
 
         parent::__construct($query, $parent);
+    }
+
+    /**
+     * Attempt to resolve the intermediate table name from the given string.
+     *
+     * @param  string  $table
+     * @return string
+     */
+    protected function resolveTableName($table)
+    {
+        if (! Str::contains($table, '\\') || ! class_exists($table)) {
+            return $table;
+        }
+
+        $model = new $table;
+
+        if (! $model instanceof Model) {
+            return $table;
+        }
+
+        if ($model instanceof Pivot) {
+            $this->using($table);
+        }
+
+        return $model->getTable();
     }
 
     /**
@@ -480,7 +505,7 @@ class BelongsToMany extends Relation
     public function find($id, $columns = ['*'])
     {
         return is_array($id) ? $this->findMany($id, $columns) : $this->where(
-            $this->getRelated()->getQualifiedKeyName(), '=', $id
+            $this->getRelated()->getQualifiedKeyName(), '=', $this->parseId($id)
         )->first($columns);
     }
 
@@ -494,7 +519,7 @@ class BelongsToMany extends Relation
     public function findMany($ids, $columns = ['*'])
     {
         return empty($ids) ? $this->getRelated()->newCollection() : $this->whereIn(
-            $this->getRelated()->getQualifiedKeyName(), $ids
+            $this->getRelated()->getQualifiedKeyName(), $this->parseIds($ids)
         )->get($columns);
     }
 
@@ -799,7 +824,7 @@ class BelongsToMany extends Relation
      */
     protected function guessInverseRelation()
     {
-        return Str::camel(Str::plural(class_basename($this->getParent())));
+        return Str::camel(Str::pluralStudly(class_basename($this->getParent())));
     }
 
     /**
@@ -895,11 +920,11 @@ class BelongsToMany extends Relation
     /**
      * Create an array of new instances of the related models.
      *
-     * @param  array  $records
+     * @param  iterable  $records
      * @param  array  $joinings
      * @return array
      */
-    public function createMany(array $records, array $joinings = [])
+    public function createMany(iterable $records, array $joinings = [])
     {
         $instances = [];
 
@@ -1107,5 +1132,15 @@ class BelongsToMany extends Relation
     public function getPivotAccessor()
     {
         return $this->accessor;
+    }
+
+    /**
+     * Get the pivot columns for this relationship.
+     *
+     * @return array
+     */
+    public function getPivotColumns()
+    {
+        return $this->pivotColumns;
     }
 }
