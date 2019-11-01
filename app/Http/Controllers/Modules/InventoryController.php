@@ -283,7 +283,11 @@ class InventoryController extends AppBaseController
         $parameters = "550_contagens=".$input['counts'].";550_valida_saldo=".
                       $input['vstock'].";550_valida_endereco=".$input['vlocation'].
                       ";550_valida_produto=".$input['vproduct'];
+
+        //Pega caminho do Excel importado
         $pathFile = $input['fileExcel']->getRealPath();
+
+        //Importa os itens baseando na classe InventoryItemsImport
         Excel::import($erro = new InventoryItemsImport($parameters), $pathFile);
 
 

@@ -58,7 +58,10 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('receipt/{document_id}/items/{document_item_id}/edit', 'Modules\ReceiptController@editItem'); //Form de edição de itens
     Route::patch('receipt/updateItem/{document_item_id}', 'Modules\ReceiptController@updateItem')->name('receipt.updateItem'); //Atualiza item
     Route::post('receipt/storeItem', 'Modules\ReceiptController@storeItem')->name('receipt.storeItem'); //Cria item
+    Route::get('receipt/importXml', 'Modules\ReceiptController@showImportXml'); //Mostra Tela de Importação XML
+    Route::post('receipt/importXml', 'Modules\ReceiptController@importXml'); //Importa XML e cria documento
     Route::resource('receipt', 'Modules\ReceiptController'); //Ações de documentos de Recebimento
+
     
     // ----------------------------------------------------------------------------------------------
     // Modulo de Transferência
