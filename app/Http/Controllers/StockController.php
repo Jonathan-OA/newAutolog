@@ -99,7 +99,7 @@ class StockController extends AppBaseController
                $task = App\Models\Task::create('664',$input['location_code'],$input['location_code']);
                $task->end();
                //Cria atividade
-               $atv = App\Models\Activity::create($task->id,$input['label_id'],$input['pallet_id'],$input['prim_qty'],'Entrada de Saldo');
+               $atv = App\Models\Activity::create($task->id,$input['product_code'],$input['label_id'],$input['pallet_id'],$input['prim_qty'],'Entrada de Saldo');
 
                 //Grava log
                $descricao = 'Ent. Manual -  End:'.$input['location_code'].' Umv: '.$input['label_id'].' - Prd: '.$input['product_code'].' Qde: '.$input['qty'].'('. $input['prim_qty'].')';

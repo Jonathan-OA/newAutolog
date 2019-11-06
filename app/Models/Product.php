@@ -94,6 +94,8 @@ class Product extends Model
         //Caso seja uma etiqueta, o status tem q ser diferente de 9
         $company_id = (trim($company_id == ''))?Auth::user()->company_id: $company_id;
         $ret['erro'] = 0;
+        $barcode = strtoupper($barcode);
+
         $infos = DB::table('labels')->join('products', function ($join) {
                                         $join->on('products.code', '=', 'labels.product_code')
                                              ->whereColumn ('products.company_id','labels.company_id');
@@ -153,7 +155,7 @@ class Product extends Model
                                         ['products.code', '=', $barcode]
                                   ])
                                   ->select( DB::raw("'' as label_id"), 'packings.product_code','products.description',
-                                         DB::raw('1 as qty'),'packings.uom_code','packings.prev_qty','packings.uom_code as prev_uom_code',
+                                         DB::raw('1 as qty'),'packings.uom_code','packings.prim_qty','packings.uom_code as prim_uom_code',
                                         'packings.conf_batch','packings.conf_batch_supplier','packings.conf_serial','packings.create_label',
                                         'packings.conf_due_date','packings.conf_prod_date',DB::raw("'' as batch"),DB::raw("'' as batch_supplier"),
                                         DB::raw("'' as serial_number"),DB::raw("'' as prod_date"), DB::raw("'' as due_date"), 
