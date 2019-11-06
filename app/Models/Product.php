@@ -110,7 +110,7 @@ class Product extends Model
                                     ])
                                     ->orWhere('labels.id', (int)$barcode)
                                     ->select('labels.id as label_id', 'labels.product_code','products.description','labels.qty','labels.uom_code',
-                                             'labels.prev_qty','labels.prev_uom_code','labels.batch','labels.batch_supplier',
+                                             'labels.prim_qty','labels.prim_uom_code','labels.batch','labels.batch_supplier',
                                              'labels.serial_number','labels.prod_date','labels.due_date','labels.origin',
                                              'packings.conf_batch','packings.conf_batch_supplier','packings.conf_serial','packings.create_label',
                                              'packings.conf_due_date','packings.conf_prod_date','labels.label_status_id as label_status',

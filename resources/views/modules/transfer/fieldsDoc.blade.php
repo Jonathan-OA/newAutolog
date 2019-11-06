@@ -15,7 +15,7 @@
 
     <!-- Document Type Code Field -->
     {!! Form::label('document_type_code', Lang::get('models.document_type_code').':') !!}
-    {!! Form::select('document_type_code', $document_types,(!empty($document->document_type_code)) ? $document->document_type_code : '', ['class' => 'form-control', 'id' = 'document_type_code']) !!}
+    {!! Form::select('document_type_code', $document_types,(!empty($document->document_type_code)) ? $document->document_type_code : '', ['class' => 'form-control', 'id' => 'document_type_code']) !!}
 
     <!-- Number Field -->
     {!! Form::label('number', Lang::get('models.number').':') !!}

@@ -12,7 +12,7 @@
                 </div>
                 <!-- Modal de Impressão -->
                 <div class="modal fade" id="printModal" tabindex="-1" role="dialog"  aria-hidden="true">
-                    @include('layouts.print')
+                    @include('layouts.print', ['module' => 'labels'])
                 </div>
                 <div class="row">
                     <div class="col-md-12">
@@ -61,12 +61,12 @@
                 }
             },
             columns: [  { data: 'barcode' },
-                        { data: 'product_code' },
+                        { data: 'product_code', className: "td_center" },
                         { data: 'prim_qty' },
                         { data: 'prim_uom_code' },
                         { data: 'batch' },
                         { data: 'batch_supplier' },
-                        { data: 'label_status_id' },
+                        { data: 'label_status_id', className: "td_center" },
                         { data: 'due_date', 
                           className: "th_grid",
                           render: function ( data, type, row ) {

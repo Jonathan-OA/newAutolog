@@ -36,9 +36,13 @@ class LabelController extends AppBaseController
         //Load dos labels é feito por datatable no index.blade.php
 
         $printerTypes = App\Models\PrinterType::getPrinterTypes();
+        
+        //Busca parâmetro print_server com o IP do servidor de impressão da rede
+        $print_server = App\Models\Parameter::getParam('print_server', 'localhost');
 
         return view('labels.index')
-            ->with('printerTypes', $printerTypes);
+                    ->with('printerTypes', $printerTypes)
+                    ->with('print_server', $print_server);
     }
 
     /**

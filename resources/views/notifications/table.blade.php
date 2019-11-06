@@ -9,13 +9,11 @@
                 <th class="th_grid">@lang('models.action')</th>
             </thead>
             <tbody>
-            @foreach($notifications as $notification)
                 <tr>
-                    <td>{!! $notification->user_id !!}</td>
-            <td>{!! $notification->message !!}</td>
-            <td>{!! $notification->visualized !!}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                 </tr>
-            @endforeach
             </tbody>
         </table>
         </div>
