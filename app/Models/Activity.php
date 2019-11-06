@@ -88,9 +88,9 @@ class Activity extends Model
      * Parâmetros: ID Tarefa, Produto, Etiqueta, Pallet, Quantidade, Descrição, Documento, Item, Endereço, Status, Contagem, ID Motivo, Usuário
      * @var array
      */
-    public static function create($task_id ,$product, $label_id, $pallet_id, $qty, $description, $document_id = '',
-                                  $document_item_id = '', $location = '', $liberation_item_id = '', $inventory_item_id = '',
-                                  $status = '', $count = '',$reason_id = '',$user_id = '' ){
+    public static function create($task_id ,$product, $label_id, $pallet_id, $qty, $description, $document_id = NULL,
+                                  $document_item_id = NULL, $location = NULL, $liberation_item_id = NULL, $inventory_item_id = NULL,
+                                  $status = '', $count = '',$reason_id = '',$user_id = NULL ){
         //Caso não venha usuário, considera o logado
         $user_id = (trim($user_id == ''))?Auth::user()->id: $user_id;
         $data = Carbon::now();
