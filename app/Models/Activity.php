@@ -90,7 +90,7 @@ class Activity extends Model
      */
     public static function create($task_id ,$product, $label_id, $pallet_id, $qty, $description, $document_id = NULL,
                                   $document_item_id = NULL, $location = NULL, $liberation_item_id = NULL, $inventory_item_id = NULL,
-                                  $status = '', $count = '',$reason_id = '',$user_id = NULL ){
+                                  $status = 8, $count = 1,$reason_id = NULL, $user_id = NULL ){
         //Caso não venha usuário, considera o logado
         $user_id = (trim($user_id == ''))?Auth::user()->id: $user_id;
         $data = Carbon::now();
