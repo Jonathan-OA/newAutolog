@@ -783,6 +783,7 @@ class ComposerStaticInitee7e704ccecb65ac385e00feebaed5d3
         'App\\Http\\Requests\\UpdateVolumeItemRequest' => __DIR__ . '/../..' . '/app/Http/Requests/UpdateVolumeItemRequest.php',
         'App\\Http\\Requests\\UpdateVolumeRequest' => __DIR__ . '/../..' . '/app/Http/Requests/UpdateVolumeRequest.php',
         'App\\Http\\Requests\\UpdateVolumeStatusRequest' => __DIR__ . '/../..' . '/app/Http/Requests/UpdateVolumeStatusRequest.php',
+        'App\\Imports\\DocumentsXMLImport' => __DIR__ . '/../..' . '/app/Imports/DocumentsXMLImport.php',
         'App\\Imports\\InventoryItemsImport' => __DIR__ . '/../..' . '/app/Imports/InventoryItemsImport.php',
         'App\\Listeners\\ControlLogout' => __DIR__ . '/../..' . '/app/Listeners/ControlLogout.php',
         'App\\Listeners\\EventListener' => __DIR__ . '/../..' . '/app/Listeners/EventListener.php',

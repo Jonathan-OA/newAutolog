@@ -230,6 +230,7 @@ return array(
     'App\\Http\\Requests\\UpdateVolumeItemRequest' => $baseDir . '/app/Http/Requests/UpdateVolumeItemRequest.php',
     'App\\Http\\Requests\\UpdateVolumeRequest' => $baseDir . '/app/Http/Requests/UpdateVolumeRequest.php',
     'App\\Http\\Requests\\UpdateVolumeStatusRequest' => $baseDir . '/app/Http/Requests/UpdateVolumeStatusRequest.php',
+    'App\\Imports\\DocumentsXMLImport' => $baseDir . '/app/Imports/DocumentsXMLImport.php',
     'App\\Imports\\InventoryItemsImport' => $baseDir . '/app/Imports/InventoryItemsImport.php',
     'App\\Listeners\\ControlLogout' => $baseDir . '/app/Listeners/ControlLogout.php',
     'App\\Listeners\\EventListener' => $baseDir . '/app/Listeners/EventListener.php',
