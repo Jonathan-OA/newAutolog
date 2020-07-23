@@ -43,7 +43,8 @@ class DocumentRepository extends BaseRepository
         'user_id',
         'location_code',
         'number_origin',
-        'document_type_origin'
+        'document_type_origin',
+        'delivery_date'
     ];
 
     /**

@@ -10,14 +10,12 @@
                 <th class="th_grid">@lang('models.action')</th>
             </thead>
             <tbody>
-            @foreach($uoms as $uom)
                 <tr>
-                    <td>{!! $uom->code !!}</td>
-                    <td>{!! $uom->description !!}</td>
-                    <td>{!! $uom->val_integer !!}</td>
-                    <td>{!! $uom->decimal_places !!}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                 </tr>
-            @endforeach
             </tbody>
         </table>
         </div>

@@ -10,14 +10,12 @@
                 <th class="th_grid">@lang('models.action')</th>
             </thead>
             <tbody>
-            @foreach($deposits as $deposit)
                 <tr>
-                    <td>{!! $deposit->code !!}</td>
-                    <td>{!! $deposit->department_code !!}</td>
-                    <td>{!! $deposit->deposit_type_code !!}</td>
-                    <td>{!! $deposit->description !!}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                 </tr>
-            @endforeach
             </tbody>
         </table>
         </div>

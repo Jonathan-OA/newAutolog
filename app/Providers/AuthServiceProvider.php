@@ -26,8 +26,8 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $companies = App\Models\Company::all();
-        View::share('companies', $companies);
+        //$companies = App\Models\Company::all();
+        //View::share('companies', $companies);
         $this->registerPolicies();
 
         //

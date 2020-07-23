@@ -14,19 +14,17 @@
                 <th class="th_grid">@lang('models.action')</th>
             </thead>
             <tbody>
-            @foreach($packings as $packing)
                 <tr>
-                    <td>{!! $packing->company_id !!}</td>
-                    <td>{!! $packing->level !!}</td>
-                    <td>{!! $packing->product_code !!}</td>
-                    <td>{!! $packing->uom_code !!}</td>
-                    <td>{!! $packing->barcode !!}</td>
-                    <td>{!! $packing->prev_qty !!}</td>
-                    <td>{!! $packing->conf_batch !!}</td>
-                    <td>{!! $packing->conf_serial !!}</td>
-                    <td>{!! $packing->conf_batch_supplier !!}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                 </tr>
-            @endforeach
             </tbody>
         </table>
         </div>

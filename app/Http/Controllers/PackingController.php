@@ -33,15 +33,9 @@ class PackingController extends AppBaseController
      */
     public function index($product_code)
     {
-        $product = App\Models\Product::where('company_id', Auth::user()->company_id)
-                            ->where('code', $product_code)
-                            ->first();  
-
-        $packings = $this->packingRepository->findWhere(array('product_code' => $product->code,
-                                                              'company_id' => Auth::user()->company_id));
-
+         //Load dos packings é feito por datatable no index.blade.php
+        
         return view('packings.index')
-                ->with('packings', $packings)
                 ->with('product_code', $product_code);
     }
 

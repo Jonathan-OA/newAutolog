@@ -16,7 +16,7 @@
                         <input type="checkbox" 
                             id ="P_{{$item->deposit_code}}" 
                             name="deposits[]" value="{{$item->deposit_code}}">
-                        2ª
+                            {{$invCount}}ª  <!-- Número da Contagem Atual --> 
                     </th>
                     <th class="input-group-text">
                         <!-- Checkbox que armazenará todos os depositos selecionados -->
@@ -30,12 +30,12 @@
                         @lang('models.deposit_code'): {{ $item->deposit_code }}
                     </th>
                 </tr>
-                <th class="th_grid" width="65px">2ª Cont</th>
+                <th class="th_grid" width="65px">{{$invCount}}ª Cont</th>
                 <th class="th_grid" width="65px">Finalizar</th>
                 <th class="th_grid">@lang('models.location_code') </th>
                 <th class="th_grid">@lang('models.product_code') </th>
                 <th class="th_grid">@lang('models.stock') </th>
-                <th class="th_grid">@lang('models.1acount') </th>
+                <th class="th_grid">@lang('models.'.($invCount-1).'acount') </th>
                 <th class="th_grid">@lang('models.margin_div') </th>
             </thead>
             <tbody>
@@ -53,8 +53,8 @@
             <td>{!! $item->location_code !!}</td> <!--Endereço -->
             <td>{!! $item->product_code !!}</td> <!--Produto --> 
             <td class="td_center">{!! (float)$item->qty_wms !!} </td> <!--Saldo --> 
-            <td class="td_center">{!! (float)$item->qty1 !!} </td> <!--1ª Count --> 
-            <td style="width: 30%" class="td_center {!! (($item->qty1 - $item->qty_wms) < 0)? 'statred' : 'statgreen' !!}">
+            <td class="td_center">{!! (float)$item->{'qty'.($invCount-1)} !!} </td> <!--1ª, 2ª, 3ª Count --> 
+            <td style="width: 30%" class="td_center {!! (($item->{'qty'.($invCount-1)} - $item->qty_wms) < 0)? 'statred' : 'statgreen' !!}">
                 <span >{!! (float)($item->diverg)!!} </span>
                 <span >R${!! (float)($item->cost)!!} </span>
             </td> <!--Div --> 

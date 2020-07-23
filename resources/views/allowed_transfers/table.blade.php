@@ -13,17 +13,16 @@
                 <th class="th_grid">@lang('models.action')</th>
             </thead>
             <tbody>
-            @foreach($allowedTransfers as $allowedTransfer)
                 <tr>
-                    <td>{!! $allowedTransfer->orig_department_code !!}</td>
-                    <td>{!! $allowedTransfer->orig_deposit_code !!}</td>
-                    <td>{!! $allowedTransfer->dest_department_code !!}</td>
-                    <td>{!! $allowedTransfer->dest_deposit_code !!}</td>
-                    <td>{!! $allowedTransfer->operation_code !!}</td>
-                    <td>{!! $allowedTransfer->reset_stock !!}</td>
-                    <td>{!! $allowedTransfer->export_erp !!}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                 </tr>
-            @endforeach
             </tbody>
         </table>
         </div>

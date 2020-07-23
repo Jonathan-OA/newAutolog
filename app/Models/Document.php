@@ -48,7 +48,7 @@ class Document extends Model
         'number_origin',
         'document_type_origin',
         'finalization',
-       'inventory_status_id',
+        'inventory_status_id',
     ];
 
     /**
@@ -460,7 +460,12 @@ class Document extends Model
                                                             ['finality_code', 'RESERVA']
                                                     ])->delete();     
                 
-                //Apagar tarefas
+                //Apagar tarefas não iniciadas
+                $uTsk = DB::table('tasks')->where([  
+                                                    ['company_id', Auth::user()->company_id],
+                                                    ['document_id', $document_id],
+                                                    ['task_status_id', '<', 2]
+                                                 ])->delete();     
                                                                                             
                 //Grava log
                 $descricao = 'Retornou o documento: '.$docT->document_type_code.' - '.$docT->number;
@@ -559,6 +564,69 @@ class Document extends Model
         
         return $return;
         
+    }
+
+    /**
+     * Função que finaliza o documento de inventário
+     * Parâmetros: ID do Documento
+     * @var array
+     */
+
+    public static function finalizeInventory($document_id){
+        //Busca documento
+        $doc = App\Models\Document::find($document_id);
+        if(in_array($doc->document_type_code, array('IVD','IVG','IVR','INV'))){
+            //Só permite finalizar se a primeira contagem estiver iniciada
+            if($doc->inventory_status_id > 1){
+
+                //Atualiza todos os itens para o status pendente
+                $upInv = DB::table('inventory_items')->where([  
+                    ['company_id', Auth::user()->company_id],
+                    ['document_id', $document_id]
+                ])->update(['inventory_status_id' => 8,
+                            'qty_1count' => 0,
+                            'qty_2count' => 0,
+                            'qty_3count' => 0,
+                            'qty_4count' => 0,
+                            'user_1count' => NULL,
+                            'user_2count' => NULL,
+                            'user_3count' => NULL,
+                            'user_4count' => NULL]);
+                
+                //Volta status do documento
+                $upTsk = DB::table('documents')->where([  
+                    ['company_id', Auth::user()->company_id] ,
+                    ['id', $document_id]
+                ])->update(['document_status_id' => 0,
+                            'inventory_status_id' => 0]);
+
+                //Cancela todas as tarefas
+                $upTsk = DB::table('tasks')->where([  
+                    ['company_id', Auth::user()->company_id] ,
+                    ['document_id', $document_id],
+                ])->update(['task_status_id' => 8]);
+
+                //Apaga linhas em Inventário
+                $dSal = DB::table('stocks')->where([  
+                    ['company_id', Auth::user()->company_id],
+                    ['document_id', $document_id],
+                    ['finality_code', 'INVENTARIO']
+                ])->delete();
+
+                $return['erro'] = 0;
+                $return['msg'] = 'Inventário Retornado com Sucesso';
+
+            }else{
+                $return['erro'] = 1;
+                $return['msg'] = 'Status de Inventário Inválido para esta Operação.';
+            }
+        }else{
+            $return['erro'] = 1;
+            $return['msg'] = 'Tipo de Documento Inválido para esta Operação.';
+        }
+
+        return $return;
+
     }
 
     /**

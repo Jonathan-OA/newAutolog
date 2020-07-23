@@ -1,4 +1,6 @@
-<?php namespace Kodeine\Acl\Traits;
+<?php
+
+namespace Kodeine\Acl\Traits;
 
 use Illuminate\Support\Collection;
 
@@ -117,7 +119,7 @@ trait HasUserPermission
      */
     protected function addSlug($alias, array $permissions)
     {
-        $slugs = method_exists($this->permissions, 'pluck') ? $this->permissions->pluck('slug', 'name') : $this->permissions->lists('slug', 'name');
+        $slugs = $this->permissions->pluck('slug', 'name');
         $collection = new Collection($slugs);
 
         if ( $collection->has($alias) ) {
@@ -138,7 +140,7 @@ trait HasUserPermission
      */
     protected function removeSlug($alias, array $permissions)
     {
-        $slugs = method_exists($this->permissions, 'pluck') ? $this->permissions->pluck('slug', 'name') : $this->permissions->lists('slug', 'name');
+        $slugs = $this->permissions->pluck('slug', 'name');
         $collection = new Collection($slugs);
 
         if ( $collection->has($alias) ) {
@@ -148,5 +150,4 @@ trait HasUserPermission
 
         return $collection->get($alias);
     }
-
 }

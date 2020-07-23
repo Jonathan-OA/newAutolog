@@ -58,7 +58,10 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('receipt/{document_id}/items/{document_item_id}/edit', 'Modules\ReceiptController@editItem'); //Form de edição de itens
     Route::patch('receipt/updateItem/{document_item_id}', 'Modules\ReceiptController@updateItem')->name('receipt.updateItem'); //Atualiza item
     Route::post('receipt/storeItem', 'Modules\ReceiptController@storeItem')->name('receipt.storeItem'); //Cria item
+    Route::get('receipt/importXml', 'Modules\ReceiptController@showImportXml'); //Mostra Tela de Importação XML
+    Route::post('receipt/importXml', 'Modules\ReceiptController@importXml'); //Importa XML e cria documento
     Route::resource('receipt', 'Modules\ReceiptController'); //Ações de documentos de Recebimento
+
     
     // ----------------------------------------------------------------------------------------------
     // Modulo de Transferência
@@ -86,6 +89,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('inventory/{document_id}/storeItem', 'Modules\InventoryController@storeItem')->name('inventory.storeItem');; //Cria item
     Route::resource('inventory', 'Modules\InventoryController'); //Ações de documentos de inventário
     Route::get('/inventory/{id}/liberate/{cont?}', 'Modules\InventoryController@liberate'); //Libera Contagem
+    Route::get('/inventory/{id}/finalize', 'Modules\InventoryController@finalize'); //Finaliza Contagem
     Route::get('/inventory/{id}/return', 'Modules\InventoryController@return'); //Retorna Inventário
     // ----------------------------------------------------------------------------------------------
     //Rota que libera documento(s)
@@ -142,6 +146,7 @@ Route::group(['middleware' => 'auth'], function() {
 
     Route::get('users/datatable', 'UserController@getData');
     Route::get('users/updTime', 'UserController@updTime');
+    Route::get('users/online', 'UserController@usersOnline');
     Route::resource('users', 'UserController');
 
     Route::get('userTypes/datatable', 'UserTypeController@getData');
@@ -440,15 +445,13 @@ Route::group(['middleware' => 'auth'], function() {
 
 
 
-
-
-
-
-
-
-
 Route::get('labelVariables/datatable', 'LabelVariableController@getData');
 Route::resource('labelVariables', 'LabelVariableController');
 
 Route::get('notifications/datatable', 'NotificationController@getData');
 Route::resource('notifications', 'NotificationController');
+
+
+
+
+

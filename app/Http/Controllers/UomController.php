@@ -33,11 +33,9 @@ class UomController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $this->uomRepository->pushCriteria(new RequestCriteria($request));
-        $uoms = $this->uomRepository->all();
+        //Load das uoms é feito por datatable no index.blade.php
 
-        return view('products.uoms.index')
-            ->with('uoms', $uoms);
+        return view('products.uoms.index');
     }
 
     /**

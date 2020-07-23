@@ -12,16 +12,14 @@
                 <th class="th_grid">@lang('models.action')</th>
             </thead>
             <tbody>
-            @foreach($modules as $module)
                 <tr>
-                    <td>{!! $module->module !!}</td>
-                    <td>{!! $module->submodule !!}</td>
-                    <td>{!! $module->name !!}</td>
-                    <td>{!! $module->enabled !!}</td>
-                    <td>{!! $module->icon !!}</td>
-                    <td>{!! $module->url !!}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                 </tr>
-            @endforeach
             </tbody>
         </table>
         </div>

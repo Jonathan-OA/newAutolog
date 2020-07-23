@@ -43,7 +43,8 @@
                 <div class="lay_account">
                     {{strtoupper(Auth::user()->name) }}
                     </br>
-                    TWX
+                   {{ Auth::user()->getCompanyInfo()->code }} - {{Auth::user()->getCompanyInfo()->branch}}
+                    
                 </div>
         </div>
     </div>

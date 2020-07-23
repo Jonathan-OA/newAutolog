@@ -43,7 +43,7 @@ return [
             'driver' => 'mysql',
             'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_DATABASE', 'newautolog'),
+            'database' => env('DB_DATABASE', 'twx_main'),
             'username' => env('DB_USERNAME', 'autolog'),
             'password' => env('DB_PASSWORD', 'autolog'),
             'unix_socket' => env('DB_SOCKET', ''),
@@ -52,6 +52,38 @@ return [
             'prefix' => '',
             'strict' => false,
             'engine' => null,
+            'version' => 8,
+            'modes'  => [
+                 'ONLY_FULL_GROUP_BY',
+                 'STRICT_TRANS_TABLES',
+                 'NO_ZERO_IN_DATE',
+                 'NO_ZERO_DATE',
+                 'ERROR_FOR_DIVISION_BY_ZERO',
+                 'NO_ENGINE_SUBSTITUTION',
+            ],
+
+        ],
+        //Tenant = Uma conexão especifica para cada cliente
+        'tenant' => [
+            'driver' => 'mysql',
+            'host' => env('DB_HOST', '127.0.0.1'),
+            'port' => env('DB_PORT', '3306'),
+            'database' => '',
+            'username' => env('DB_USERNAME', 'autolog'),
+            'password' => env('DB_PASSWORD', 'autolog'),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'strict' => true,
+            'engine' => null,
+            'modes'  => [
+                'ONLY_FULL_GROUP_BY',
+                'STRICT_TRANS_TABLES',
+                'NO_ZERO_IN_DATE',
+                'NO_ZERO_DATE',
+                'ERROR_FOR_DIVISION_BY_ZERO',
+                'NO_ENGINE_SUBSTITUTION',
+           ],
         ],
 
         'pgsql' => [

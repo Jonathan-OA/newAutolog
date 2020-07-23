@@ -78,8 +78,10 @@ class Pallet extends Model
         $company_id = (trim($company_id == ''))?Auth::user()->company_id: $company_id;
         $ret['erro'] = 0;
 
+        $barcode = strtoupper($barcode);
+
         //Valida prefixo do palete informado com o  parâmetro
-        $pref = Parameter::getParam('prefixo_palete');    
+        $pref = strtoupper(Parameter::getParam('prefixo_palete'));    
         if(trim($pref) == ''){
             $pref = 'PLT';
         }

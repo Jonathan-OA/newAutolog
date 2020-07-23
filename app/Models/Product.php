@@ -94,6 +94,8 @@ class Product extends Model
         //Caso seja uma etiqueta, o status tem q ser diferente de 9
         $company_id = (trim($company_id == ''))?Auth::user()->company_id: $company_id;
         $ret['erro'] = 0;
+        $barcode = strtoupper($barcode);
+
         $infos = DB::table('labels')->join('products', function ($join) {
                                         $join->on('products.code', '=', 'labels.product_code')
                                              ->whereColumn ('products.company_id','labels.company_id');
@@ -110,7 +112,7 @@ class Product extends Model
                                     ])
                                     ->orWhere('labels.id', (int)$barcode)
                                     ->select('labels.id as label_id', 'labels.product_code','products.description','labels.qty','labels.uom_code',
-                                             'labels.prev_qty','labels.prev_uom_code','labels.batch','labels.batch_supplier',
+                                             'labels.prim_qty','labels.prim_uom_code','labels.batch','labels.batch_supplier',
                                              'labels.serial_number','labels.prod_date','labels.due_date','labels.origin',
                                              'packings.conf_batch','packings.conf_batch_supplier','packings.conf_serial','packings.create_label',
                                              'packings.conf_due_date','packings.conf_prod_date','labels.label_status_id as label_status',
@@ -153,7 +155,7 @@ class Product extends Model
                                         ['products.code', '=', $barcode]
                                   ])
                                   ->select( DB::raw("'' as label_id"), 'packings.product_code','products.description',
-                                         DB::raw('1 as qty'),'packings.uom_code','packings.prev_qty','packings.uom_code as prev_uom_code',
+                                         DB::raw('1 as qty'),'packings.uom_code','packings.prim_qty','packings.uom_code as prim_uom_code',
                                         'packings.conf_batch','packings.conf_batch_supplier','packings.conf_serial','packings.create_label',
                                         'packings.conf_due_date','packings.conf_prod_date',DB::raw("'' as batch"),DB::raw("'' as batch_supplier"),
                                         DB::raw("'' as serial_number"),DB::raw("'' as prod_date"), DB::raw("'' as due_date"), 

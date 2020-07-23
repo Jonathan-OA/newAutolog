@@ -20,17 +20,19 @@
         AUTOLOG WMS
     </div>
     </br>
-    <form class="form-horizontal" role="form" method="POST" action="{{ url('/login') }}">
+    <form id="formLogin" class="form-horizontal" role="form" method="POST" action="{{ url('/login') }}">
       {{csrf_field() }}
         <div class="row">
                 <div class="col-xs-10 col-sm-6 col-centered login_page_inputs">
                     <div class="form-group">
-                        <label for="company_id">Empresa</label>
-                        <select name="company_id" id="company_id" class="form-control">
-                            @foreach ($companies as $company)
-                               <option value={{$company->id }}> {{$company->name }} - {{$company->branch }}</option>
-                            @endforeach
-                        </select>
+                        <div class = "col-sm-6">
+                            <label for="code">Empresa</label>
+                            <input type="text" class="form-control" name="company_code"  id="company_code" placeholder="Código da Empresa" required>
+                        </div>
+                        <div class = "col-sm-6">
+                                <label for="code">Filial</label>
+                                <input type="text" class="form-control" name="company_branch"  id="company_branch" placeholder="Código da Filial" required>
+                            </div>
                     </div>
                     <div class="form-group">
                         <label for="code">Usuário</label>
@@ -54,15 +56,34 @@
         </div>
     </form>
     <footer class="login_page_rodape">
-        TWX 2018
+        TWX 2019
     </footer>
-    <script src="js/vendor/jquery.js"></script>
+    <script src="{{ asset('/js/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('/js/jquery/jquery-ui.min.js') }}"></script>
     <script src="js/vendor/what-input.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/app.js"></script>
 
     <script>
-        $(document).foundation();
+
+        $(function(){
+            //Ao dar o submit, grava as informações de empresa e filial no local storage
+            $( "#formLogin" ).submit(function( event ) {
+                localStorage.setItem("AUTOLOGWMS_CompanyCode",$('#company_code').val());
+                localStorage.setItem("AUTOLOGWMS_BranchCode",$('#company_branch').val());
+            })
+
+            //Recupera as informações de empresa e filial gravadas, para colocar nos inputs
+            if(localStorage.getItem("AUTOLOGWMS_CompanyCode")){
+                $('#company_code').val(localStorage.getItem("AUTOLOGWMS_CompanyCode"));
+                $('#company_branch').val(localStorage.getItem("AUTOLOGWMS_BranchCode"));
+                $('#code').focus();
+            }else{
+                $('#company_code').focus();
+            }
+            
+
+        })
     </script>
 
 </body>

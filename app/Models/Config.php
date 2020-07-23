@@ -49,7 +49,13 @@ class Config extends Model
         
     ];
 
-    
+    //Retorna uma configuração especifica
+    public static function getConfig($code){
+        return Config::where('code', $code)
+                      ->get()
+                      ->toArray()[0]['value'];
+    }
+
 
     //Retorna todos os configs disponíveis
     public static function getConfigs(){

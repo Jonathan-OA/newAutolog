@@ -9,13 +9,11 @@
                 <th class="th_grid">@lang('models.action')</th>
             </thead>
             <tbody>
-            @foreach($sectors as $sector)
                 <tr>
-                    <td>{!! $sector->code !!}</td>
-                    <td>{!! $sector->deposit_code !!}</td>
-                    <td>{!! $sector->description !!}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                 </tr>
-            @endforeach
             </tbody>
         </table>
         </div>

@@ -8,18 +8,16 @@
                    <!-- Texto baseado no arquivo de linguagem -->
                    @lang('models.volumes') 
                 </div>
-                <div class="panel panel-default">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <!-- Alerta de erro / sucesso -->
-                            @include('flash::message')
-                            <div id="msg_excluir"></div>
-                            <div class="row buttons_grid">
-                                <a class="btn btn-success"  href="{!! route('volumes.create') !!}">@lang('buttons.add')</a>
-                            </div>
-                            <div class="panel-body">
-                                @include('volumes.table')
-                            </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <!-- Alerta de erro / sucesso -->
+                        @include('flash::message')
+                        <div id="msg_excluir"></div>
+                        <div class="row buttons_grid">
+                            <a class="btn btn-success"  href="{!! route('volumes.create') !!}">@lang('buttons.add')</a>
+                        </div>
+                        <div class="panel-body">
+                            @include('volumes.table')
                         </div>
                     </div>
                 </div>

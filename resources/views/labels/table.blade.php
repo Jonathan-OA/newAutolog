@@ -14,18 +14,16 @@
                 <th class="th_grid">@lang('models.action')</th>
             </thead>
             <tbody>
-            @foreach($labels as $label)
                 <tr>
-                    <td>{!! $label->barcode !!}</td>
-                    <td>{!! $label->product_code !!}</td>
-                    <td>{!! $label->prim_qty !!}</td>
-                    <td>{!! $label->prim_uom_code !!}</td>
-                    <td>{!! $label->batch !!}</td>
-                    <td>{!! $label->batch_supplier !!}</td>
-                    <td>{!! $label->label_status_id !!}</td>
-                    <td>{!! $label->due_date !!}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                 </tr>
-            @endforeach
             </tbody>
         </table>
         </div>

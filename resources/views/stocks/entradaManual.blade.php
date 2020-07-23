@@ -36,12 +36,12 @@
                                             {!! Form::text('uom_code', null, ['class' => 'form-control', 'readonly']) !!}
                                         </div>
                                         <div class="col-md-6">
-                                            {!! Form::label('prev_qty', Lang::get('models.prev_qty').':') !!}
-                                            {!! Form::text('prev_qty', null, ['class' => 'form-control']) !!}    
+                                            {!! Form::label('prim_qty', Lang::get('models.prim_qty').':') !!}
+                                            {!! Form::text('prim_qty', null, ['class' => 'form-control']) !!}    
                                         </div>
                                         <div class="col-md-6">
-                                            {!! Form::label('prev_uom_code', Lang::get('models.prev_uom_code').':') !!}
-                                            {!! Form::text('prev_uom_code', null, ['class' => 'form-control', 'readonly']) !!}
+                                            {!! Form::label('prim_uom_code', Lang::get('models.prev_uom_code').':') !!}
+                                            {!! Form::text('prim_uom_code', null, ['class' => 'form-control', 'readonly']) !!}
                                         </div>
                                             {!! Form::label('location_code', Lang::get('models.location_code').':') !!}
                                             {!! Form::text('location_code', null, ['class' => 'form-control', 'id' => 'autocomplete', 'table' => 'locations']) !!}
@@ -121,7 +121,7 @@
                         $("#qty").val(data.infos.qty);
                         $("#prev_qty").val(data.infos.prev_qty);
                         $("#uom_code").val(data.infos.uom_code);
-                        $("#prev_uom_code").val(data.infos.prev_uom_code);
+                        $("#prim_uom_code").val(data.infos.prim_uom_code);
                         $("#product_code").val(data.infos.product_code);
                         $("#label_id").val(data.infos.label_id);
                         //Limpa campo de msg, caso esteja preenchido

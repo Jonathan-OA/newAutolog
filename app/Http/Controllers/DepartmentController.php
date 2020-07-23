@@ -33,11 +33,7 @@ class DepartmentController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $this->departmentRepository->pushCriteria(new RequestCriteria($request));
-        $departments = $this->departmentRepository->findByField('company_id', Auth::user()->company_id);
-
-        return view('locations.departments.index')
-            ->with('departments', $departments);
+        return view('locations.departments.index');
     }
 
     /**

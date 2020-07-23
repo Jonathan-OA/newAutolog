@@ -352,7 +352,6 @@ app.controller('DetCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '
                 { name: 'Lote', field: 'batch' },
                 { name: 'Lote Fornec', field: 'batch_supplier' },
                 { name: 'Qtd. Conf.', field: 'qty_conf' },
-                { name: 'Qtd. Embarc.', field: 'qty_ship' },
                 { name: 'Status', field: 'document_status_id', cellTemplate: '<div class="ui-grid-cell-contents"><div class="grid_cell stat{{grid.getCellValue(row, col)}}">{{row.entity.description}}</div></div>' }
             ],
             enablePaginationControls: false,

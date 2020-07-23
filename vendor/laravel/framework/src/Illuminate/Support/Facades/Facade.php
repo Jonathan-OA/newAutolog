@@ -4,8 +4,8 @@ namespace Illuminate\Support\Facades;
 
 use Closure;
 use Mockery;
-use RuntimeException;
 use Mockery\MockInterface;
+use RuntimeException;
 
 abstract class Facade
 {
@@ -71,7 +71,7 @@ abstract class Facade
     /**
      * Create a fresh mock instance for the given class.
      *
-     * @return \Mockery\Expectation
+     * @return \Mockery\MockInterface
      */
     protected static function createFreshMockInstance()
     {
@@ -159,7 +159,7 @@ abstract class Facade
     /**
      * Resolve the facade root instance from the container.
      *
-     * @param  string|object  $name
+     * @param  object|string  $name
      * @return mixed
      */
     protected static function resolveFacadeInstance($name)
@@ -172,7 +172,9 @@ abstract class Facade
             return static::$resolvedInstance[$name];
         }
 
-        return static::$resolvedInstance[$name] = static::$app[$name];
+        if (static::$app) {
+            return static::$resolvedInstance[$name] = static::$app[$name];
+        }
     }
 
     /**

@@ -8,12 +8,10 @@
                 <th class="th_grid">@lang('models.action')</th>
             </thead>
             <tbody>
-            @foreach($departments as $department)
                 <tr>
-                    <td>{!! $department->code !!}</td>
-                    <td>{!! $department->description !!}</td>
+                    <td></td>
+                    <td></td>
                 </tr>
-            @endforeach
             </tbody>
         </table>
         </div>

@@ -33,11 +33,8 @@ class TaskController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $this->taskRepository->pushCriteria(new RequestCriteria($request));
-        $tasks = $this->taskRepository->findByField('company_id', Auth::user()->company_id);
-
-        return view('tasks.index')
-            ->with('tasks', $tasks);
+         //Load das tasks é feito por datatable no index.blade.php
+        return view('tasks.index');
     }
 
     /**

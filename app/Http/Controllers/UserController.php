@@ -34,11 +34,9 @@ class UserController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $this->userRepository->pushCriteria(new RequestCriteria($request));
-        $users = $this->userRepository->findByField('company_id', Auth::user()->company_id);
+         //Load dos usuarios é feito por datatable no index.blade.php
 
-        return view('users.index')
-            ->with('users', $users);
+        return view('users.index');
     }
 
     /**
@@ -209,6 +207,22 @@ class UserController extends AppBaseController
             Flash::error(Lang::get('validation.permission'));
             return array(1,Lang::get('validation.permission'));
         }    
+    }
+
+     /**
+     * Get users online
+     *
+     */
+    public function usersOnline(){
+
+        //Pega apenas os usuarios online
+        $usersOn = App\Models\User::getOnline();
+
+        //Pega total de licenças para desktop
+        $usersDeskDisp = App\Models\Config::getConfig('usuarios_desktop');
+
+        return view('users.users_online')->with('usersOn', $usersOn)
+                                         ->with('usersDeskDisp', (int)$usersDeskDisp);
     }
 
     /**

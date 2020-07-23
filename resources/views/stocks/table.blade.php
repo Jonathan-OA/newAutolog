@@ -15,19 +15,17 @@
                 <th class="th_grid">@lang('models.action')</th>
             </thead>
             <tbody>
-            @foreach($stocks as $stock)
                 <tr>
-                    <td>{!! $stock->product_code !!}</td>
-                    <td>{!! $stock->label_id !!}</td>
-                    <td>{!! $stock->location_code !!}</td>
-                    <td>{!! $stock->qty !!}</td>
-                    <td>{!! $stock->uom_code !!}</td>
-                    <td>{!! $stock->prev_qty !!}</td>
-                    <td>{!! $stock->prev_uom_code !!}</td>
-                    <td>{!! $stock->pallet_id !!}</td>
-                    <td>{!! $stock->finality_code !!}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                 </tr>
-            @endforeach
             </tbody>
         </table>
         </div>

@@ -12,17 +12,14 @@
                 <th class="th_grid">@lang('models.action')</th>
             </thead>
             <tbody>
-            @foreach($operations as $operation)
                 <tr >
-                    <td >{!! $operation->code !!}</td>
-                    <td >{!! $operation->type !!}</td>
-                    <td >{!! $operation->module_name !!}</td>
-                    <td >{!! $operation->level !!}</td>
-                    <td >{!! $operation->description !!}</td>
-                    <td >{!! $operation->writes_log !!}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                     <td></td>
                 </tr>
-            @endforeach
             </tbody>
         </table>
         </div>

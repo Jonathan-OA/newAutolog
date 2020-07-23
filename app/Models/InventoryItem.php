@@ -203,6 +203,9 @@ class InventoryItem extends Model
             case 3:
                 $status = array(1,2,31);
                 break;
+            case 4:
+                $status = array(1,2,3,41);
+                break;
             default:
                 $status = '';
         }

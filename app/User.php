@@ -10,10 +10,13 @@ use Session;
 use Request;
 use Auth;
 use DB;
+use App\Models\Company;
+use Cache;
 
 class User extends Authenticatable
 {
     use Notifiable;
+
 
     /**
      * The attributes that are mass assignable.
@@ -32,6 +35,7 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
 
     // Valida se usuário já esta logado
     public function valLogged($ip){
@@ -93,6 +97,13 @@ class User extends Authenticatable
         $this->last_login = $dataAtual->toDateTimeString();
         $this->save();
 
+    }
+
+
+    //Retorna os dados da filial do usuário atual
+    public function getCompanyInfo(){
+        $company = Company::where('id', $this->company_id)->get();
+        return $company[0];
     }
 
 }

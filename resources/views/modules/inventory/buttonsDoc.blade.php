@@ -22,21 +22,27 @@
             <img class='icon' src='{{asset('/icons/1acont.png') }}'>
         </button>
 
-        <!-- 2ª Contagem (Status 21) -->
-        <button ng-if="row.status_inv == 21" class="icon_action" 
+        <!-- 2ª Contagem (Status 21 ou 1 e com o inventário aceitando mais de uma contagem) -->
+        <button ng-if="((row.status_inv == 21 || row.status_inv == 1) && row.counts > 1)" class="icon_action" 
                 ng-click="callRoute('./inventory/'+row.id+'/selectItemsCount/2')" aria-label="@lang('buttons.2acont')" data-microtip-position="left" role="tooltip">
                 <img class='icon' src='{{asset('/icons/2acont.png') }}'>
         </button>
 
-        <!-- 3ª Contagem (Status 31)  -->
-        <button ng-if="row.status_inv == 31"  class="icon_action" 
-                ng-click="callRoute('./inventory/'+row.id+'/liberate/3', 1)" aria-label="@lang('buttons.3acont')" data-microtip-position="left" role="tooltip">
+        <!-- 3ª Contagem (Status 31 ou 2 e com o inventário aceitando mais de duas contagem)   -->
+        <button ng-if="((row.status_inv == 31 || row.status_inv == 2) && row.counts > 2)"  class="icon_action" 
+                ng-click="callRoute('./inventory/'+row.id+'/selectItemsCount/3')" aria-label="@lang('buttons.3acont')" data-microtip-position="left" role="tooltip">
                 <img class='icon' src='{{asset('/icons/3acont.png') }}'>
+        </button>
+
+        <!-- Finalizar Inventário   -->
+        <button ng-if="(row.status_inv > 1)"  class="icon_action" 
+                ng-click="callRouteConfirm('./inventory/'+row.id+'/finalize',1,'@lang('buttons.msg_finalize_inv')')" aria-label="@lang('buttons.finalize_inv')" data-microtip-position="left" role="tooltip">
+                <img class='icon' src='{{asset('/icons/finalize.png') }}'>
         </button>
 
          <!-- Retornar e Relatorio de Contagens realizadas (Status Doc > 1 e < 8) -->
          <span ng-if="row.status_doc != 0  && row.status_doc != 8">
-            <button ng-click="callRoute('./inventory/'+row.id+'/return', 1)"
+            <button ng-click="callRouteConfirm('./inventory/'+row.id+'/return', 1, '@lang('buttons.msg_return')')"
                     class="icon_action" aria-label="@lang('buttons.return')" data-microtip-position="left" role="tooltip">
                     <img class='icon' src='{{asset('/icons/retornar.png') }}'>
             </button>

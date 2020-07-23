@@ -17,6 +17,10 @@ use App;
 use Auth;
 use Flash;
 use Lang;
+use Orchestra\Parser\Xml\Facade as XmlParser;
+use Storage;
+use Carbon\Carbon;
+use DB;
 
 class ReceiptController extends AppBaseController
 {
@@ -54,9 +58,9 @@ class ReceiptController extends AppBaseController
         if(App\Models\User::getPermission('documents_rec_add',Auth::user()->user_type_code)){
             
             //Busca os tipos de documentos para o movimento de recebimento
-            $document_types = App\Models\DocumentType::getDocumentTypes('030');
+            $document_types = App\Models\DocumentType::getDocumentTypes('010');
             //Busca informações do tipo de documento (liberação automatica, depositos, tela de impressão..)
-            $document_types_infos = App\Models\DocumentType::getDocumentTypesArray('030');
+            $document_types_infos = App\Models\DocumentType::getDocumentTypesArray('010');
 
             return view('modules.receipt.createDocument')->with('document_types',$document_types)
                                                             ->with('document_types_infos',$document_types_infos);
@@ -106,7 +110,7 @@ class ReceiptController extends AppBaseController
             $document = $this->documentRepository->findWithoutFail($id);
             
             //Busca os tipos de documentos para o movimento de recebimento
-            $document_types = App\Models\DocumentType::getDocumentTypes('030');
+            $document_types = App\Models\DocumentType::getDocumentTypes('010');
 
             //Valida se o documento existe e se pertence a esse módulo (recebimento)
             if (empty($document) || !array_key_exists($document->document_type_code, $document_types->toArray())) {
@@ -371,7 +375,7 @@ class ReceiptController extends AppBaseController
             $input = $request->all(); 
 
             //Cria array no formato q a função de liberação reconhece
-            $document['moviment_code'] = '030';
+            $document['moviment_code'] = '010';
             $documents = array($document);
 
             
@@ -396,6 +400,131 @@ class ReceiptController extends AppBaseController
             return redirect(url('receipt'));
         }
 
+    }
+
+    /**
+     * Mostra a tela de importação de xml para recebimento
+     *
+     * @return Response
+     */
+
+    public function showImportXml()
+    {
+        //Valida se usuário possui permissão para acessar esta opção
+        if(App\Models\User::getPermission('documents_rec_imp',Auth::user()->user_type_code)){
+
+            return view('modules.receipt.importXml');
+        }else{
+            //Sem permissão
+            Flash::error(Lang::get('validation.permission'));
+            return redirect(url('receipt'));
+        }
+
+    }
+
+    /**
+     * Valida XML enviadO e insere os documentos / itens
+     *
+     * @return Response
+     */
+
+    public function importXml(Request $request)
+    {
+        $input = $request->all();
+
+        //Pega dados da empresa para gravar xml na pasta com CODIGO + FILIAL
+        $companyInfo = Auth::user()->getCompanyInfo();
+        $folderName = $companyInfo->code.$companyInfo->branch;
+
+        $path = $request->file('fileXml')->storeAs('Imports/'.$folderName,'importRec'.date('Ymd').'.xml');
+        $FILE = Storage::get($path);
+
+        $xml = XmlParser::extract($FILE);
+        //Extrai as informações do XMl em um array
+        //nó[child1, child2] => Pega um subarray com as informações especificadas em child, separadas por virgula. Ex: Documento -> Numero
+        //nó{subnó{child1, child2}} => quando tem mais de dois níveis de informação. Ex: Documento -> Item -> código
+        try{
+            $documents = $xml->parse([
+                'docs' => 
+                    ['uses' => 
+                        'documento[numero>number,tipo>document_type_code,cliente>customer_code,'.""
+                        .'fornecedor>supplier_code,transportadora>courier_code,data>emission_date,'.""
+                        .'entrega>delivery_date,itens{item{codigo>product_code,quantidade>qty,lote>batch}}]'],
+            ]);
+            
+            if(count($documents['docs']) > 0){
+                $docSuccess = 0;
+                $return = array();
+                foreach($documents['docs'] as $doc){
+                    
+                    $doc['company_id'] = Auth::user()->company_id;
+                    $doc['user_id'] = Auth::user()->id;
+                    
+                    
+                    //Verifica se número do documento é valido (não existe outro doc com o mesmo tipo / numero)
+                    $countDoc = App\Models\Document::valDocumentNumber($doc['document_type_code'], $doc['number']);
+                    if($countDoc == 0){
+                        $itens = $doc['itens'][0]['item']; //Pega o array com os itens
+                        unset($doc['itens']);//Limpa da variavel para poder criar o documento sem erros
+                        
+                        //Converte as datas caso existam
+                        $doc['emission_date'] = ($doc['emission_date']) ? Carbon::createFromFormat('d/m/Y', $doc['emission_date']) : null;
+                        $doc['delivery_date'] = ($doc['delivery_date']) ? Carbon::createFromFormat('d/m/Y', $doc['delivery_date']) : null;
+
+                        //Limpa valores nulos
+                        $doc = array_filter($doc);
+                        
+                        //Status do Documento
+                        $doc['document_status_id'] = '0';
+
+                        //Para cada documento inicia uma transação
+                        DB::beginTransaction();
+
+                        //Pode criar
+                        $document = $this->documentRepository->create($doc);
+                        if($document){
+                            
+                            //Insere os itens
+                            foreach($itens as $item){
+                                $item['company_id'] = Auth::user()->company_id;
+                                $item['document_id'] = $document->id;
+                                $item['uom_code'] = 'UN';
+                                //Limpa valores nulos
+                                $item = array_filter($item);
+                                $item['document_status_id'] = "0";
+                                
+                                $newItem = $this->documentItemRepository->create($item);
+                            }
+                            $docSuccess++;
+
+                        }
+
+                        DB::commit();
+                       //Grava log
+                        $descricao = 'Importou Documento '.$document->document_type_code.' '.$document->number.' via XML';
+                        $log = App\Models\Log::wlog('documents_rec_imp', $descricao, $document->id);
+                        
+                    }else{
+                        $return[$doc['number']] = 'Documento já existe com status diferente de cancelado / finalizado';
+                    }
+                    
+                }
+
+                Flash::success($docSuccess.' Documentos importados com sucesso!');
+                return redirect(url('receipt'));
+                
+            }else{
+                Flash::success('Sem documentos para importar.');
+            }
+
+        }catch(Exception $err)
+        {
+            Flash::error('Falha na leitura do arquivo XML. Verifique se todas as tags estão corretas.');
+        }        
+
+        
+        return redirect(url('receipt/importXml'));
+        
     }
 
     //--------------------------------------------------------------------------------------------
