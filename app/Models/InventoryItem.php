@@ -248,9 +248,13 @@ class InventoryItem extends Model
                                 }
                             })
                             ->groupBy('inv.company_id', 
+                                      'inv.document_id',
                                       'inv.product_code',
-                                      'location_code',
-                                      'inventory_status.description')
+                                      'inv.location_code',
+                                      'inventory_status.description',
+                                      'deposit_code', 
+                                      'inv.inventory_status_id',
+                                      'inv.prim_uom_code')
                             ->orderBy('deposit_code')
                             ->get();
     }

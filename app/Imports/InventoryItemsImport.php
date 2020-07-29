@@ -9,11 +9,14 @@ class InventoryItemsImport implements ToArray
 {
     private $parameters = '';
     private $customer_code = '';
+    private $value = '';
 
     //Parametros de inventário enviados pelo construtor no controller de inventário
-    public function __construct($parameters, $customer){
+    //Customer = Cliente e Value = Valor por Leitura
+    public function __construct($parameters, $customer, $value){
         $this->parameters = $parameters;
         $this->customer_code = $customer;
+        $this->value = $value;
     }
 
     
@@ -84,6 +87,7 @@ class InventoryItemsImport implements ToArray
                                                  'document_type_code' => 'IVD',
                                                  'document_status_id' => 0,
                                                  'inventory_status_id' => 0,
+                                                 'inventory_value' => $this->value,
                                                  'customer_code' => $this->customer_code,
                                                  'user_id' => Auth::user()->id,
                                                  'emission_date' => \Carbon\Carbon::now(),
@@ -103,9 +107,9 @@ class InventoryItemsImport implements ToArray
             if(trim($desc) == '' && trim($produto) == '') break;
             
             //Deposito
-            //Se não informar, grava padrão 01
+            //Se não informar, grava padrão 99
             if(trim($deposito) == ''){
-                $deposito = '01';
+                $deposito = '99';
             }
             if(trim($deposito) <> ''){
                 //Valida se existe
@@ -155,7 +159,7 @@ class InventoryItemsImport implements ToArray
                                                         'location_type_code' => 'BLOCADO',
                                                         'location_function_code' => 'ESTOQUE',
                                                         'label_type_code' => 'ENDERE',
-                                                        'stock_type_code' => 0
+                                                        'stock_type_code' => 3
                                                         ]);
 
                     if(!$newLoc->save()){
@@ -261,8 +265,6 @@ class InventoryItemsImport implements ToArray
                 break;
             }
             
-            //Pausa para teste
-            if($cont == 100) break;
         }
 
         if($erro == 0){

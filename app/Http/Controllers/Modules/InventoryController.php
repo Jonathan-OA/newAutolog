@@ -285,7 +285,7 @@ class InventoryController extends AppBaseController
         //Campos presentes no arquivo (informado pelo usuário na tela anterior)
         $fields = $input['fields'];
         $customer_code = $input['customer_code'];
-        $cost = $input['cost'];
+        $inventory_value = $input['cost']; //Preço por Leitura
 
 
         if (in_array($extFile, ['xls', 'xlsx'])) {
@@ -313,7 +313,7 @@ class InventoryController extends AppBaseController
             if($countColumns <> count($fields)){
                 Flash::error(Lang::get('validation.infos_import_error', ['fields' => count($fields), 'columnsFile' => $countColumns]));
                 return redirect(url('inventory/importFile'))->with('customer_code', $customer_code)
-                                                            ->with('cost', $cost);
+                                                            ->with('inventory_value', $inventory_value);
             }
 
             //Salva o arquivo no storage para ser obtido após a confirmação
@@ -324,7 +324,7 @@ class InventoryController extends AppBaseController
                                                               ->with('sepFile', $sepFile)
                                                               ->with('infos', $infos)
                                                               ->with('customer_code', $customer_code)
-                                                              ->with('cost', $cost)
+                                                              ->with('inventory_value', $inventory_value)
                                                               ->with('fields', $fields);
         } else {
             //Arquivo invalido
@@ -346,6 +346,7 @@ class InventoryController extends AppBaseController
         $extFile = $input['extFile']; //Extensão do arquivo salvo
         $sepFile = $input['sepFile']; //Separador de cada linha
         $customer_code = $input['customer_code']; //Cliente
+        $inventory_value = $input['inventory_value']; //Valor por Leitura
 
         //Pega a ordem das colunas e suas informações
         //Inverte as chaves para que o índice seja a informação do campo e o valor da ordem
@@ -364,7 +365,7 @@ class InventoryController extends AppBaseController
         } elseif (in_array($extFile, ['txt', 'csv'])) {
             $file = file_get_contents(storage_path() . '/' . $fileName, 'r');
             //Cria o objeto e chama a função passando os parâmetros do txt
-            $importFile = new InventoryItemsImport($parameters, $customer_code);
+            $importFile = new InventoryItemsImport($parameters, $customer_code, $inventory_value);
             $importFile->array($file, array('order' => $fieldsOrder,'separator' => $sepFile));
         }else{
             //Arquivo invalido

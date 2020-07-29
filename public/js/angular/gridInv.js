@@ -152,6 +152,8 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
             columnDefs: [
                 { name: 'Número', field: 'number' },
                 { name: 'Tipo', field: 'document_type_code',  minWidth: 10 },
+                { name: 'Cliente', field: 'customer', minWidth: 220 },
+                { name: 'Valor', field: 'inventory_value', minWidth: 10, cellTemplate: '<div>R${{row.entity.inventory_value}}</div>'},
                 {
                     name: 'Status',
                     field: 'document_status_id',
@@ -259,7 +261,7 @@ app.controller('DetCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '
                 { name: 'Quantidade', field: 'qty' },
                 { name: 'Status', field: 'description', cellTemplate: '<div class="grid_cell stat{{grid.getCellValue(row, col)}}"><div class="ui-grid-cell-contents">{{row.entity.description}}</div></div>' }
             ],
-            enablePaginationControls: false,
+            enablePaginationControls: true,
             paginationPageSize: 18,
             rowTemplate: '<div ng-click="grid.appScope.clickRow(row, col, $event)" ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.uid" class="ui-grid-cell" ng-class="col.colIndex()" ui-grid-cell></div>',
         };

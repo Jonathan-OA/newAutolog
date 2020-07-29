@@ -65,6 +65,8 @@
                                     {!! Form::hidden('extFile', $extFile) !!}
                                     {!! Form::hidden('sepFile', $sepFile) !!}
                                     {!! Form::hidden('customer_code', $customer_code) !!}
+                                    {!! Form::hidden('inventory_value', $inventory_value) !!}
+                                    
                                     <br>
                                     <!-- Parâmetros de Inventário -->
                                     <span id="parameters">

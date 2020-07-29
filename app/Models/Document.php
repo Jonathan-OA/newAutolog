@@ -49,6 +49,7 @@ class Document extends Model
         'document_type_origin',
         'finalization',
         'inventory_status_id',
+        'inventory_value',
     ];
 
     /**
@@ -94,7 +95,8 @@ class Document extends Model
                                  'inventory_status.description as inv_description', 'inventory_status_id', DB::raw("COUNT(DISTINCT document_items.id) as total_items"),
                                  DB::raw("IFNULL(ROUND(SUM(CASE WHEN document_items.qty_conf IS NULL THEN 0 ELSE document_items.qty_conf END)/SUM(document_items.qty)*100,0),0) as total_conf"),
                                  'documents.delivery_date','documents.billing_date', 'document_types.lib_location', 'document_types.print_labels','document_types.label_type_code',
-                                 'document_types.print_labels_doc','documents.location_code', 'documents.number_origin', 'documents.document_type_origin','documents.finalization')
+                                 'document_types.print_labels_doc','documents.location_code', 'documents.number_origin', 'documents.document_type_origin','documents.finalization',
+                                 'documents.inventory_value')
                         ->join('document_types', 'documents.document_type_code', '=', 'document_types.code')
                         ->join('document_status', 'document_status.id', '=', 'documents.document_status_id')
                         ->leftJoin('customers', function ($joint) {
@@ -125,7 +127,8 @@ class Document extends Model
                                 'documents.created_at','documents.updated_at','moviment_code', 'document_status.description',
                                 'inventory_status.description', 'inventory_status_id',  'document_types.lib_location', 'document_types.print_labels',
                                 'documents.delivery_date','documents.billing_date','document_types.label_type_code','document_types.print_labels_doc',
-                                'documents.location_code', 'documents.number_origin', 'documents.document_type_origin','documents.finalization')
+                                'documents.location_code', 'documents.number_origin', 'documents.document_type_origin','documents.finalization',
+                                'documents.inventory_value')
                        ->orderBy('documents.id', 'desc')
                        ->take($qty)
                        ->get();
