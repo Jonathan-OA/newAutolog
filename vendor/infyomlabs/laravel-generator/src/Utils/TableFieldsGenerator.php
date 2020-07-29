@@ -278,6 +278,10 @@ class TableFieldsGenerator
         $field->parseDBType($dbType.','.$column->getPrecision().','.$column->getScale());
         $field->htmlType = 'number';
 
+        if ($dbType === 'decimal') {
+            $field->numberDecimalPoints = $column->getScale();
+        }
+
         return $this->checkForPrimary($field);
     }
 
@@ -454,6 +458,10 @@ class TableFieldsGenerator
             if ($foreignField == $primary) {
                 return false;
             }
+        }
+
+        if (empty($manyToManyTable)) {
+            return false;
         }
 
         $modelName = model_name_from_table_name($manyToManyTable);

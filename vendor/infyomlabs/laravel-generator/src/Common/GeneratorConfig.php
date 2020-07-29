@@ -68,6 +68,7 @@ class GeneratorConfig
     /* Prefixes */
     public $prefixes;
 
+    /** @var CommandData */
     private $commandData;
 
     /* Command Options */
@@ -91,6 +92,7 @@ class GeneratorConfig
         'factory',
         'seeder',
         'repositoryPattern',
+        'localized',
         'connection',
     ];
 
@@ -217,12 +219,13 @@ class GeneratorConfig
         $this->pathSeeder = config('infyom.laravel_generator.path.seeder', database_path('seeds/'));
         $this->pathDatabaseSeeder = config('infyom.laravel_generator.path.database_seeder', database_path('seeds/DatabaseSeeder.php'));
         $this->pathViewProvider = config(
-            'infyom.laravel_generator.path.view_provider', app_path('Providers/ViewServiceProvider.php')
+            'infyom.laravel_generator.path.view_provider',
+            app_path('Providers/ViewServiceProvider.php')
         );
 
         $this->modelJsPath = config(
-                'infyom.laravel_generator.path.modelsJs',
-                resource_path('assets/js/models/')
+            'infyom.laravel_generator.path.modelsJs',
+            resource_path('assets/js/models/')
         );
     }
 
@@ -308,6 +311,8 @@ class GeneratorConfig
             config('infyom.laravel_generator.api_version', 'v1')
         );
 
+        $commandData->addDynamicVariable('$SEARCHABLE$', '');
+
         return $commandData;
     }
 
@@ -365,6 +370,14 @@ class GeneratorConfig
             $this->options['save'] = config('infyom.laravel_generator.options.save_schema_file', true);
         }
 
+        if (empty($this->options['localized'])) {
+            $this->options['localized'] = config('infyom.laravel_generator.options.localized', false);
+        }
+
+        if ($this->options['localized']) {
+            $commandData->getTemplatesManager()->setUseLocale(true);
+        }
+
         $this->options['softDelete'] = config('infyom.laravel_generator.options.softDelete', false);
         $this->options['repositoryPattern'] = config('infyom.laravel_generator.options.repository_pattern', true);
         if (!empty($this->options['skip'])) {
@@ -388,7 +401,7 @@ class GeneratorConfig
         $this->prefixes['public'] = explode('/', config('infyom.laravel_generator.prefixes.public', ''));
 
         if ($this->getOption('prefix')) {
-            $multiplePrefixes = explode(',', $this->getOption('prefix'));
+            $multiplePrefixes = explode('/', $this->getOption('prefix'));
 
             $this->prefixes['route'] = array_merge($this->prefixes['route'], $multiplePrefixes);
             $this->prefixes['path'] = array_merge($this->prefixes['path'], $multiplePrefixes);

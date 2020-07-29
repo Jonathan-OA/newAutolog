@@ -43,19 +43,25 @@ class ViewServiceProviderGenerator extends BaseGenerator
     }
 
     /**
-     * @param string $views
-     * @param string $variableName
-     * @param string $columns
-     * @param string $tableName
+     * @param string      $views
+     * @param string      $variableName
+     * @param string      $columns
+     * @param string      $tableName
+     * @param string|null $modelName
      */
-    public function addViewVariables($views, $variableName, $columns, $tableName)
+    public function addViewVariables($views, $variableName, $columns, $tableName, $modelName = null)
     {
-        $model = model_name_from_table_name($tableName);
+        if (!empty($modelName)) {
+            $model = $modelName;
+        } else {
+            $model = model_name_from_table_name($tableName);
+        }
 
         $this->commandData->addDynamicVariable('$COMPOSER_VIEWS$', $views);
         $this->commandData->addDynamicVariable('$COMPOSER_VIEW_VARIABLE$', $variableName);
         $this->commandData->addDynamicVariable(
-            '$COMPOSER_VIEW_VARIABLE_VALUES$', $model."::pluck($columns)->toArray()"
+            '$COMPOSER_VIEW_VARIABLE_VALUES$',
+            $model."::pluck($columns)->toArray()"
         );
 
         $mainViewContent = $this->addViewComposer();
@@ -80,7 +86,10 @@ class ViewServiceProviderGenerator extends BaseGenerator
 
         $replacePosition = strpos($mainViewContent, $lastSeederStatement);
         $mainViewContent = substr_replace(
-            $mainViewContent, $newViewStatement, $replacePosition + strlen($lastSeederStatement) + 6, 0
+            $mainViewContent,
+            $newViewStatement,
+            $replacePosition + strlen($lastSeederStatement) + 6,
+            0
         );
 
         return $mainViewContent;
@@ -116,7 +125,10 @@ class ViewServiceProviderGenerator extends BaseGenerator
             $nameSpaceStatement = $matches[0][$totalMatches - 1];
             $replacePosition = strpos($mainViewContent, $nameSpaceStatement);
             $mainViewContent = substr_replace(
-                $mainViewContent, $newModelStatement, $replacePosition + strlen($nameSpaceStatement), 0
+                $mainViewContent,
+                $newModelStatement,
+                $replacePosition + strlen($nameSpaceStatement),
+                0
             );
         }
 

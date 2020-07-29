@@ -321,6 +321,7 @@ return [
     'document_create' => 'Criação de Documento',  
     'document_lib' => 'Liberação de Documento',  
     'document_imp' => 'Importação de Documento',  
+    'pre_document_imp' => 'Importação de Documento - Confirmação',  
     'item_create' => 'Criação de Item',  
     'item_edit' => 'Edição de Item',  
     'items' => 'Itens',
@@ -344,8 +345,11 @@ return [
     'printConfig' => 'Configuração de Impressoras',
     'total' => 'Total ',
     'fileExcel' => 'Planilha Excel ',
+    'fileInput' => 'Arquivo de Entrada ',
     'fileXml' => 'Arquivo XML ',
     'users_online' => 'Usuários Online',
+    'infos_import' => 'Informações Presentes no Arquivo',
+    'cost_inventory' => 'Valor por Leitura'
     
 
 

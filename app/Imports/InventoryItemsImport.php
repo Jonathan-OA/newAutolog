@@ -8,10 +8,12 @@ use Maatwebsite\Excel\Concerns\ToArray;
 class InventoryItemsImport implements ToArray
 {
     private $parameters = '';
+    private $customer_code = '';
 
     //Parametros de inventário enviados pelo construtor no controller de inventário
-    public function __construct($parameters){
+    public function __construct($parameters, $customer){
         $this->parameters = $parameters;
+        $this->customer_code = $customer;
     }
 
     
@@ -21,28 +23,50 @@ class InventoryItemsImport implements ToArray
      *
      * @return User|null
      */
-    public function array(array $row)
+    public function array($row, $params = "")
     {   
+        $isTxt = false;
+
+        //SE É UM ARRAY, INDICA QUE A IMPORTAÇÃO É VIA EXCEL
+        //SE NÃO FOR, TESTA SE É UM ARQUIVO
+        if(!is_array($row)){
+            $row = explode("\n", $row);
+            $isTxt = true;
+            //Sem parâmetros informados (Array(separator e order))
+            if(empty($params)){
+                $erro = 1;
+                return $erro;
+            }else{
+                $separator = $params['separator'];
+                $order = $params['order'];
+            }
+        }
+
         $totLines = count($row) - 1;
         $cont = 0;
-        
+        $erro = 0;
         //echo $this->parameters;exit; 
-        DB::beginTransaction();
+        //DB::beginTransaction();
         
         foreach($row as $key => $line){
             $cont++;
-            $erro = 0;
             
-            $endere = $line[0];
-            $deposito = $line[1];
-            $produto = $line[2];
-            $desc = $line[3];
-            $barcode = $line[4];
-            $saldo = $line[5];
-            $unidade = $line[6];
+            
+            //Se for um txt, quebra cada linha pelo caractere separador
+            if($isTxt){
+                $line = explode($separator, $line);
+            }
+            
+            $endere = ($isTxt) ? ((array_key_exists('end', $order)) ? $line[$order['end']] : '') : $line[0];
+            $deposito = ($isTxt) ? ((array_key_exists('dep', $order)) ? $line[$order['dep']] : '') : $line[1];
+            $produto = ($isTxt) ? ((array_key_exists('prd', $order)) ? $line[$order['prd']] : '') : $line[2];
+            $desc = ($isTxt) ? ((array_key_exists('dsc', $order)) ? $line[$order['dsc']] : '') : $line[3];
+            $barcode = ($isTxt) ? ((array_key_exists('ean', $order)) ? $line[$order['ean']] : '') : $line[4];
+            $saldo = ($isTxt) ? ((array_key_exists('qde', $order)) ? $line[$order['qde']] : '') : $line[5];
+            $unidade = ($isTxt) ? ((array_key_exists('uni', $order)) ? $line[$order['uni']] : '') : $line[6];
 
-            //Se achar alguma linha com endereço e produto em branco, encerra o loop
-            if(trim($endere) == '' && trim($produto) == '') break;
+            
+            
 
             //Primeira linha
             if($cont == 1) {
@@ -60,6 +84,7 @@ class InventoryItemsImport implements ToArray
                                                  'document_type_code' => 'IVD',
                                                  'document_status_id' => 0,
                                                  'inventory_status_id' => 0,
+                                                 'customer_code' => $this->customer_code,
                                                  'user_id' => Auth::user()->id,
                                                  'emission_date' => \Carbon\Carbon::now(),
                                                  'comments' => $this->parameters
@@ -70,11 +95,18 @@ class InventoryItemsImport implements ToArray
                 }
 
                 //Desconsidera linha de cabeçalho
-                continue; 
+                if(trim($desc) == '' && trim($produto) == '') continue;
+                
             }
 
+            //Se achar alguma linha com descricao e produto em branco, encerra o loop
+            if(trim($desc) == '' && trim($produto) == '') break;
             
             //Deposito
+            //Se não informar, grava padrão 01
+            if(trim($deposito) == ''){
+                $deposito = '01';
+            }
             if(trim($deposito) <> ''){
                 //Valida se existe
                 $cDeposit = \App\Models\Deposit::where('company_id', Auth::user()->company_id)
@@ -98,6 +130,10 @@ class InventoryItemsImport implements ToArray
             }
 
             //Endereço
+            //Se não informar, grava padrão DEF
+            if(trim($endere) == ''){
+                $endere = 'DEF';
+            }
             if(trim($endere) <> '' && $erro == 0){
                 //Valida se existe
                 $cLocation = \App\Models\Location::where('company_id', Auth::user()->company_id)
@@ -118,6 +154,7 @@ class InventoryItemsImport implements ToArray
                                                         'status' => 1,
                                                         'location_type_code' => 'BLOCADO',
                                                         'location_function_code' => 'ESTOQUE',
+                                                        'label_type_code' => 'ENDERE',
                                                         'stock_type_code' => 0
                                                         ]);
 
@@ -127,6 +164,11 @@ class InventoryItemsImport implements ToArray
                 }                               
 
             }
+            //Se não informar unidade, grava padrão UN
+            if(trim($unidade) == ''){
+                $unidade = 'UN';
+            }
+
             //Unidade
             $cUnid = \App\Models\Uom::where('code', trim($unidade))
                                     ->get()
@@ -149,8 +191,8 @@ class InventoryItemsImport implements ToArray
                                             ->get()
                                             ->count();
                 if($cProd == 0){
-                    //Descrição
-                    $desc = (trim($desc) <> '')? $desc : 'Prd '.$produto;
+                    //Descrição (100 caracteres)
+                    $desc = (trim($desc) <> '')? substr(utf8_encode($desc),0,100) : 'Prd '.$produto;
 
                     //Insere da products com grupo e tipo default
                     $newPrd = new \App\Models\Product([ 'company_id' => Auth::user()->company_id,
@@ -183,6 +225,11 @@ class InventoryItemsImport implements ToArray
                                                                  'uom_code' => 'UN',
                                                                  'prev_qty' => 1 ,
                                                                  'prim_qty' => 1,
+                                                                 'prev_level' => 1,
+                                                                 'conf_batch' => 0,
+                                                                 'conf_batch_supplier' => 0,
+                                                                 'create_label' => 1,
+                                                                 'print_label' => 1
                                                                 ]);
 
                             if(!$newPack->save()){
@@ -194,7 +241,6 @@ class InventoryItemsImport implements ToArray
                     } 
                 }
             }
-
 
             if($erro == 0){
                 //Grava na inventory_itens
@@ -211,16 +257,18 @@ class InventoryItemsImport implements ToArray
                     $erro = 1;
                     break;
                 }
+            }else{
+                break;
             }
-
-
-
-            $cont++;
+            
+            //Pausa para teste
+            if($cont == 100) break;
         }
+
         if($erro == 0){
-            DB::commit();
+            //DB::commit();
         }else{
-            DB::rollback();
+            //DB::rollback();
             echo 'erroooo';
         }
 

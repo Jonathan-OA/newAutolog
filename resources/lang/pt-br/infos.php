@@ -55,4 +55,13 @@ return [
     'labellayouts.commands'     => 'Este recurso utiliza a API externa Labelary, que pode não funcionar corretamente em algum momento.',    
     
 
+    /*
+    |
+    | Textos de informações gerais
+    |
+    */
+    
+    'attention.import'       => '!! ATENÇÃO: Confirme as informações referentes a cada coluna no arquivo antes de CONTINUAR.',    
+    
+
 ];

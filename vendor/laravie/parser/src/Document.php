@@ -2,6 +2,8 @@
 
 namespace Laravie\Parser;
 
+use Closure;
+
 abstract class Document
 {
     /**
@@ -81,12 +83,16 @@ abstract class Document
      * Filter value.
      *
      * @param  mixed   $value
-     * @param  string|null  $filter
+     * @param  \Closure|string|null  $filter
      *
      * @return mixed
      */
-    protected function filterValue($value, ?string $filter = null)
+    protected function filterValue($value, $filter = null)
     {
+        if ($filter instanceof Closure) {
+            return $this->callFilterResolver($resolver, $value);
+        }
+
         $resolver = $this->getFilterResolver($filter);
 
         if (\method_exists($resolver[0], $resolver[1])) {
@@ -155,7 +161,7 @@ abstract class Document
         }
 
         if ($position !== false) {
-            list($class, $method) = \explode('@', $filter, 2);
+            [$class, $method] = \explode('@', $filter, 2);
         }
 
         return $this->makeFilterResolver($class, $method);

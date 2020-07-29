@@ -101,6 +101,35 @@ class Button extends Fluent implements Arrayable
     }
 
     /**
+     * @param mixed $message
+     * @return $this
+     * @see https://editor.datatables.net/examples/api/removeMessage
+     * @see https://editor.datatables.net/reference/button/create
+     * @see https://editor.datatables.net/reference/button/edit
+     * @see https://editor.datatables.net/reference/button/remove
+     */
+    public function formMessage($message)
+    {
+        $this->attributes['formMessage'] = $message;
+
+        return $this;
+    }
+
+    /**
+     * @param mixed $title
+     * @return $this
+     * @see https://editor.datatables.net/reference/button/create
+     * @see https://editor.datatables.net/reference/button/edit
+     * @see https://editor.datatables.net/reference/button/remove
+     */
+    public function formTitle($title)
+    {
+        $this->attributes['formTitle'] = $title;
+
+        return $this;
+    }
+
+    /**
      * Set className option value.
      *
      * @param string $value
@@ -109,6 +138,23 @@ class Button extends Fluent implements Arrayable
     public function className($value)
     {
         $this->attributes['className'] = $value;
+
+        return $this;
+    }
+
+    /**
+     * Append a class name to column.
+     *
+     * @param string $class
+     * @return $this
+     */
+    public function addClass($class)
+    {
+        if (! isset($this->attributes['className'])) {
+            $this->attributes['className'] = $class;
+        } else {
+            $this->attributes['className'] .= " $class";
+        }
 
         return $this;
     }
@@ -172,7 +218,9 @@ class Button extends Fluent implements Arrayable
      */
     public function actionSubmit()
     {
-        return $this->action('function() { this.submit(); }');
+        $this->attributes['action'] = 'function() { this.submit(); }';
+
+        return $this;
     }
 
     /**
@@ -183,7 +231,11 @@ class Button extends Fluent implements Arrayable
      */
     public function action($value)
     {
-        $this->attributes['action'] = $value;
+        if (substr($value, 0, 8) == 'function') {
+            $this->attributes['action'] = $value;
+        } else {
+            $this->attributes['action'] = "function(e, dt, node, config) { $value }";
+        }
 
         return $this;
     }
@@ -196,7 +248,9 @@ class Button extends Fluent implements Arrayable
      */
     public function actionHandler($action)
     {
-        return $this->action("function() { this.submit(null, null, function(data) { data.action = '{$action}'; return data; }) }");
+        $this->attributes['action'] = "function() { this.submit(null, null, function(data) { data.action = '{$action}'; return data; }) }";
+
+        return $this;
     }
 
     /**
@@ -206,6 +260,21 @@ class Button extends Fluent implements Arrayable
      */
     public function actionClose()
     {
-        return $this->action('function() { this.close(); }');
+        $this->attributes['action'] = 'function() { this.close(); }';
+
+        return $this;
+    }
+
+    /**
+     * Set button alignment.
+     *
+     * @param string $align
+     * @return \Yajra\DataTables\Html\Button
+     */
+    public function align($align = 'button-left')
+    {
+        $this->attributes['align'] = $align;
+
+        return $this;
     }
 }

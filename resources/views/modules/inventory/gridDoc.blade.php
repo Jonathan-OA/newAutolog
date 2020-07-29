@@ -22,7 +22,7 @@
                                     </a>
                                 </div>
                                 <div class="icon_grid" aria-label="@lang('buttons.import')" data-microtip-position="bottom" role="tooltip">
-                                    <a  href="{!! url('inventory/importExcel') !!}">
+                                    <a  href="{!! url('inventory/importFile') !!}">
                                         <img class='icon' src='{{asset('/icons/import.png') }}'>
                                     </a>
                                 </div>
