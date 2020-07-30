@@ -23,7 +23,12 @@
                                         <div class="col-md-6">
                                             {{-- Custo por Leitura no Inventário --}}
                                             {!! Form::label('cost', Lang::get('models.cost_inventory').':') !!}
-                                            {!! Form::number('cost', (isset($cost)) ? $cost : '', ['class' => 'form-control', 'required']) !!}
+                                            <div class="input-group mb-2">
+                                                <div class="input-group-prepend">
+                                                    <div class="input-group-text">R$</div>
+                                                </div>
+                                                {!! Form::number('cost', (isset($cost)) ? $cost : '', ['class' => 'form-control', 'step' => '0.01', 'required']) !!}
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="row">

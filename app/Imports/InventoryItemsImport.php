@@ -54,11 +54,14 @@ class InventoryItemsImport implements ToArray
         foreach($row as $key => $line){
             $cont++;
             
+            if(trim($line) == "") break; //Ultima linha vazia
             
             //Se for um txt, quebra cada linha pelo caractere separador
             if($isTxt){
                 $line = explode($separator, $line);
             }
+
+           
             
             $endere = ($isTxt) ? ((array_key_exists('end', $order)) ? $line[$order['end']] : '') : $line[0];
             $deposito = ($isTxt) ? ((array_key_exists('dep', $order)) ? $line[$order['dep']] : '') : $line[1];
