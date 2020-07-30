@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use InfyOm\Generator\Utils\ResponseUtil;
 use Response;
 use DB;
-use Input;
+use Request;
 use Auth;
 use Schema;
 
@@ -42,14 +42,14 @@ class AppBaseController extends Controller
      * @return Response
      */
 
-    public function autocomplete(){
+    public function autoComplete(){
         
         //Busca na tabela $table os registros com o código $term e o filtro $valDep (Caso seja um valor atrelado)
-        $term = Input::get('term'); //String de pesquisa
-        $table = Input::get('table'); //Tabela Atual
-        $tableDep = Input::get('tableDep'); //Valor de um input dependente
-        $field = (trim($tableDep) == '' || Input::get('field') == substr($table,0,-1).'_code')? 'code' : Input::get('field'); //Nome do Campo de Busca
-        $filters = Input::get('filters'); //Filtros do select
+        $term = Request::get('term'); //String de pesquisa
+        $table = Request::get('table'); //Tabela Atual
+        $tableDep = Request::get('tableDep'); //Valor de um Request dependente
+        $field = (trim($tableDep) == '' || Request::get('field') == substr($table,0,-1).'_code')? 'code' : Request::get('field'); //Nome do Campo de Busca
+        $filters = Request::get('filters'); //Filtros do select
         $termFilters = array();
 
         //Caso seja campos de Origem/Destino, considera o campo code
@@ -65,7 +65,7 @@ class AppBaseController extends Controller
             $termFilters = explode(";",$filters); //Resultado: Array onde cada item é CAMPO:VALOR
         }
 
-        $GLOBALS['valDep'] = Input::get('valDep');
+        $GLOBALS['valDep'] = Request::get('valDep');
         $GLOBALS['campoDep'] = substr($tableDep,0,-1).'_code';
 
         $results = array();

@@ -134,7 +134,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('/install/trans', 'InstallController@step1');
 
     //AUTOCOMPLETE
-    Route::get('search', 'AppBaseController@autocomplete');
+    Route::get('/search', 'AppBaseController@autoComplete');
 
     Route::get('operations/datatable', 'OperationController@getData');
     Route::resource('operations', 'OperationController');
