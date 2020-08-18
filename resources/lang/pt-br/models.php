@@ -321,6 +321,7 @@ return [
     'document_create' => 'Criação de Documento',  
     'document_lib' => 'Liberação de Documento',  
     'document_imp' => 'Importação de Documento',  
+    'document_exp' => 'Exportação de Documento',  
     'pre_document_imp' => 'Importação de Documento - Confirmação',  
     'item_create' => 'Criação de Item',  
     'item_edit' => 'Edição de Item',  
@@ -349,7 +350,9 @@ return [
     'fileXml' => 'Arquivo XML ',
     'users_online' => 'Usuários Online',
     'infos_import' => 'Informações Presentes no Arquivo',
-    'cost_inventory' => 'Valor por Leitura'
+    'cost_inventory' => 'Valor por Leitura',
+    'perfil_export' => 'Perfil de Exportação',
+    'delimiter' => 'Delimitador',
     
 
 

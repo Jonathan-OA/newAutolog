@@ -379,6 +379,25 @@ class InventoryController extends AppBaseController
     }
 
     /**
+     * Mostra a tela de exportação de planilha/txt para inventário
+     * @return Response
+     */
+
+    public function showExportFile($document_id)
+    {
+        $document = $this->documentRepository->findWithoutFail($document_id);
+
+        //Valida se usuário possui permissão para acessar esta opção
+        if (App\Models\User::getPermission('documents_inv_exp', Auth::user()->user_type_code)) {
+            return view('modules.inventory.exportFile')->with('document', $document);
+        } else {
+            //Sem permissão
+            Flash::error(Lang::get('validation.permission'));
+            return redirect(url('inventory'));
+        }
+    }
+
+    /**
      * Mostra o formulário para inserção de itens 2ª e 3ª contagem
      *
      * @return Response

@@ -22,6 +22,7 @@ return [
     'detail' => 'Detalhes',
     'packings' => 'Embalagens',
     'import' => 'Importar',
+    'export' => 'Exportar',
     'filter' => 'Filtrar',
     'action' => 'Ações',
     'return' => 'Retornar',

@@ -80,6 +80,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('inventory/importFile', 'Modules\InventoryController@showImportFile'); //Mostra Tela de Importação Excel
     Route::post('inventory/confirmImportFile', 'Modules\InventoryController@confirmImportFile'); //Confirma a ordem dos campos para importação
     Route::post('inventory/importFile', 'Modules\InventoryController@importFile'); //Importa Excel e Cria IVD com os itens
+    Route::get('inventory/{document_id}/exportFile', 'Modules\InventoryController@showExportFile'); //Mostra Tela de Exportação Excel / Txt
     Route::get('inventory/{document_id}/items', 'Modules\InventoryController@showItems'); //Mostra grid de itens
     Route::match(['GET', 'POST'],'inventory/{document_id}/selectItems', 'Modules\InventoryController@selectItems'); //Form de seleção de itens para o inventário
     Route::match(['GET', 'POST'],'inventory/{document_id}/selectItemsCount/{invCount}', 'Modules\InventoryController@selectItemsNextCount'); //Form de seleção de itens para segunda / terceira contagem
