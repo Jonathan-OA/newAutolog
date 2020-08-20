@@ -29,6 +29,7 @@ return [
     'documents' => 'Documents',
     'operations' => 'Operações',
     'parameters' => 'Parâmetros',
+    'options' => 'Opções',
     'modules' => 'Modulos',
     'user_types' => 'Tipos de Usuários',
     'user_permissions' => 'Permissões de Usuários',

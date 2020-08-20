@@ -18,6 +18,7 @@ return [
     'param_location' => 'Valida Endereço: ',
     'param_productdef' => 'Produto Padrão: ',
     'param_locationdef' => 'Endereço Padrão: ',
+    'param_sumprod' => 'Sumarizar por Produto: ',
     
 
 ];

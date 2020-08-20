@@ -16,7 +16,8 @@ return [
     'param_product'             => 'Permite ler apenas produtos que foram selecionados no inventário.',
     'param_location'            => 'Permite ler apenas endereços que foram selecionados no inventário.',
     'param_productdef'          => 'Produto padrão para as contagens do inventário:',
-    'param_locationdef'         => 'Endereço padrão para as contagens do inventário:',
+    'param_locationdef'         => 'Endereço padrão para as contagens do inventário.',
+    'param_sumprod'             => 'Agrupar as linhas do mesmo produto e somar suas quantidades.',
 
     /*
     |

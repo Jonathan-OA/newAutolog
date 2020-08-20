@@ -10,6 +10,7 @@ use App\Http\Requests\UpdateDocumentItemRequest;
 use App\Repositories\DocumentItemRepository;
 use App\Http\Controllers\AppBaseController;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Prettus\Repository\Criteria\RequestCriteria;
@@ -17,8 +18,10 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\InventoryItemsImport;
 use App;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Laracasts\Flash\Flash;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Storage;
 
 ini_set('max_execution_time', 300); //5 minutes
 
@@ -395,6 +398,48 @@ class InventoryController extends AppBaseController
             Flash::error(Lang::get('validation.permission'));
             return redirect(url('inventory'));
         }
+    }
+
+    /**
+     * Realiza as validações e exporta as contagens para txt
+     * @return Response
+     */
+
+    public function exportFile($document_id, Request $request)
+    {
+        $input = $request->all();
+        $delimiter = $input['delimiter'];
+        //Gravar perfil de exportação para a proxima utilização
+        //insert into profiles
+
+        $content = "";
+        $fileName = "export_".$document_id.".txt";
+    
+        //Pega as informações das contagens
+        $select = DB::table('inventory_items')
+                    ->select("product_code", "qty_1count")
+                    ->where('document_id', $document_id)
+                    ->get()
+                    ->toArray();
+
+
+        //Gera a variável com o conteudo do arquivo
+        foreach($select as $key => $line){
+            //print_R($line->product_code);exit;
+            $content.= $line->product_code.$delimiter.$line->qty_1count.$delimiter."\n";
+        }
+
+        Storage::put($fileName, $content);
+        //Cabeçalho para indicar que o arquivo será baixado
+        $headers = [
+            'Content-type' => 'text/plain', 
+            'Content-Disposition' => sprintf('attachment; filename="%s"', $fileName),
+            'Content-Length' => strlen($content)
+        ];
+
+        // make a response, with the content, a 200 response code and the headers
+        return response()->download(storage_path().'\\app\\'.$fileName, $fileName, $headers)->deleteFileAfterSend();
+        
     }
 
     /**
