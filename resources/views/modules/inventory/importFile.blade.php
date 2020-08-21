@@ -5,7 +5,7 @@
         <div class="col-md-12 pad-ct">
             <div class="panel panel-default" >
                 <div class="panel-heading">
-                    @lang('models.document_imp') 
+                    @lang('models.document_imp') - Inventário
                 </div>
                 <div class="panel-body" >
                     <div class="row">
@@ -17,19 +17,30 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <!-- Cliente  -->
-                                            {!! Form::label('customer_code', Lang::get('models.customer_code').':') !!}
+                                            {!! Form::label('customer_code', "*".Lang::get('models.customer_code').':') !!}
                                             {!! Form::text('customer_code', (isset($customer_code)) ? $customer_code : '', ['class' => 'form-control', 'id' => 'autocomplete', 'table' => 'customers', 'required']) !!}
                                         </div>
+                                    </div>
+                                    <hr>
+                                    <div class="row">
                                         <div class="col-md-6">
-                                            {{-- Custo por Leitura no Inventário --}}
-                                            {!! Form::label('cost', Lang::get('models.cost_inventory').':') !!}
-                                            {!! Form::number('cost', (isset($cost)) ? $cost : '', ['class' => 'form-control', 'step' => '0.01', 'required']) !!}
+                                            {!! Form::label('billing_type', "*".Lang::get('models.billing_type').':') !!}
+                                            {{ Form::radio('billing_type', '1' , false) }} Por Leitura
+                                            {{ Form::radio('billing_type', '0' , true) }} Valor Fechado
                                         </div>
                                     </div>
                                     <div class="row">
+                                        <div class="col-md-6">
+                                            {{-- Custo por Leitura no Inventário --}}
+                                            {!! Form::label('cost', "*".Lang::get('models.cost_inventory').':') !!}
+                                            {!! Form::number('cost', (isset($cost)) ? $cost : '', ['class' => 'form-control', 'step' => '0.01', 'required']) !!}
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="row">
                                         <div class="col-md-12">
                                             <!-- Arquivo Excel  -->
-                                            {!! Form::label('fileExcel', Lang::get('models.fileInput').':') !!}
+                                            {!! Form::label('fileExcel', "*".Lang::get('models.fileInput').':') !!}
                                             {!! Form::file('fileExcel', ['required']) !!}
                                         </div>
                                     </div>

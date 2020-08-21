@@ -351,9 +351,10 @@ return [
     'fileXml' => 'Arquivo XML ',
     'users_online' => 'Usuários Online',
     'infos_import' => 'Informações Presentes no Arquivo',
-    'cost_inventory' => 'Valor por Leitura',
-    'perfil_export' => 'Perfil de Exportação',
+    'cost_inventory' => 'Valor',
+    'profile_export' => 'Perfil de Exportação',
     'delimiter' => 'Delimitador',
+    'billing_type' => 'Tipo de Cobrança',
     
 
 

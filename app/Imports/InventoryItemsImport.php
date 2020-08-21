@@ -111,9 +111,9 @@ class InventoryItemsImport implements ToArray
             
             //Deposito
             //Se não informar, grava padrão 99
-            if(trim($deposito) == ''){
-                $deposito = '99';
-            }
+            // if(trim($deposito) == ''){
+            //     $deposito = '99';
+            // }
             if(trim($deposito) <> ''){
                 //Valida se existe
                 $cDeposit = \App\Models\Deposit::where('company_id', Auth::user()->company_id)
@@ -138,9 +138,9 @@ class InventoryItemsImport implements ToArray
 
             //Endereço
             //Se não informar, grava padrão DEF
-            if(trim($endere) == ''){
-                $endere = 'DEF';
-            }
+            // if(trim($endere) == ''){
+            //     $endere = 'DEF';
+            // }
             if(trim($endere) <> '' && $erro == 0){
                 //Valida se existe
                 $cLocation = \App\Models\Location::where('company_id', Auth::user()->company_id)
@@ -208,6 +208,7 @@ class InventoryItemsImport implements ToArray
                                                         'status' => 1,
                                                         'product_type_code' => 'PA',
                                                         'group_code' => '000',
+                                                        'customer_code' => $this->customer_code
                                                         ]);
 
                     if(!$newPrd->save()){
@@ -247,6 +248,10 @@ class InventoryItemsImport implements ToArray
                         
                     } 
                 }
+            }
+
+            if(trim($endere) == ''){
+                $endere = null;
             }
 
             if($erro == 0){

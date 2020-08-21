@@ -13,22 +13,18 @@
     $arrayPreenc = array('0' => 'Zeros', ' ' => 'Espaços em Branco', '-' => 'Hífen');
 
     //Array com as opções para preencher os campos de data
-    $arrayDat = array('dd/mm/yyyy H:i:s' => 'dd/mm/yyyy H:i:s',
-                        'dd-mm-yyyy H:i:s' => 'dd-mm-yyyy H:i:s',
-                        'yyyy-mm-dd H:i:s' => 'yyyy-mm-dd H:i:s',
-                        'yyyy-dd-mm H:i:s' => 'yyyy-dd-mm H:i:s',
-                        'dd/mm/yyyy' => 'dd/mm/yyyy',
-                        'dd-mm-yyyy' => 'dd-mm-yyyy');
+    $arrayDat = array('%d/%m/%Y %H:%i:%s' => 'dd/mm/yyyy H:i:s',
+                        '%d-%m-%Y %H:%i:%s' => 'dd-mm-yyyy H:i:s',
+                        '%Y-%m-%d %H:%i:%s' => 'yyyy-mm-dd H:i:s',
+                        '%Y-%d-%m %H:%i:%s' => 'yyyy-dd-mm H:i:s',
+                        '%d/%m/%Y' => 'dd/mm/yyyy',
+                        '%d-%m-%Y' => 'dd-mm-yyyy');
 
     //Array com os delimitadores
     $arrayDelim = array(';' => 'Ponto e Vírgula', ':' => 'Dois Pontos', ',' => 'Vírgula');
 
 @endphp
-    <!--Modal para informar a descrição do perfil a ser criado (primeira utilização) - ao Clicar em exportar -->
-    <div class="modal fade" id="profileModal" tabindex="-1" role="dialog" aria-labelledby="profileModalLabel" aria-hidden="true">
-        {!! Form::label('profile_export', "Descrição do novo perfil:") !!}
-        {!! Form::text('profile_export', '', ['class' => 'form-control']) !!}               
-    </div>
+
     <div class="row">
         <div class="col-md-12 pad-ct">
             <div class="panel panel-default" >
@@ -38,7 +34,28 @@
                 <div class="panel-body" >
                     <div class="row">
                         <div class="col-md-12">
-                            {!! Form::open(['url' => 'inventory/'.$document->id.'/exportFile', 'method' => 'POST']) !!}
+                            {!! Form::open(['url' => 'inventory/'.$document->id.'/exportFile', 'method' => 'POST', 'id' => 'formExport']) !!}
+                            <!--Modal para informar a descrição do perfil a ser criado (primeira utilização) - ao Clicar em exportar -->
+                            <div class="modal fade" id="profileModal" tabindex="-1" role="dialog" aria-labelledby="profileModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-body">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    {!! Form::label('profile_desc', "Novo perfil identificado. Informe uma descrição:") !!}
+                                                    {!! Form::text('profile_desc', '', ['class' => 'form-control', 'id' => 'profile_desc']) !!}  
+                                                    <div class="row"> 
+                                                        <div class="col-md-12">
+                                                            {!! Form::submit(Lang::get('buttons.continue'), ['class' => 'btn btn-primary']) !!}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>           
+                            </div>
                             <div class="form-group">
                                 <div class="form_fields ui-droppable">
                                      @include('flash::message')
@@ -60,35 +77,38 @@
                                            
                                         </div>
                                     </div>
-                                    <ul id="sortable" style="margin-top: 5px">
-                                        <li class="ui-state-default">
-                                            <span aria-label="@lang('buttons.remove')" data-microtip-position="bottom" role="tooltip">
-                                                <a href="#" onClick="removeField(this);">
-                                                    <img class='icon' src='{{asset('/icons/cancelar2.png') }}'>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <ul id="sortable" style="margin-top: 5px">
+                                                <li class="ui-state-default">
+                                                    <span aria-label="@lang('buttons.remove')" data-microtip-position="bottom" role="tooltip">
+                                                        <a href="#" onClick="removeField(this);">
+                                                            <img class='icon' src='{{asset('/icons/cancelar2.png') }}'>
+                                                        </a>
+                                                    </span>
+                                                    <span class="fieldTitle">  Campo 1 </span>
+                                                    {!! Form::select('fieldsOrder[]',$arrayFields , null, ['class' => 'form-control props', 'id' => 'fieldInfo_1']) !!}
+                                                    <hr>
+                                                    <div class="props" style="font-size: 0.8em; text-align: left" id="field_1">
+                                                        <label for="eanMax">Limite Caracteres</label>
+                                                        <input class="form-control props" type="number" size="5" name="eanMax" id="eanMax"/>
+                                                        <label for="eanPre">Preencher</label>
+                                                        {!! Form::select('eanPre',$arrayPreenc , null, ['class' => 'form-control props', 'id' => 'eanPre']) !!}
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                            <div class="icon_grid" aria-label="@lang('buttons.add')" data-microtip-position="bottom" role="tooltip">
+                                                <a href="#" onClick="addField();">
+                                                    <img class='icon' src='{{asset('/icons/add.png') }}'>
                                                 </a>
-                                            </span>
-                                            <span class="fieldTitle">  Campo 1 </span>
-                                            {!! Form::select('fieldsOrder[]',$arrayFields , null, ['class' => 'form-control props', 'id' => 'fieldInfo_1']) !!}
-                                            <hr>
-                                            <div class="props" style="font-size: 0.8em; text-align: left" id="field_1">
-                                                <label for="eanMax">Limite Caracteres</label>
-                                                <input class="form-control props" type="number" size="5" name="eanMax" id="eanMax"/>
-                                                <label for="eanPre">Preencher</label>
-                                                {!! Form::select('eanPre',$arrayPreenc , null, ['class' => 'form-control props', 'id' => 'eanPre']) !!}
                                             </div>
-                                        </li>
-                                    </ul>
-                                    <div class="icon_grid" aria-label="@lang('buttons.add')" data-microtip-position="bottom" role="tooltip">
-                                        <a href="#" onClick="addField();">
-                                            <img class='icon' src='{{asset('/icons/add.png') }}'>
-                                        </a>
+                                        </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-2">
-                                            <strong>Linha de exemplo: <strong>
+                                        <div class="col-md-3" align="right">
+                                            <strong> => Linha de exemplo: </strong>
                                         </div>
-                                        <div class="col-md-10" id="exampleLine">
-                                        </div>
+                                        <div class="col-md-9" id="exampleLine" style="width: auto; border: 1px solid #0a7941; border-radius: 5px;"></div>
                                     </div>
                                     <hr>
                                     <div class="panel-heading" >
@@ -108,9 +128,7 @@
                     </div>
                      <!-- Submit Field -->
                      {!! Form::submit(Lang::get('buttons.export'), ['class' => 'btn btn-primary']) !!}
-                     <a  href="#" id="buttonProfile" data-toggle="modal" data-target="#profileModal" title="Salvar Perfil">
-                        <img class="icon" src="{{ asset('/icons/account_notf.png') }}" alt="Account">
-                    </a>
+                     <a href="{!! route('inventory.index') !!}" class="btn btn-default">@lang('buttons.cancel')</a>
                 </div>   
             </div>
         </div>
@@ -122,6 +140,8 @@
     #sortable li { margin: 3px 3px 3px 0; padding: 5px; float: left; font-size: 1.2em; text-align: center; width: 11%  }
     #sortable li select {margin-top: 5px}
     #sortable li img {width: 15px}
+    #exampleLine b {color: red;}
+    #exampleLine {font-weight: bold;}
     </style>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script>
@@ -181,7 +201,8 @@
                         newValue = String(value).padStart(maxLength, caracter)
                     }
                 }else{
-                    newValue = value.padEnd(maxLength, caracter)
+                    newValue = value.padEnd(maxLength, caracter);
+                    newValue = newValue.substring(0,maxLength);
                 }
                 return newValue;
             }else{
@@ -193,7 +214,7 @@
         function modifyExample(){
             var exampleLine = "";
             var fieldsList = $("select[name^='fieldsOrder[]']");
-            var delimiter = $("#delimiter").val();
+            var delimiter = "<b>"+$("#delimiter").val()+"</b>";
             if(delimiter){
                 //Loop nos campos para gerar novamente a linha de exemplo
                 fieldsList.map(function() {
@@ -233,6 +254,10 @@
                             var dat = $("#datFormat").val();
                             exampleLine = exampleLine+dat+delimiter;
                             break
+                        case 'datexp':
+                            var dat = $("#datExpFormat").val();
+                            exampleLine = exampleLine+dat+delimiter;
+                            break
                     }
                 });
                 $("#exampleLine").html(exampleLine);
@@ -249,6 +274,9 @@
                 titlesField.map(function(ix, element) {
                     $(element).html("Campo "+(ix+1));
                 })
+
+                //Recarrega a linha de exemplo reorganizando as infos
+                modifyExample();
             } );
             
              //Monitora cada alteração do select para evitar que o mesmo campo se repita
@@ -293,8 +321,8 @@
                                             '{!! Form::select('datFormat',$arrayDat, null, ['class' => 'form-control props', 'id' => 'datFormat']) !!}');            
                     break;
                     case 'datexp':
-                        $("#field_"+i).html('<label for="datFormat">Formato: </label>'+
-                                            '{!! Form::select('datFormat',$arrayDat, null, ['class' => 'form-control props', 'id' => 'datFormat']) !!}');            
+                        $("#field_"+i).html('<label for="datExpFormat">Formato: </label>'+
+                                            '{!! Form::select('datexpFormat',$arrayDat, null, ['class' => 'form-control props', 'id' => 'datExpFormat']) !!}');            
                     break;
                 }
                 //Verifica se de erro na validação
@@ -316,6 +344,19 @@
                 modifyExample();
             });
 
+            //Ao clicar em submit valida se a descrição do perfil esta setada
+            $("#formExport").submit(function(e){
+                if(!$('#profile_desc').val()){
+                    e.preventDefault();
+                    //Tira a model de carregando e mostra a model para a descrição do perfil
+                    $('#loadingModal').modal('toggle');
+                    $('#profileModal').modal();
+                }else{
+                    $('#profileModal').modal('toggle');
+                }
+                
+               
+            })
         });
     </script>
 @endsection 

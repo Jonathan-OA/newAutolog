@@ -40,7 +40,7 @@
                 <img class='icon' src='{{asset('/icons/finalize.png') }}'>
         </button>
 
-         <!-- Retornar e Relatorio de Contagens realizadas (Status Doc > 1 e < 8) -->
+         <!-- Retornar , Relatorio de Contagens realizadas e Exportar (Status Doc > 1 e < 8) -->
          <span ng-if="row.status_doc != 0  && row.status_doc != 8">
             <button ng-click="callRouteConfirm('./inventory/'+row.id+'/return', 1, '@lang('buttons.msg_return')')"
                     class="icon_action" aria-label="@lang('buttons.return')" data-microtip-position="left" role="tooltip">
@@ -49,6 +49,10 @@
             <button ng-click="callRoute('./inventoryItems/'+row.id+'/report')"
                     class="icon_action" aria-label="@lang('reports.reportInv')" data-microtip-position="left" role="tooltip">
                     <img class='icon' src='{{asset('/icons/report.png') }}'>
+            </button>
+            <button ng-click="callRoute('./inventory/'+row.id+'/exportFile')"
+                    class="icon_action" aria-label="@lang('buttons.export')" data-microtip-position="left" role="tooltip">
+                    <img class='icon' src='{{asset('/icons/export.png') }}'>
             </button>
         </span>
     </div>
