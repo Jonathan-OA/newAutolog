@@ -6,6 +6,7 @@
                 <th class="th_grid">@lang('models.code') </th>
                 <th class="th_grid">@lang('models.description') </th>
                 <th class="th_grid">@lang('models.product_type_code') </th>
+                <th class="th_grid">@lang('models.customer_code') </th>
                 <th class="th_grid">@lang('models.group_code') </th>
                 <th class="th_grid">@lang('models.subgroup_code') </th>
                 <th class="th_grid">@lang('models.inspection') </th>

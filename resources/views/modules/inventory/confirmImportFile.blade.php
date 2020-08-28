@@ -55,8 +55,8 @@
                                         <img class='icon' src='{{asset('/icons/information.png') }}' >
                                     </span>
                                     {!! Form::label('counts', Lang::get('parameters.param_count')) !!}
-                                    {{ Form::radio('counts', '1' , false) }} 1
-                                    {{ Form::radio('counts', '2' , true) }} 2
+                                    {{ Form::radio('counts', '1' , true) }} 1
+                                    {{ Form::radio('counts', '2' , false) }} 2
                                     {{ Form::radio('counts', '3' , false) }} 3 
                                     {{ Form::radio('counts', '4' , false) }} 4
 
@@ -65,6 +65,7 @@
                                     {!! Form::hidden('extFile', $extFile) !!}
                                     {!! Form::hidden('sepFile', $sepFile) !!}
                                     {!! Form::hidden('customer_code', $customer_code) !!}
+                                    {!! Form::hidden('billing_type', $billing_type) !!}
                                     {!! Form::hidden('inventory_value', $inventory_value) !!}
                                     
                                     <br>
@@ -81,14 +82,12 @@
                                             <img class='icon' src='{{asset('/icons/information.png') }}' >
                                         </span>
                                         {!! Form::label('vproduct', Lang::get('parameters.param_product')) !!}
-                                        {{ Form::radio('vproduct', '1' , true) }} @lang('models.yes')
                                         {{ Form::radio('vproduct', '0' , true) }} @lang('models.no')
                                         <br>
                                         <span aria-label="@lang('infos.param_location')" data-microtip-position="right" role="tooltip">
                                             <img class='icon' src='{{asset('/icons/information.png') }}' >
                                         </span>
                                         {!! Form::label('vlocation', Lang::get('parameters.param_location')) !!} 
-                                        {{ Form::radio('vlocation', '1' , true) }} @lang('models.yes')
                                         {{ Form::radio('vlocation', '0' , true) }} @lang('models.no')
                                         <br>
                                     </span>

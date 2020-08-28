@@ -66,6 +66,7 @@
             columns: [  { data: 'code', className: "td_center" },
                         { data: 'description' },
                         { data: 'product_type_code', className: "td_center" },
+                        { data: 'customer_code'},
                         { data: 'group_code', className: "td_center" },
                         { data: 'subgroup_code', className: "td_center" },
                         { data: 'inspection', className: "td_center" },

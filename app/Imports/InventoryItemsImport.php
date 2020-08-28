@@ -10,13 +10,15 @@ class InventoryItemsImport implements ToArray
     private $parameters = '';
     private $customer_code = '';
     private $value = '';
+    private $billing_type = '';
 
     //Parametros de inventário enviados pelo construtor no controller de inventário
     //Customer = Cliente e Value = Valor por Leitura
-    public function __construct($parameters, $customer, $value){
+    public function __construct($parameters, $customer, $value, $billing_type){
         $this->parameters = $parameters;
         $this->customer_code = $customer;
         $this->value = $value;
+        $this->billing_type = $billing_type;
     }
 
     
@@ -91,6 +93,7 @@ class InventoryItemsImport implements ToArray
                                                  'document_status_id' => 0,
                                                  'inventory_status_id' => 0,
                                                  'inventory_value' => $this->value,
+                                                 'billing_type' => $this->billing_type,
                                                  'customer_code' => $this->customer_code,
                                                  'user_id' => Auth::user()->id,
                                                  'emission_date' => \Carbon\Carbon::now(),
@@ -136,11 +139,6 @@ class InventoryItemsImport implements ToArray
                 
             }
 
-            //Endereço
-            //Se não informar, grava padrão DEF
-            // if(trim($endere) == ''){
-            //     $endere = 'DEF';
-            // }
             if(trim($endere) <> '' && $erro == 0){
                 //Valida se existe
                 $cLocation = \App\Models\Location::where('company_id', Auth::user()->company_id)
@@ -171,6 +169,7 @@ class InventoryItemsImport implements ToArray
                 }                               
 
             }
+
             //Se não informar unidade, grava padrão UN
             if(trim($unidade) == ''){
                 $unidade = 'UN';
@@ -195,6 +194,7 @@ class InventoryItemsImport implements ToArray
 
                 $cProd = \App\Models\Product::where('company_id', Auth::user()->company_id)
                                             ->where('code', trim($produto))
+                                            ->where('customer_code', trim($this->customer_code))
                                             ->get()
                                             ->count();
                 if($cProd == 0){
@@ -208,7 +208,7 @@ class InventoryItemsImport implements ToArray
                                                         'status' => 1,
                                                         'product_type_code' => 'PA',
                                                         'group_code' => '000',
-                                                        'customer_code' => $this->customer_code
+                                                        'customer_code' => trim($this->customer_code)
                                                         ]);
 
                     if(!$newPrd->save()){
@@ -230,13 +230,13 @@ class InventoryItemsImport implements ToArray
                                                                  'product_code' => $produto,
                                                                  'barcode' => $barcode,
                                                                  'level' => '1',
-                                                                 'uom_code' => 'UN',
+                                                                 'uom_code' => "$unidade",
                                                                  'prev_qty' => 1 ,
                                                                  'prim_qty' => 1,
                                                                  'prev_level' => 1,
                                                                  'conf_batch' => 0,
                                                                  'conf_batch_supplier' => 0,
-                                                                 'create_label' => 1,
+                                                                 'create_label' => 0,
                                                                  'print_label' => 1
                                                                 ]);
 
@@ -255,20 +255,21 @@ class InventoryItemsImport implements ToArray
             }
 
             if($erro == 0){
-                //Grava na inventory_itens
-                $invItem = new \App\Models\InventoryItem(['company_id' => Auth::user()->company_id,
-                                                          'document_id' => $inv->id,
-                                                          'product_code' => $produto,
-                                                          'location_code' => $endere,
-                                                          'qty_wms' => $saldo,
-                                                          'uom_code' => $unidade,
-                                                          'prim_uom_code' => $unidade,
-                                                          'inventory_status_id' => 0
-                                                        ]);
-                if(!$invItem->save()){
-                    $erro = 1;
-                    break;
-                }
+                // //Grava na inventory_itens
+                //Não grava na inventory_Items.. otimização de espaço em banco (Grava só na products com o client_id)
+                // $invItem = new \App\Models\InventoryItem(['company_id' => Auth::user()->company_id,
+                //                                           'document_id' => $inv->id,
+                //                                           'product_code' => $produto,
+                //                                           'location_code' => $endere,
+                //                                           'qty_wms' => $saldo,
+                //                                           'uom_code' => $unidade,
+                //                                           'prim_uom_code' => $unidade,
+                //                                           'inventory_status_id' => 0
+                //                                         ]);
+                // if(!$invItem->save()){
+                //     $erro = 1;
+                //     break;
+                // }
             }else{
                 break;
             }

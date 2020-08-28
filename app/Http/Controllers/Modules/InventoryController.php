@@ -290,6 +290,7 @@ class InventoryController extends AppBaseController
         $fields = $input['fields'];
         $customer_code = $input['customer_code'];
         $inventory_value = $input['cost']; //Preço por Leitura
+        $billing_type = $input['billing_type']; //Tipo de Cobrança
 
 
         if (in_array($extFile, ['xls', 'xlsx'])) {
@@ -329,6 +330,7 @@ class InventoryController extends AppBaseController
                                                               ->with('infos', $infos)
                                                               ->with('customer_code', $customer_code)
                                                               ->with('inventory_value', $inventory_value)
+                                                              ->with('billing_type', $billing_type)
                                                               ->with('fields', $fields);
         } else {
             //Arquivo invalido
@@ -351,6 +353,7 @@ class InventoryController extends AppBaseController
         $sepFile = $input['sepFile']; //Separador de cada linha
         $customer_code = $input['customer_code']; //Cliente
         $inventory_value = $input['inventory_value']; //Valor por Leitura
+        $billing_type = $input['billing_type']; //Tipo de Cobrança
 
         //Pega a ordem das colunas e suas informações
         //Inverte as chaves para que o índice seja a informação do campo e o valor da ordem
@@ -360,8 +363,8 @@ class InventoryController extends AppBaseController
         //Concatena todos os parametros informados em uma string separando por ; e grava no campo comments
         //O tratamento é feito no app coletor
         $parameters = "550_contagens=" . $input['counts'] . ";550_valida_saldo=" .
-            $input['vstock'] . ";550_valida_endereco=" . $input['vlocation'] .
-            ";550_valida_produto=" . $input['vproduct'];
+            $input['vstock'] . ";550_valida_endereco=" . $input['vlocation']?? '' .
+            ";550_valida_produto=" . $input['vproduct'] ?? '';
 
         //Confirma extensões validas para direcionar a importação correta
         if (in_array($extFile, ['xls', 'xlsx'])) {
@@ -369,7 +372,7 @@ class InventoryController extends AppBaseController
         } elseif (in_array($extFile, ['txt', 'csv'])) {
             $file = file_get_contents(storage_path() . '/' . $fileName, 'r');
             //Cria o objeto e chama a função passando os parâmetros do txt
-            $importFile = new InventoryItemsImport($parameters, $customer_code, $inventory_value);
+            $importFile = new InventoryItemsImport($parameters, $customer_code, $inventory_value, $billing_type);
             $importFile->array($file, array('order' => $fieldsOrder,'separator' => $sepFile));
         }else{
             //Arquivo invalido
@@ -390,10 +393,13 @@ class InventoryController extends AppBaseController
     public function showExportFile($document_id)
     {
         $document = $this->documentRepository->findWithoutFail($document_id);
-
+        //Busca perfis de exportação já gravados
+        $profiles = Profile::getProfiles('EXPORT');
+        
         //Valida se usuário possui permissão para acessar esta opção
         if (App\Models\User::getPermission('documents_inv_exp', Auth::user()->user_type_code)) {
-            return view('modules.inventory.exportFile')->with('document', $document);
+            return view('modules.inventory.exportFile')->with('document', $document) 
+                                                       ->with('profiles', $profiles);
         } else {
             //Sem permissão
             Flash::error(Lang::get('validation.permission'));
@@ -418,7 +424,7 @@ class InventoryController extends AppBaseController
         foreach($fieldsOrder as $order => $field){
             switch($field){
                 case 'fix':
-                    $jsonFields['fields'][] = array('code' => $field, $field.'Format' =>$input['fixedValue'] );
+                    $jsonFields['fields'][] = array('code' => $field, $field.'Format' =>$input['fixFormat'] );
                 break;
                 case 'dat':
                     $jsonFields['fields'][] = array('code' => $field, $field.'Format' => (isset($input[$field.'Format']) ? $input[$field.'Format'] : ""));
@@ -439,7 +445,7 @@ class InventoryController extends AppBaseController
         $jsonFields['options'] = array('summarize'=> $input['summarize']);
         //Cadastra o novo perfil de importação
         $insertProfile = Profile::insert(
-            ['company_id' => Auth::user()->company_id, 'type' => 'IMPORT', 'description' =>  $input['profile_desc'], 'delimiter' =>  $delimiter,
+            ['company_id' => Auth::user()->company_id, 'type' => 'EXPORT', 'description' =>  $input['profile_desc'], 'delimiter' =>  $delimiter,
             'format' => json_encode($jsonFields), 'created_at'=> new \DateTime()]
         );
 
@@ -453,7 +459,7 @@ class InventoryController extends AppBaseController
                                 "inventory_items.qty_1count as qde", 
                                 DB::raw( isset($input['datexpFormat']) ? "DATE_FORMAT(inventory_items.date_1count, '{$input['datexpFormat']}') as dat" : "'' as dat" ),
                                 DB::raw( isset($input['datexpFormat']) ? "DATE_FORMAT(NOW(), '{$input['datexpFormat']}') as datexp" : "'' as datexp" ),
-                                "labels.batch as lot", DB::raw(isset($input['fixedValue']) ? "'{$input['fixedValue']}' as fix" : "'' as fix"))
+                                "labels.batch as lot", DB::raw(isset($input['fixFormat']) ? "'{$input['fixFormat']}' as fix" : "'' as fix"))
                         ->join('products', function ($join) {
                             $join->on('products.code', '=', 'inventory_items.product_code')
                                 ->whereColumn ('products.company_id','inventory_items.company_id');
@@ -465,6 +471,7 @@ class InventoryController extends AppBaseController
                         })
                         ->leftJoin('labels', 'labels.id', 'inventory_items.label_id')
                         ->where('inventory_items.document_id', $document_id)
+                        ->where('inventory_items.qty_1count', '>', 0)
                         ->get()
                         ->toArray();
         }else{
@@ -473,7 +480,7 @@ class InventoryController extends AppBaseController
                      DB::raw("SUM(inventory_items.qty_4count) as qde"), 
                      DB::raw("' ' as dat"),
                      DB::raw( isset($input['datexpFormat']) ? "DATE_FORMAT(NOW(), '{$input['datexpFormat']}') as datexp" : "'' as datexp" ),
-                     "labels.batch as lot", DB::raw(isset($input['fixedValue']) ? "'{$input['fixedValue']}' as fix" : "'' as fix"))
+                     "labels.batch as lot", DB::raw(isset($input['fixFormat']) ? "'{$input['fixFormat']}' as fix" : "'' as fix"))
             ->join('products', function ($join) {
                 $join->on('products.code', '=', 'inventory_items.product_code')
                      ->whereColumn ('products.company_id','inventory_items.company_id');
@@ -485,6 +492,7 @@ class InventoryController extends AppBaseController
             })
             ->leftJoin('labels', 'labels.id', 'inventory_items.label_id')
             ->where('inventory_items.document_id', $document_id)
+            ->where('inventory_items.qty_1count', '>', 0)
             ->groupBy('products.code','products.description','packings.barcode','labels.batch')
             ->get()
             ->toArray();
@@ -502,10 +510,10 @@ class InventoryController extends AppBaseController
                     
                     case 'qde':
                         if($valueField == '') $valueField = "0";
-                        $max = (isset($field[$code.'Max']) ? $field[$code.'Max'] : '');
+                        $max = ((isset($field[$code.'Max']) && trim($field[$code.'Max']) <> '') ? $field[$code.'Max'] : 5);
                         $dec = (isset($field[$code.'Dec']) ? $field[$code.'Dec'] : 0);
                         $quebra = explode(".", $valueField);
-                        $valueField = str_pad($quebra[0],($max-$dec),0,\STR_PAD_LEFT).'.'.str_pad((!isset($quebra[1])?'0':$quebra[1]),($dec),0,\STR_PAD_RIGHT);
+                        $valueField = substr(str_pad($quebra[0],($max-$dec),0,\STR_PAD_LEFT),0,($max-$dec)).'.'.substr(str_pad((!isset($quebra[1])?'0':$quebra[1]),($dec),0,\STR_PAD_RIGHT),0,$dec) ;
                     break;
 
                     case 'dsc':

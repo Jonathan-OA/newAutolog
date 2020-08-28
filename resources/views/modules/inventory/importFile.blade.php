@@ -25,8 +25,8 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             {!! Form::label('billing_type', "*".Lang::get('models.billing_type').':') !!}
-                                            {{ Form::radio('billing_type', '1' , false) }} Por Leitura
-                                            {{ Form::radio('billing_type', '0' , true) }} Valor Fechado
+                                            {{ Form::radio('billing_type', 'VL' , false) }} Por Leitura
+                                            {{ Form::radio('billing_type', 'VF' , true) }} Valor Fechado
                                         </div>
                                     </div>
                                     <div class="row">

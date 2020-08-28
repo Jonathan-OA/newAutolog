@@ -153,6 +153,7 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
                 { name: 'Número', field: 'number' },
                 { name: 'Tipo', field: 'document_type_code',  minWidth: 10 },
                 { name: 'Cliente', field: 'customer', minWidth: 220 },
+                { name: 'Cobrança', field: 'billing_type', minWidth: 10 },
                 { name: 'Valor', field: 'inventory_value', minWidth: 10, cellTemplate: '<div>R${{row.entity.inventory_value}}</div>'},
                 {
                     name: 'Status',

@@ -40,6 +40,14 @@
 {!! Form::label('product_type_code', Lang::get('models.product_type_code').':') !!}
 {!! Form::text('product_type_code', null, ['class' => 'form-control','id' => 'autocomplete', 'table' => 'product_types']) !!}
 
+<!-- Customer Code Code Field -->
+<span aria-label="@lang('infos.products.customer_code')" data-microtip-position="right" role="tooltip">
+    <img class='icon' src='{{asset('/icons/information.png') }}' >
+</span>
+{!! Form::label('customer_code', Lang::get('models.customer_code').':') !!}
+{!! Form::text('customer_code', null, ['class' => 'form-control','id' => 'autocomplete2', 'table' => 'customers']) !!}
+
+
 <!-- Group Code Field -->
 {!! Form::label('group_code', Lang::get('models.group_code').':') !!}
 {!! Form::text('group_code', null, ['class' => 'form-control','id' => 'autocomplete1', 'table' => 'groups']) !!}

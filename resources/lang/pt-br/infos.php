@@ -53,6 +53,7 @@ return [
 
     'groups.trf_movement'       => 'Caso preenchido, exporta o apontamento/movimentação desse grupo com este valor para o erp/sistema.',    
     'products.origin'           => 'Caso o produto possua grade, indica o código origem (Tamanhos / cores diferentes, por exemplo)',    
+    'products.customer_code'    => 'Caso preenchido, indica que é um item específico de um cliente, podendo existir outras linhas com o mesmo código de produto.',    
     'labellayouts.commands'     => 'Este recurso utiliza a API externa Labelary, que pode não funcionar corretamente em algum momento.',    
     
 

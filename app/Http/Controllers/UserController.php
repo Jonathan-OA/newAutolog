@@ -15,6 +15,7 @@ use DataTables;
 use App;
 use Lang;
 use App\User;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends AppBaseController
 {
@@ -77,7 +78,9 @@ class UserController extends AppBaseController
             'code' => $input['code'],
             'email' => $input['email'],
             'user_type_code' => $input['user_type_code'],
-            'password' => bcrypt($input['password']),
+            'password' => Hash::make($input['password'], [
+                'rounds' => 12,
+            ]),
             'last_login' => null,
             'status' => $input['status']
             
@@ -161,7 +164,9 @@ class UserController extends AppBaseController
 
         //Criptografa senha
         $campos = $request->all();
-        $campos['password'] = bcrypt($campos['password']);
+        $campos['password'] = Hash::make($campos['password'], [
+            'rounds' => 12,
+        ]);
 
         $user = $this->userRepository->update($campos, $id);
 

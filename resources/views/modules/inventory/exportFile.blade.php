@@ -61,9 +61,14 @@
                                      @include('flash::message')
                                      <div class="row">
                                         <div class="col-md-6">
-                                            <!-- Perfil  -->
+                                            <!-- Perfil de Exportação -->
                                             {!! Form::label('profile_export', Lang::get('models.profile_export').':') !!}
-                                            {!! Form::text('profile_export', '', ['class' => 'form-control', 'id' => 'autocomplete', 'table' => 'customers']) !!}
+                                            <select class="form-control" name="profile_export" id="profile_export" >
+                                                <option></option> 
+                                                @foreach ($profiles as $profile)
+                                                <option value="{{$profile['id']}}" format="{{$profile['format']}}" delim="{{$profile['delimiter']}}"> {{$profile['description']}} </option> 
+                                                @endforeach
+                                            </select>
                                         </div>
                                     </div>
                                         <div class="alert alert-info" style="margin-top: 15px">
@@ -73,7 +78,7 @@
                                         <div class="col-md-3">
                                             <!-- Delimitador  -->
                                             {!! Form::label('delimiter', '*'.Lang::get('models.delimiter').':') !!}
-                                            {!! Form::select('delimiter',$arrayDelim , null, ['class' => 'form-control props', 'id' => 'delimiter', 'required']) !!}
+                                            {!! Form::text('delimiter','', ['class' => 'form-control props', 'id' => 'delimiter', 'required', 'maxlength' => '4']) !!}
                                            
                                         </div>
                                     </div>
@@ -193,7 +198,6 @@
                             value = value+'.00';
                         }
                         var quebra = String(value).split('.');
-                        console.log(quebra);
                         var int = String(quebra[0]).padStart(maxLength - decimals, caracter);
                         var dec = String(quebra[1]).padEnd(decimals, caracter);
                         newValue = String(int)+"."+String(dec);
@@ -243,7 +247,7 @@
                             exampleLine = exampleLine+subString("PRD01",prdDig,prdPre)+delimiter;
                             break
                         case 'fix':
-                            var fix = $("#fixedValue").val();
+                            var fix = $("#fixFormat").val();
                             exampleLine = exampleLine+fix+delimiter;
                             break
                         case 'ean':
@@ -255,7 +259,7 @@
                             exampleLine = exampleLine+dat+delimiter;
                             break
                         case 'datexp':
-                            var dat = $("#datExpFormat").val();
+                            var dat = $("#datexpFormat").val();
                             exampleLine = exampleLine+dat+delimiter;
                             break
                     }
@@ -314,15 +318,15 @@
                         break;
                     case 'fix':
                         $("#field_"+i).html('<label for="fixedValue">Valor:</label>'+
-                                            '<input class="form-control props" type="text" size="5" name="fixedValue" id="fixedValue"/>');
+                                            '<input class="form-control props" type="text" size="5" name="fixFormat" id="fixFormat"/>');
                         break;
                     case 'dat':
                         $("#field_"+i).html('<label for="datFormat">Formato: </label>'+
                                             '{!! Form::select('datFormat',$arrayDat, null, ['class' => 'form-control props', 'id' => 'datFormat']) !!}');            
                     break;
                     case 'datexp':
-                        $("#field_"+i).html('<label for="datExpFormat">Formato: </label>'+
-                                            '{!! Form::select('datexpFormat',$arrayDat, null, ['class' => 'form-control props', 'id' => 'datExpFormat']) !!}');            
+                        $("#field_"+i).html('<label for="datexpFormat">Formato: </label>'+
+                                            '{!! Form::select('datexpFormat',$arrayDat, null, ['class' => 'form-control props', 'id' => 'datexpFormat']) !!}');            
                     break;
                 }
                 //Verifica se de erro na validação
@@ -356,6 +360,45 @@
                 }
                 
                
+            })
+
+            //Ao selecionar um outro perfil de exportação, reajusta o grids de acordo
+            $('#profile_export').change(function(){
+                //Pega o formato do perfil selecionado
+                var newFormat = JSON.parse($('#profile_export option:selected').attr('format'));
+                //Seta o delimitador
+                $('#delimiter').val($('#profile_export option:selected').attr('delim'));
+
+                //Apaga os blocos atuais
+                $('#sortable:not(".ui-sortable-handle")').children('li').remove();
+                count = 1;
+                //Loop nos campos para montar novamente a ordenação correta
+                newFormat.fields.forEach(element => {
+                    //Adiciona um novo bloco
+                    addField();
+                    //Seta o campo na ordem
+                    $("#fieldInfo_"+(count-1)).val(element.code);
+                    //Força o evento change para atualizar as linhas
+                    $('.props').trigger('change'); 
+
+                    //Loop para setar as propriedades de cada campo (qdeMax, qdeDigitos...)
+                    for (var [key, value] of Object.entries(element)) {
+                        if(key != 'code'){
+                            $('#'+key).val(value);
+                        }
+                        modifyExample(); //Modifica a linha de exemplo a cada alteração
+                        
+                    }
+                    
+                        
+                });
+
+                //Seta se é sumarizado ou não
+                $('#summarize').val(newFormat.options.summarize);
+                
+
+                //$("#datexpFormat").val("%d/%m/%Y");
+                
             })
         });
     </script>
