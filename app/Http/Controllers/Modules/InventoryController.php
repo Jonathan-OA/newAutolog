@@ -539,18 +539,21 @@ class InventoryController extends AppBaseController
             //$content.= $line->product_code.$delimiter.$line->qty_1count.$delimiter."\n";
             
         }
+
+        $content.="FIM";
         
 
         Storage::put($fileName, $content);
+
         //Cabeçalho para indicar que o arquivo será baixado
         $headers = [
             'Content-type' => 'text/plain', 
             'Content-Disposition' => sprintf('attachment; filename="%s"', $fileName),
             'Content-Length' => strlen($content)
         ];
-
+        
         // make a response, with the content, a 200 response code and the headers
-        return response()->download(storage_path().'\\app\\'.$fileName, $fileName, $headers)->deleteFileAfterSend();
+        return Storage::download($fileName);
         
     }
 
