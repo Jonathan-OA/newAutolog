@@ -7,6 +7,7 @@
 <!-- Code Field -->
 {!! Form::label('code', Lang::get('models.code').':') !!}
 @if(isset($action) && $action == 'edit')
+    <input id='id' name='id' type='hidden' value='{!! $customer->id !!}'>
     {!! Form::text('code', null, ['class' => 'form-control','readonly' => 'true']) !!}
 @else
     {!! Form::text('code', null, ['class' => 'form-control']) !!}  
@@ -27,6 +28,15 @@
 <!-- State Registration Field -->
 {!! Form::label('state_registration', Lang::get('models.state_registration').':') !!}
 {!! Form::text('state_registration', null, ['class' => 'form-control']) !!}
+
+<!-- Due Days Field -->
+{!! Form::label('due_days', Lang::get('models.due_days').':') !!}
+{!! Form::number('due_days', null, ['class' => 'form-control']) !!}
+
+<!-- Prefix Code  -->
+{!! Form::label('prefix_code', Lang::get('models.prefix_code').':') !!}
+{!! Form::text('prefix_code', null, ['class' => 'form-control', 'maxlength' => '4']) !!}
+
 
 <!-- Active Field -->
 {!! Form::label('status', Lang::get('models.status').':') !!}

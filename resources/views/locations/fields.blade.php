@@ -19,6 +19,7 @@
 <!-- Code Field -->
 {!! Form::label('code', Lang::get('models.code').':') !!}
 @if(isset($action) && $action == 'edit')
+    <input id='id' name='id' type='hidden' value='{!! $location->id !!}'>
     {!! Form::text('code', null, ['class' => 'form-control','readonly' => 'true']) !!}
 @else
     {!! Form::text('code', null, ['class' => 'form-control']) !!}  

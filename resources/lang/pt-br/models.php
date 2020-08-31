@@ -305,7 +305,8 @@ return [
     'field' => 'Campo',
     'inspection' => 'Inspeção',
     'finalization' => 'Finalização Hab.',
-    
+    'due_days' => 'Dias Mín. para Vencimento',
+    'prefix_code' => 'Prefixo para Produtos',
     
     //PlaceHolders
     'sel_type' => 'Selecione um tipo: ',

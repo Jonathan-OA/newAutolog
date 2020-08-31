@@ -69,6 +69,7 @@ class Product extends Model
         'abz_code' => 'string',
         'inspection' => 'integer',
         'customer_code' => 'string',
+        'alternative_code' => 'string',
         'obs1' => 'string',
         'obs2' => 'string',
         'obs3' => 'string',

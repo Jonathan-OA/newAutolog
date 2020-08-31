@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Customer;
+use Illuminate\Support\Facades\Auth;
 
 class UpdateCustomerRequest extends FormRequest
 {
@@ -25,6 +26,17 @@ class UpdateCustomerRequest extends FormRequest
      */
     public function rules()
     {
-        return Customer::$rules;
+        return [ 
+            'code' => 'required|string|unique:customers,code,'.$this->get('id').',id,company_id,'.Auth::user()->company_id.'|max:40',
+            'name' => 'required|string|max:50',
+            'trading_name' => 'required|string|max:60',
+            'state_registration' => 'nullable|string|max:20',
+            'cnpj' => 'nullable|string|max:20',
+            'status' => 'required|in:0,1',
+            'profile_import' => 'nullable|integer|exists:profiles,id,company_id,'.Auth::user()->company_id,
+            'profile_export' => 'nullable|integer|exists:profiles,id,company_id,'.Auth::user()->company_id,
+            'due_days' => 'nullable|integer|min:0|max:365',
+            'prefix_code' => 'nullable|string|max:4',
+         ];
     }
 }

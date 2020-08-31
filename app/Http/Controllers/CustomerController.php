@@ -70,6 +70,17 @@ class CustomerController extends AppBaseController
     {
         $input = $request->all();
 
+        //Se o prefixo não for informado, quebra o nome e gera um automaticamente com as primeiras letras
+        if(empty($input['prefix_code'])){
+            $name = explode(" ",$input['name']);
+            foreach($name as $key => $part){
+                $ctr = ($key == 0) ? 2 : 1 ;
+                $input['prefix_code'] .= strtoupper(substr($part,0,$ctr));
+            }
+
+            if(count($name) <= 1) $input['prefix_code'] .= strtoupper(substr($input['name'],-2));
+        }
+
         $customer = $this->customerRepository->create($input);
 
         Flash::success(Lang::get('validation.save_success'));
@@ -149,8 +160,18 @@ class CustomerController extends AppBaseController
         $descricao = 'Alterou Customer ID: '.$id.' - '.$requestF['code'];
         $log = App\Models\Log::wlog('customers_edit', $descricao);
 
+        //Se o prefixo não for informado, quebra o nome e gera um automaticamente com as primeiras letras
+        if(empty($requestF['prefix_code'])){
+            $name = explode(" ",$requestF['name']);
+            foreach($name as $key => $part){
+                $ctr = ($key == 0) ? 2 : 1 ;
+                $requestF['prefix_code'] .= strtoupper(substr($part,0,$ctr));
+            }
 
-        $customer = $this->customerRepository->update($request->all(), $id);
+            if(count($name) <= 1) $requestF['prefix_code'] .= strtoupper(substr($requestF['name'],-2));
+        }
+
+        $customer = $this->customerRepository->update($requestF, $id);
 
         Flash::success(Lang::get('validation.update_success'));
 

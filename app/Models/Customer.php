@@ -40,7 +40,11 @@ class Customer extends Model
         'status',
         'obs1',
         'obs2',
-        'obs3'
+        'obs3',
+        'due_days',
+        'profile_import',
+        'profile_export',
+        'prefix_code'
     ];
 
     /**

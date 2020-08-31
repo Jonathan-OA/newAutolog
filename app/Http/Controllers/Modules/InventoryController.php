@@ -127,7 +127,7 @@ class InventoryController extends AppBaseController
             $document = $this->documentRepository->findWithoutFail($id);
 
             //Busca os tipos de documentos para o movimento de inventário
-            $document_types = App\Models\DocumentType::getDocumentTypes('030');
+            $document_types = App\Models\DocumentType::getDocumentTypes('090');
 
             //Valida se o documento existe e se pertence a esse módulo (inventário)
             if (empty($document) || !array_key_exists($document->document_type_code, $document_types->toArray())) {
@@ -166,14 +166,17 @@ class InventoryController extends AppBaseController
 
             //Concatena todos os parametros informados em uma string separando por ; e grava no campo comments
             //O tratamento é feito no app coletor
-            $parameters = "550_contagens=" . $requestF['counts'] . ";550_valida_saldo=" .
+            if(empty($requestF['comments'])){
+                $parameters = "550_contagens=" . $requestF['counts'] . ";550_valida_saldo=" .
                 $requestF['vstock'] . ";550_valida_endereco=" . $requestF['vlocation'] .
                 ";550_valida_produto=" . $requestF['vproduct'] . ";";
 
-            $requestF['comments'] = $parameters;
+                $requestF['comments'] = $parameters;
+            }
+           
 
-            $descricao = 'Alterou Documento ID: ' . $id . ' - ' . $requestF['document_type_code'] . ' ' . $requestF['number'];
-            $log = App\Models\Log::wlog('documents_inv_edit', $descricao);
+            $descricao = 'Alterou Documento ID: ' . $id . ' - ' . $requestF['document_type_code'] . ' ' . $requestF['number'].' - Valor: '.$requestF['inventory_value'];
+            $log = App\Models\Log::wlog('documents_inv_edit', $descricao, $id);
 
 
             $document = $this->documentRepository->update($request->all(), $id);
@@ -539,20 +542,18 @@ class InventoryController extends AppBaseController
             //$content.= $line->product_code.$delimiter.$line->qty_1count.$delimiter."\n";
             
         }
-
-        $content.="FIM";
         
-
+        //Grava o Arquivo
         Storage::put($fileName, $content);
 
-        //Cabeçalho para indicar que o arquivo será baixado
-        $headers = [
-            'Content-type' => 'text/plain', 
-            'Content-Disposition' => sprintf('attachment; filename="%s"', $fileName),
-            'Content-Length' => strlen($content)
-        ];
-        
-        // make a response, with the content, a 200 response code and the headers
+        // //Cabeçalho para indicar que o arquivo será baixado
+        // $headers = [
+        //     'Content-type' => 'text/plain', 
+        //     'Content-Disposition' => sprintf('attachment; filename="%s"', $fileName),
+        //     'Content-Length' => strlen($content)
+        // ];
+
+        //Baixa o Arquivo
         return Storage::download($fileName);
         
     }

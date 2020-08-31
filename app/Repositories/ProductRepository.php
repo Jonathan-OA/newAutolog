@@ -33,7 +33,9 @@ class ProductRepository extends BaseRepository
         'obs2',
         'obs3',
         'obs4',
-        'obs5'
+        'obs5',
+        'customer_code',
+        'alternative_code'
     ];
 
     /**

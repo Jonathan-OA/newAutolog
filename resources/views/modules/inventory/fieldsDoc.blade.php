@@ -32,7 +32,24 @@
         <input id='document_status_id' name='document_status_id' type='hidden' value='0'>
     @endif
 
-    
+    <!-- Cliente  -->
+    {!! Form::label('customer_code', "*".Lang::get('models.customer_code').':') !!}
+    {!! Form::text('customer_code', (isset($document->customer_code)) ? $document->customer_code : '', ['class' => 'form-control', 'id' => 'autocomplete', 'table' => 'customers', 'required']) !!}
+
+    <!-- Tipo de Cobrança  -->
+    <div class="row">
+        <div class="col-md-6">
+            {!! Form::label('billing_type', "*".Lang::get('models.billing_type').':') !!}
+            {{ Form::radio('billing_type', 'VL' , false) }} Por Leitura
+            {{ Form::radio('billing_type', 'VF' , true) }} Valor Fechado
+        </div>
+    </div>
+
+    {{-- Custo por Leitura no Inventário --}}
+    {!! Form::label('inventory_value', "*".Lang::get('models.cost_inventory').':') !!}
+    {!! Form::number('inventory_value', (isset($document->inventory_value)) ? $document->inventory_value : '', ['class' => 'form-control', 'step' => '0.01', 'required']) !!}
+
+
     <!-- Emission Date Field -->
     {!! Form::label('emission_date', Lang::get('models.emission_date').':') !!}
     {!! Form::date('emission_date', (!empty($document->emission_date)) ? $document->emission_date->format('Y-m-d') : date('Y-m-d'), ['class' => 'form-control']) !!}
@@ -43,38 +60,43 @@
         @lang('models.parameters')
     </div>
     <hr>
-    <span aria-label="@lang('infos.param_count')" data-microtip-position="right" role="tooltip">
-        <img class='icon' src='{{asset('/icons/information.png') }}' >
-    </span>
-    {!! Form::label('counts', Lang::get('parameters.param_count')) !!}
-    {{ Form::radio('counts', '1' , false) }} 1
-    {{ Form::radio('counts', '2' , true) }} 2
-    {{ Form::radio('counts', '3' , false) }} 3 
-    {{ Form::radio('counts', '4' , false) }} 4
-    <br>
-    <span id="parameters">
-        <span aria-label="@lang('infos.param_stock')" data-microtip-position="right" role="tooltip">
+    @if(!empty($action) && $action != 'edit')
+        <span aria-label="@lang('infos.param_count')" data-microtip-position="right" role="tooltip">
             <img class='icon' src='{{asset('/icons/information.png') }}' >
         </span>
-        {!! Form::label('vstock', Lang::get('parameters.param_stock')) !!}
-        {{ Form::radio('vstock', '1' , true) }} @lang('models.yes')
-        {{ Form::radio('vstock', '0' , true) }} @lang('models.no')
+        {!! Form::label('counts', Lang::get('parameters.param_count')) !!}
+        {{ Form::radio('counts', '1' , false) }} 1
+        {{ Form::radio('counts', '2' , true) }} 2
+        {{ Form::radio('counts', '3' , false) }} 3 
+        {{ Form::radio('counts', '4' , false) }} 4
         <br>
-        <span aria-label="@lang('infos.param_product')" data-microtip-position="right" role="tooltip">
-            <img class='icon' src='{{asset('/icons/information.png') }}' >
+    
+        <span id="parameters">
+            <span aria-label="@lang('infos.param_stock')" data-microtip-position="right" role="tooltip">
+                <img class='icon' src='{{asset('/icons/information.png') }}' >
+            </span>
+            {!! Form::label('vstock', Lang::get('parameters.param_stock')) !!}
+            {{ Form::radio('vstock', '1' , true) }} @lang('models.yes')
+            {{ Form::radio('vstock', '0' , true) }} @lang('models.no')
+            <br>
+            <span aria-label="@lang('infos.param_product')" data-microtip-position="right" role="tooltip">
+                <img class='icon' src='{{asset('/icons/information.png') }}' >
+            </span>
+            {!! Form::label('vproduct', Lang::get('parameters.param_product')) !!}
+            {{ Form::radio('vproduct', '1' , true) }} @lang('models.yes')
+            {{ Form::radio('vproduct', '0' , true) }} @lang('models.no')
+            <br>
+            <span aria-label="@lang('infos.param_location')" data-microtip-position="right" role="tooltip">
+                <img class='icon' src='{{asset('/icons/information.png') }}' >
+            </span>
+            {!! Form::label('vlocation', Lang::get('parameters.param_location')) !!} 
+            {{ Form::radio('vlocation', '1' , true) }} @lang('models.yes')
+            {{ Form::radio('vlocation', '0' , true) }} @lang('models.no')
+            <br>
         </span>
-        {!! Form::label('vproduct', Lang::get('parameters.param_product')) !!}
-        {{ Form::radio('vproduct', '1' , true) }} @lang('models.yes')
-        {{ Form::radio('vproduct', '0' , true) }} @lang('models.no')
-        <br>
-        <span aria-label="@lang('infos.param_location')" data-microtip-position="right" role="tooltip">
-            <img class='icon' src='{{asset('/icons/information.png') }}' >
-        </span>
-        {!! Form::label('vlocation', Lang::get('parameters.param_location')) !!} 
-        {{ Form::radio('vlocation', '1' , true) }} @lang('models.yes')
-        {{ Form::radio('vlocation', '0' , true) }} @lang('models.no')
-        <br>
-    </span>
+    @else
+        <input id='comments' name='comments' type='hidden' value='{!! $document->comments !!}'>
+    @endif
     <!-- Parâmetros Específicos para o Inventário Padrão (Produto e Endereço Default) -->
     <span id="parameters_inv" style="display: none">
         <span aria-label="@lang('infos.param_productdef')" data-microtip-position="right" role="tooltip">

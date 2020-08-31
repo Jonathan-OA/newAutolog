@@ -33,6 +33,10 @@ class CreateCustomerRequest extends FormRequest
             'state_registration' => 'nullable|string|max:20',
             'cnpj' => 'nullable|string|max:20',
             'status' => 'required|in:0,1',
+            'profile_import' => 'nullable|integer|exists:profiles,id,company_id,'.Auth::user()->company_id,
+            'profile_export' => 'nullable|integer|exists:profiles,id,company_id,'.Auth::user()->company_id,
+            'due_days' => 'nullable|integer|min:0|max:365',
+            'prefix_code' => 'nullable|string|max:4',
          ];
     }
 }

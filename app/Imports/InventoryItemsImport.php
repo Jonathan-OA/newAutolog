@@ -104,6 +104,13 @@ class InventoryItemsImport implements ToArray
                     break;
                 }
 
+                //Busca prefixo de cliente para gravar o produto com esse valor
+                $client = \App\Models\Customer::where('company_id', Auth::user()->company_id)
+                                              ->where('code',$this->customer_code)
+                                              ->get();
+                                              
+                $prefixCli = $client[0]->prefix_code ?? '';
+
                 //Desconsidera linha de cabeçalho
                 if(trim($desc) == '' && trim($produto) == '') continue;
                 
@@ -126,11 +133,11 @@ class InventoryItemsImport implements ToArray
                 if($cDeposit == 0){
                     //Insere na tabela
                     $newDep = new \App\Models\Deposit(['company_id' => Auth::user()->company_id,
-                                                      'code' => $deposito,
-                                                      'department_code' => '1',
-                                                      'deposit_type_code' => 'REC',
-                                                      'description' => 'Depósito '.$deposito,
-                                                      'status' => '1'
+                                                       'code' => $deposito,
+                                                       'department_code' => '1',
+                                                       'deposit_type_code' => 'REC',
+                                                       'description' => 'Depósito '.$deposito,
+                                                       'status' => '1'
                                                       ]);
                     if(!$newDep->save()){
                         $erro = 1;
@@ -193,7 +200,7 @@ class InventoryItemsImport implements ToArray
             if(trim($produto) <> ''  && $erro == 0){
 
                 $cProd = \App\Models\Product::where('company_id', Auth::user()->company_id)
-                                            ->where('code', trim($produto))
+                                            ->where('code', trim($prefixCli.$produto))
                                             ->where('customer_code', trim($this->customer_code))
                                             ->get()
                                             ->count();
@@ -203,12 +210,13 @@ class InventoryItemsImport implements ToArray
 
                     //Insere da products com grupo e tipo default
                     $newPrd = new \App\Models\Product([ 'company_id' => Auth::user()->company_id,
-                                                        'code' => $produto,
+                                                        'code' => trim($prefixCli.$produto),
                                                         'description' => $desc,
                                                         'status' => 1,
                                                         'product_type_code' => 'PA',
                                                         'group_code' => '000',
-                                                        'customer_code' => trim($this->customer_code)
+                                                        'customer_code' => trim($this->customer_code),
+                                                        'alternative_code' => trim($produto)
                                                         ]);
 
                     if(!$newPrd->save()){
@@ -220,14 +228,14 @@ class InventoryItemsImport implements ToArray
                     $barcode = (trim($barcode) <> '')? $barcode : $produto;
                     if($erro == 0){
                         $cPack = \App\Models\Packing::where('company_id', Auth::user()->company_id)
-                                                     ->where('product_code', trim($produto))
+                                                     ->where('product_code', trim($prefixCli.$produto))
                                                      ->where('barcode', trim($barcode))
                                                      ->get()
                                                      ->count();
                         if($cPack == 0){
                             //Insere embalagem
                             $newPack = new \App\Models\Packing([ 'company_id' => Auth::user()->company_id,
-                                                                 'product_code' => $produto,
+                                                                 'product_code' => $prefixCli.$produto,
                                                                  'barcode' => $barcode,
                                                                  'level' => '1',
                                                                  'uom_code' => "$unidade",
