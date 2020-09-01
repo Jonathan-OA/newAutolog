@@ -120,7 +120,7 @@ class InventoryItem extends Model
                                      ->whereColumn('locations.company_id','inventory_items.company_id');
                             })
                             ->where('inventory_items.company_id', Auth::user()->company_id)
-                            ->where('inventory_itemsdocument_id', $document_id)
+                            ->where('document_id', $document_id)
                             ->where(function ($query) {
                                 if(!empty($statusDsc)){
                                     $query->where('inventory_status_id.id', '<>' ,$statusDsc);
