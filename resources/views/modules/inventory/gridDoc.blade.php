@@ -13,6 +13,12 @@
                         <!-- Alerta de erro / sucesso -->
                         <div id="msg_excluir"></div>
                         @include('flash::message')
+                        @if (session('fileDownload'))
+                            <div class="alert alert-success" role="alert"> 
+                                <strong>Arquivo gerado com sucesso!</strong> 
+                                <a id="download" href='{{url("download/".session("fileDownload"))}}'> Clique aqui </a> caso o download não tenha se iniciado automaticamente.
+                            </div>
+                        @endif
                         <!-- Botões de incluir, filtrar ,etc -->
                         <div class="row buttons_grid">
                             <div class="col-md-10">
@@ -58,5 +64,14 @@
     </div>
 @endsection
 @section('scripts')
-    <script src="js/angular/gridInv.js"></script>    
+    <script src="js/angular/gridInv.js"></script>
+    <script>
+        $( function() {
+            //Faz o download automatico do arquivo de exportação se existir o link
+            if( $('#download').length){
+                document.location = $('#download').attr ('href');
+            }
+                
+        })
+    </script>
 @endsection

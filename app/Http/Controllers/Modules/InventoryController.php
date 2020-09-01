@@ -23,8 +23,9 @@ use Laracasts\Flash\Flash;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Profile;
+use App\Models\Customer;
 
-ini_set('max_execution_time', 600); //5 minutes
+ini_set('max_execution_time', 1200); //10 minutes
 
 class InventoryController extends AppBaseController
 {
@@ -396,13 +397,20 @@ class InventoryController extends AppBaseController
     public function showExportFile($document_id)
     {
         $document = $this->documentRepository->findWithoutFail($document_id);
+        $idExport = App\Models\Customer::where('company_id',  Auth::user()->company_id)
+                                        ->where('code', $document->customer_code)
+                                        ->select('profile_export')
+                                        ->get();
+        $profileExport = $idExport[0]->profile_export;
+
         //Busca perfis de exportação já gravados
         $profiles = Profile::getProfiles('EXPORT');
         
         //Valida se usuário possui permissão para acessar esta opção
         if (App\Models\User::getPermission('documents_inv_exp', Auth::user()->user_type_code)) {
             return view('modules.inventory.exportFile')->with('document', $document) 
-                                                       ->with('profiles', $profiles);
+                                                       ->with('profiles', $profiles)
+                                                       ->with('profileExport', $profileExport);
         } else {
             //Sem permissão
             Flash::error(Lang::get('validation.permission'));
@@ -420,7 +428,8 @@ class InventoryController extends AppBaseController
         $input = $request->all();
         $delimiter = $input['delimiter'];
         $fieldsOrder = $input['fieldsOrder'];
-        
+        $document = $this->documentRepository->findWithoutFail($document_id);
+
         //Gravar perfil de exportação para a proxima utilização
         //insert into profiles
         $jsonFields = array('fields' => array(), 'options' => array());
@@ -436,21 +445,38 @@ class InventoryController extends AppBaseController
                     $jsonFields['fields'][] = array('code' => $field, $field.'Format' => (isset($input[$field.'Format']) ? $input[$field.'Format'] : ""));
                 break;
                 case 'qde':
-                    $jsonFields['fields'][] = array('code' => $field, $field.'Max' => (isset($input[$field.'Max']) ? $input[$field.'Max'] : ""), 
-                                                            $field.'Dec' => (isset($input[$field.'Dec']) ? $input[$field.'Dec'] : ""));
+                    $jsonFields['fields'][] = array('code' => $field, $field.'Dec' => (isset($input[$field.'Dec']) ? $input[$field.'Dec'] : ""),
+                                                              $field.'Max' => (isset($input[$field.'Max']) ? $input[$field.'Max'] : "") 
+                                                            );
                 break;
                 default:
                     $jsonFields['fields'][] = array('code' => $field, $field.'Max' => (isset($input[$field.'Max']) ? $input[$field.'Max'] : ""), 
-                                                            $field.'Pre' => (isset($input[$field.'Pre']) ? $input[$field.'Pre'] : ""));
+                                                                      $field.'Pre' => (isset($input[$field.'Pre']) ? $input[$field.'Pre'] : "")  
+                                                            );
                 break;
             }
         }
         $jsonFields['options'] = array('summarize'=> $input['summarize']);
-        //Cadastra o novo perfil de importação
-        $insertProfile = Profile::insert(
-            ['company_id' => Auth::user()->company_id, 'type' => 'EXPORT', 'description' =>  $input['profile_desc'], 'delimiter' =>  $delimiter,
-            'format' => json_encode($jsonFields), 'created_at'=> new \DateTime()]
-        );
+
+        //Cadastra o novo perfil de importação se não existir um igual
+        $verProfile = Profile::where('company_id', Auth::user()->company_id)
+                             ->where('type', 'EXPORT')
+                             ->whereJsonContains('format', $jsonFields)
+                             ->get()
+                             ->count();
+
+        if($verProfile == 0){
+            $insertProfile = Profile::insertGetId(
+                ['company_id' => Auth::user()->company_id, 'type' => 'EXPORT', 'description' =>  $input['profile_desc'], 'delimiter' =>  $delimiter,
+                'format' => json_encode($jsonFields), 'created_at'=> new \DateTime()]
+            );
+            $input['profile_export'] = $insertProfile;
+        }
+        
+        //Atualiza no cliente o ultimo perfil utilizado
+        $updCustomer = Customer::where('company_id', Auth::user()->company_id)
+                               ->where('code', $document->customer_code)
+                               ->update(['profile_export' => $input['profile_export']]);
 
         $content = "";
         $fileName = "export_ivd_".$document_id."_".date('Ymd')."_".date('His').".txt";
@@ -516,21 +542,23 @@ class InventoryController extends AppBaseController
                         $max = ((isset($field[$code.'Max']) && trim($field[$code.'Max']) <> '') ? $field[$code.'Max'] : 5);
                         $dec = (isset($field[$code.'Dec']) ? $field[$code.'Dec'] : 0);
                         $quebra = explode(".", $valueField);
-                        $valueField = substr(str_pad($quebra[0],($max-$dec),0,\STR_PAD_LEFT),0,($max-$dec)).'.'.substr(str_pad((!isset($quebra[1])?'0':$quebra[1]),($dec),0,\STR_PAD_RIGHT),0,$dec) ;
+                        //Valor decimal (Se for vazio, remove o ponto da quantidade)
+                        $decValue = ($dec > 0) ? '.'.substr(str_pad((!isset($quebra[1])?'0':$quebra[1]),($dec),0,\STR_PAD_RIGHT),0,$dec) : '';
+                        $valueField = substr(str_pad($quebra[0],($max-$dec),0,\STR_PAD_LEFT),0,($max-$dec)).$decValue;
                     break;
 
                     case 'dsc':
                         $max = (isset($field[$code.'Max']) ? $field[$code.'Max'] : '');
-                        $pre = (isset($field[$code.'Pre']) ? $field[$code.'Pre'] : '');
+                        $pre = (isset($field[$code.'Pre']) ? (($field[$code.'Pre'] == "") ? " " : $field[$code.'Pre']) : '');
                         if($max <> '')
-                            $valueField = substr(str_pad($valueField,$max,$pre,\STR_PAD_RIGHT),0,$max);
+                            $valueField = substr(str_pad($valueField,$max,"$pre",\STR_PAD_RIGHT),0,$max);
                     break;
 
                     case 'prd':
                         $max = (isset($field[$code.'Max']) ? $field[$code.'Max'] : '');
-                        $pre = (isset($field[$code.'Pre']) ? $field[$code.'Pre'] : '');
+                        $pre = (isset($field[$code.'Pre']) ? (($field[$code.'Pre'] == "") ? " " : $field[$code.'Pre']) : '');
                         if($max <> '')
-                            $valueField = substr(str_pad($valueField,$max,$pre,\STR_PAD_RIGHT),0,$max);
+                            $valueField = substr(str_pad($valueField,$max,"$pre",\STR_PAD_RIGHT),0,$max);
                     break;
 
                 }
@@ -539,22 +567,14 @@ class InventoryController extends AppBaseController
             }
             //Quebra a linha
             $content.="\n";
-            //$content.= $line->product_code.$delimiter.$line->qty_1count.$delimiter."\n";
             
         }
         
         //Grava o Arquivo
-        Storage::put($fileName, $content);
+        Storage::disk('public')->put($fileName, $content);
 
-        // //Cabeçalho para indicar que o arquivo será baixado
-        // $headers = [
-        //     'Content-type' => 'text/plain', 
-        //     'Content-Disposition' => sprintf('attachment; filename="%s"', $fileName),
-        //     'Content-Length' => strlen($content)
-        // ];
-
-        //Baixa o Arquivo
-        return Storage::download($fileName);
+        //Chama a tela do grid principal passando o nome do arquivo para download
+        return redirect('inventory')->with('fileDownload', $fileName);
         
     }
 

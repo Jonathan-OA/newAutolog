@@ -14,6 +14,7 @@
 use App\Models\Product;
 use App\Models\Pallet;
 use App\Models\PalletItem;
+use Illuminate\Support\Facades\Storage;
 
 Auth::routes();
 
@@ -108,6 +109,11 @@ Route::group(['middleware' => 'auth'], function() {
 
     //BOTÕES
     Route::get('getButtons/{modulo}', 'ButtonsController@getButtons');
+
+    //Baixa um arquivo do storage public
+    Route::get('/download/{file}', function($file){
+        return Storage::disk('public')->download($file);
+    });
 
     //API
     Route::get('/api/documents/{moviment}/{qty?}', function($moviment_code, $qty = '15000') {

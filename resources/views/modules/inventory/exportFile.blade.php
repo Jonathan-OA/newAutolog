@@ -4,13 +4,13 @@
 @php
     //Array com as opções de cada campo
     $arrayFields = array('ean'=> 'EAN', 'dsc' => 'Descrição', 
-                            'prd' => 'Código Interno', 
-                            'qde' => 'Saldo',
-                            'fix' => 'Texto Fixo',
-                            'dat' => 'Data e Hora Apontamento',
-                            'datexp' => 'Data e Hora Exportação');
+                         'prd' => 'Código Interno', 
+                         'qde' => 'Saldo',
+                         'fix' => 'Texto Fixo',
+                         'dat' => 'Data e Hora Apontamento',
+                         'datexp' => 'Data e Hora Exportação');
     //Array com as opções para preencher os caracteres a mais
-    $arrayPreenc = array('0' => 'Zeros', ' ' => 'Espaços em Branco', '-' => 'Hífen');
+    $arrayPreenc = array('0' => 'Zeros', " " => 'Espaços em Branco', '-' => 'Hífen');
 
     //Array com as opções para preencher os campos de data
     $arrayDat = array('%d/%m/%Y %H:%i:%s' => 'dd/mm/yyyy H:i:s',
@@ -66,7 +66,7 @@
                                             <select class="form-control" name="profile_export" id="profile_export" >
                                                 <option></option> 
                                                 @foreach ($profiles as $profile)
-                                                <option value="{{$profile['id']}}" format="{{$profile['format']}}" delim="{{$profile['delimiter']}}"> {{$profile['description']}} </option> 
+                                                <option value="{{$profile['id']}}" {{($profile['id'] == $profileExport) ? 'selected' : ''}} format="{{$profile['format']}}" delim="{{$profile['delimiter']}}"> {{$profile['description']}} </option> 
                                                 @endforeach
                                             </select>
                                         </div>
@@ -78,7 +78,7 @@
                                         <div class="col-md-3">
                                             <!-- Delimitador  -->
                                             {!! Form::label('delimiter', '*'.Lang::get('models.delimiter').':') !!}
-                                            {!! Form::text('delimiter','', ['class' => 'form-control props', 'id' => 'delimiter', 'required', 'maxlength' => '4']) !!}
+                                            {!! Form::text('delimiter',';', ['class' => 'form-control props', 'id' => 'delimiter', 'required', 'maxlength' => '4']) !!}
                                            
                                         </div>
                                     </div>
@@ -95,10 +95,8 @@
                                                     {!! Form::select('fieldsOrder[]',$arrayFields , null, ['class' => 'form-control props', 'id' => 'fieldInfo_1']) !!}
                                                     <hr>
                                                     <div class="props" style="font-size: 0.8em; text-align: left" id="field_1">
-                                                        <label for="eanMax">Limite Caracteres</label>
+                                                        <label for="eanMax">Num . Dígitos</label>
                                                         <input class="form-control props" type="number" size="5" name="eanMax" id="eanMax"/>
-                                                        <label for="eanPre">Preencher</label>
-                                                        {!! Form::select('eanPre',$arrayPreenc , null, ['class' => 'form-control props', 'id' => 'eanPre']) !!}
                                                     </div>
                                                 </li>
                                             </ul>
@@ -150,6 +148,7 @@
     </style>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script>
+        var uptProfile = 0; //Variavel que indica se houve alteração para salvar um novo perfil
         var count = 2;
         var oldValue = "";
         //Adiciona um novo campo para incluir na exportação
@@ -216,6 +215,7 @@
 
         //Modifica a linha de exemplo de acordo com as propriedades definidas
         function modifyExample(){
+            uptProfile = 1; //Indica que houve alteração nas configs. Salva uma nova
             var exampleLine = "";
             var fieldsList = $("select[name^='fieldsOrder[]']");
             var delimiter = "<b>"+$("#delimiter").val()+"</b>";
@@ -234,7 +234,6 @@
                             }else{
                                 exampleLine = exampleLine+String(subString(12,qdeDig,0,qdeDec))+delimiter;
                             }
-                            
                             break
                         case 'dsc':
                             var dscDig = $("#dscMax").val();
@@ -334,7 +333,7 @@
                     var selectDest = $('select:not("#'+this.id+'") option[value="'+newValue+'"]:selected');
 
                     //Como mudou o campo selecionado no select atual, busca o outro select que estava com este valor selecionado e atribui o valor antigo
-                    selectDest.parent().find('option[value="'+oldValue+'"]').prop('selected', true);
+                    selectDest.parent().find('option[value="'+oldValue+'"]').prop('selected', true).trigger('change');
                     //Atribui novo valor na variavel para próximas alterações
                     oldValue = this.value;
                 }else{
@@ -350,13 +349,14 @@
 
             //Ao clicar em submit valida se a descrição do perfil esta setada
             $("#formExport").submit(function(e){
-                if(!$('#profile_desc').val()){
+                if(uptProfile == 1){
                     e.preventDefault();
                     //Tira a model de carregando e mostra a model para a descrição do perfil
                     $('#loadingModal').modal('toggle');
                     $('#profileModal').modal();
+                    uptProfile = 0;
                 }else{
-                    $('#profileModal').modal('toggle');
+                    $('#profileModal').modal('hide');
                 }
                 
                
@@ -364,6 +364,7 @@
 
             //Ao selecionar um outro perfil de exportação, reajusta o grids de acordo
             $('#profile_export').change(function(){
+                
                 //Pega o formato do perfil selecionado
                 var newFormat = JSON.parse($('#profile_export option:selected').attr('format'));
                 //Seta o delimitador
@@ -379,27 +380,31 @@
                     //Seta o campo na ordem
                     $("#fieldInfo_"+(count-1)).val(element.code);
                     //Força o evento change para atualizar as linhas
-                    $('.props').trigger('change'); 
-
+                    $('.props').trigger('change');
+                });
+                //Segundo loop pois estava tendo problema em atribuir os valores no primeiro
+                newFormat.fields.forEach(element => {
                     //Loop para setar as propriedades de cada campo (qdeMax, qdeDigitos...)
                     for (var [key, value] of Object.entries(element)) {
+                        if(value == "") value = " ";
                         if(key != 'code'){
-                            $('#'+key).val(value);
+                            $('#'+key).val(value).trigger('change');
                         }
                         modifyExample(); //Modifica a linha de exemplo a cada alteração
                         
                     }
-                    
-                        
                 });
 
                 //Seta se é sumarizado ou não
                 $('#summarize').val(newFormat.options.summarize);
                 
-
-                //$("#datexpFormat").val("%d/%m/%Y");
+                uptProfile = 0;
                 
             })
+
+            //Se existir algum perfil já cadastrado no cliente, recarrega automaticamente os blocos
+            if(parseInt($('#profile_export').val()) > 0)
+                $('#profile_export').trigger("change");
         });
     </script>
 @endsection 
