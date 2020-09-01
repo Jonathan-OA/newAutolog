@@ -50,7 +50,8 @@ class Product extends Model
         'obs2',
         'obs3',
         'obs4',
-        'obs5'
+        'obs5',
+        'alternative_code'
     ];
 
     /**
