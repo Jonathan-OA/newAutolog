@@ -294,7 +294,7 @@ return [
     '2acount' => '2ª Cont.',
     '3acount' => '3ª Cont.',
     '4acount' => '4ª Cont.',
-    'qty_wms' => 'Qde. WMS',
+    'qty_wms' => 'Saldo Previsto',
     'trf_movement' => 'Movimento de Exportação (ERP)',
     'printer_type_code' => 'Tipo de Impressora',
     'commands' => 'Comandos de Impressão',

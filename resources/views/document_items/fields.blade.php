@@ -12,6 +12,10 @@
 {!! Form::label('product_code', Lang::get('models.product_code').':') !!}
 {!! Form::text('product_code', null, ['class' => 'form-control']) !!}
 
+<!-- Description Field -->
+{!! Form::label('description', Lang::get('models.description').':') !!}
+{!! Form::text('description', null, ['class' => 'form-control']) !!}
+
 <!-- Qty Field -->
 {!! Form::label('qty', Lang::get('models.qty').':') !!}
 {!! Form::number('qty', null, ['class' => 'form-control']) !!}

@@ -304,14 +304,15 @@ app.controller('DetCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '
                 { name: 'Depósito', field: 'deposit_code' },
                 { name: 'Endereço', field: 'location_code' },
                 { name: 'Item', field: 'product_code' },
-                { name: 'Quantidade', field: 'qty' },
+                { name: 'Descricao', field: 'product_description'},
+                { name: 'Saldo Previsto', field: 'qty' },
                 { name: 'Status', field: 'description', cellTemplate: '<div class="grid_cell stat{{grid.getCellValue(row, col)}}"><div class="ui-grid-cell-contents">{{row.entity.description}}</div></div>' }
             ],
             enablePaginationControls: true,
             paginationPageSize: 18,
             rowTemplate: '<div ng-click="grid.appScope.clickRow(row, col, $event)" ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.uid" class="ui-grid-cell" ng-class="col.colIndex()" ui-grid-cell></div>',
         };
-
+        
         $scope.callRoute = function(route, async = 0) {
             //Chama função global que chama uma rota ao clicar no botão
             $rootScope.callRouteRS(route, async, $scope);
@@ -359,6 +360,7 @@ app.controller('DetCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '
             //Busca os itens do documento
             $http.get('../../api/inventoryItems/' + id)
                 .then(function(response) {
+                    console.log(response.data);
                     $scope.gridDetalhes.data = response.data;
                 });
         }

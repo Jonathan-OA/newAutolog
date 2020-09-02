@@ -49,11 +49,10 @@ class InventoryItemController extends AppBaseController
     public function create()
     {
         //Valida se usuário possui permissão para acessar esta opção
-        if(App\Models\User::getPermission('inventory_items_add',Auth::user()->user_type_code)){
+        if (App\Models\User::getPermission('inventory_items_add', Auth::user()->user_type_code)) {
 
             return view('inventory_items.create');
-
-        }else{
+        } else {
             //Sem permissão
             Flash::error(Lang::get('validation.permission'));
             return redirect(route('inventory_items.index'));
@@ -108,7 +107,7 @@ class InventoryItemController extends AppBaseController
     public function edit($id)
     {
         //Valida se usuário possui permissão para acessar esta opção
-        if(App\Models\User::getPermission('inventory_items_edit',Auth::user()->user_type_code)){
+        if (App\Models\User::getPermission('inventory_items_edit', Auth::user()->user_type_code)) {
 
             $inventoryItem = $this->inventoryItemRepository->findWithoutFail($id);
 
@@ -119,8 +118,7 @@ class InventoryItemController extends AppBaseController
             }
 
             return view('inventory_items.edit')->with('inventoryItem', $inventoryItem);
-        
-        }else{
+        } else {
             //Sem permissão
             Flash::error(Lang::get('validation.permission'));
             return redirect(route('inventory_items.index'));
@@ -147,7 +145,7 @@ class InventoryItemController extends AppBaseController
 
         //Grava log
         $requestF = $request->all();
-        $descricao = 'Alterou InventoryItem ID: '.$id.' - '.$requestF['code'];
+        $descricao = 'Alterou InventoryItem ID: ' . $id . ' - ' . $requestF['code'];
         $log = App\Models\Log::wlog('inventory_items_edit', $descricao);
 
 
@@ -170,10 +168,10 @@ class InventoryItemController extends AppBaseController
     {
 
         //Valida se usuário possui permissão para acessar esta opção
-        if(App\Models\User::getPermission('inventory_items_remove',Auth::user()->user_type_code)){
-            
+        if (App\Models\User::getPermission('inventory_items_remove', Auth::user()->user_type_code)) {
+
             //Apaga as linhas do endereço + produto informados
-            $rLb = DB::table('inventory_items')->where([  
+            $rLb = DB::table('inventory_items')->where([
                 ['company_id', Auth::user()->company_id],
                 ['document_id', $document_id],
                 ['location_code', $request['location']],
@@ -181,18 +179,17 @@ class InventoryItemController extends AppBaseController
 
             ])->delete();
 
-             //Grava log
-            $descricao = 'Excluiu Linhas do Inventário: '.$document_id. 'Endereço: '.$request['location'].' Produto: '.$request['product'];
+            //Grava log
+            $descricao = 'Excluiu Linhas do Inventário: ' . $document_id . 'Endereço: ' . $request['location'] . ' Produto: ' . $request['product'];
             $log = App\Models\Log::wlog('inventory_items_remove', $descricao);
 
             Flash::success(Lang::get('validation.delete_success'));
-            return array(0,Lang::get('validation.delete_success'));
-
-        }else{
+            return array(0, Lang::get('validation.delete_success'));
+        } else {
             //Sem permissão
             Flash::error(Lang::get('validation.permission'));
-            return array(1,Lang::get('validation.permission'));
-        }    
+            return array(1, Lang::get('validation.permission'));
+        }
     }
 
     /**
@@ -206,17 +203,19 @@ class InventoryItemController extends AppBaseController
     {
 
         $inventory_items = App\Models\InventoryItem::getAppointments($document_id, 1);
-
+        $document = DB::table('documents')->where([
+            ['company_id', Auth::user()->company_id],
+            ['id', $document_id]
+        ])->get()[0];
         return view('modules.inventory.repInventory')
-                ->with('document_id', $document_id)
-                ->with('inventory_items', $inventory_items);
-        
+            ->with('document_id', $document_id)
+            ->with('inventory_items', $inventory_items)
+            ->with('document', $document);
     }
 
     public function reportDatatable($document_id)
     {
         return Datatables::of(App\Models\InventoryItem::getAppointments($document_id, 1))->make(true);
-        
     }
 
 

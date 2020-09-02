@@ -22,6 +22,12 @@
     <p>{!! $documentItem->product_code !!}</p>
 </div>
 
+<!-- Description Field -->
+<div class="col-md-12">
+    {!! Form::label('description', 'Description:') !!}
+    <p>{!! $documentItem->description !!}</p>
+</div>
+
 <!-- Qty Field -->
 <div class="col-md-12">
     {!! Form::label('qty', 'Qty:') !!}

@@ -112,12 +112,16 @@ class InventoryItem extends Model
         
         return InventoryItem::select(DB::raw("MIN(inventory_items.id) as id "),'inventory_items.company_id','uom_code','document_id',
                                     'inventory_items.product_code','location_code',DB::raw("SUM(qty_wms) as qty"),
-                                    'inventory_items.created_at', 'description', 'deposit_code', 'inventory_status_id', 'prim_uom_code')
+                                    'inventory_items.created_at', 'inventory_status.description as description', 'deposit_code', 'inventory_status_id', 'prim_uom_code', 
+                                    'products.description as product_description')
                             ->join('inventory_status','inventory_status.id','inventory_items.inventory_status_id')
-
                             ->join('locations', function($join){
                                 $join->on('locations.code','inventory_items.location_code')
                                      ->whereColumn('locations.company_id','inventory_items.company_id');
+                            })
+                            ->join('products', function($join){
+                                $join->on('products.code','inventory_items.product_code')
+                                     ->whereColumn('products.company_id','inventory_items.company_id');
                             })
                             ->where('inventory_items.company_id', Auth::user()->company_id)
                             ->where('document_id', $document_id)
@@ -131,11 +135,12 @@ class InventoryItem extends Model
                                       'inventory_items.product_code',
                                       'location_code',
                                       'inventory_items.created_at',
-                                      'description',
+                                      'inventory_status.description',
                                       'deposit_code',
                                       'inventory_status_id',
                                       'prim_uom_code',
-                                      'uom_code')
+                                      'uom_code',
+                                      'products.description')
                             ->get()
                             ->toArray();
     }
@@ -162,8 +167,9 @@ class InventoryItem extends Model
                                     'inventory_items.document_id','inventory_items.location_code',DB::raw("SUM(qty_1count) as qty1"),
                                     DB::raw("SUM(qty_2count) as qty2"),DB::raw("SUM(qty_3count) as qty3"),
                                     DB::raw("SUM(qty_wms) as qty_wms"),DB::raw("SUM(qty_4count) as qty4"),'labels.barcode as label_barcode',
-                                    'inventory_items.created_at', 'inventory_status.description', 'deposit_code', 'inventory_status_id', 'inventory_items.prim_uom_code',
-                                    DB::raw('CASE WHEN products.customer_code IS NOT NULL AND products.alternative_code IS NOT NULL THEN products.alternative_code ELSE inventory_items.product_code END as product_code'))
+                                    'inventory_items.created_at', 'inventory_status.description as description', 'deposit_code', 'inventory_status_id', 'inventory_items.prim_uom_code',
+                                    DB::raw('CASE WHEN products.customer_code IS NOT NULL AND products.alternative_code IS NOT NULL THEN products.alternative_code ELSE inventory_items.product_code END as product_code'),
+                                    'products.description as product_description')
                             ->join('inventory_status','inventory_status.id','inventory_items.inventory_status_id')
                             ->join('locations', function($join){
                                 $join->on('locations.code','inventory_items.location_code')
