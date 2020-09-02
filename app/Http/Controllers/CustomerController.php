@@ -81,6 +81,8 @@ class CustomerController extends AppBaseController
             if(count($name) <= 1) $input['prefix_code'] .= strtoupper(substr($input['name'],-2));
         }
 
+        $input['prefix_code'] = substr($input['prefix_code'],0,4); //Corta em 4 caracteres
+
         $customer = $this->customerRepository->create($input);
 
         Flash::success(Lang::get('validation.save_success'));

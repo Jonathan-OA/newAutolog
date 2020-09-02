@@ -10,7 +10,7 @@
                 <div class="panel-body" >
                     <div class="row">
                         <div class="col-md-12">
-                            {!! Form::open(['url' => 'inventory/confirmImportFile', 'files' => true, 'method' => 'POST']) !!}
+                            {!! Form::open(['url' => 'inventory/confirmImportFile', 'files' => true, 'method' => 'POST', 'id' => 'formImport']) !!}
                             <div class="form-group">
                                 <div class="form_fields">
                                     @include('flash::message')
@@ -62,7 +62,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-2">
-                                            {!! Form::checkbox('fields[]', 'ean') !!} EAN
+                                            {!! Form::checkbox('fields[]', 'ean' ) !!} EAN
                                         </div>
                                         <div class="col-md-2">
                                         {!! Form::checkbox('fields[]', 'dsc') !!} Descrição
@@ -104,4 +104,23 @@
         </div>
 
     </div>
+@endsection
+@section('scripts')
+    <script>
+        $( function() {
+            //Ao clicar em submit valida se ao menos um campo foi preenchido das infos do arquivo
+
+            $("#formImport").submit(function(e){
+                if($('input[name="fields[]"]:checked').length == 0){
+                    e.preventDefault();
+                    alert("Preencha ao menos uma das informações presentes no arquivo.");
+                    $('#loadingModal').modal('toggle');
+                }
+               
+                    
+                
+            
+            })
+        })
+    </script>
 @endsection
