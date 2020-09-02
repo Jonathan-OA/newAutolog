@@ -64,6 +64,8 @@
     </div>
 @endsection
 @section('scripts')
+    <script src="js/ui-grid/ui-grid.selection.min.js"></script>
+    <script src="js/ui-grid/ui-grid.resizecolumns.min.js"></script>
     <script src="js/angular/gridInv.js"></script>
     <script>
         $( function() {

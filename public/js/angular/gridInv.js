@@ -84,32 +84,62 @@ app.run(['$rootScope', function($rootScope) {
     }
 
     //Salva grid modificado
-    $rootScope.saveStateRS = function($scope, name, $http) {
-        var datas = $scope.gridApi.saveState.save();
-        localStorage.setItem(name, JSON.stringify(datas));
+    $rootScope.saveStateRS = function($scope, $http) {
+
+        //$rootScope.page = documents: veio do grid de documentos
+        //$rootScope.page = items : veio do grid de itens
+        if ($rootScope.page == 'documents') {
+            $scopeC = $scope.gridApi;
+            $url = 'api/grid';
+        } else {
+            $scopeC = $scope.gridApiDet;
+            $url = '../../api/grid';
+        }
+        var datas = $scopeC.saveState.save();
+        //Salva na sessão
+        localStorage.setItem($scope.gridCode, JSON.stringify(datas));
+        //Salva no banco
         $http({
             method: 'POST',
-            url: 'api/grid'
-        }).then(function(data) {
-            $scope.PostDataResponse = data;
+            url: $url,
+            data: { 'config': JSON.stringify(datas), 'code': $scope.gridCode }
+        }).then(function(res) {
+            //Mostra mensagem de sucesso ou erro
+            $('.alert').remove();
+            $('#msg_excluir').html('<div class="alert alert-' + res.data[0] + '">' + res.data[1] + '</div>');
+            $('.alert').html(res.data[1]);
         }, function(error) {
             console.log("Erro ao buscar Grid Salvo");
         });
     }
 
     //Restaura grid salvo anteriormente
-    $rootScope.restoreStateRS = function($scope, name, $http) {
-        var columns = localStorage.getItem(name);
-        if (columns) {
-            $scope.gridApi.saveState.restore($scope, JSON.parse(columns));
+    $rootScope.restoreStateRS = function($scope, $http) {
+
+        //$rootScope.page = documents: veio do grid de documentos
+        //$rootScope.page = items : veio do grid de itens
+        if ($rootScope.page == 'documents') {
+            $scopeC = $scope.gridApi;
+            $url = 'api/grid/';
         } else {
+            $scopeC = $scope.gridApiDet;
+            $url = '../../api/grid/';
+        }
+
+        var columns = localStorage.getItem($scope.gridCode);
+        if (columns) {
+            $scopeC.saveState.restore($scope, JSON.parse(columns));
+        } else {
+            //Se não encontrou a configuração na sessão, busca no banco
             $http({
                 method: 'GET',
-                url: 'api/grid/Inventario'
-            }).then(function(data) {
-                $scope.gridApi.saveState.restore($scope, data);
+                url: $url + $scope.gridCode
+            }).then(function(res) {
+                $scopeC.saveState.restore($scope, res.data);
             });
         }
+
+        //$('.alert').remove();
     }
 
 }]);
@@ -118,13 +148,20 @@ app.run(['$rootScope', function($rootScope) {
 //Grid de documentos
 app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '$timeout', '$animate', '$compile', '$filter',
     function($rootScope, $scope, $http, uiGridConstants, $timeout, $animate, $compile, $filter) {
+       //Código do grid a ser salvo / recuperado no banco
+         $scope.gridCode = 'AUTOLOGWMS_GridInv';
         //Variavel de controle para buscar o filtro externo apenas uma vez
         $scope.hasFilter = false;
+        $rootScope.page = 'documents';
         $scope.gridOptions = {
             enableFullRowSelection: false,
+            enableRowSelection: false,
+            rowSelection: false,
             multiSelect: false,
             enableFiltering: false,
             fastWatch: true,
+            enableColumnResizing: true,
+            enableHorizontalScrollbar: true,
             onRegisterApi: function(gridApi) {
                 $scope.gridApi = gridApi;
                 $timeout(function() {
@@ -150,16 +187,16 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
             },
             enableGridMenu: true,
             columnDefs: [
-                { name: 'Número', field: 'number' },
-                { name: 'Tipo', field: 'document_type_code',  minWidth: 10 },
-                { name: 'Cliente', field: 'customer', minWidth: 220 },
-                { name: 'Cobrança', field: 'billing_type', minWidth: 10 },
-                { name: 'Valor', field: 'inventory_value', minWidth: 10, cellTemplate: '<div>R${{row.entity.inventory_value}}</div>'},
+                { name: 'Número', field: 'number',minWidth: 120 },
+                { name: 'Tipo', field: 'document_type_code',  minWidth: 15 },
+                { name: 'Cliente', field: 'customer', minWidth: 200 },
+                { name: 'Cobrança', field: 'billing_type', minWidth: 15 },
+                { name: 'Valor', field: 'inventory_value', minWidth: 15, cellTemplate: '<div>R${{row.entity.inventory_value}}</div>'},
                 {
                     name: 'Status',
                     field: 'document_status_id',
                     display: 'description',
-                    minWidth: 200,
+                    minWidth: 180,
                     filter: {
                         noTerm: true,
                         type: uiGridConstants.filter.SELECT,
@@ -169,7 +206,7 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
                     },
                     cellTemplate: '<div class="ui-grid-cell-contents" ><div class="grid_cell stat{{grid.getCellValue(row, col)}}"> {{row.entity.description}}</div></div>'
                 },
-                { name: 'Contagem', field: 'inv_description', minWidth: 300 },
+                { name: 'Contagem', field: 'inv_description', minWidth: 160 },
                 { name: 'Emissão', field: 'emission_date', type: 'date', cellFilter: "dateFilter" },
                 { name: 'Início', field: 'start_date', type: 'date', cellFilter: "dateFilter" },
                 { name: 'Finalização', field: 'end_date', type: 'date', cellFilter: "dateFilter" },
@@ -179,6 +216,11 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
             paginationPageSize: 25,
             rowTemplate: '<div ng-click="grid.appScope.clickRow(row, col, $event)" ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.uid" class="ui-grid-cell" ng-class="col.colIndex()" ui-grid-cell></div>',
         };
+
+        //Se houver scroll no grid, fecha as opções da linha
+        $scope.$on('scrolled', function(event, args) {
+            $('#options').remove();
+        });
 
         $scope.callRouteConfirm = function(route, async = 0, msg) {
             if (confirm(msg)) {
@@ -198,14 +240,14 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
         }
 
 
-        //Salva o grid atual em uma variavel de sessão e banco (ajax)
-        $scope.saveState = function(name) {
-            $rootScope.saveStateRS($scope, name, $http);
+       //Salva o grid atual em uma variavel de sessão e banco (ajax)
+        $scope.saveState = function() {
+            $rootScope.saveStateRS($scope, $http);
         };
 
         //Restaura o grid salvo em sessão ou banco (ajax)
-        $scope.restoreState = function(name) {
-            $rootScope.restoreStateRS($scope, name, $http);
+        $scope.restoreState = function() {
+            $rootScope.restoreStateRS($scope, $http);
         };
 
         //Carrega grid com os 2 mil ultimos documentos
@@ -241,8 +283,11 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
 //Grid de detalhes dos documentos
 app.controller('DetCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '$timeout', '$interval',
     function($rootScope, $scope, $http, uiGridConstants, $timeout, $interval) {
+        //Código do grid a ser salvo / recuperado no banco
+        $scope.gridCode = 'AUTOLOGWMS_GridInv_Det';
         $scope.gridDetalhes = {};
         $scope.gridDetalhes.data = [];
+        $rootScope.page = 'items';
         $scope.gridDetalhes = {
             enableFullRowSelection: false,
             multiSelect: false,
