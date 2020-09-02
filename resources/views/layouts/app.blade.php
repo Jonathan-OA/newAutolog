@@ -6,7 +6,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{config('app.name', 'AUTOLOG WMS') }}</title>
+    <title>{{config('app.name', 'AUTOLOG CONTAGEM') }}</title>
 
     <!-- Styles -->
     <!-- <link href="{{ asset('/datatables/datatables.min.css') }}"  rel="stylesheet"> -->
@@ -26,7 +26,7 @@
                 <img class="icon" src="{{ asset('/icons/menu.png') }}" alt="Menu">
             </a>
         </div>
-        <div class="title"> AUTOLOG WMS </div>
+        <div class="title"> AUTOLOG CONTAGEM </div>
         <!-- Authentication Links -->
         <div class="lay_login hidden-sm">
                 <a  href="#" id="buttonNotification" data-toggle="modal" data-target="#notificationModal" title="Notificações">

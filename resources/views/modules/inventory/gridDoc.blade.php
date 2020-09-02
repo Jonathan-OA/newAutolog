@@ -22,11 +22,11 @@
                         <!-- Botões de incluir, filtrar ,etc -->
                         <div class="row buttons_grid">
                             <div class="col-md-10">
-                                <div class="icon_grid" aria-label="@lang('buttons.add')" data-microtip-position="bottom" role="tooltip">
+                                {{-- <div class="icon_grid" aria-label="@lang('buttons.add')" data-microtip-position="bottom" role="tooltip">
                                     <a href="{!! route('inventory.create') !!}">
                                         <img class='icon' src='{{asset('/icons/add.png') }}'>
                                     </a>
-                                </div>
+                                </div> --}}
                                 <div class="icon_grid" aria-label="@lang('buttons.import')" data-microtip-position="bottom" role="tooltip">
                                     <a  href="{!! url('inventory/importFile') !!}">
                                         <img class='icon' src='{{asset('/icons/import.png') }}'>
