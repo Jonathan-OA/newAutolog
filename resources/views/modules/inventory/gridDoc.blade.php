@@ -54,8 +54,8 @@
                                 <span aria-label="@lang('infos.actions_grid')" data-microtip-position="right" role="tooltip">
                                         <img class='icon' src='{{asset('/icons/information.png') }}' >
                                 </span>
-                                <button id="save" type="button" class="btn btn-success" ng-click="saveState('Autolog_GridProd')">Salvar Grid</button>
-                                <button id="restore" type="button" class="btn btn-success" ng-click="restoreState('Autolog_GridProd')">Restaurar Grid</button>
+                                <button id="save" type="button" class="btn btn-success" ng-click="saveState()">Salvar Grid</button>
+                                <button id="restore" type="button" class="btn btn-success" ng-click="restoreState()">Restaurar Grid</button>
                             </div>
                     </div>
                 </div>
