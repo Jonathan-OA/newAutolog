@@ -165,7 +165,7 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
             onRegisterApi: function(gridApi) {
                 $scope.gridApi = gridApi;
                 $timeout(function() {
-                    $scope.restoreState('Autolog_GridInv');
+                    $scope.restoreState($scope.gridCode);
                 }, 50);
                 //Chama a função que preenche o grid
                 $scope.getFirstData();
