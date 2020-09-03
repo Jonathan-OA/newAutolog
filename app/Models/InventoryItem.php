@@ -164,8 +164,8 @@ class InventoryItem extends Model
         }
         
         return InventoryItem::select('inventory_items.company_id','pallets.barcode as plt_barcode',
-                                    'inventory_items.document_id','inventory_items.location_code',DB::raw("SUM(qty_1count) as qty1"),
-                                    DB::raw("SUM(qty_2count) as qty2"),DB::raw("SUM(qty_3count) as qty3"),
+                                    'inventory_items.document_id','inventory_items.location_code',DB::raw("SUM(qty_1count) as qty1"), 'users.name',
+                                    DB::raw("SUM(qty_2count) as qty2") ,DB::raw("SUM(qty_3count) as qty3"),
                                     DB::raw("SUM(qty_wms) as qty_wms"),DB::raw("SUM(qty_4count) as qty4"),'labels.barcode as label_barcode',
                                     'inventory_items.created_at', 'inventory_status.description as description', 'deposit_code', 'inventory_status_id', 'inventory_items.prim_uom_code',
                                     DB::raw('CASE WHEN products.customer_code IS NOT NULL AND products.alternative_code IS NOT NULL THEN products.alternative_code ELSE inventory_items.product_code END as product_code'),
@@ -178,6 +178,10 @@ class InventoryItem extends Model
                             ->join('products', function($join){
                                 $join->on('products.code','inventory_items.product_code')
                                      ->whereColumn('products.company_id','inventory_items.company_id');
+                            })
+                            ->leftJoin('users', function($join){
+                                $join->on('users.id','inventory_items.user_1count')
+                                     ->whereColumn('users.company_id','inventory_items.company_id');
                             })
                             ->leftJoin('pallets', 'pallets.id', 'inventory_items.pallet_id')
                             ->leftJoin('labels', 'labels.id', 'inventory_items.label_id')
@@ -196,8 +200,10 @@ class InventoryItem extends Model
                                       'inventory_status.description',
                                       'pallets.barcode',
                                       'labels.barcode',
-                                      'inventory_items.id')
-                            ->orderBy('deposit_code')
+                                      'inventory_items.id',
+                                      'inventory_items.user_1count',
+                                      'users.name')
+                            ->orderBy('location_code')
                             ->get();
     }
 

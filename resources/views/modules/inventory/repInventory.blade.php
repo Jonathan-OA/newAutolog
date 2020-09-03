@@ -27,11 +27,12 @@
                                     <table class="table table-bordered table-striped" id="relInv-table" cellspacing="0" width="100%">
                                         <thead>
                                             <th class="th_grid">@lang('models.deposit_code') </th>
-                                            <th class="th_grid">@lang('models.location_code') </th>
+                                            <!-- <th class="th_grid">@lang('models.location_code') </th> -->
                                             <th class="th_grid">@lang('models.product_code') </th>
                                             <th class="th_grid">@lang('models.description') </th>
                                             <th class="th_grid">@lang('models.qty_wms') </th>
                                             <th class="th_grid">@lang('models.prim_uom_code') </th>
+                                            <th class="th_grid">@lang('models.user_code') </th>
                                             <th class="th_grid">@lang('models.1acount') </th>
                                             <th class="th_grid">@lang('models.2acount') </th>
                                         </thead>
@@ -89,12 +90,13 @@
                     sPrevious: "@lang('models.previous')",
                 }
             },
-            columns: [  { data: 'deposit_code', className: "td_center"},
-                        { data: 'location_code', className: "td_center" },
+            columns: [  { data: 'location_code', className: "td_center"},
+                        // { data: 'location_code', className: "td_center" },
                         { data: 'product_code', className: "td_center" },
                         { data: 'product_description', className: "td_center" },
                         { data: 'qty_wms'},
                         { data: 'prim_uom_code', className: "td_center"},
+                        { data: 'name'},
                         { data: 'qty1'},
                         { data: 'qty2'}],
             "drawCallback": function ( settings ) {
@@ -103,9 +105,10 @@
                 var last=null;
                 var qty1 = 0;
                 api.column(groupColumn, {page:'current'} ).data().each( function ( group, i ) {
+
                     if ( last !== group ) {
                         $(rows).eq( i ).before(
-                            '<tr class="dataTables_group"><td style="padding: 2px 15px !important" colspan="11">Depósito: '+group+'</td></tr>'
+                            '<tr class="dataTables_group"><td style="padding: 2px 15px !important" colspan="11">Endereço: '+group+'</td></tr>'
                         );
     
                         last = group;

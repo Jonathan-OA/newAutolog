@@ -31,7 +31,7 @@
 
 <!-- Due Days Field -->
 {!! Form::label('due_days', Lang::get('models.due_days').':') !!}
-{!! Form::number('due_days', null, ['class' => 'form-control']) !!}
+{!! Form::number('due_days', null, ['class' => 'form-control', 'min' => 0]) !!}
 
 <!-- Prefix Code  -->
 {!! Form::label('prefix_code', Lang::get('models.prefix_code').':') !!}

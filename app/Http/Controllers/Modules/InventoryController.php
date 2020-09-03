@@ -295,7 +295,18 @@ class InventoryController extends AppBaseController
         $customer_code = $input['customer_code'];
         $inventory_value = $input['cost']; //Preço por Leitura
         $billing_type = $input['billing_type']; //Tipo de Cobrança
+        
+        //Valida se Cliente existe
+        $authCustomer = Customer::where([
+            ['code', $customer_code],
+            ['company_id', Auth::user()->company_id]
+        ])->get()->count();
 
+        if($authCustomer == 0){
+            Flash::error(Lang::get('validation.customer_not_exist'));
+            return redirect(url('inventory/importFile'))->with('customer_code', $customer_code)
+                                                        ->with('inventory_value', $inventory_value);           
+        }
 
         if (in_array($extFile, ['xls', 'xlsx'])) {
             //Salva o arquivo na pasta temporária e depois envia o path correto
@@ -501,8 +512,9 @@ class InventoryController extends AppBaseController
                         ->leftJoin('labels', 'labels.id', 'inventory_items.label_id')
                         ->where('inventory_items.document_id', $document_id)
                         ->where('inventory_items.qty_1count', '>', 0)
-                        ->get()
-                        ->toArray();
+                        ->toSQL();
+                        //->toSQL();
+                        echo $select;exit;
         }else{
             $select = DB::table('inventory_items')
             ->select("products.code as prd", "products.description as dsc", "packings.barcode as ean",
