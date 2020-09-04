@@ -202,14 +202,15 @@ class InventoryItemController extends AppBaseController
     public function reportInv($document_id)
     {
 
-        $inventory_items = App\Models\InventoryItem::getAppointments($document_id, 1);
+        // $inventory_items = App\Models\InventoryItem::getAppointments($document_id, 1);
+        
         $document = DB::table('documents')->where([
             ['company_id', Auth::user()->company_id],
             ['id', $document_id]
         ])->get()[0];
         return view('modules.inventory.repInventory')
             ->with('document_id', $document_id)
-            ->with('inventory_items', $inventory_items)
+            //->with('inventory_items', $inventory_items)
             ->with('document', $document);
     }
 

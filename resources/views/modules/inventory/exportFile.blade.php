@@ -151,6 +151,7 @@
         var uptProfile = 0; //Variavel que indica se houve alteração para salvar um novo perfil
         var count = 2;
         var oldValue = "";
+        var summarizeSelected;
         //Adiciona um novo campo para incluir na exportação
         function addField(){
             //Inserir no máximo 8 campos
@@ -231,6 +232,11 @@
                                 alert('Número de Casas Decimais não pode ser maior que o total');
                                 var qdeDec = $("#qdeDec").val('0');
                                 var qdeDec = $("#qdeDec").focus();
+                            } else if(qdeDig == "" || qdeDig == 0){
+                                alert('Total de Digitos não pode ser 0');
+                                $("#qdeMax").val('5');
+                                exampleLine = exampleLine+String(subString(12,5,0,qdeDec))+delimiter;
+                                $("#qdeMax").focus();
                             }else{
                                 exampleLine = exampleLine+String(subString(12,qdeDig,0,qdeDec))+delimiter;
                             }
@@ -268,9 +274,16 @@
         }
 
         $( function() {
+            
             $( "#sortable" ).sortable();
             $( "#sortable" ).disableSelection();
-
+            $("input[type='radio'][name='summarize']").on("change", function(event){
+                
+                if(summarizeSelected != event.target.value){
+                    uptProfile = 1;
+                    $('#summarize').val(event.target.value);
+                }
+            });
             //Muda os número da ordem dos campos caso reordene
             $( "#sortable" ).on( "sortstop", function( event, ui ) {
                 var titlesField = $("span[class^='fieldTitle']");
@@ -295,7 +308,7 @@
                 switch(newValue){
                     case 'qde':
                         $("#field_"+i).html('<label for="qdeMax">Total Dígitos: </label>'+
-                                            '<input class="form-control props" type="number" size="5" min="0" max="20" name="qdeMax" id="qdeMax"/>'+
+                                            '<input class="form-control props" type="number" size="5" min="0" required value="5"max="20" name="qdeMax" id="qdeMax"/>'+
                                             '<label for="qdeDec">Casas Decimais: </label>'+
                                             '<input class="form-control props" type="number" min="0" max="6" value="0" size="5" name="qdeDec" id="qdeDec"/>');
                         break;
@@ -396,8 +409,8 @@
                 });
 
                 //Seta se é sumarizado ou não
-                $('#summarize').val(newFormat.options.summarize);
-                
+                $("input[name=summarize][value='"+newFormat.options.summarize+"']").prop("checked",true);
+                summarizeSelected = newFormat.options.summarize;
                 uptProfile = 0;
                 
             })

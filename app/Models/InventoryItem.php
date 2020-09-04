@@ -130,6 +130,15 @@ class InventoryItem extends Model
                                     $query->where('inventory_status_id.id', '<>' ,$statusDsc);
                                 }
                             })
+                            ->where(function($query){
+                                $query->where("inventory_items.qty_wms", ">", 0)
+                                ->orWhere(function($query){
+                                    $query->where("inventory_items.qty_1count", ">", "0")
+                                    ->orWhere("inventory_items.qty_2count", ">", "0")
+                                    ->orWhere("inventory_items.qty_3count", ">", "0")
+                                    ->orWhere("inventory_items.qty_4count", ">", "0");
+                                });
+                            })
                             ->groupBy('inventory_items.company_id', 
                                       'document_id',
                                       'inventory_items.product_code',
@@ -162,7 +171,6 @@ class InventoryItem extends Model
             default:
                 $status = '';
         }
-        
         return InventoryItem::select('inventory_items.company_id','pallets.barcode as plt_barcode',
                                     'inventory_items.document_id','inventory_items.location_code',DB::raw("SUM(qty_1count) as qty1"), 'users.name',
                                     DB::raw("SUM(qty_2count) as qty2") ,DB::raw("SUM(qty_3count) as qty3"),
@@ -188,6 +196,15 @@ class InventoryItem extends Model
                             ->where('inventory_items.company_id', Auth::user()->company_id)
                             ->where('inventory_items.document_id', $document_id)
                             ->where('inventory_items.inventory_status_id', '<>' ,9)
+                            ->where(function($query){
+                                $query->where("inventory_items.qty_wms", ">", 0)
+                                ->orWhere(function($query){
+                                    $query->where("inventory_items.qty_1count", ">", "0")
+                                    ->orWhere("inventory_items.qty_2count", ">", "0")
+                                    ->orWhere("inventory_items.qty_3count", ">", "0")
+                                    ->orWhere("inventory_items.qty_4count", ">", "0");
+                                });
+                            })
                             ->when($status, function ($query, $status) {
                                 if(count($status) > 0){
                                     $query->whereIn('inventory_items.inventory_status_id', $status);

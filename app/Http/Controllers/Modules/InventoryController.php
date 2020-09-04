@@ -167,16 +167,16 @@ class InventoryController extends AppBaseController
 
             //Concatena todos os parametros informados em uma string separando por ; e grava no campo comments
             //O tratamento é feito no app coletor
-            if(empty($requestF['comments'])){
+            if (empty($requestF['comments'])) {
                 $parameters = "550_contagens=" . $requestF['counts'] . ";550_valida_saldo=" .
-                $requestF['vstock'] . ";550_valida_endereco=" . $requestF['vlocation'] .
-                ";550_valida_produto=" . $requestF['vproduct'] . ";";
+                    $requestF['vstock'] . ";550_valida_endereco=" . $requestF['vlocation'] .
+                    ";550_valida_produto=" . $requestF['vproduct'] . ";";
 
                 $requestF['comments'] = $parameters;
             }
-           
 
-            $descricao = 'Alterou Documento ID: ' . $id . ' - ' . $requestF['document_type_code'] . ' ' . $requestF['number'].' - Valor: '.$requestF['inventory_value'];
+
+            $descricao = 'Alterou Documento ID: ' . $id . ' - ' . $requestF['document_type_code'] . ' ' . $requestF['number'] . ' - Valor: ' . $requestF['inventory_value'];
             $log = App\Models\Log::wlog('documents_inv_edit', $descricao, $id);
 
 
@@ -285,7 +285,7 @@ class InventoryController extends AppBaseController
     public function confirmImportFile(Request $request)
     {
         $input = $request->all();
-        
+
         //Pega a extensão e nome do arquivo
         $extFile = $input['fileExcel']->clientExtension();
         $fileName = $input['fileExcel']->getClientOriginalName();
@@ -295,17 +295,17 @@ class InventoryController extends AppBaseController
         $customer_code = $input['customer_code'];
         $inventory_value = $input['cost']; //Preço por Leitura
         $billing_type = $input['billing_type']; //Tipo de Cobrança
-        
+
         //Valida se Cliente existe
         $authCustomer = Customer::where([
             ['code', $customer_code],
             ['company_id', Auth::user()->company_id]
         ])->get()->count();
 
-        if($authCustomer == 0){
+        if ($authCustomer == 0) {
             Flash::error(Lang::get('validation.customer_not_exist'));
             return redirect(url('inventory/importFile'))->with('customer_code', $customer_code)
-                                                        ->with('inventory_value', $inventory_value);           
+                ->with('inventory_value', $inventory_value);
         }
 
         if (in_array($extFile, ['xls', 'xlsx'])) {
@@ -321,8 +321,8 @@ class InventoryController extends AppBaseController
             $sepFile = (strpos($primLinha, ";")) ? ";" : (strpos($primLinha, ",") ? "," : "");
             if ($sepFile <> "") {
                 $infos = explode($sepFile, $primLinha);
-                $indx = count($infos)-1;
-                if(trim($infos[$indx]) == ""){
+                $indx = count($infos) - 1;
+                if (trim($infos[$indx]) == "") {
                     //Exclui ultima posição do array caso esteja vazio (; final)
                     array_pop($infos);
                 }
@@ -330,23 +330,23 @@ class InventoryController extends AppBaseController
             }
 
             //Valida se as informações setadas na tela anterior batem com a quantidade de infos (colunas) no txt
-            if($countColumns <> count($fields)){
+            if ($countColumns <> count($fields)) {
                 Flash::error(Lang::get('validation.infos_import_error', ['fields' => count($fields), 'columnsFile' => $countColumns]));
                 return redirect(url('inventory/importFile'))->with('customer_code', $customer_code)
-                                                            ->with('inventory_value', $inventory_value);
+                    ->with('inventory_value', $inventory_value);
             }
 
             //Salva o arquivo no storage para ser obtido após a confirmação
-            $input['fileExcel']->move(storage_path(),$fileName);
+            $input['fileExcel']->move(storage_path(), $fileName);
 
             return view('modules.inventory.confirmImportFile')->with('fileName', $fileName)
-                                                              ->with('extFile', $extFile)
-                                                              ->with('sepFile', $sepFile)
-                                                              ->with('infos', $infos)
-                                                              ->with('customer_code', $customer_code)
-                                                              ->with('inventory_value', $inventory_value)
-                                                              ->with('billing_type', $billing_type)
-                                                              ->with('fields', $fields);
+                ->with('extFile', $extFile)
+                ->with('sepFile', $sepFile)
+                ->with('infos', $infos)
+                ->with('customer_code', $customer_code)
+                ->with('inventory_value', $inventory_value)
+                ->with('billing_type', $billing_type)
+                ->with('fields', $fields);
         } else {
             //Arquivo invalido
             Flash::error(Lang::get('validation.permission'));
@@ -378,7 +378,7 @@ class InventoryController extends AppBaseController
         //Concatena todos os parametros informados em uma string separando por ; e grava no campo comments
         //O tratamento é feito no app coletor
         $parameters = "550_contagens=" . $input['counts'] . ";550_valida_saldo=" .
-            $input['vstock'] . ";550_valida_endereco=" . $input['vlocation']?? '' .
+            $input['vstock'] . ";550_valida_endereco=" . $input['vlocation'] ?? '' .
             ";550_valida_produto=" . $input['vproduct'] ?? '';
 
         //Confirma extensões validas para direcionar a importação correta
@@ -388,8 +388,8 @@ class InventoryController extends AppBaseController
             $file = file_get_contents(storage_path() . '/' . $fileName, 'r');
             //Cria o objeto e chama a função passando os parâmetros do txt
             $importFile = new InventoryItemsImport($parameters, $customer_code, $inventory_value, $billing_type);
-            $importFile->array($file, array('order' => $fieldsOrder,'separator' => $sepFile));
-        }else{
+            $importFile->array($file, array('order' => $fieldsOrder, 'separator' => $sepFile));
+        } else {
             //Arquivo invalido
             Flash::error(Lang::get('validation.permission'));
             return redirect(url('inventory.importFile'));
@@ -409,19 +409,19 @@ class InventoryController extends AppBaseController
     {
         $document = $this->documentRepository->findWithoutFail($document_id);
         $idExport = App\Models\Customer::where('company_id',  Auth::user()->company_id)
-                                        ->where('code', $document->customer_code)
-                                        ->select('profile_export')
-                                        ->get();
+            ->where('code', $document->customer_code)
+            ->select('profile_export')
+            ->get();
         $profileExport = $idExport[0]->profile_export;
 
         //Busca perfis de exportação já gravados
         $profiles = Profile::getProfiles('EXPORT');
-        
+
         //Valida se usuário possui permissão para acessar esta opção
         if (App\Models\User::getPermission('documents_inv_exp', Auth::user()->user_type_code)) {
-            return view('modules.inventory.exportFile')->with('document', $document) 
-                                                       ->with('profiles', $profiles)
-                                                       ->with('profileExport', $profileExport);
+            return view('modules.inventory.exportFile')->with('document', $document)
+                ->with('profiles', $profiles)
+                ->with('profileExport', $profileExport);
         } else {
             //Sem permissão
             Flash::error(Lang::get('validation.permission'));
@@ -444,150 +444,172 @@ class InventoryController extends AppBaseController
         //Gravar perfil de exportação para a proxima utilização
         //insert into profiles
         $jsonFields = array('fields' => array(), 'options' => array());
-        foreach($fieldsOrder as $order => $field){
-            switch($field){
+        foreach ($fieldsOrder as $order => $field) {
+            switch ($field) {
                 case 'fix':
-                    $jsonFields['fields'][] = array('code' => $field, $field.'Format' =>$input['fixFormat'] );
-                break;
+                    $jsonFields['fields'][] = array('code' => $field, $field . 'Format' => $input['fixFormat']);
+                    break;
                 case 'dat':
-                    $jsonFields['fields'][] = array('code' => $field, $field.'Format' => (isset($input[$field.'Format']) ? $input[$field.'Format'] : ""));
-                break;
+                    $jsonFields['fields'][] = array('code' => $field, $field . 'Format' => (isset($input[$field . 'Format']) ? $input[$field . 'Format'] : ""));
+                    break;
                 case 'datexp':
-                    $jsonFields['fields'][] = array('code' => $field, $field.'Format' => (isset($input[$field.'Format']) ? $input[$field.'Format'] : ""));
-                break;
+                    $jsonFields['fields'][] = array('code' => $field, $field . 'Format' => (isset($input[$field . 'Format']) ? $input[$field . 'Format'] : ""));
+                    break;
                 case 'qde':
-                    $jsonFields['fields'][] = array('code' => $field, $field.'Dec' => (isset($input[$field.'Dec']) ? $input[$field.'Dec'] : ""),
-                                                              $field.'Max' => (isset($input[$field.'Max']) ? $input[$field.'Max'] : "") 
-                                                            );
-                break;
+                    $jsonFields['fields'][] = array(
+                        'code' => $field, $field . 'Dec' => (isset($input[$field . 'Dec']) ? $input[$field . 'Dec'] : ""),
+                        $field . 'Max' => (isset($input[$field . 'Max']) ? $input[$field . 'Max'] : "")
+                    );
+                    break;
                 default:
-                    $jsonFields['fields'][] = array('code' => $field, $field.'Max' => (isset($input[$field.'Max']) ? $input[$field.'Max'] : ""), 
-                                                                      $field.'Pre' => (isset($input[$field.'Pre']) ? $input[$field.'Pre'] : "")  
-                                                            );
-                break;
+                    $jsonFields['fields'][] = array(
+                        'code' => $field, $field . 'Max' => (isset($input[$field . 'Max']) ? $input[$field . 'Max'] : ""),
+                        $field . 'Pre' => (isset($input[$field . 'Pre']) ? $input[$field . 'Pre'] : "")
+                    );
+                    break;
             }
         }
-        $jsonFields['options'] = array('summarize'=> $input['summarize']);
+        $jsonFields['options'] = array('summarize' => $input['summarize']);
 
         //Cadastra o novo perfil de importação se não existir um igual
         $verProfile = Profile::where('company_id', Auth::user()->company_id)
-                             ->where('type', 'EXPORT')
-                             ->whereJsonContains('format', $jsonFields)
-                             ->get()
-                             ->count();
+            ->where('type', 'EXPORT')
+            ->whereJsonContains('format', $jsonFields)
+            ->get()
+            ->count();
 
-        if($verProfile == 0){
+        if ($verProfile == 0) {
             $insertProfile = Profile::insertGetId(
-                ['company_id' => Auth::user()->company_id, 'type' => 'EXPORT', 'description' =>  $input['profile_desc'], 'delimiter' =>  $delimiter,
-                'format' => json_encode($jsonFields), 'created_at'=> new \DateTime()]
+                [
+                    'company_id' => Auth::user()->company_id, 'type' => 'EXPORT', 'description' =>  $input['profile_desc'], 'delimiter' =>  $delimiter,
+                    'format' => json_encode($jsonFields), 'created_at' => new \DateTime()
+                ]
             );
             $input['profile_export'] = $insertProfile;
         }
-        
+
         //Atualiza no cliente o ultimo perfil utilizado
         $updCustomer = Customer::where('company_id', Auth::user()->company_id)
-                               ->where('code', $document->customer_code)
-                               ->update(['profile_export' => $input['profile_export']]);
+            ->where('code', $document->customer_code)
+            ->update(['profile_export' => $input['profile_export']]);
 
         $content = "";
-        $fileName = "export_ivd_".$document_id."_".date('Ymd')."_".date('His').".txt";
-    
+        $fileName = "export_ivd_" . $document_id . "_" . date('Ymd') . "_" . date('His') . ".txt";
         //Pega as informações das contagens (se parametro summarize = 1, agrupa por item)
-        if($jsonFields['options']['summarize'] == 0){
+        if ($jsonFields['options']['summarize'] == 0) {
             $select = DB::table('inventory_items')
-                        ->select(DB::raw("products.code as prd"), "products.description as dsc", "packings.barcode as ean",
-                                "inventory_items.qty_1count as qde", 
-                                DB::raw( isset($input['datexpFormat']) ? "DATE_FORMAT(inventory_items.date_1count, '{$input['datexpFormat']}') as dat" : "'' as dat" ),
-                                DB::raw( isset($input['datexpFormat']) ? "DATE_FORMAT(NOW(), '{$input['datexpFormat']}') as datexp" : "'' as datexp" ),
-                                "labels.batch as lot", DB::raw(isset($input['fixFormat']) ? "'{$input['fixFormat']}' as fix" : "'' as fix"))
-                        ->join('products', function ($join) {
-                            $join->on('products.code', '=', 'inventory_items.product_code')
-                                ->whereColumn ('products.company_id','inventory_items.company_id');
-                        })
-                        ->join('packings', function ($join) {
-                            $join->on('inventory_items.product_code', '=', 'packings.product_code')
-                                ->whereColumn('inventory_items.uom_code','packings.uom_code')
-                                ->whereColumn ('inventory_items.company_id','packings.company_id');
-                        })
-                        ->leftJoin('labels', 'labels.id', 'inventory_items.label_id')
-                        ->where('inventory_items.document_id', $document_id)
-                        ->where('inventory_items.qty_1count', '>', 0)
-                        ->toSQL();
-                        //->toSQL();
-                        echo $select;exit;
-        }else{
+                ->select(
+                    DB::raw("products.code as prd"),
+                    "products.description as dsc",
+                    "packings.barcode as ean",
+                    "inventory_items.qty_1count as qde",
+                    DB::raw(isset($input['datexpFormat']) ? "DATE_FORMAT(inventory_items.date_1count, '{$input['datexpFormat']}') as dat" : "'' as dat"),
+                    DB::raw(isset($input['datexpFormat']) ? "DATE_FORMAT(NOW(), '{$input['datexpFormat']}') as datexp" : "'' as datexp"),
+                    "labels.batch as lot",
+                    DB::raw(isset($input['fixFormat']) ? "'{$input['fixFormat']}' as fix" : "'' as fix")
+                )
+                ->join('products', function ($join) {
+                    $join->on('products.code', '=', 'inventory_items.product_code')
+                        ->whereColumn('products.company_id', 'inventory_items.company_id');
+                })
+                ->join('packings', function ($join) {
+                    $join->on('inventory_items.product_code', '=', 'packings.product_code')
+                        ->whereColumn('inventory_items.uom_code', 'packings.uom_code')
+                        ->whereColumn('inventory_items.company_id', 'packings.company_id');
+                })
+                ->leftJoin('labels', 'labels.id', 'inventory_items.label_id')
+                ->where('inventory_items.document_id', $document_id)
+                ->where('inventory_items.qty_1count', '>', 0)
+                ->get()
+                ->toArray();
+        } else {
             $select = DB::table('inventory_items')
-            ->select("products.code as prd", "products.description as dsc", "packings.barcode as ean",
-                     DB::raw("SUM(inventory_items.qty_4count) as qde"), 
-                     DB::raw("' ' as dat"),
-                     DB::raw( isset($input['datexpFormat']) ? "DATE_FORMAT(NOW(), '{$input['datexpFormat']}') as datexp" : "'' as datexp" ),
-                     "labels.batch as lot", DB::raw(isset($input['fixFormat']) ? "'{$input['fixFormat']}' as fix" : "'' as fix"))
-            ->join('products', function ($join) {
-                $join->on('products.code', '=', 'inventory_items.product_code')
-                     ->whereColumn ('products.company_id','inventory_items.company_id');
-            })
-            ->join('packings', function ($join) {
-                $join->on('inventory_items.product_code', '=', 'packings.product_code')
-                     ->whereColumn('inventory_items.uom_code','packings.uom_code')
-                     ->whereColumn ('inventory_items.company_id','packings.company_id');
-            })
-            ->leftJoin('labels', 'labels.id', 'inventory_items.label_id')
-            ->where('inventory_items.document_id', $document_id)
-            ->where('inventory_items.qty_1count', '>', 0)
-            ->groupBy('products.code','products.description','packings.barcode','labels.batch')
-            ->get()
-            ->toArray();
+                ->select(
+                    "products.code as prd",
+                    "products.description as dsc",
+                    "packings.barcode as ean",
+                    DB::raw("SUM(inventory_items.qty_1count) as qde"),
+                    DB::raw("' ' as dat"),
+                    DB::raw(isset($input['datexpFormat']) ? "DATE_FORMAT(NOW(), '{$input['datexpFormat']}') as datexp" : "'' as datexp"),
+                    "labels.batch as lot",
+                    DB::raw(isset($input['fixFormat']) ? "'{$input['fixFormat']}' as fix" : "'' as fix")
+                )
+                ->join('products', function ($join) {
+                    $join->on('products.code', '=', 'inventory_items.product_code')
+                        ->whereColumn('products.company_id', 'inventory_items.company_id');
+                })
+                ->join('packings', function ($join) {
+                    $join->on('inventory_items.product_code', '=', 'packings.product_code')
+                        ->whereColumn('inventory_items.uom_code', 'packings.uom_code')
+                        ->whereColumn('inventory_items.company_id', 'packings.company_id');
+                })
+                ->leftJoin('labels', 'labels.id', 'inventory_items.label_id')
+                ->where('inventory_items.document_id', $document_id)
+                ->where('inventory_items.qty_1count', '>', 0)
+                ->groupBy('products.code', 'products.description', 'packings.barcode', 'labels.batch')
+                ->get()
+                ->toArray();
         }
-        
+
 
         //Gera a variável com o conteudo do arquivo
-        foreach($select as $key => $line){
+        foreach ($select as $key => $line) {
+            $row = "";
             //Loop no formato definido de exportação para ajustar as linhas
-            foreach($jsonFields['fields'] as $field){
+            foreach ($jsonFields['fields'] as $field) {
                 $code = $field['code'];
                 $valueField = $line->$code;
 
-                switch($code){
-                    
+                switch ($code) {
+
                     case 'qde':
-                        if($valueField == '') $valueField = "0";
-                        $max = ((isset($field[$code.'Max']) && trim($field[$code.'Max']) <> '') ? $field[$code.'Max'] : 5);
-                        $dec = (isset($field[$code.'Dec']) ? $field[$code.'Dec'] : 0);
+                        if ($valueField == '') $valueField = "0";
+                        $max = ((isset($field[$code . 'Max']) && trim($field[$code . 'Max']) <> '') ? $field[$code . 'Max'] : 5);
+                        $dec = (isset($field[$code . 'Dec']) ? $field[$code . 'Dec'] : 0);
                         $quebra = explode(".", $valueField);
                         //Valor decimal (Se for vazio, remove o ponto da quantidade)
-                        $decValue = ($dec > 0) ? '.'.substr(str_pad((!isset($quebra[1])?'0':$quebra[1]),($dec),0,\STR_PAD_RIGHT),0,$dec) : '';
-                        $valueField = substr(str_pad($quebra[0],($max-$dec),0,\STR_PAD_LEFT),0,($max-$dec)).$decValue;
-                    break;
+                        $decValue = ($dec > 0) ? '.' . substr(str_pad((!isset($quebra[1]) ? '0' : $quebra[1]), ($dec), 0, \STR_PAD_RIGHT), 0, $dec) : '';
+                        //se parametro summarize = 1, As linhas são quebradas com quantidade = 1
+                        if ($jsonFields['options']['summarize'] == 0) {
+                            $valueField = substr(str_pad(($valueField <> 0) ? 1 : 0, ($max - $dec), 0, \STR_PAD_LEFT), 0, ($max - $dec)) . $decValue;
+                        } else {
+                            $valueField = substr(str_pad($quebra[0], ($max - $dec), 0, \STR_PAD_LEFT), 0, ($max - $dec)) . $decValue;
+                        }
+                        break;
 
                     case 'dsc':
-                        $max = (isset($field[$code.'Max']) ? $field[$code.'Max'] : '');
-                        $pre = (isset($field[$code.'Pre']) ? (($field[$code.'Pre'] == "") ? " " : $field[$code.'Pre']) : '');
-                        if($max <> '')
-                            $valueField = substr(str_pad($valueField,$max,"$pre",\STR_PAD_RIGHT),0,$max);
-                    break;
+                        $max = (isset($field[$code . 'Max']) ? $field[$code . 'Max'] : '');
+                        $pre = (isset($field[$code . 'Pre']) ? (($field[$code . 'Pre'] == "") ? " " : $field[$code . 'Pre']) : '');
+                        if ($max <> '')
+                            $valueField = substr(str_pad($valueField, $max, "$pre", \STR_PAD_RIGHT), 0, $max);
+                        break;
 
                     case 'prd':
-                        $max = (isset($field[$code.'Max']) ? $field[$code.'Max'] : '');
-                        $pre = (isset($field[$code.'Pre']) ? (($field[$code.'Pre'] == "") ? " " : $field[$code.'Pre']) : '');
-                        if($max <> '')
-                            $valueField = substr(str_pad($valueField,$max,"$pre",\STR_PAD_RIGHT),0,$max);
-                    break;
-
+                        $max = (isset($field[$code . 'Max']) ? $field[$code . 'Max'] : '');
+                        $pre = (isset($field[$code . 'Pre']) ? (($field[$code . 'Pre'] == "") ? " " : $field[$code . 'Pre']) : '');
+                        if ($max <> '')
+                            $valueField = substr(str_pad($valueField, $max, "$pre", \STR_PAD_RIGHT), 0, $max);
+                        break;
                 }
-                
-                $content.=$valueField.$delimiter;
+                //Adiciona campo na linha
+                $row .= $valueField . $delimiter;
             }
-            //Quebra a linha
-            $content.="\n";
-            
+            //se parametro summarize = 1, As linhas são quebradas com quantidade = 1
+            if ($jsonFields['options']['summarize'] == 0) {
+                //Contador inicia com o total a ser repetido e vai diminuindo até chegar 2, a ultima linha será adicionada abaixo
+                for ($i = $line->qde; $i > 1; $i--) {
+                    $content .= $row."\n";
+                }
+            }
+            //Adiciona linha no conteúdo do arquivo e pula para proxima linha
+            $content .= $row."\n";
         }
-        
+
         //Grava o Arquivo
         Storage::disk('public')->put($fileName, $content);
 
         //Chama a tela do grid principal passando o nome do arquivo para download
         return redirect('inventory')->with('fileDownload', $fileName);
-        
     }
 
     /**
