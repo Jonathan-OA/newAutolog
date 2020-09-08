@@ -200,8 +200,10 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
                     filter: {
                         noTerm: true,
                         type: uiGridConstants.filter.SELECT,
-                        selectOptions: [{ value: '0', label: 'Pendente' }, { value: '1', label: 'Liberado' }, { value: '2', label: 'Em execução' },
-                            { value: '8', label: 'Encerrado' }, { value: '9', label: 'Cancelado' }
+                        selectOptions: [{ value: '0', label: 'Pendente' }, { value: '1', label: 'Liberado' }, { value: '2', label: 'Em execução' }, { value: '3', label: 'Interrompido' },
+                            { value: '4', label: 'Separado' }, { value: '5', label: 'Em Conferência' }, { value: '6', label: 'Finalizado' }, { value: '7', label: 'Fin. Divergência' }, { value: '8', label: 'Encerrado' },
+                            { value: '10', label: 'Expedido' }, { value: '11', label: 'Embalado' }, { value: '12', label: 'Faturado' }, { value: '13', label: 'Boneficação' }, { value: '14', label: 'Em enderaçamento' },
+                            { value: '15', label: 'Aguardando Qualidade' }, { value: '16', label: 'Exportado' },{ value: '9', label: 'Cancelado' }
                         ]
                     },
                     cellTemplate: '<div class="ui-grid-cell-contents" ><div class="grid_cell stat{{grid.getCellValue(row, col)}}"> {{row.entity.description}}</div></div>'

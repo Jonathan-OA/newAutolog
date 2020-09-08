@@ -231,7 +231,7 @@
                             if(qdeDig && qdeDec > qdeDig){
                                 alert('Número de Casas Decimais não pode ser maior que o total');
                                 var qdeDec = $("#qdeDec").val('0');
-                                var qdeDec = $("#qdeDec").focus();
+                                // var qdeDec = $("#qdeDec").focus();
                             } else if(qdeDig == "" || qdeDig == 0){
                                 alert('Total de Digitos não pode ser 0');
                                 $("#qdeMax").val('5');

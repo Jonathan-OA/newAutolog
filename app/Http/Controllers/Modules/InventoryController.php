@@ -598,15 +598,19 @@ class InventoryController extends AppBaseController
             if ($jsonFields['options']['summarize'] == 0) {
                 //Contador inicia com o total a ser repetido e vai diminuindo até chegar 2, a ultima linha será adicionada abaixo
                 for ($i = $line->qde; $i > 1; $i--) {
-                    $content .= $row."\n";
+                    $content .= $row . "\n";
                 }
             }
             //Adiciona linha no conteúdo do arquivo e pula para proxima linha
-            $content .= $row."\n";
+            $content .= $row . "\n";
         }
 
         //Grava o Arquivo
         Storage::disk('public')->put($fileName, $content);
+
+        //Muda Status do documento para "Exportado"
+        $document->document_status_id = 16;
+        $document->save();
 
         //Chama a tela do grid principal passando o nome do arquivo para download
         return redirect('inventory')->with('fileDownload', $fileName);
@@ -718,9 +722,25 @@ class InventoryController extends AppBaseController
 
     public function finalize($document_id)
     {
-        //$ret = App\Models\InventoryItem::closeItem();
-        Flash::success("Documento Finalizado com Sucesso");
-        return array('success', "Documento Finalizado com Sucesso");
+        //Valida se usuário possui permissão para acessar esta opção
+        if (App\Models\User::getPermission('documents_inv_fin', Auth::user()->user_type_code)) {
+            //Finaliza os itens no Inventário
+            if (App\Models\InventoryItem::closeItems($document_id)) {
+                //Finaliza Documento
+                $retorno = App\Models\Document::finalizeInventory($document_id);
+                $descricao = 'Finalizou inventario';
+                $log = App\Models\Log::wlog('documents_inv_fin', $descricao, $document_id);
+                Flash::success("Documento Finalizado com Sucesso");
+                return array('success', "Documento Finalizado com Sucesso");
+            } else {
+                Flash::error(Lang::get('validation.val_error'));
+                return redirect(url('inventory'));
+            }
+        } else {
+            //Sem permissão
+            Flash::error(Lang::get('validation.permission'));
+            return redirect(url('inventory'));
+        }
     }
 
 

@@ -411,6 +411,10 @@
         background: -webkit-linear-gradient(#FFBF48, #FFA500);
         background: linear-gradient(#FFBF48, #FFA500);
     }
+    .stat16 {
+        background: -webkit-linear-gradient(#9cc0d8, #70A8CD);
+        background: linear-gradient(#9cc0d8, #70A8CD);
+    }
     
     .statred {
         background-color: #f2a9a9;

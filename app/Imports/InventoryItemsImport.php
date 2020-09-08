@@ -216,7 +216,8 @@ class InventoryItemsImport implements ToArray
                                                         'product_type_code' => 'PA',
                                                         'group_code' => '000',
                                                         'customer_code' => trim($this->customer_code),
-                                                        'alternative_code' => trim($produto)
+                                                        'alternative_code' => trim($produto),
+                                                        'qty_erp' => $saldo
                                                         ]);
 
                     if(!$newPrd->save()){

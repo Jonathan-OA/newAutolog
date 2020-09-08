@@ -51,7 +51,8 @@ class Product extends Model
         'obs3',
         'obs4',
         'obs5',
-        'alternative_code'
+        'alternative_code',
+        'qty_erp'
     ];
 
     /**

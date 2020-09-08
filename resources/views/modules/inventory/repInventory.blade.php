@@ -1,29 +1,29 @@
 @extends('layouts.app')
 
 @section('content')
-     <!-- BreadCrumb - Trilha  -->
-     <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-              <li class="breadcrumb-item"><a href="{!! route('inventory.index') !!}">@lang('models.inventory')</a></li>
-              <li class="breadcrumb-item active" aria-current="page">@lang('models.reports')</li>
-            </ol>
-          </nav>
-    <div class="row">
-        <div class="col-md-12 pad-ct">
-            <div class="panel pbread panel-default" >
-                <div class="panel-heading">
-                   <!-- Texto baseado no arquivo de linguagem -->
-                   @lang('reports.reportInv') : {{ $document->document_type_code }} -  {{ $document->number }}
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <!-- Alerta de erro / sucesso -->
-                        @include('flash::message')
-                        <div id="msg_excluir"></div>
-                        <div class="panel-body">
-                            <div class="row">
-                                <div class="col-md-12 pad-ct">
-                                    <div class="" style="margin: 0 15px 0 15px">
+<!-- BreadCrumb - Trilha  -->
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{!! route('inventory.index') !!}">@lang('models.inventory')</a></li>
+        <li class="breadcrumb-item active" aria-current="page">@lang('models.reports')</li>
+    </ol>
+</nav>
+<div class="row">
+    <div class="col-md-12 pad-ct">
+        <div class="panel pbread panel-default">
+            <div class="panel-heading">
+                <!-- Texto baseado no arquivo de linguagem -->
+                @lang('reports.reportInv') : {{ $document->document_type_code }} - {{ $document->number }}
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- Alerta de erro / sucesso -->
+                    @include('flash::message')
+                    <div id="msg_excluir"></div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12 pad-ct">
+                                <div class="" style="margin: 0 15px 0 15px">
                                     <table class="table table-bordered table-striped" id="relInv-table" cellspacing="0" width="100%">
                                         <thead>
                                             <th class="th_grid">@lang('models.deposit_code') </th>
@@ -40,7 +40,6 @@
 
                                         </tbody>
                                     </table>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -49,6 +48,7 @@
             </div>
         </div>
     </div>
+</div>
 @endsection
 @section('scripts')
 
@@ -63,10 +63,13 @@
 
 <script>
     var table;
+    var urlNotSummarized = "{{url('inventoryItems/'.$document_id.'/datatable/0')}}";
+    var urlSummarized = "{{url('inventoryItems/'.$document_id.'/datatable/1')}}";
+    var summarize = 1;
     $(function() {
         var groupColumn = 0;
-       //Parâmetros para criação da datatable
-       table = $("#relInv-table").DataTable({
+        //Parâmetros para criação da datatable
+        table = $("#relInv-table").DataTable({
             dom: 'Bfrtip',
             buttons: [
                 'excel', 'pdf',
@@ -74,50 +77,93 @@
             scrollX: true,
             scrollY: "60vh",
             pageLength: 100,
-            ajax: "{{url('inventoryItems/'.$document_id.'/datatable')}}",
+            ajax: urlSummarized,
             autoWidth: true,
-            columnDefs: [
-            { "visible": false, "targets": groupColumn }
-            ],
+            columnDefs: [{
+                "visible": false,
+                "targets": groupColumn
+            }],
             "oLanguage": {
                 sLengthMenu: "@lang('models.show') _MENU_ @lang('models.entries')",
                 sSearch: "<img class='icon-s' src='{{asset('/icons/buscar.png') }}'>",
                 sInfo: " _START_ a _END_ - _TOTAL_ @lang('models.entries')",
                 "oPaginate": {
                     sFirst: "@lang('models.first')",
-                    sLast: "@lang('models.last')", 
-                    sNext: "@lang('models.next')", 
+                    sLast: "@lang('models.last')",
+                    sNext: "@lang('models.next')",
                     sPrevious: "@lang('models.previous')",
                 }
             },
-            columns: [  { data: 'location_code', className: "td_center"},
-                        // { data: 'location_code', className: "td_center" },
-                        { data: 'product_code', className: "td_center" },
-                        { data: 'product_description', className: "td_center" },
-                        { data: 'qty_wms'},
-                        { data: 'prim_uom_code', className: "td_center"},
-                        { data: 'name'},
-                        { data: 'qty1'},
-                        { data: 'qty2'}],
-            "drawCallback": function ( settings ) {
-                var api = this.api();
-                var rows = api.rows( {page:'current'} ).nodes();
-                var last=null;
-                var qty1 = 0;
-                api.column(groupColumn, {page:'current'} ).data().each( function ( group, i ) {
+            columns: [{
+                    data: 'location_code',
+                    className: "td_center"
+                },
+                // { data: 'location_code', className: "td_center" },
+                {
+                    data: 'product_code',
+                    className: "td_center"
+                },
+                {
+                    data: 'product_description',
+                    className: "td_center"
+                },
+                {
+                    data: 'qty_wms'
+                },
+                {
+                    data: 'prim_uom_code',
+                    className: "td_center"
+                },
+                {
+                    data: 'name'
+                },
+                {
+                    data: 'qty1'
+                },
+                {
+                    data: 'qty2'
+                }
+            ],
+            "initComplete": function() {
 
-                    if ( last !== group ) {
-                        $(rows).eq( i ).before(
-                            '<tr class="dataTables_group"><td style="padding: 2px 15px !important" colspan="11">Endereço: '+group+'</td></tr>'
+            },
+            "drawCallback": function(settings) {
+                var api = this.api();
+                var rows = api.rows({
+                    page: 'current'
+                }).nodes();
+                var last = null;
+                var qty1 = 0;
+                api.column(groupColumn, {
+                    page: 'current'
+                }).data().each(function(group, i) {
+
+                    if (last !== group && summarize == 0) {
+                        $(rows).eq(i).before(
+                            '<tr class="dataTables_group"><td style="padding: 2px 15px !important" colspan="11">Endereço: ' + group + '</td></tr>'
                         );
-    
+
                         last = group;
                     }
-            } );
-        }
-      });   
-               
+                });
+            }
+        });
+        $('#relInv-table_filter').append('<span style="margin-left:0.5vw"  aria-label="@lang("infos.param_sumprod")" data-microtip-position="right" role="tooltip"> ' +
+                    '<img class="icon" src="{{asset("/icons/information.png") }}"> ' +
+                    '</span>' +
+                    '{!! Form::label("summarize", Lang::get("parameters.param_sumprod")) !!} ' +
+                    '{{ Form::radio("summarize", "1" , true) }} Sim  ' +
+                    '{{ Form::radio("summarize", "0" , false) }} Não');
+                $("input[type='radio'][name='summarize']").on("change", function(event) {
+                    if (event.target.value == 0) {
+                        table.ajax.url(urlNotSummarized);
+                        summarize = 0;
+                    } else {
+                        table.ajax.url(urlSummarized);
+                        summarize = 1;
+                    }
+                    table.ajax.reload();
+                });
     });
-
 </script>
 @endsection

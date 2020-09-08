@@ -214,9 +214,9 @@ class InventoryItemController extends AppBaseController
             ->with('document', $document);
     }
 
-    public function reportDatatable($document_id)
+    public function reportDatatable($document_id, $summarize)
     {
-        return Datatables::of(App\Models\InventoryItem::getAppointments($document_id, 1))->make(true);
+        return Datatables::of(App\Models\InventoryItem::getAppointments($document_id, 1, $summarize))->make(true);
     }
 
 
