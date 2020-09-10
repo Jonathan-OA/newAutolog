@@ -70,10 +70,13 @@ class InventoryItemsImport implements ToArray
             $produto = ($isTxt) ? ((array_key_exists('prd', $order)) ? $line[$order['prd']] : '') : $line[2];
             $desc = ($isTxt) ? ((array_key_exists('dsc', $order)) ? $line[$order['dsc']] : '') : $line[3];
             $barcode = ($isTxt) ? ((array_key_exists('ean', $order)) ? $line[$order['ean']] : '') : $line[4];
-            $saldo = ($isTxt) ? ((array_key_exists('qde', $order)) ? $line[$order['qde']] : '') : $line[5];
+            $saldo = ($isTxt) ? ((array_key_exists('qde', $order)) ? $line[$order['qde']] : null) : $line[5];
             $unidade = ($isTxt) ? ((array_key_exists('uni', $order)) ? $line[$order['uni']] : '') : $line[6];
 
-            
+            //Se Chegou até aqui, porém EAN ta preenchido mas Código do Produto não, Código do Produto fica igual ao EAN
+            if(!(array_key_exists('prd', $order)) && ($produto == "" && $barcode <> "")){
+                $produto = $barcode;
+            }
             
 
             //Primeira linha

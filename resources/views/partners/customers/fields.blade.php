@@ -42,7 +42,7 @@
 {!! Form::label('status', Lang::get('models.status').':') !!}
 <div class="onoffswitch">
     <input type="hidden" name="status"  value="0" >
-    {{ Form::checkbox('status', 1, (!empty($customer->status)) ? $customer->status : 0 ,['class' => 'onoffswitch-checkbox', 'id' => 'status']) }}
+    {{ Form::checkbox('status', 1, (!empty($customer->status)) ? $customer->status : 1 ,['class' => 'onoffswitch-checkbox', 'id' => 'status']) }}
     <label class="onoffswitch-label" for="status">
         <span class="onoffswitch-inner"></span>
         <span class="onoffswitch-switch"></span>
