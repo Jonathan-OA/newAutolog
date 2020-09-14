@@ -385,10 +385,16 @@ class InventoryController extends AppBaseController
         if (in_array($extFile, ['xls', 'xlsx'])) {
             $file = fopen(storage_path() . '/' . $fileName, 'r');
         } elseif (in_array($extFile, ['txt', 'csv'])) {
-            $file = file_get_contents(storage_path() . '/' . $fileName, 'r');
+            $file = fopen(storage_path() . '/' . $fileName, 'r');
             //Cria o objeto e chama a função passando os parâmetros do txt
             $importFile = new InventoryItemsImport($parameters, $customer_code, $inventory_value, $billing_type);
-            $importFile->array($file, array('order' => $fieldsOrder, 'separator' => $sepFile));
+            $ret = $importFile->array($file, array('order' => $fieldsOrder, 'separator' => $sepFile));
+
+            if($ret <> 0){
+                Flash::success('Erro ao importar o inventário.  Código de Erro: '.$ret);
+                return redirect(route('inventory.index'));
+            }
+            
         } else {
             //Arquivo invalido
             Flash::error(Lang::get('validation.permission'));

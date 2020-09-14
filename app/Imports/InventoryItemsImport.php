@@ -30,40 +30,36 @@ class InventoryItemsImport implements ToArray
      */
     public function array($row, $params = "")
     {   
-        $isTxt = false;
+        //Desabilita logs do banco para amenizar o uso de cpu
+        DB::connection()->disableQueryLog();
 
-        //SE É UM ARRAY, INDICA QUE A IMPORTAÇÃO É VIA EXCEL
-        //SE NÃO FOR, TESTA SE É UM ARQUIVO
-        if(!is_array($row)){
-            $row = explode("\n", $row);
-            $isTxt = true;
-            //Sem parâmetros informados (Array(separator e order))
-            if(empty($params)){
-                $erro = 1;
-                return $erro;
-            }else{
-                $separator = $params['separator'];
-                $order = $params['order'];
-            }
+        //Arrays para realizar os inserts de uma vez só
+        $arrayInsertPrd = array();
+        $arrayInsertPack = array();
+        $arrayInsertEnd = array();
+        $arrayInsertDep = array();
+        $arrayInsertUom = array();
+
+        $isTxt = true;
+
+        //Sem parâmetros informados (Array(separator e order))
+        if(empty($params)){
+            $erro = 1;
+            return $erro;
+        }else{
+            $separator = $params['separator'];
+            $order = $params['order'];
         }
 
-        $totLines = count($row) - 1;
         $cont = 0;
         $erro = 0;
-        //echo $this->parameters;exit; 
-        //DB::beginTransaction();
+
+        DB::beginTransaction();
         
-        foreach($row as $key => $line){
+        while ($line = fgetcsv($row, 0, $separator)) {
             $cont++;
             
-            if(trim($line) == "") break; //Ultima linha vazia
-            
-            //Se for um txt, quebra cada linha pelo caractere separador
-            if($isTxt){
-                $line = explode($separator, $line);
-            }
-
-           
+            if(count($line) == 0) break; //Ultima linha vazia
             
             $endere = ($isTxt) ? ((array_key_exists('end', $order)) ? $line[$order['end']] : '') : $line[0];
             $deposito = ($isTxt) ? ((array_key_exists('dep', $order)) ? $line[$order['dep']] : '') : $line[1];
@@ -123,60 +119,38 @@ class InventoryItemsImport implements ToArray
             if(trim($desc) == '' && trim($produto) == '') break;
             
             //Deposito
-            //Se não informar, grava padrão 99
-            // if(trim($deposito) == ''){
-            //     $deposito = '99';
-            // }
             if(trim($deposito) <> ''){
-                //Valida se existe
-                $cDeposit = \App\Models\Deposit::where('company_id', Auth::user()->company_id)
-                                               ->where('code', trim($deposito))
-                                               ->get()
-                                               ->count();
-                if($cDeposit == 0){
-                    //Insere na tabela
-                    $newDep = new \App\Models\Deposit(['company_id' => Auth::user()->company_id,
-                                                       'code' => $deposito,
-                                                       'department_code' => '1',
-                                                       'deposit_type_code' => 'REC',
-                                                       'description' => 'Depósito '.$deposito,
-                                                       'status' => '1'
-                                                      ]);
-                    if(!$newDep->save()){
-                        $erro = 1;
-                    }
-                }       
-                
+
+                //Adiciona os dados do deposito atual para inserir posteriormente
+                $arrayInsertDep[] =  ['company_id' => Auth::user()->company_id,
+                                        'code' => $deposito,
+                                        'department_code' => '1',
+                                        'deposit_type_code' => 'REC',
+                                        'description' => 'Depósito '.$deposito,
+                                        'status' => '1'];
+                     
             }
 
+            //Endereço
             if(trim($endere) <> '' && $erro == 0){
-                //Valida se existe
-                $cLocation = \App\Models\Location::where('company_id', Auth::user()->company_id)
-                                               ->where('code', trim($endere))
-                                               ->get()
-                                               ->count();
-                if($cLocation == 0){
-                    //Insere na tabela
-                    $newLoc = new \App\Models\Location(['company_id' => Auth::user()->company_id,
-                                                        'code' => $endere,
-                                                        'barcode' => $endere,
-                                                        'department_code' => '1',
-                                                        'deposit_code' => $deposito,
-                                                        'sector_code' => 'REC',
-                                                        'aisle' => '1',
-                                                        'column' => 1,
-                                                        'level' => 1,
-                                                        'status' => 1,
-                                                        'location_type_code' => 'BLOCADO',
-                                                        'location_function_code' => 'ESTOQUE',
-                                                        'label_type_code' => 'ENDERE',
-                                                        'stock_type_code' => 3
-                                                        ]);
-
-                    if(!$newLoc->save()){
-                        $erro = 1;
-                    }
-                }                               
+                
+                    //Adiciona os dados do Endereço atual para inserir posteriormente
+                    $arrayInsertEnd[] = ['company_id' => Auth::user()->company_id,
+                                         'code' => $endere,
+                                         'barcode' => $endere,
+                                         'department_code' => '1',
+                                         'deposit_code' => $deposito,
+                                         'sector_code' => 'REC',
+                                         'aisle' => '1',
+                                         'column' => 1,
+                                         'level' => 1,
+                                         'status' => 1,
+                                         'location_type_code' => 'BLOCADO',
+                                         'location_function_code' => 'ESTOQUE',
+                                         'label_type_code' => 'ENDERE',
+                                         'stock_type_code' => 3
+                                        ];
+                                           
 
             }
 
@@ -185,118 +159,144 @@ class InventoryItemsImport implements ToArray
                 $unidade = 'UN';
             }
 
-            //Unidade
-            $cUnid = \App\Models\Uom::where('code', trim($unidade))
-                                    ->get()
-                                    ->count();
-            if($cUnid == 0){
-                //Insere UOM
-                $newUom = new \App\Models\Uom([ 'code' => $unidade,
-                                                'description' => $unidade]);
 
-                if(!$newUom->save()){
-                    $erro = 1;
-                }
+            if($unidade <> 'UN'){
+               //Adiciona os dados do Uom atual para inserir posteriormente, caso seja diferente de UN
+                $arrayInsertUom[] = [ 'code' => $unidade, 'description' => $unidade];
             }
 
             //Produto
             if(trim($produto) <> ''  && $erro == 0){
+         
+                //Descrição (100 caracteres)
+                $desc = (trim($desc) <> '')? substr(utf8_encode($desc),0,100) : 'Prd '.$produto;
 
-                $cProd = \App\Models\Product::where('company_id', Auth::user()->company_id)
-                                            ->where('code', trim($prefixCli.$produto))
-                                            ->where('customer_code', trim($this->customer_code))
-                                            ->get()
-                                            ->count();
-                if($cProd == 0){
-                    //Descrição (100 caracteres)
-                    $desc = (trim($desc) <> '')? substr(utf8_encode($desc),0,100) : 'Prd '.$produto;
+                //Adiciona os dados do produto atual para inserir posteriormente
+                $arrayInsertPrd[] = ['company_id' => Auth::user()->company_id, 
+                                        'code' => trim($prefixCli.$produto), 
+                                        'description' => $desc,
+                                        'status' =>  1, 
+                                        'product_type_code' => 'PA',
+                                        'group_code' => '000',
+                                        'customer_code' => trim($this->customer_code), 
+                                        'alternative_code' => trim($produto), 
+                                        'qty_erp' => $saldo];
 
-                    //Insere da products com grupo e tipo default
-                    $newPrd = new \App\Models\Product([ 'company_id' => Auth::user()->company_id,
-                                                        'code' => trim($prefixCli.$produto),
-                                                        'description' => $desc,
-                                                        'status' => 1,
-                                                        'product_type_code' => 'PA',
-                                                        'group_code' => '000',
-                                                        'customer_code' => trim($this->customer_code),
-                                                        'alternative_code' => trim($produto),
-                                                        'qty_erp' => $saldo
-                                                        ]);
+                
 
-                    if(!$newPrd->save()){
-                        $erro = 1;
-                    }
+                //Barcode
+                $barcode = (trim($barcode) <> '')? $barcode : $produto;
+                if($erro == 0){
+                    //Adiciona os dados da embalagem atual para inserir posteriormente
+                    $arrayInsertPack[] = ['company_id' => Auth::user()->company_id, 
+                                            'product_code' => trim($prefixCli.$produto), 
+                                            'barcode' => $barcode,
+                                            'level' => 1, 
+                                            'uom_code' => "$unidade", 
+                                            'prev_qty' => 1, 
+                                            'prim_qty' => 1, 
+                                            'prev_level' => 1,
+                                            'conf_batch' => 0, 
+                                            'conf_batch_supplier' => 0, 
+                                            'create_label' => 0, 
+                                            'print_label' => 1,
+                                            'created_at' => date('Y-m-d H:i:s'),
+                                            'updated_at' => date('Y-m-d H:i:s')];
 
-
-                    //Barcode
-                    $barcode = (trim($barcode) <> '')? $barcode : $produto;
-                    if($erro == 0){
-                        $cPack = \App\Models\Packing::where('company_id', Auth::user()->company_id)
-                                                     ->where('product_code', trim($prefixCli.$produto))
-                                                     ->where('barcode', trim($barcode))
-                                                     ->get()
-                                                     ->count();
-                        if($cPack == 0){
-                            //Insere embalagem
-                            $newPack = new \App\Models\Packing([ 'company_id' => Auth::user()->company_id,
-                                                                 'product_code' => $prefixCli.$produto,
-                                                                 'barcode' => $barcode,
-                                                                 'level' => '1',
-                                                                 'uom_code' => "$unidade",
-                                                                 'prev_qty' => 1 ,
-                                                                 'prim_qty' => 1,
-                                                                 'prev_level' => 1,
-                                                                 'conf_batch' => 0,
-                                                                 'conf_batch_supplier' => 0,
-                                                                 'create_label' => 0,
-                                                                 'print_label' => 1
-                                                                ]);
-
-                            if(!$newPack->save()){
-                                $erro = 1;
-                            }
-
-                        }
-                        
-                    } 
-                }
+                } 
+                
             }
 
             if(trim($endere) == ''){
                 $endere = null;
             }
 
-            if($erro == 0){
-                // //Grava na inventory_itens
-                //Não grava na inventory_Items.. otimização de espaço em banco (Grava só na products com o client_id)
-                // $invItem = new \App\Models\InventoryItem(['company_id' => Auth::user()->company_id,
-                //                                           'document_id' => $inv->id,
-                //                                           'product_code' => $produto,
-                //                                           'location_code' => $endere,
-                //                                           'qty_wms' => $saldo,
-                //                                           'uom_code' => $unidade,
-                //                                           'prim_uom_code' => $unidade,
-                //                                           'inventory_status_id' => 0
-                //                                         ]);
-                // if(!$invItem->save()){
-                //     $erro = 1;
-                //     break;
-                // }
-            }else{
-                break;
+            //Insere no banco a cada 4000 registros
+            if($cont%4000 == 0){
+                $return = $this->insertValuesByArray($arrayInsertPrd, $arrayInsertPack, $arrayInsertEnd, $arrayInsertDep, $arrayInsertUom);
+                if($return <> 0){
+                    $erro = $return;
+                    break;
+                }else{
+                    //Limpa os arrays para evitar uma lista muito grande
+                    $arrayInsertPrd = array();
+                    $arrayInsertPack = array();
+                    $arrayInsertEnd = array();
+                    $arrayInsertDep = array();
+                }
             }
-            
         }
 
+        //Insere os registros que sobraram e não foram inseridos dentro do loop
+        $return = $this->insertValuesByArray($arrayInsertPrd, $arrayInsertPack, $arrayInsertEnd, $arrayInsertDep, $arrayInsertUom);
+        if($return <> 0){
+            $erro = $return;
+        }
+
+        //Finaliza
         if($erro == 0){
-            //DB::commit();
+            DB::commit();
         }else{
-            //DB::rollback();
-            echo 'erroooo';
+            DB::rollback();
         }
 
         return $erro;
 
 
     }
+
+    //Faz os inserts em massa tendo como parametros os arrays de informações
+    function insertValuesByArray($arrayInsertPrd, $arrayInsertPack, $arrayInsertEnd, $arrayInsertDep, $arrayInsertUom){
+        $erro = 0;
+
+        if(count($arrayInsertPrd) > 0){
+            try { 
+                //Insere na tabela products com grupo e tipo default
+                $newPrd = DB::table('products')->insertOrIgnore($arrayInsertPrd);
+                if(count($arrayInsertPack) > 0){
+                    $newPack = DB::table('packings')->insertOrIgnore($arrayInsertPack);
+                }
+            }catch(\Illuminate\Database\QueryException $ex){ 
+                 //Erro ao inserir produtos e/ou embalagens
+                dd($ex->getMessage()); 
+                $erro = 1;
+            }
+        }
+
+        if(count($arrayInsertDep) > 0){
+            //Insere os depositos
+            try { 
+                $newDep = DB::table('deposits')->insertOrIgnore(array_unique($arrayInsertDep));
+            }catch(\Illuminate\Database\QueryException $ex){ 
+                //Erro ao inserir Depositos
+                dd($ex->getMessage()); 
+                $erro = 2;
+            }
+        }
+
+        if(count($arrayInsertEnd) > 0){
+            //Insere os endereços
+            try{
+                $newLoc = DB::table('locations')->insertOrIgnore(array_unique($arrayInsertEnd));
+            }catch(\Illuminate\Database\QueryException $ex){ 
+                //Erro ao inserir locations
+                dd($ex->getMessage()); 
+                $erro = 3;
+            }
+        }
+        
+        if(count($arrayInsertUom) > 0){
+            //Insere as unidades
+            try{
+                $newUom = DB::table('uoms')->insertOrIgnore(array_unique($arrayInsertUom));
+            }catch(\Illuminate\Database\QueryException $ex){ 
+                //Erro ao inserir Uoms
+                dd($ex->getMessage()); 
+                $erro = 4;
+            }
+        }
+
+        return $erro;
+    }
 }
+
