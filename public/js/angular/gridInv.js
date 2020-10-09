@@ -54,13 +54,20 @@ app.run(['$rootScope', function($rootScope) {
         $scope.row = row.entity;
         $scope.row.status_inv = row.entity.inventory_status_id;
         $scope.row.status_doc = row.entity.document_status_id;
-
-        //Quantidade de contagens definida no inventario
-        $scope.row.counts = row.entity.comments.slice(row.entity.comments.indexOf('550_contagens=')+14,15);
-
+        //Valida se veio do grid principal ou de detalhes
+        if ($rootScope.page == 'documents') {
+            $scopeC = $scope.gridApi;
+            $url = 'api/grid';
+            //Quantidade de contagens definida no inventario
+            $scope.row.counts = row.entity.comments.slice(row.entity.comments.indexOf('550_contagens=')+14,15);
+        } else {
+            $scopeC = $scope.gridApiDet;
+            $url = '../../api/grid';
+        }
+            
         //Pega id da ultima coluna
-        var ultCol = $scope.gridApi.grid.columns[$scope.gridApi.grid.columns.length - 1].uid;
-        var penultCol = $scope.gridApi.grid.columns[$scope.gridApi.grid.columns.length - 2].uid;
+        var ultCol = $scopeC.grid.columns[$scopeC.grid.columns.length - 1].uid;
+        var penultCol = $scopeC.grid.columns[$scopeC.grid.columns.length - 2].uid;
         //Pega posição a esquerda do elemento clicado
         var left = $($event.currentTarget).position().left;
         if (col.uid != ultCol && col.uid != penultCol) {
@@ -283,8 +290,8 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
 ]);
 
 //Grid de detalhes dos documentos
-app.controller('DetCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '$timeout', '$interval',
-    function($rootScope, $scope, $http, uiGridConstants, $timeout, $interval) {
+app.controller('DetCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '$timeout', '$interval', '$animate', '$compile', '$filter',
+    function($rootScope, $scope, $http, uiGridConstants, $timeout, $interval, $animate, $compile, $filter) {
         //Código do grid a ser salvo / recuperado no banco
         $scope.gridCode = 'AUTOLOGWMS_GridInv_Det';
         $scope.gridDetalhes = {};
@@ -303,13 +310,11 @@ app.controller('DetCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '
             },
             enableGridMenu: true,
             columnDefs: [
-                { name: 'Depósito', field: 'deposit_code' },
                 { name: 'Endereço', field: 'location_code' },
-                { name: 'Item', field: 'product_code' },
-                { name: 'Descricao', field: 'product_description'},
-                { name: 'Saldo Previsto', field: 'qty' },
-                { name: 'Status', field: 'description', cellTemplate: '<div class="grid_cell stat{{grid.getCellValue(row, col)}}"><div class="ui-grid-cell-contents">{{row.entity.description}}</div></div>' }
-            ],
+                { name: 'Quantidade Prevista', field: 'qty' },
+                { name: 'Primeira Contagem', field: 'qty_1count' },
+                { name: 'Segunda Contagem', field: 'qty_2count' },
+                ],
             enablePaginationControls: true,
             paginationPageSize: 18,
             rowTemplate: '<div ng-click="grid.appScope.clickRow(row, col, $event)" ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.uid" class="ui-grid-cell" ng-class="col.colIndex()" ui-grid-cell></div>',

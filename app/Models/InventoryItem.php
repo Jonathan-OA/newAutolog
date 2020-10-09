@@ -112,17 +112,12 @@ class InventoryItem extends Model
         return InventoryItem::select(
             DB::raw("MIN(inventory_items.id) as id "),
             'inventory_items.company_id',
-            'uom_code',
             'document_id',
-            'inventory_items.product_code',
             'location_code',
             DB::raw("SUM(qty_wms) as qty"),
-            'inventory_items.created_at',
-            'inventory_status.description as description',
-            'deposit_code',
-            'inventory_status_id',
-            'prim_uom_code',
-            'products.description as product_description'
+            DB::raw("SUM(qty_1count) as qty_1count"),
+            DB::raw("SUM(qty_2count) as qty_2count"),
+            'deposit_code'
         )
             ->join('inventory_status', 'inventory_status.id', 'inventory_items.inventory_status_id')
             ->join('locations', function ($join) {
@@ -152,15 +147,8 @@ class InventoryItem extends Model
             ->groupBy(
                 'inventory_items.company_id',
                 'document_id',
-                'inventory_items.product_code',
                 'location_code',
-                'inventory_items.created_at',
-                'inventory_status.description',
-                'deposit_code',
-                'inventory_status_id',
-                'prim_uom_code',
-                'uom_code',
-                'products.description'
+                'deposit_code'
             )
             ->get()
             ->toArray();

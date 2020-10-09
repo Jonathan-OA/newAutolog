@@ -4,10 +4,16 @@
     <!-- Status do Inv: inventory_status_id (Pendente, 1ª Contagem Pendente, 2ª Contagem Pendente, etc) --> 
     <div ng-attr-id="buttons{%row.id%}"  style="overflow: visible !important;" >
         <span ng-if="row.inventory_status_id == 0">
-             <!-- Exluir (Apenas status 0) -->
+             <!-- Exluir Linha (Apenas com inventário status 0) -->
              <button ng-click="removeItem(row.entity.document_id,row.entity.location_code,row.entity.product_code,'@lang("buttons.msg_remove")')" class="icon_action" aria-label="@lang('buttons.remove')" data-microtip-position="left" role="tooltip">
                 <img class='icon' src='{{ asset('/icons/remover.png') }}'> 
             </button>
         </span>
+        <!-- Retornar contagens do endereço - reiniciar na contagem atual-->
+        <span ng-if="row.status_doc != 0  && row.status_doc != 8">
+            <button ng-click="callRouteConfirm('./inventoryItem/'+row.id+'/return', 1, '@lang('buttons.msg_return')')" class="icon_action" aria-label="@lang('buttons.return')" data-microtip-position="left" role="tooltip">
+                    <img class='icon' src='{{asset('/icons/retornar.png') }}'>
+            </button>
+    </span>
     </div>
 </script>

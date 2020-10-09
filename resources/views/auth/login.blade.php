@@ -8,7 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{config('app.name', 'AUTOLOG WMS') }}</title>
+    <title>{{config('app.name') }}</title>
 
     <!-- Styles -->
     
@@ -17,7 +17,7 @@
 </head>
 <body class="login">
     <div class="login_page">
-        AUTOLOG WMS
+        {{config('app.name') }}
     </div>
     </br>
     <form id="formLogin" class="form-horizontal" role="form" method="POST" action="{{ url('/login') }}">
