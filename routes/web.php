@@ -420,6 +420,11 @@ Route::group(['middleware' => 'auth'], function() {
 
     Route::get('inventoryItems/datatable', 'InventoryItemController@getData');
     Route::resource('inventoryItems', 'InventoryItemController');
+    //Relatórios
+    Route::get('admin/reportBranchs', 'AdminController@reportBranch');
+    Route::get('admin/reportBranchs/datatable/{summarize}/{from?}/{to?}', 'AdminController@reportBranchDatatable');
+    Route::get('admin/reportBranchsDet/{branch}', 'AdminController@reportBranchDet');
+    Route::get('admin/reportBranchsDet/datatable/{branch}/{from?}/{to?}', 'AdminController@reportBranchDetDatatable');
     Route::get('inventoryItems/{document_id}/report', 'InventoryItemController@reportInv');
     Route::get('inventoryItems/{document_id}/datatable/{summarize}', 'InventoryItemController@reportDatatable');
     

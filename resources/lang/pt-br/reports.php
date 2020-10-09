@@ -13,6 +13,8 @@ return [
     |
     */
 
-    'reportInv' => 'Relatório de Inventário'
+    'reportInv' => 'Relatório de Inventário',
+    'reportBranchs' => 'Relatório de Filiais',
+    'reportBranchsDet' => 'Relatório Detalhado - Filial',
 
 ];

@@ -307,6 +307,8 @@ return [
     'finalization' => 'Finalização Hab.',
     'due_days' => 'Dias Mín. para Vencimento',
     'prefix_code' => 'Prefixo para Produtos',
+    'branch_name' => 'Nome da Filial',
+
     
     //PlaceHolders
     'sel_type' => 'Selecione um tipo: ',
@@ -356,6 +358,14 @@ return [
     'profile_export' => 'Perfil de Exportação',
     'delimiter' => 'Delimitador',
     'billing_type' => 'Tipo de Cobrança',
+    'inventory_value' => 'Valor Fechado',
+    'admin' => 'Administrativo',
+    'average_item' => 'Média por Item',
+    'average' => 'Média',
+    'inventories' => 'Inventários',
+    'qty_parts' => 'Qtde. Peças',
+    'royalties' => 'Royalties',
+    'inventory_number' => 'Num. Inventário',
     
 
 

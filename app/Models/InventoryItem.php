@@ -604,4 +604,113 @@ class InventoryItem extends Model
             return 1;
         }
     }
+
+    /**
+     * Retorna os inventários do mês por filial
+     *
+     * @var document_id e @var count 
+     */
+
+    public static function getInventorysByBranch($summarize = 0, $dateMin = 0, $dateMax = 0)
+    {
+        if ($summarize == 0) {
+            return InventoryItem::select(
+                    'companies.id',
+                    'companies.branch',
+                    'companies.name',
+                    DB::raw("SUM(qty_1count) as items"),
+                    DB::raw("COUNT(DISTINCT documents.id) as inventories"),
+                    DB::raw("SUM( CASE WHEN billing_type = 'VL' THEN qty_1count * inventory_value ELSE inventory_value END ) as total"),
+                    DB::raw("SUM( CASE WHEN billing_type = 'VL' THEN qty_1count * inventory_value ELSE inventory_value END ) / SUM(qty_1count) as average"),
+                    DB::raw("SUM( CASE WHEN billing_type = 'VL' THEN qty_1count * inventory_value ELSE inventory_value END ) * 0.1 as royalties")
+                )
+                ->join('documents', 'documents.id', 'inventory_items.document_id')
+                ->join('document_types', function ($join) {
+                    $join->on('document_types.code', 'documents.document_type_code')
+                        ->where('document_types.moviment_code', '090');
+                })
+                //->join('companies as company', 'company.id',"\"".Auth::user()->company_id."\"")
+                ->join('companies', 'companies.id', 'inventory_items.company_id')
+                ->whereNotIn('documents.document_status_id', [0,1,9])
+                ->where('documents.inventory_status_id', '<>', 9)
+                ->where('companies.code', '<>', 9)
+                //->where('company.code', 'companies.code')
+                ->where(function ($query) use($dateMin, $dateMax) {
+                    if (!empty($dateMin) && !empty($dateMax)) {
+                        $from = date($dateMin);
+                        $to = date($dateMax);
+                        $query->whereBetween('documents.start_date', [$from, $to]);
+                    }
+                })
+                ->groupBy(
+                    'companies.branch',
+                    'companies.name',
+                    'companies.id'
+                )
+                ->orderBy('companies.branch')
+                ->get();
+        }
+    }
+
+    /**
+     * Retorna os inventários de um periodo para uma filial especifica
+     *
+     * @var document_id e @var count 
+     */
+
+    public static function getInventorys($company_id = "", $dateMin = "", $dateMax = "")
+    {
+        if ($company_id != "") {
+
+            return InventoryItem::select(
+                    'companies.id',
+                    'companies.branch',
+                    'companies.name',
+                    'documents.number',
+                    'customers.trading_name',
+                    'documents.start_date',
+                    'documents.end_date',
+                    DB::raw("SUM(qty_1count) as items"),
+                    'documents.billing_type',
+                    'documents.inventory_value',
+                    DB::raw(" CASE WHEN billing_type = 'VL' THEN SUM( qty_1count * inventory_value) ELSE inventory_value END as total"),
+                    DB::raw(" CASE WHEN billing_type = 'VL' THEN SUM( qty_1count * inventory_value) ELSE inventory_value END / SUM(qty_1count) as average"),
+                    DB::raw(" CASE WHEN billing_type = 'VL' THEN SUM( qty_1count * inventory_value) ELSE inventory_value END * 0.1 as royalties")
+                )
+                ->join('documents', 'documents.id', 'inventory_items.document_id')
+                ->join('customers', function ($join) {
+                    $join->on('customers.code', 'documents.customer_code')
+                        ->whereColumn('customers.company_id', 'documents.company_id');
+                })
+                ->join('document_types', function ($join) {
+                    $join->on('document_types.code', 'documents.document_type_code')
+                        ->where('document_types.moviment_code', '090');
+                })
+                ->join('companies', 'companies.id', 'inventory_items.company_id')
+                ->whereNotIn('documents.document_status_id', [0,1,9])
+                ->where('documents.inventory_status_id', '<>', 9)
+                ->where('documents.company_id', '=', $company_id)
+
+                ->where(function ($query) use($dateMin, $dateMax) {
+                    if (!empty($dateMin) && !empty($dateMax)) {
+                        $from = date($dateMin);
+                        $to = date($dateMax);
+                        $query->whereBetween('documents.start_date', [$from, $to]);
+                    }
+                })
+                ->groupBy(
+                    'companies.branch',
+                    'companies.name',
+                    'companies.id',
+                    'documents.number',
+                    'customers.trading_name',
+                    'documents.end_date',
+                    'documents.start_date',
+                    'documents.billing_type',
+                    'documents.inventory_value'
+                )
+                ->orderBy('documents.start_date')
+                ->get();
+        }
+    }
 }

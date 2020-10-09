@@ -19,6 +19,7 @@ return [
     'param_productdef' => 'Produto Padrão: ',
     'param_locationdef' => 'Endereço Padrão: ',
     'param_sumprod' => 'Sumarizar por Produto: ',
+    'param_sumbranch' => 'Sumarizar por Filial: ',
     
 
 ];
