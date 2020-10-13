@@ -602,38 +602,50 @@ class InventoryItem extends Model
     public static function getInventorysByBranch($summarize = 0, $dateMin = 0, $dateMax = 0)
     {
         if ($summarize == 0) {
+
+            $from = ($dateMin <> 0) ? date($dateMin) : 0;
+            $to = ($dateMax <> 0) ? date($dateMax) : 0;
+
             return InventoryItem::select(
                     'companies.id',
                     'companies.branch',
                     'companies.name',
                     DB::raw("SUM(qty_1count) as items"),
                     DB::raw("COUNT(DISTINCT documents.id) as inventories"),
-                    DB::raw("SUM( CASE WHEN billing_type = 'VL' THEN qty_1count * inventory_value ELSE inventory_value END ) as total"),
-                    DB::raw("SUM( CASE WHEN billing_type = 'VL' THEN qty_1count * inventory_value ELSE inventory_value END ) / SUM(qty_1count) as average"),
-                    DB::raw("SUM( CASE WHEN billing_type = 'VL' THEN qty_1count * inventory_value ELSE inventory_value END ) * 0.1 as royalties")
+                    DB::raw("IFNULL(SUM(CASE WHEN billing_type = 'VL' THEN qty_1count * inventory_value ELSE 0 END),0) +IFNULL( di.totalFechado, 0) as total"),
+                    DB::raw("(IFNULL(SUM(CASE WHEN billing_type = 'VL' THEN qty_1count * inventory_value ELSE 0 END),0) +IFNULL( di.totalFechado, 0)) / SUM(qty_1count) as average"),
+                    DB::raw("(IFNULL(SUM(CASE WHEN billing_type = 'VL' THEN qty_1count * inventory_value ELSE 0 END),0) +IFNULL( di.totalFechado, 0) ) * 0.1 as royalties")
                 )
                 ->join('documents', 'documents.id', 'inventory_items.document_id')
                 ->join('document_types', function ($join) {
                     $join->on('document_types.code', 'documents.document_type_code')
                         ->where('document_types.moviment_code', '090');
                 })
-                //->join('companies as company', 'company.id',"\"".Auth::user()->company_id."\"")
                 ->join('companies', 'companies.id', 'inventory_items.company_id')
+                ->leftJoin(DB::raw('(SELECT company_id, SUM(inventory_value) as totalFechado
+                                     FROM documents 
+                                     WHERE billing_type = "VF" AND
+                                           inventory_status_id NOT IN (9) AND
+                                           document_status_id NOT IN (0,1,9) AND 
+                                           CASE WHEN "'.$from.'" <> "0" AND "'.$to.'" <> "0" THEN start_date between "'.$from.'" and "'.$to.'"
+                                           ELSE 0 = 0 END
+                                     GROUP BY company_id) di'), 
+                    function($join)
+                    {
+                        $join->on('di.company_id', '=', 'documents.company_id');
+                    })
                 ->whereNotIn('documents.document_status_id', [0,1,9])
                 ->where('documents.inventory_status_id', '<>', 9)
-                ->where('companies.code', '<>', 9)
-                //->where('company.code', 'companies.code')
-                ->where(function ($query) use($dateMin, $dateMax) {
-                    if (!empty($dateMin) && !empty($dateMax)) {
-                        $from = date($dateMin);
-                        $to = date($dateMax);
+                ->where(function ($query) use($from, $to) {
+                    if (!empty($from) && !empty($to)) {
                         $query->whereBetween('documents.start_date', [$from, $to]);
                     }
                 })
                 ->groupBy(
                     'companies.branch',
                     'companies.name',
-                    'companies.id'
+                    'companies.id',
+                    'di.totalFechado'
                 )
                 ->orderBy('companies.branch')
                 ->get();
