@@ -110,8 +110,6 @@ class LoginController extends Controller
                         //Middleware ChangeDatabase é chamado a cada request para tratar o banco correto
                         Session::put('tenancy_code', $brch[0]->database_name);
 
-                        
-
                         $company_id = Company::getCompanyID($company_code, $company_branch);
                         if($company_id == 0){
                             //Erro ao identificar company_id
@@ -124,10 +122,11 @@ class LoginController extends Controller
                         //Continua o processo original do metodo login() em AuthenticatesUser
                         $this->validateLogin($request);
 
-
+                        
                         if ($this->attemptLogin($request)) {
                             return $this->sendLoginResponse($request);
                         }
+
 
                         // If the login attempt was unsuccessful we will increment the number of attempts
                         // to login and redirect the user back to the login form. Of course, when this

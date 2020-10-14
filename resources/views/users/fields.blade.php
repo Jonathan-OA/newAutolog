@@ -8,6 +8,8 @@
 {!! Form::label('code', Lang::get('models.code').':') !!}
 @if(isset($action) && $action == 'edit')
     {!! Form::text('code', null, ['class' => 'form-control','readonly' => 'true']) !!}
+     <!-- Id Field -->
+     <input id='id' name='id' type='hidden' value='{!! $user->id !!}'>
 @else
     {!! Form::text('code', null, ['class' => 'form-control']) !!}  
 @endif
@@ -40,7 +42,7 @@
 {!! Form::label('status', Lang::get('models.status').':') !!}
 <div class="onoffswitch">
     <input type="hidden" name="status"  value="0" >
-    {{ Form::checkbox('status', 1, (!empty($user->status)) ? $user->status : 0 ,['class' => 'onoffswitch-checkbox', 'id' => 'status']) }}
+    {{ Form::checkbox('status', 1, (!empty($user->status)) ? $user->status : 1 ,['class' => 'onoffswitch-checkbox', 'id' => 'status']) }}
     <label class="onoffswitch-label" for="status">
         <span class="onoffswitch-inner"></span>
         <span class="onoffswitch-switch"></span>
