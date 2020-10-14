@@ -17,13 +17,27 @@ app.config(['$qProvider', function($qProvider) {
 //Funções reaproveitadas no grid de documentos e no grid de itens
 app.run(['$rootScope', function($rootScope) {
 
-    //Função que chama as rotas do laravel
-    $rootScope.callRouteRS = function(route, async = 0, $scope) {
+   //Função que chama as rotas do laravel
+   $rootScope.callRouteRS = function(route, async = 0, typeAjax = "get", $scope) {
+
+        //$rootScope.page = documents: veio do grid de documentos
+        //$rootScope.page = items : veio do grid de itens
+        $scopeC = ($rootScope.page == 'documents') ? $scope.gridApi : $scope.gridApiDet;
+
+        //Pega todos os documentos selecionados para mandar como post
+        var documentsSelected = $scopeC.selection.getSelectedRows();
+
         //async = 1 executa a função da URL sem sair da tela
         if (async == 1) {
+
+            //Token obrigatório para envio POST
+            var tk = $('meta[name="csrf-token"]').attr('content');
+
             //.Ajax mostra o icone de loading automaticamente
             $.ajax({
-                    url: route
+                    type: typeAjax,
+                    url: route,
+                    data: { 'documents': documentsSelected, _token: tk }
                 })
                 .done(function(data) {
                     //Mostra mensagem de sucesso ou erro
@@ -40,6 +54,10 @@ app.run(['$rootScope', function($rootScope) {
 
             //Apaga outras caixas de botões que existirem
             $('#options').remove();
+
+            //Desabilita o modo Onda caso esteja ativado
+            if ($scopeC.grid.options.multiSelect) $scope.toggleMultiSelect();
+
         } else {
             //Entra na rota passada por parâmetro
             window.location = route;
@@ -172,7 +190,7 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
             onRegisterApi: function(gridApi) {
                 $scope.gridApi = gridApi;
                 $timeout(function() {
-                    $scope.restoreState($scope.gridCode);
+                    $scope.restoreState($scope.gridCode, $http);
                 }, 50);
                 //Chama a função que preenche o grid
                 $scope.getFirstData();
@@ -231,16 +249,16 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
             $('#options').remove();
         });
 
-        $scope.callRouteConfirm = function(route, async = 0, msg) {
+        $scope.callRouteConfirm = function(route, async = 0, msg, type = "get") {
             if (confirm(msg)) {
                 //Chama função global que chama uma rota ao clicar no botão
-                $rootScope.callRouteRS(route, async, $scope);
+                $rootScope.callRouteRS(route, async, type, $scope);
             }
         }
 
-        $scope.callRoute = function(route, async = 0) {
+        $scope.callRoute = function(route, async = 0, type = "get") {
             //Chama função global que chama uma rota ao clicar no botão
-            $rootScope.callRouteRS(route, async, $scope);
+            $rootScope.callRouteRS(route, async, type, $scope);
         }
 
         $scope.clickRow = function(row, col, $event) {
@@ -296,6 +314,7 @@ app.controller('DetCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '
         $scope.gridCode = 'AUTOLOGWMS_GridInv_Det';
         $scope.gridDetalhes = {};
         $scope.gridDetalhes.data = [];
+        $scope.documentId = "";
         $rootScope.page = 'items';
         $scope.gridDetalhes = {
             enableFullRowSelection: false,
@@ -320,12 +339,20 @@ app.controller('DetCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '
             rowTemplate: '<div ng-click="grid.appScope.clickRow(row, col, $event)" ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.uid" class="ui-grid-cell" ng-class="col.colIndex()" ui-grid-cell></div>',
         };
         
-        $scope.callRoute = function(route, async = 0) {
+        $scope.callRouteConfirm = function(route, async = 0, msg, type = "get") {
+            if (confirm(msg)) {
+                //Chama função global que chama uma rota ao clicar no botão
+                $rootScope.callRouteRS(route, async, type, $scope);
+            }
+        }
+
+        $scope.callRoute = function(route, async = 0, type = "get") {
             //Chama função global que chama uma rota ao clicar no botão
-            $rootScope.callRouteRS(route, async, $scope);
+            $rootScope.callRouteRS(route, async, type, $scope);
         }
 
         $scope.clickRow = function(row, col, $event) {
+
             //Chama função global que manipula o click na linha do grid
             $rootScope.clickRowRS(row, col, $event, $scope, $animate, $compile, $timeout);
         }
@@ -337,7 +364,7 @@ app.controller('DetCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '
 
         //Restaura o grid salvo em sessão ou banco (ajax)
         $scope.restoreState = function(name) {
-            $rootScope.restoreStateRS($scope, name, $http);
+            $rootScope.restoreStateRS($scope, $http);
         };
 
         //Exclui itens do documento de inventário
@@ -363,15 +390,22 @@ app.controller('DetCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '
         //Carrega a tabela de itens
         $scope.showGrid = function(id, number) {
             $scope.documentNumber = number;
+            $scope.documentId = id;
 
-            //Busca os itens do documento
-            $http.get('../../api/inventoryItems/' + id)
-                .then(function(response) {
-                    console.log(response.data);
-                    $scope.gridDetalhes.data = response.data;
-                });
+            this.getFirstData();
         }
 
+        //Carrega os itens do Documento
+        $scope.getFirstData = function() {
+             //Busca os itens do documento
+             $http.get('../../api/inventoryItems/' + $scope.documentId)
+             .then(function(response) {
+                 console.log(response.data);
+                 $scope.gridDetalhes.data = response.data;
+             });
+        }
+
+        
         //Esconde / Mostra os filtros
         $scope.toggleFiltering = function() {
             $rootScope.gridDetalhes.enableFiltering = !$scope.gridDetalhes.enableFiltering;

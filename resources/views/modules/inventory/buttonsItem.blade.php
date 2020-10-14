@@ -11,7 +11,7 @@
         </span>
         <!-- Retornar contagens do endereço - reiniciar na contagem atual-->
         <span ng-if="row.status_doc != 0  && row.status_doc != 8">
-            <button ng-click="callRouteConfirm('./inventoryItem/'+row.id+'/return', 1, '@lang('buttons.msg_return')')" class="icon_action" aria-label="@lang('buttons.return')" data-microtip-position="left" role="tooltip">
+            <button ng-click="callRouteConfirm('./returnLocation/'+row.location_code, 1, '@lang('buttons.msg_return_location')')" class="icon_action" aria-label="@lang('buttons.return')" data-microtip-position="left" role="tooltip">
                     <img class='icon' src='{{asset('/icons/retornar.png') }}'>
             </button>
     </span>

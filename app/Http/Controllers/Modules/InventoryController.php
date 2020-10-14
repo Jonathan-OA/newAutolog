@@ -892,6 +892,39 @@ class InventoryController extends AppBaseController
         return redirect(url('inventory/' . $requestF['document_id'] . '/items'));
     }
 
+    /**
+     * Retorna Contagens de Um Endereço
+     *
+     * @param CreateDocumentRequest $request
+     *
+     * @return Response
+     */
+    public function returnLocation($document_id, $location_code)
+    {
+
+        $document = $this->documentRepository->findWithoutFail($document_id);
+
+        //Valida se usuário possui permissão para acessar esta opção
+        if (App\Models\User::getPermission('documents_inv_ret', Auth::user()->user_type_code)) {
+            $return = App\Models\InventoryItem::returnLocation($document_id, $location_code, $document->inventory_status_id );
+
+            if ($return['erro'] == 0) {
+                //Grava Logs
+                $descricao = 'Retornou Contagens do Endereço: '.$location_code;
+                $log = App\Models\Log::wlog('documents_inv_ret', $descricao, $document_id);
+
+                return array('success', Lang::get('infos.return_location', ['location' =>  $location_code]));
+            } else {
+                //Erro ao retornar
+                return array('danger', $return['msg']);
+            }
+        } else {
+            //Sem permissão
+            //Flash::error(Lang::get('validation.permission'));
+            return array('danger', Lang::get('validation.permission'));
+        }
+    }
+
 
     public function getItems($document_id)
     {

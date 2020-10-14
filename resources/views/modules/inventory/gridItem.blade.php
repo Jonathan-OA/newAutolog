@@ -18,6 +18,8 @@
                 <div class="row">
                     <div class="col-md-12">
                         <!-- Alerta de erro / sucesso -->
+                        <div id="msg_excluir"></div>
+                        <!-- Alerta de erro / sucesso -->
                         @include('flash::message')
                         <div class="row buttons_grid">
                                 <div class="icon_grid" aria-label="@lang('buttons.add')" data-microtip-position="bottom" role="tooltip">

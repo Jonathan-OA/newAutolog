@@ -30,6 +30,7 @@ return [
     'msg_remove' => 'Deseja excluir este registro?',
     'msg_cancel' => 'Deseja cancelar este documento?',
     'msg_return' => 'Deseja retornar este documento?',
+    'msg_return_location' => 'Deseja retornar as contagens deste Endereço?',
     'send' => 'Enviar',
     'close' => 'Fechar',
     'back' => 'Voltar',

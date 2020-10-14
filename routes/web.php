@@ -95,6 +95,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('/inventory/{id}/liberate/{cont?}', 'Modules\InventoryController@liberate'); //Libera Contagem
     Route::get('/inventory/{id}/finalize', 'Modules\InventoryController@finalize'); //Finaliza Contagem
     Route::get('/inventory/{id}/return', 'Modules\InventoryController@return'); //Retorna Inventário
+    Route::get('/inventory/{id}/returnLocation/{location_code}', 'Modules\InventoryController@returnLocation'); //Retorna Um Endereço Especifico
     // ----------------------------------------------------------------------------------------------
     //Rota que libera documento(s)
     //Route::get('/document/liberate/{id}/{module?}', 'DocumentController@liberate');

@@ -594,6 +594,37 @@ class InventoryItem extends Model
     }
 
     /**
+     * Retorna as contagens de um endereço específico
+     *
+     * @var document_id e @var location_code 
+     */
+
+    public static function returnLocation($document_id, $location_code, $inventory_status_id)
+    {
+        
+        $updItem = InventoryItem::where('company_id', Auth::user()->company_id)
+            ->where('document_id', $document_id)
+            ->where('location_code', $location_code)
+            ->update([
+                'inventory_status_id' => $inventory_status_id,
+                'qty_1count' => 0,
+                'date_1count' => NULL,
+                'user_1count' => NULL
+                 
+            ]);
+
+         if($updItem){
+            $return['erro'] = 0;
+            $return['msg'] = 'Endereço Retornado com Sucesso.';
+         }else{
+            $return['erro'] = 1;
+            $return['msg'] = 'Erro ao Retornar Endereço';
+         }
+
+         return $return;
+    }
+
+    /**
      * Retorna os inventários do mês por filial
      *
      * @var document_id e @var count 
