@@ -169,8 +169,8 @@ class InventoryItemsImport implements ToArray
             if(trim($produto) <> ''  && $erro == 0){
          
                 //Descrição (100 caracteres)
-                $desc = (trim($desc) <> '')? substr(utf8_encode($desc),0,100) : 'Prd '.$produto;
-
+                $desc = (trim($desc) <> '')? substr($desc,0,100) : 'Prd '.$produto;
+                
                 //Adiciona os dados do produto atual para inserir posteriormente
                 $arrayInsertPrd[] = ['company_id' => Auth::user()->company_id, 
                                         'code' => trim($prefixCli.$produto), 
