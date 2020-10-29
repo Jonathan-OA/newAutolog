@@ -36,6 +36,7 @@ class InventoryItemsImport implements ToArray
         //Arrays para realizar os inserts de uma vez só
         $arrayInsertPrd = array();
         $arrayInsertPack = array();
+        $arrayInsertBcd = array();
         $arrayInsertEnd = array();
         $arrayInsertDep = array();
         $arrayInsertUom = array();
@@ -203,6 +204,12 @@ class InventoryItemsImport implements ToArray
                                             'created_at' => date('Y-m-d H:i:s'),
                                             'updated_at' => date('Y-m-d H:i:s')];
 
+                    $arrayInsertBcd[] = ['company_id' => Auth::user()->company_id, 
+                                         'product_code' => trim($prefixCli.$produto), 
+                                         'barcode' => $barcode,
+                                         'created_at' => date('Y-m-d H:i:s'),
+                                         'updated_at' => date('Y-m-d H:i:s') ];
+
                 } 
                 
             }
@@ -213,7 +220,7 @@ class InventoryItemsImport implements ToArray
 
             //Insere no banco a cada 4000 registros
             if($cont%4000 == 0){
-                $return = $this->insertValuesByArray($arrayInsertPrd, $arrayInsertPack, $arrayInsertEnd, $arrayInsertDep, $arrayInsertUom);
+                $return = $this->insertValuesByArray($arrayInsertPrd, $arrayInsertPack, $arrayInsertEnd, $arrayInsertDep, $arrayInsertUom, $arrayInsertBcd);
                 if($return <> 0){
                     $erro = $return;
                     break;
@@ -223,12 +230,13 @@ class InventoryItemsImport implements ToArray
                     $arrayInsertPack = array();
                     $arrayInsertEnd = array();
                     $arrayInsertDep = array();
+                    $arrayInsertBcd = array();
                 }
             }
         }
 
         //Insere os registros que sobraram e não foram inseridos dentro do loop
-        $return = $this->insertValuesByArray($arrayInsertPrd, $arrayInsertPack, $arrayInsertEnd, $arrayInsertDep, $arrayInsertUom);
+        $return = $this->insertValuesByArray($arrayInsertPrd, $arrayInsertPack, $arrayInsertEnd, $arrayInsertDep, $arrayInsertUom, $arrayInsertBcd);
         if($return <> 0){
             $erro = $return;
         }
@@ -246,7 +254,7 @@ class InventoryItemsImport implements ToArray
     }
 
     //Faz os inserts em massa tendo como parametros os arrays de informações
-    function insertValuesByArray($arrayInsertPrd, $arrayInsertPack, $arrayInsertEnd, $arrayInsertDep, $arrayInsertUom){
+    function insertValuesByArray($arrayInsertPrd, $arrayInsertPack, $arrayInsertEnd, $arrayInsertDep, $arrayInsertUom, $arrayInsertBcd){
         $erro = 0;
 
         if(count($arrayInsertPrd) > 0){
@@ -293,6 +301,17 @@ class InventoryItemsImport implements ToArray
                 //Erro ao inserir Uoms
                 dd($ex->getMessage()); 
                 $erro = 4;
+            }
+        }
+
+        if(count($arrayInsertBcd) > 0){
+            //Insere os barcodes alternativos do item (referente ao nivel 1)
+            try{
+                $newBc = DB::table('barcodes')->insertOrIgnore($arrayInsertBcd);
+            }catch(\Illuminate\Database\QueryException $ex){ 
+                //Erro ao inserir barcodes
+                dd($ex->getMessage()); 
+                $erro = 5;
             }
         }
 
