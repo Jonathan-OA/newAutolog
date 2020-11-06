@@ -178,12 +178,12 @@ class InventoryItem extends Model
                 'pallets.barcode as plt_barcode',
                 'inventory_items.document_id',
                 'inventory_items.location_code',
-                DB::raw("SUM(qty_1count) as qty1"),
+                DB::raw("format(SUM(qty_1count), uoms.decimal_places) as qty1"),
                 'users.name',
-                DB::raw("SUM(qty_2count) as qty2"),
-                DB::raw("SUM(qty_3count) as qty3"),
-                DB::raw("SUM(products.qty_erp) as qty_wms"),
-                DB::raw("SUM(qty_4count) as qty4"),
+                DB::raw("format(SUM(qty_2count), uoms.decimal_places) as qty2"),
+                DB::raw("format(SUM(qty_3count), uoms.decimal_places) as qty3"),
+                DB::raw("format(SUM(products.qty_erp), uoms.decimal_places) as qty_wms"),
+                DB::raw("format(SUM(qty_4count), uoms.decimal_places) as qty4"),
                 'labels.barcode as label_barcode',
                 'inventory_items.created_at',
                 'inventory_status.description as description',
@@ -193,6 +193,7 @@ class InventoryItem extends Model
                 DB::raw('CASE WHEN products.customer_code IS NOT NULL AND products.alternative_code IS NOT NULL THEN products.alternative_code ELSE inventory_items.product_code END as product_code'),
                 'products.description as product_description'
             )
+                ->join("uoms", "inventory_items.prim_uom_code", "uoms.code")
                 ->join('inventory_status', 'inventory_status.id', 'inventory_items.inventory_status_id')
                 ->join('locations', function ($join) {
                     $join->on('locations.code', 'inventory_items.location_code')
@@ -246,12 +247,12 @@ class InventoryItem extends Model
                 'pallets.barcode as plt_barcode',
                 'inventory_items.document_id',
                 DB::raw("'' as location_code"),
-                DB::raw("SUM(qty_1count) as qty1"),
+                DB::raw("format(SUM(qty_1count), uoms.decimal_places) as qty1"),
                 DB::raw("' ----- ' as name"),
-                DB::raw("SUM(qty_2count) as qty2"),
-                DB::raw("SUM(qty_3count) as qty3"),
-                DB::raw("SUM(distinct products.qty_erp) as qty_wms"),
-                DB::raw("SUM(qty_4count) as qty4"),
+                DB::raw("format(SUM(qty_2count), uoms.decimal_places) as qty2"),
+                DB::raw("format(SUM(qty_3count), uoms.decimal_places) as qty3"),
+                DB::raw("format(SUM(distinct products.qty_erp), uoms.decimal_places) as qty_wms"),
+                DB::raw("format(SUM(qty_4count), uoms.decimal_places) as qty4"),
                 'labels.barcode as label_barcode',
                 DB::raw("now() as created_at"),
                 'inventory_status.description as description',
@@ -261,6 +262,7 @@ class InventoryItem extends Model
                 DB::raw('CASE WHEN products.customer_code IS NOT NULL AND products.alternative_code IS NOT NULL THEN products.alternative_code ELSE inventory_items.product_code END as product_code'),
                 'products.description as product_description'
             )
+                ->join("uoms", "inventory_items.prim_uom_code", "uoms.code")
                 ->join('inventory_status', 'inventory_status.id', 'inventory_items.inventory_status_id')
                 ->join('locations', function ($join) {
                     $join->on('locations.code', 'inventory_items.location_code')
@@ -667,8 +669,11 @@ class InventoryItem extends Model
                     })
                 ->whereNotIn('documents.document_status_id', [0,1,9])
                 ->where('documents.inventory_status_id', '<>', 9)
+                ->where('inventory_items.inventory_status_id', '<>', 9)
                 ->where(function ($query) use($from, $to) {
                     if (!empty($from) && !empty($to)) {
+                        $from = date($dateMin)." 00:00:00";
+                        $to = date($dateMax). " 23:59:59";
                         $query->whereBetween('documents.start_date', [$from, $to]);
                     }
                 })
@@ -719,13 +724,14 @@ class InventoryItem extends Model
                 })
                 ->join('companies', 'companies.id', 'inventory_items.company_id')
                 ->whereNotIn('documents.document_status_id', [0,1,9])
+                ->where('inventory_items.inventory_status_id', '<>', 9)
                 ->where('documents.inventory_status_id', '<>', 9)
                 ->where('documents.company_id', '=', $company_id)
 
                 ->where(function ($query) use($dateMin, $dateMax) {
                     if (!empty($dateMin) && !empty($dateMax)) {
-                        $from = date($dateMin);
-                        $to = date($dateMax);
+                        $from = date($dateMin)." 00:00:00";
+                        $to = date($dateMax). " 23:59:59";
                         $query->whereBetween('documents.start_date', [$from, $to]);
                     }
                 })

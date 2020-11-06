@@ -57,7 +57,13 @@
                                         <tfoot>
                                             <tr>
                                                 <th>Total</th>
-                                                <th colspan="7"></th>
+                                                <th> ### </th>
+                                                <th> ### </th>
+                                                <th> ### </th>
+                                                <th> ### </th>
+                                                <th></th>
+                                                <th></th>
+                                                <th> ### </th>
                                                 <th></th>
                                                 <th></th>
                                             </tr>
@@ -176,6 +182,19 @@
                         return intVal(a) + intVal(b);
                     }, 0 );
 
+                var valorFechado = api
+                    .column( 5, { page: 'current'} )
+                    .data()
+                    .reduce( function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0 );
+                var totalPecas = api
+                    .column( 6, { page: 'current'} )
+                    .data()
+                    .reduce( function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0 );
+                
                  // Total Royalties 
                  royalTotal = api
                     .column( 9, { page: 'current'} )
@@ -185,12 +204,18 @@
                     }, 0 );
     
                 // Update footer
+                $( api.column( 5 ).footer() ).html(
+                    'R$ '+ new Intl.NumberFormat('pt-BR').format(valorFechado.toFixed(2)) +' '
+                );
+                $( api.column( 6 ).footer() ).html(
+                    totalPecas
+                );
                 $( api.column( 8 ).footer() ).html(
                     'R$ '+ new Intl.NumberFormat('pt-BR').format(pageTotal) +' '
                 );
 
                 $( api.column( 9 ).footer() ).html(
-                    'R$ '+ new Intl.NumberFormat('pt-BR').format(royalTotal) +' '
+                    'R$ '+ new Intl.NumberFormat('pt-BR').format(royalTotal.toFixed(2)) +' '
                 );
 
             }
@@ -204,7 +229,8 @@
             var to = $("#period_max").val();
             var from = $("#period_min").val();
 
-
+            console.log(to);
+            console.log(from);
             if(to != "" && from != ""){
                 //Recarrega o datatable com os filtros
                 table.ajax.url(urlSummarized+"/"+from+"/"+to);

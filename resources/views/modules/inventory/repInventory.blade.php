@@ -118,10 +118,12 @@
                     data: 'name'
                 },
                 {
-                    data: 'qty1'
+                    data: 'qty1',
+                    className: "td_right"
                 },
                 {
-                    data: 'qty2'
+                    data: 'qty2',
+                    className: "td_right"
                 }
             ],
             "initComplete": function() {
@@ -133,19 +135,33 @@
                     page: 'current'
                 }).nodes();
                 var last = null;
+                var totalQty1 = 0;
+                var totalQty2 = 0;
                 var qty1 = 0;
                 api.column(groupColumn, {
                     page: 'current'
                 }).data().each(function(group, i) {
-
-                    if (last !== group && summarize == 0) {
-                        $(rows).eq(i).before(
-                            '<tr class="dataTables_group"><td style="padding: 2px 15px !important" colspan="11">Endereço: ' + group + '</td></tr>'
-                        );
-
+                    
+                    if (last !== group) {
+                        if(summarize == 0){
+                            if(last != null){
+                                $(rows).eq(i).before(
+                                    '<tr class="dataTables_total"><td style="padding: 2px 15px !important" colspan="5"> Total: </td> <td style="padding: 2px 2px !important" nowrap colspan="1" align="right">   ' + totalQty1 + ' </td> <td style="padding: 2px 15px !important" > </td></tr>'
+                                );
+                            }
+                            totalQty1 = 0;
+                            $(rows).eq(i).before(
+                                '<tr class="dataTables_group"><td style="padding: 2px 15px !important" colspan="7">Endereço: ' + group + ' </td> </tr>'
+                            );
+                        }
                         last = group;
                     }
-                });
+                    totalQty1 += parseFloat(api.data()[i].qty1);
+                });    
+                $(rows).last().after(
+                    '<tr class="dataTables_total"><td style="padding: 2px 15px !important" colspan="5"> Total: </td> <td style="padding: 2px 2px !important" nowrap colspan="1" align="right"> ' + totalQty1 + '</td> <td style="padding: 2px 15px !important" > </td></tr>'
+                );
+                
             }
         });
         $('#relInv-table_filter').append('<span style="margin-left:0.5vw"  aria-label="@lang("infos.param_sumprod")" data-microtip-position="right" role="tooltip"> ' +
