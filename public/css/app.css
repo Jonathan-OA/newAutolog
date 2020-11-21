@@ -63,6 +63,11 @@
         align-content: center;
         vertical-align: middle;
     }
+    .td_right {
+        text-align: right;
+        align-content: right;
+        vertical-align: middle;
+    }
     
     .nowp {
         white-space: nowrap;
@@ -614,6 +619,13 @@
     .dataTables_group {
         background-color: #404e65 !important;
         font-weight: bold;
+    }
+    .dataTables_total {
+        background-color: #5c687c !important;
+        font-weight: bold;
+    }
+    .dataTables_total>td {
+        color: white !important;
     }
     
     .dataTables_group>td {

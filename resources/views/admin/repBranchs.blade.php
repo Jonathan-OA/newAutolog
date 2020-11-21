@@ -48,8 +48,13 @@
                                         <tfoot>
                                             <tr>
                                                 <th>Total</th>
-                                                <th colspan="4"></th>
+                                                <th class="td_center"> ### </th>
                                                 <th></th>
+                                                <th></th>
+                                                <th> ### </th>
+                                                <th></th>
+                                                <th></th>
+                                                <th class="td_center"> ### </th>
                                             </tr>
                                         </tfoot>
                                     </table>
@@ -144,7 +149,6 @@
             },
             "footerCallback": function ( row, data, start, end, display ) {
                 var api = this.api(), data;
-
                 // Remove the formatting to get integer data for summation
                 var intVal = function ( i ) {
                     return typeof i === 'string' ?
@@ -160,10 +164,44 @@
                     .reduce( function (a, b) {
                         return intVal(a) + intVal(b);
                     }, 0 );
-    
+
+                var totalPecas = api
+                    .column(3, { page: "current"})
+                    .data()
+                    .reduce( function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+
+                var totalInv = api
+                    .column(2, { page: "current"})
+                    .data()
+                    .reduce( function (a, b) {
+                        return a + b;
+                    }, 0);
+
+                var totalRoyal = api
+                    .column(6, { page: "current"})
+                    .data()
+                    .reduce( function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+                var novaMedia = pageTotal/totalPecas;
                 // Update footer
+                $( api.column( 2 ).footer() ).html(
+                    totalInv
+                );
+                $( api.column( 3 ).footer() ).html(
+                    totalPecas
+                );
+                /*$( api.column( 4 ).footer() ).html(
+                    'R$ '+ new Intl.NumberFormat('pt-BR').format(novaMedia.toFixed(2)) +' '
+                );*/
                 $( api.column( 5 ).footer() ).html(
-                    'R$ '+ new Intl.NumberFormat('pt-BR').format(pageTotal) +' '
+                    'R$ '+ new Intl.NumberFormat('pt-BR').format(pageTotal.toFixed(2)) +' '
+                );
+                $( api.column( 6 ).footer() ).html(
+                    'R$ '+ new Intl.NumberFormat('pt-BR').format(totalRoyal.toFixed(2)) +' '
                 );
             }
         });
@@ -191,7 +229,8 @@
             var to = $("#period_max").val();
             var from = $("#period_min").val();
 
-
+            console.log(to);
+            console.log(from);
             if(to != "" && from != ""){
                 //Recarrega o datatable com os filtros
                 table.ajax.url(urlSummarized+"/"+from+"/"+to);
