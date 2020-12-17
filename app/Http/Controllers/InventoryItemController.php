@@ -203,7 +203,6 @@ class InventoryItemController extends AppBaseController
     {
 
         // $inventory_items = App\Models\InventoryItem::getAppointments($document_id, 1);
-        
         $document = DB::table('documents')->where([
             ['company_id', Auth::user()->company_id],
             ['id', $document_id]

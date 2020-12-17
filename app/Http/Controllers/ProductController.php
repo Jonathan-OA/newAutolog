@@ -213,6 +213,6 @@ class ProductController extends AppBaseController
      */
     public function getData()
     {
-        return DataTables::of(App\Models\Product::where('company_id', Auth::user()->company_id)->take(5000)->orderBy('id', 'desc'))->make(true);
+        return DataTables::of(App\Models\Product::where('company_id', Auth::user()->company_id)->take(100)->orderBy('id', 'desc'))->make(true);
     }
 }

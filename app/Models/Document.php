@@ -479,6 +479,12 @@ class Document extends Model
                     ['finality_code', 'INVENTARIO']
                 ])->delete();
 
+                //Cancela todas as Leituras
+                $upAct = DB::table("activities")->where([
+                    ['company_id', Auth::user()->company_id],
+                    ['document_id', $document_id]
+                ])->update(['activity_status_id' => 9]);
+
                 $return['erro'] = 0;
                 $return['msg'] = 'Inventário Retornado com Sucesso';
             } else {

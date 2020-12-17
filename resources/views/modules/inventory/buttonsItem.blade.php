@@ -9,6 +9,12 @@
                 <img class='icon' src='{{ asset('/icons/remover.png') }}'> 
             </button>
         </span>
+        <span>
+             <!-- Auditoria  -->
+             <button ng-click="callRoute('./returnLocation/'+row.location_code')" class="icon_action" aria-label="@lang('buttons.audit_acont')" data-microtip-position="left" role="tooltip">
+                <img class='icon' src='{{ asset('/icons/login.png') }}'> 
+            </button>
+        </span>
         <!-- Retornar contagens do endereço - reiniciar na contagem atual-->
         <span ng-if="row.status_doc != 0  && row.status_doc != 8">
             <button ng-click="callRouteConfirm('./returnLocation/'+row.location_code, 1, '@lang('buttons.msg_return_location')')" class="icon_action" aria-label="@lang('buttons.return')" data-microtip-position="left" role="tooltip">
