@@ -11,7 +11,7 @@
         </span>
         <span>
              <!-- Auditoria  -->
-             <button ng-click="callRoute('./returnLocation/'+row.location_code')" class="icon_action" aria-label="@lang('buttons.audit_acont')" data-microtip-position="left" role="tooltip">
+             <button ng-click="callRoute('./audit/'+row.location_code)" class="icon_action" aria-label="@lang('buttons.audit_acont')" data-microtip-position="left" role="tooltip">
                 <img class='icon' src='{{ asset('/icons/login.png') }}'> 
             </button>
         </span>

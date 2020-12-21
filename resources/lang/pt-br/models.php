@@ -331,6 +331,7 @@ return [
     'item_edit' => 'Edição de Item',  
     'items' => 'Itens',
     'items_doc' => 'Itens do Documento',
+    'audit_count' => 'Auditoria',
     'dashboard' => 'Dashboard',
     'support' => 'Suporte',
     'message' => 'Mensagem',

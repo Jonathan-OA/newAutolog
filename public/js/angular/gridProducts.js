@@ -168,20 +168,20 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
                 //Chama a função que preenche o grid
                 $scope.getFirstData();
                 //Caso o filtro não retorne nenhuma informação, busca todos os documentos (sem limite de docs)
-                /*$scope.gridApi.core.on.rowsRendered($scope, function() {
+                $scope.gridApi.core.on.rowsRendered($scope, function() {
                     var qty_lines = $scope.gridApi.core.getVisibleRows($scope.gridApi.grid).length;
                     if (qty_lines == 0 && $scope.gridOptions.enableFiltering && !$scope.hasFilter) {
                         //Variavel de controle para buscar o filtro externo apenas uma vez
                         $scope.hasFilter = true;
                         //Busca os dados novamente sem filtro de quantidade
-                        $http.get('api/documents/090')
+                        $http.get('products/datatable')
                             .then(function(response) {
                                 $scope.gridOptions.data = response.data;
                             });
                     } else {
                         $scope.hasFilter = false;
                     }
-                })*/
+                })
             },
             enableGridMenu: true,
             columnDefs: [
@@ -235,9 +235,8 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
         $scope.getFirstData = function() {
             $http({
                 method: 'GET',
-                url: 'products/datatable'
+                url: 'products/datatable/2000'
             }).then(function(success) {
-                console.log("Carregou");
                 console.log(success.data.data);
                 $scope.gridOptions.data = success.data.data;
             }, function(error) {

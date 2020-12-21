@@ -198,7 +198,7 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
                 $scope.gridApi.core.on.rowsRendered($scope, function() {
                     var qty_lines = $scope.gridApi.core.getVisibleRows($scope.gridApi.grid).length;
                     if (qty_lines == 0 && $scope.gridOptions.enableFiltering && !$scope.hasFilter) {
-                        //Variavel de controle para buscar o filtro externo apenas uma vez
+                        //Variável de controle para buscar o filtro externo apenas uma vez
                         $scope.hasFilter = true;
                         //Busca os dados novamente sem filtro de quantidade
                         $http.get('api/documents/090')
@@ -283,7 +283,7 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
                 method: 'GET',
                 url: 'api/documents/090/2000'
             }).then(function(success) {
-                console.log(success.data);
+                console.log(success.data); 
                 $scope.gridOptions.data = success.data;
             }, function(error) {
                 console.log("Errouuu" + error);
@@ -406,6 +406,87 @@ app.controller('DetCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '
              });
         }
 
+        
+        //Esconde / Mostra os filtros
+        $scope.toggleFiltering = function() {
+            $rootScope.gridDetalhes.enableFiltering = !$scope.gridDetalhes.enableFiltering;
+            $rootScope.gridApiDet.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
+        };
+
+
+    }
+])
+
+//Grid de Auditoria
+app.controller('auditCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '$timeout', '$interval', '$animate', '$compile', '$filter',
+    function($rootScope, $scope, $http, uiGridConstants, $timeout, $interval, $animate, $compile, $filter) {
+        //Código do grid a ser salvo / recuperado no banco
+        $scope.gridCode = 'AUTOLOGWMS_GridInv_Audit';
+        $scope.gridDetalhes = {};
+        $scope.gridDetalhes.data = [];
+        $scope.documentId = "";
+        $scope.locationCode = "";
+        $rootScope.page = 'audit';
+        $scope.gridDetalhes = {
+            enableFullRowSelection: false,
+            multiSelect: false,
+            enableFiltering: false,
+            fastWatch: true,
+            onRegisterApi: function(gridApiDet) {
+                $scope.gridApiDet = gridApiDet;
+                $timeout(function() {
+                    $scope.restoreState('Autolog_GridInv_Audit');
+                }, 50);
+            },
+            enableGridMenu: true,
+            columnDefs: [
+                { name: 'Código', field: 'product_code' },
+                { name: 'Descrição', field: 'description' },
+                { name: 'Quantidade Prevista', field: 'qty_wms' },
+                { name: 'Primeira Contagem', field: 'qty_1count' },
+                { name: 'Segunda Contagem', field: 'qty_2count' },
+                { name: 'Auditoria', cellTemplate: '<input type="number" id="{{row.entity.id}}" name="{{row.entity.id}}" value="{{row.entity.qty_1count}}" class="form-control" style="margin-left:5% !important;max-width: 90% !important;max-height: 100% !important;"/>' }
+                ],
+            enablePaginationControls: true,
+            paginationPageSize: 18,
+            rowTemplate: '<div ng-click="grid.appScope.clickRow(row, col, $event)" ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.uid" class="ui-grid-cell" ng-class="col.colIndex()" ui-grid-cell></div>',
+        };
+        
+        //Salva o grid atual em uma variavel de sessão e banco (ajax)
+        $scope.saveState = function(name) {
+            $rootScope.saveStateRS($scope, name, $http);
+        };
+
+        //Restaura o grid salvo em sessão ou banco (ajax)
+        $scope.restoreState = function(name) {
+            $rootScope.restoreStateRS($scope, $http);
+        };
+
+
+        //Carrega a tabela de Auditoria
+        $scope.showGridAudit = function(id, number, location_code) {
+
+            $scope.documentNumber = number;
+            $scope.documentId = id;
+            $scope.locationCode = location_code;
+
+            this.getFirstData();
+        }
+
+        //Carrega os itens do Documento
+        $scope.getFirstData = function() {
+             //Busca os itens do documento
+             $http.get('../../../api/inventoryItems/audit/' + $scope.documentId + '/' + $scope.locationCode)
+             .then(function(response) {
+                 console.log(response.data);
+                 $scope.gridDetalhes.data = response.data;
+             });
+        }
+        $scope.saveAudit = function(){
+            //console.log($scope);
+            //console.log($rootScope);
+            console.log($scope.gridApiDet.core.getVisibleRows($scope.gridDetalhes.grid));
+        }
         
         //Esconde / Mostra os filtros
         $scope.toggleFiltering = function() {

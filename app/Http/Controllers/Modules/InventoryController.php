@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateDocumentRequest;
 use App\Repositories\DocumentRepository;
 use App\Http\Requests\CreateDocumentItemRequest;
 use App\Http\Requests\UpdateDocumentItemRequest;
+use App\Http\Requests\AuditLocationRequest;
 use App\Repositories\DocumentItemRepository;
 use App\Http\Controllers\AppBaseController;
 use Illuminate\Http\Request;
@@ -24,6 +25,9 @@ use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Profile;
 use App\Models\Customer;
+use App\Models\InventoryItem;
+use App\Models\Activity;
+use App\Models\Task;
 
 ini_set('max_execution_time', 1200); //10 minutes
 
@@ -390,11 +394,10 @@ class InventoryController extends AppBaseController
             $importFile = new InventoryItemsImport($parameters, $customer_code, $inventory_value, $billing_type);
             $ret = $importFile->array($file, array('order' => $fieldsOrder, 'separator' => $sepFile));
 
-            if($ret <> 0){
-                Flash::success('Erro ao importar o inventário.  Código de Erro: '.$ret);
+            if ($ret <> 0) {
+                Flash::success('Erro ao importar o inventário.  Código de Erro: ' . $ret);
                 return redirect(route('inventory.index'));
             }
-            
         } else {
             //Arquivo invalido
             Flash::error(Lang::get('validation.permission'));
@@ -906,11 +909,11 @@ class InventoryController extends AppBaseController
 
         //Valida se usuário possui permissão para acessar esta opção
         if (App\Models\User::getPermission('documents_inv_ret', Auth::user()->user_type_code)) {
-            $return = App\Models\InventoryItem::returnLocation($document_id, $location_code, $document->inventory_status_id );
+            $return = App\Models\InventoryItem::returnLocation($document_id, $location_code, $document->inventory_status_id);
 
             if ($return['erro'] == 0) {
                 //Grava Logs
-                $descricao = 'Retornou Contagens do Endereço: '.$location_code;
+                $descricao = 'Retornou Contagens do Endereço: ' . $location_code;
                 $log = App\Models\Log::wlog('documents_inv_ret', $descricao, $document_id);
 
                 return array('success', Lang::get('infos.return_location', ['location' =>  $location_code]));
@@ -932,25 +935,15 @@ class InventoryController extends AppBaseController
      *
      * @return Response
      */
-    public function audit($document_id, $inventory_item_id)
+    public function audit($document_id, $location_code)
     {
-
-        $document = $this->documentRepository->findWithoutFail($document_id);
 
         //Valida se usuário possui permissão para acessar esta opção
         if (App\Models\User::getPermission('documents_inv_ret', Auth::user()->user_type_code)) {
-            $return = App\Models\InventoryItem::returnLocation($document_id, $location_code, $document->inventory_status_id );
-
-            if ($return['erro'] == 0) {
-                //Grava Logs
-                $descricao = 'Retornou Contagens do Endereço: '.$location_code;
-                $log = App\Models\Log::wlog('documents_inv_ret', $descricao, $document_id);
-
-                return array('success', Lang::get('infos.return_location', ['location' =>  $location_code]));
-            } else {
-                //Erro ao retornar
-                return array('danger', $return['msg']);
-            }
+            $document = $this->documentRepository->findWithoutFail($document_id);
+            return view('modules.inventory.gridAudit')
+                ->with('document', $document)
+                ->with('location_code', $location_code);
         } else {
             //Sem permissão
             //Flash::error(Lang::get('validation.permission'));
@@ -963,5 +956,67 @@ class InventoryController extends AppBaseController
     {
         $documents = App\Models\DocumentItem::where('document_id', $document_id)->get();
         return $documents->toArray();
+    }
+
+    public function auditLocation($document_id, AuditLocationRequest $request)
+    {
+        // print_r($request->all());exit;
+        $inputs = $request->all();
+        //Valida se usuário possui permissão para acessar esta opção
+        if (App\Models\User::getPermission('documents_inv_audit', Auth::user()->user_type_code)) {
+
+            foreach ($inputs as $chave => $valor) {
+                if (!in_array($chave, ["_token","number", "location_code", "document_type_code"])) {
+                    $inventory_item_id = $chave;
+                    $novoValor = $valor;
+                    //Pega Inventory Item e Task
+                    $invItm = InventoryItem::find($inventory_item_id);
+                    // echo $inventory_item_id;exit;
+                    if($invItm->qty_1count == $novoValor){
+                        continue;
+                    }
+                    $task = Task::where([
+                        ['company_id', Auth::user()->company_id],
+                        ['inventory_item_id', $inventory_item_id],
+                        ['document_id', $document_id],
+                        ['operation_code', "551"]
+                    ])->first();
+                    $description = "Item ajustado: " . $invItm->qty_1count . " -> " . $novoValor;
+                    //Cria atividade
+                    Activity::create(
+                        $task->id,
+                        $invItm->product_code,
+                        $invItm->label_id,
+                        $invItm->pallet_id,
+                        $novoValor,
+                        $description,
+                        $document_id,
+                        NULL,
+                        $invItm->location_code,
+                        NULL,
+                        $inventory_item_id,
+                        8,
+                        1,
+                        NULL,
+                        Auth::id()
+                    );
+                    //Salva Inventory Item
+                    $invItm->qty_1count = $novoValor;
+                    $invItm->save();
+                }
+            }
+            $descricao = 'Auditoria Documento ID: ' . $document_id . ' - ' . $inputs['document_type_code'] . ' ' . $inputs['number'] . ' - Endereço: ' . $inputs['location_code'];
+            $log = App\Models\Log::wlog('documents_inv_audit', $descricao, $document_id);
+            Flash::success(Lang::get('infos.audit_location', ['location' =>  $inputs['location_code']]));
+            $document = $this->documentRepository->findWithoutFail($document_id);
+            return view('modules.inventory.gridItem')->with('document', $document);
+
+            
+        } else {
+            //Sem permissão
+            Flash::error(Lang::get('validation.permission'));
+            $document = $this->documentRepository->findWithoutFail($document_id);
+            return view('modules.inventory.gridItem')->with('document', $document);
+        }
     }
 }

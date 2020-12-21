@@ -90,13 +90,14 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('inventory/{document_id}/detItemsNextCount', 'Modules\InventoryController@detItemsNextCount'); //Detalhes dos itens para finalizar contagem
     Route::get('inventory/{document_id}/items/{document_item_id}/edit', 'Modules\InventoryController@editItem'); //Form de edição de itens
     Route::patch('inventory/updateItem/{document_item_id}', 'Modules\InventoryController@updateItem')->name('inventory.updateItem');; //Atualiza item
+    Route::post('inventory/{document_id}/auditLocation', 'Modules\InventoryController@auditLocation')->name('inventory.auditLocation');; //Cria item
     Route::post('inventory/{document_id}/storeItem', 'Modules\InventoryController@storeItem')->name('inventory.storeItem');; //Cria item
     Route::resource('inventory', 'Modules\InventoryController'); //Ações de documentos de inventário
     Route::get('/inventory/{id}/liberate/{cont?}', 'Modules\InventoryController@liberate'); //Libera Contagem
     Route::get('/inventory/{id}/finalize', 'Modules\InventoryController@finalize'); //Finaliza Contagem
     Route::get('/inventory/{id}/return', 'Modules\InventoryController@return'); //Retorna Inventário
     Route::get('/inventory/{id}/returnLocation/{location_code}', 'Modules\InventoryController@returnLocation'); //Retorna Um Endereço Especifico
-    Route::get('/inventory/{id}/audit/{inventory_item_id}', 'Modules\InventoryController@audit'); //Tela de Auditoria
+    Route::get('/inventory/{id}/audit/{location_code}', 'Modules\InventoryController@audit'); //Tela de Auditoria
     // ----------------------------------------------------------------------------------------------
     //Rota que libera documento(s)
     //Route::get('/document/liberate/{id}/{module?}', 'DocumentController@liberate');
@@ -127,6 +128,9 @@ Route::group(['middleware' => 'auth'], function() {
     
     Route::get('/api/inventoryItems/{doc_id}/{statusDsc?}', function($document_id, $stsDsc = '') {
         return App\Models\InventoryItem::getItens($document_id, $stsDsc);
+    });
+    Route::get('/api/inventoryItems/audit/{doc_id}/{location_code}', function($document_id, $location_code) {
+        return App\Models\InventoryItem::getItensAudit($document_id, $location_code);
     });
     Route::get('/api/itemsProd/{document}', 'Modules\ProductionController@getItems');
     Route::post('/api/grid/', 'GridController@setColumns');
@@ -180,7 +184,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('packingTypes/datatable', 'PackingTypeController@getData');
     Route::resource('packingTypes', 'PackingTypeController');
 
-    Route::get('products/datatable', 'ProductController@getData');
+    Route::get('products/datatable/{qty?}', 'ProductController@getData');
     Route::get('products/val/{barcode}', function($barcode) {
         return Product::valCBPD($barcode);
     });

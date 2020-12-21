@@ -211,8 +211,8 @@ class ProductController extends AppBaseController
      * Get data from model 
      *
      */
-    public function getData()
+    public function getData($qty = 15000)
     {
-        return DataTables::of(App\Models\Product::where('company_id', Auth::user()->company_id)->take(100)->orderBy('id', 'desc'))->make(true);
+        return DataTables::of(App\Models\Product::where('company_id', Auth::user()->company_id)->take($qty)->orderBy('id', 'desc'))->make(true);
     }
 }
