@@ -141,7 +141,6 @@
                 api.column(groupColumn, {
                     page: 'current'
                 }).data().each(function(group, i) {
-                    
                     if (last !== group) {
                         if(summarize == 0){
                             if(last != null){
@@ -156,7 +155,8 @@
                         }
                         last = group;
                     }
-                    totalQty1 += parseFloat(api.data()[i].qty1);
+
+                    totalQty1 += parseFloat(api.rows( {page:'current'} ).data()[i].qty1);
                 });    
                 $(rows).last().after(
                     '<tr class="dataTables_total"><td style="padding: 2px 15px !important" colspan="5"> Total: </td> <td style="padding: 2px 2px !important" nowrap colspan="1" align="right"> ' + totalQty1 + '</td> <td style="padding: 2px 15px !important" > </td></tr>'
