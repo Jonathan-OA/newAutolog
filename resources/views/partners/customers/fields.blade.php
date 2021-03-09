@@ -51,7 +51,7 @@
 
 <!-- Address Field -->
 {!! Form::label('address', Lang::get('models.address').':') !!}
-{!! Form::text('address', null, ['class' => 'form-control']) !!}
+{!! Form::text('address', null, ['class' => 'form-control', 'maxlength' => '60']) !!}
 
 <!-- Number Field -->
 {!! Form::label('number', Lang::get('models.number').':') !!}
@@ -59,19 +59,19 @@
 
 <!-- Neighbourhood Field -->
 {!! Form::label('neighbourhood', Lang::get('models.neighbourhood').':') !!}
-{!! Form::text('neighbourhood', null, ['class' => 'form-control']) !!}
+{!! Form::text('neighbourhood', null, ['class' => 'form-control','maxlength' => '40']) !!}
 
 <!-- City Field -->
 {!! Form::label('city', Lang::get('models.city').':') !!}
-{!! Form::text('city', null, ['class' => 'form-control']) !!}
+{!! Form::text('city', null, ['class' => 'form-control','maxlength' => '30']) !!}
 
 <!-- State Field -->
 {!! Form::label('state', Lang::get('models.state').':') !!}
-{!! Form::text('state', null, ['class' => 'form-control']) !!}
+{!! Form::text('state', null, ['class' => 'form-control', 'maxlength' => '3']) !!}
 
 <!-- Country Field -->
 {!! Form::label('country', Lang::get('models.country').':') !!}
-{!! Form::text('country', null, ['class' => 'form-control']) !!}
+{!! Form::text('country', null, ['class' => 'form-control', 'maxlength' => '20']) !!}
 
 <!-- Zip Code Field -->
 {!! Form::label('zip_code', Lang::get('models.zip_code').':') !!}
@@ -79,24 +79,24 @@
 
 <!-- Phone1 Field -->
 {!! Form::label('phone1', Lang::get('models.phone1').':') !!}
-{!! Form::text('phone1', null, ['class' => 'form-control']) !!}
+{!! Form::text('phone1', null, ['class' => 'form-control', 'maxlength' => '15']) !!}
 
 <!-- Phone2 Field -->
 {!! Form::label('phone2', Lang::get('models.phone2').':') !!}
-{!! Form::text('phone2', null, ['class' => 'form-control']) !!}
+{!! Form::text('phone2', null, ['class' => 'form-control', 'maxlength' => '15']) !!}
 
 
 <!-- Obs1 Field -->
 {!! Form::label('obs1', Lang::get('models.obs1').':') !!}
-{!! Form::text('obs1', null, ['class' => 'form-control']) !!}
+{!! Form::text('obs1', null, ['class' => 'form-control', 'maxlength' => '40']) !!}
 
 <!-- Obs2 Field -->
 {!! Form::label('obs2', Lang::get('models.obs2').':') !!}
-{!! Form::text('obs2', null, ['class' => 'form-control']) !!}
+{!! Form::text('obs2', null, ['class' => 'form-control', 'maxlength' => '40']) !!}
 
 <!-- Obs3 Field -->
 {!! Form::label('obs3', Lang::get('models.obs3').':') !!}
-{!! Form::text('obs3', null, ['class' => 'form-control']) !!}
+{!! Form::text('obs3', null, ['class' => 'form-control', 'maxlength' => '40']) !!}
 </div>
 
 <!-- Submit Field -->
