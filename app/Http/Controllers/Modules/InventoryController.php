@@ -315,7 +315,7 @@ class InventoryController extends AppBaseController
         if (in_array($extFile, ['xls', 'xlsx'])) {
             //Salva o arquivo na pasta temporária e depois envia o path correto
             //Excel::import($erro = new InventoryItemsImport($parameters), $input['fileExcel']);
-
+  
         } else  if (in_array($extFile, ['txt', 'csv'])) {
             $file = fopen($input['fileExcel'], "r");
             //Pega apenas a primeira linha do arquivo
