@@ -17,6 +17,7 @@
         "laravelcollective/html": "6.*",
         "lavary/laravel-menu": "^1.7",
         "lavela/phpjasper": "^3.0",
+        "league/flysystem-aws-s3-v3": "~1.0",
         "maatwebsite/excel": "^3.1",
         "okipa/laravel-bootstrap-components": "^1.0",
         "orchestra/parser": "4.0",

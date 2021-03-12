@@ -50,7 +50,8 @@ class Document extends Model
         'finalization',
         'inventory_status_id',
         'inventory_value',
-        'billing_type'
+        'billing_type',
+        'order_fields'
     ];
 
     /**

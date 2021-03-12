@@ -282,6 +282,11 @@ class ViewGenerator extends BaseGenerator
                 }
 
                 $tableName = $this->commandData->config->tableName;
+                $viewPath = $this->commandData->config->prefixes['view'];
+                if (!empty($viewPath)) {
+                    $tableName = $viewPath.'.'.$tableName;
+                }
+
                 $variableName = Str::singular($selectTable).'Items'; // e.g $userItems
 
                 $fieldTemplate = $this->generateViewComposer($tableName, $variableName, $columns, $selectTable, $modalName);
@@ -309,7 +314,11 @@ class ViewGenerator extends BaseGenerator
 
     private function generateViewComposer($tableName, $variableName, $columns, $selectTable, $modelName = null)
     {
-        $fieldTemplate = get_template('scaffold.fields.select', $this->templateType);
+        $templateName = 'scaffold.fields.select';
+        if ($this->commandData->isLocalizedTemplates()) {
+            $templateName .= '_locale';
+        }
+        $fieldTemplate = get_template($templateName, $this->templateType);
 
         $viewServiceProvider = new ViewServiceProviderGenerator($this->commandData);
         $viewServiceProvider->generate();

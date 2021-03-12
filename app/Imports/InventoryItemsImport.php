@@ -11,14 +11,16 @@ class InventoryItemsImport implements ToArray
     private $customer_code = '';
     private $value = '';
     private $billing_type = '';
+    private $fieldsOrderJson = '';
 
     //Parametros de inventário enviados pelo construtor no controller de inventário
     //Customer = Cliente e Value = Valor por Leitura
-    public function __construct($parameters, $customer, $value, $billing_type){
+    public function __construct($parameters, $customer, $value, $billing_type, $fieldsOrderJson){
         $this->parameters = $parameters;
         $this->customer_code = $customer;
         $this->value = $value;
         $this->billing_type = $billing_type;
+        $this->fieldsOrderJson = $fieldsOrderJson; //Ordem dos campos para importação
     }
 
     
@@ -42,6 +44,7 @@ class InventoryItemsImport implements ToArray
         $arrayInsertUom = array();
 
         $isTxt = true;
+        $inventoryNumber = "";
 
         //Sem parâmetros informados (Array(separator e order))
         if(empty($params)){
@@ -97,11 +100,14 @@ class InventoryItemsImport implements ToArray
                                                  'customer_code' => $this->customer_code,
                                                  'user_id' => Auth::user()->id,
                                                  'emission_date' => \Carbon\Carbon::now(),
-                                                 'comments' => $this->parameters
+                                                 'comments' => $this->parameters,
+                                                 'order_fields' => $this->fieldsOrderJson
                                                 ]);
                 if(!$inv->save()){
                     $erro = 1;
                     break;
+                }else{
+                    $inventoryNumber = $inv->number;
                 }
 
                 //Busca prefixo de cliente para gravar o produto com esse valor
@@ -248,7 +254,7 @@ class InventoryItemsImport implements ToArray
             DB::rollback();
         }
 
-        return $erro;
+        return array( $inventoryNumber, $erro) ;
 
 
     }

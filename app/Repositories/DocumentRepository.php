@@ -44,7 +44,8 @@ class DocumentRepository extends BaseRepository
         'location_code',
         'number_origin',
         'document_type_origin',
-        'delivery_date'
+        'delivery_date',
+        'order_fields'
     ];
 
     /**

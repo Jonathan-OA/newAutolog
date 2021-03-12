@@ -2,6 +2,7 @@
 
 namespace Maatwebsite\Excel\Factories;
 
+use Maatwebsite\Excel\Cache\CacheManager;
 use Maatwebsite\Excel\Concerns\MapsCsvSettings;
 use Maatwebsite\Excel\Concerns\WithCharts;
 use Maatwebsite\Excel\Concerns\WithCustomCsvSettings;
@@ -28,6 +29,10 @@ class WriterFactory
     public static function make(string $writerType, Spreadsheet $spreadsheet, $export): IWriter
     {
         $writer = IOFactory::createWriter($spreadsheet, $writerType);
+
+        $writer->setUseDiskCaching(
+            config('excel.cache.driver', CacheManager::DRIVER_MEMORY) !== CacheManager::DRIVER_MEMORY
+        );
 
         if (static::includesCharts($export)) {
             $writer->setIncludeCharts(true);

@@ -378,6 +378,7 @@ class InventoryController extends AppBaseController
         //Inverte as chaves para que o índice seja a informação do campo e o valor da ordem
         //Ex: 'qde' => 0, 'end' => 1
         $fieldsOrder = array_flip($input['fieldsOrder']);
+        $fieldsOrderJson = json_encode($fieldsOrder);
 
         //Concatena todos os parametros informados em uma string separando por ; e grava no campo comments
         //O tratamento é feito no app coletor
@@ -391,12 +392,19 @@ class InventoryController extends AppBaseController
         } elseif (in_array($extFile, ['txt', 'csv'])) {
             $file = fopen(storage_path() . '/' . $fileName, 'r');
             //Cria o objeto e chama a função passando os parâmetros do txt
-            $importFile = new InventoryItemsImport($parameters, $customer_code, $inventory_value, $billing_type);
+            $importFile = new InventoryItemsImport($parameters, $customer_code, $inventory_value, $billing_type, $fieldsOrderJson);
             $ret = $importFile->array($file, array('order' => $fieldsOrder, 'separator' => $sepFile));
 
-            if ($ret <> 0) {
-                Flash::success('Erro ao importar o inventário.  Código de Erro: ' . $ret);
+            if ($ret[1] <> 0) {
+                Flash::success('Erro ao importar o inventário.  Código de Erro: ' . $ret[1]);
                 return redirect(route('inventory.index'));
+            }else{
+                $inventoryNumber = $ret[0];
+                //Tudo certo, grava o arquivo no S3 para consultas futuras
+                //Pasta no padrão CODE+BRANCH/CLIENTE/INVENTARIO
+                $fileDest = Auth::user()->getCompanyInfo()->code.Auth::user()->getCompanyInfo()->branch.'/'.$customer_code.'/'.$inventoryNumber.'.txt';
+                Storage::disk('s3')->put($fileDest, file_get_contents(storage_path() . '/' . $fileName));
+
             }
         } else {
             //Arquivo invalido
@@ -405,7 +413,7 @@ class InventoryController extends AppBaseController
         }
 
 
-        Flash::success('Inventário criado com sucesso!');
+        Flash::success('Inventário '.$inventoryNumber.' criado com sucesso!');
         return redirect(route('inventory.index'));
     }
 
