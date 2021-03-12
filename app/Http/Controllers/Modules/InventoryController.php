@@ -536,8 +536,9 @@ class InventoryController extends AppBaseController
                 })
                 ->leftJoin('labels', 'labels.id', 'activities.label_id')
                 ->where('activities.document_id', $document_id)
+                ->where('activities.description', 'not like', 'Cancelamento%')
                 ->where('activities.prim_qty', '>', 0)
-                ->where('activities.activity_status_id', '>', 0)
+                ->where('activities.activity_status_id', '<>', 9)
                 ->get()
                 ->toArray();
         } else {
