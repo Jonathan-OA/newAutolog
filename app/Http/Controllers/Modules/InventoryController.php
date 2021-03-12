@@ -447,17 +447,24 @@ class InventoryController extends AppBaseController
     {
         $input = $request->all();
         $delimiter = $input['delimiter'];
+        $final_delimiter = (isset($input['final_delimiter'])) ? 1 : 0;
         $fieldsOrder = $input['fieldsOrder'];
         $document = $this->documentRepository->findWithoutFail($document_id);
 
         //Gravar perfil de exportação para a proxima utilização
         //insert into profiles
         $jsonFields = array('fields' => array(), 'options' => array());
+        //Variavel de controle para ver se detalha ou não por endereço
+        $fieldLocation = 0;
         foreach ($fieldsOrder as $order => $field) {
             switch ($field) {
                 case 'fix':
                     $jsonFields['fields'][] = array('code' => $field, $field . 'Format' => $input['fixFormat']);
                     break;
+                case 'loc':
+                    $fieldLocation = 1;
+                        $jsonFields['fields'][] = array('code' => $field, $field . 'Max' => (isset($input[$field . 'Max'])) ? $input[$field . 'Max'] : "");
+                        break;
                 case 'dat':
                     $jsonFields['fields'][] = array('code' => $field, $field . 'Format' => (isset($input[$field . 'Format']) ? $input[$field . 'Format'] : ""));
                     break;
@@ -506,38 +513,44 @@ class InventoryController extends AppBaseController
         $fileName = "export_ivd_" . $document_id . "_" . date('Ymd') . "_" . date('His') . ".txt";
         //Pega as informações das contagens (se parametro summarize = 1, agrupa por item)
         if ($jsonFields['options']['summarize'] == 0) {
-            $select = DB::table('inventory_items')
+            $select = DB::table('activities')
                 ->select(
                     DB::raw("products.code as prd"),
                     "products.description as dsc",
-                    "packings.barcode as ean",
-                    "inventory_items.qty_1count as qde",
-                    DB::raw(isset($input['datexpFormat']) ? "DATE_FORMAT(inventory_items.date_1count, '{$input['datexpFormat']}') as dat" : "'' as dat"),
-                    DB::raw(isset($input['datexpFormat']) ? "DATE_FORMAT(NOW(), '{$input['datexpFormat']}') as datexp" : "'' as datexp"),
+                    "activities.barcode as ean",
+                    "activities.prim_qty as qde",
+                    "activities.location_code as loc",
+                    DB::raw(isset($input['datFormat']) ? "DATE_FORMAT(activities.start_date, '{$input['datFormat']}') as dat" : "'' as dat"),
+                    DB::raw(isset($input['datexpFormat']) ? "DATE_FORMAT(CONVERT_TZ(NOW(),'SYSTEM','America/Sao_Paulo'), '{$input['datexpFormat']}') as datexp" : "'' as datexp"),
                     "labels.batch as lot",
                     DB::raw(isset($input['fixFormat']) ? "'{$input['fixFormat']}' as fix" : "'' as fix")
                 )
                 ->join('products', function ($join) {
-                    $join->on('products.code', '=', 'inventory_items.product_code')
-                        ->whereColumn('products.company_id', 'inventory_items.company_id');
+                    $join->on('products.code', '=', 'activities.product_code')
+                        ->whereColumn('products.company_id', 'activities.company_id');
                 })
                 ->join('packings', function ($join) {
-                    $join->on('inventory_items.product_code', '=', 'packings.product_code')
-                        ->whereColumn('inventory_items.uom_code', 'packings.uom_code')
-                        ->whereColumn('inventory_items.company_id', 'packings.company_id');
+                    $join->on('activities.product_code', '=', 'packings.product_code')
+                        ->whereColumn('activities.uom_code', 'packings.uom_code')
+                        ->whereColumn('activities.company_id', 'packings.company_id');
                 })
-                ->leftJoin('labels', 'labels.id', 'inventory_items.label_id')
-                ->where('inventory_items.document_id', $document_id)
-                ->where('inventory_items.qty_1count', '>', 0)
+                ->leftJoin('labels', 'labels.id', 'activities.label_id')
+                ->where('activities.document_id', $document_id)
+                ->where('activities.prim_qty', '>', 0)
+                ->where('activities.activity_status_id', '>', 0)
                 ->get()
                 ->toArray();
         } else {
+
+            $locQuery = ($fieldLocation == 1) ? "inventory_items.location_code" : "";
+            $groupLoc = ($fieldLocation == 1) ? ",inventory_items.location_code": "";
             $select = DB::table('inventory_items')
                 ->select(
                     "products.code as prd",
                     "products.description as dsc",
                     "packings.barcode as ean",
                     DB::raw("SUM(inventory_items.qty_1count) as qde"),
+                    DB::raw("' ' as loc"),
                     DB::raw("' ' as dat"),
                     DB::raw(isset($input['datexpFormat']) ? "DATE_FORMAT(NOW(), '{$input['datexpFormat']}') as datexp" : "'' as datexp"),
                     "labels.batch as lot",
@@ -555,12 +568,12 @@ class InventoryController extends AppBaseController
                 ->leftJoin('labels', 'labels.id', 'inventory_items.label_id')
                 ->where('inventory_items.document_id', $document_id)
                 ->where('inventory_items.qty_1count', '>', 0)
-                ->groupBy('products.code', 'products.description', 'packings.barcode', 'labels.batch')
+                ->groupBy('products.code', 'products.description', 'packings.barcode', 
+                          'labels.batch')
                 ->get()
                 ->toArray();
         }
-
-
+        
         //Gera a variável com o conteudo do arquivo
         foreach ($select as $key => $line) {
             $row = "";
@@ -580,9 +593,20 @@ class InventoryController extends AppBaseController
                         $decValue = ($dec > 0) ? '.' . substr(str_pad((!isset($quebra[1]) ? '0' : $quebra[1]), ($dec), 0, \STR_PAD_RIGHT), 0, $dec) : '';
                         //se parametro summarize = 1, As linhas são quebradas com quantidade = 1
                         if ($jsonFields['options']['summarize'] == 0) {
-                            $valueField = substr(str_pad(($valueField <> 0) ? 1 : 0, ($max - $dec), 0, \STR_PAD_LEFT), 0, ($max - $dec)) . $decValue;
+                            //Se for 0 considera o tamanho real
+                            if($max != 0){
+                                $valueField = substr(str_pad(($valueField <> 0) ? 1 : 0, ($max - $dec), 0, \STR_PAD_LEFT), 0, ($max - $dec)) . $decValue;
+                            }else{
+                                //Não sumariza, mostra qde 1 por linha
+                                $valueField = 1;
+                            }
                         } else {
-                            $valueField = substr(str_pad($quebra[0], ($max - $dec), 0, \STR_PAD_LEFT), 0, ($max - $dec)) . $decValue;
+                            //Se for 0 considera o tamanho real
+                            if($max != 0){
+                                $valueField = substr(str_pad($quebra[0], ($max - $dec), 0, \STR_PAD_LEFT), 0, ($max - $dec)) . $decValue;
+                            }else{
+                                $valueField = (float)$valueField;
+                            }
                         }
                         break;
 
@@ -603,15 +627,24 @@ class InventoryController extends AppBaseController
                 //Adiciona campo na linha
                 $row .= $valueField . $delimiter;
             }
-            //se parametro summarize = 1, As linhas são quebradas com quantidade = 1
+
+
+            //Se foi marcado para não ter o delimitador no final, remove 
+            if($final_delimiter == 0){
+                $row = substr($row, 0, -(strlen($delimiter)));
+            }
+
+            //se parametro summarize = 0, As linhas são quebradas com quantidade = 1
             if ($jsonFields['options']['summarize'] == 0) {
                 //Contador inicia com o total a ser repetido e vai diminuindo até chegar 2, a ultima linha será adicionada abaixo
                 for ($i = $line->qde; $i > 1; $i--) {
                     $content .= $row . "\n";
                 }
             }
+            
             //Adiciona linha no conteúdo do arquivo e pula para proxima linha
             $content .= $row . "\n";
+            
         }
 
         //Grava o Arquivo

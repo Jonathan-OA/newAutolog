@@ -3,9 +3,11 @@
 @section('content')
 @php
     //Array com as opções de cada campo
-    $arrayFields = array('ean'=> 'EAN', 'dsc' => 'Descrição', 
+    $arrayFields = array('ean'=> 'EAN', 
+                         'dsc' => 'Descrição', 
                          'prd' => 'Código Interno', 
                          'qde' => 'Saldo',
+                         'loc' => 'Setor',
                          'fix' => 'Texto Fixo',
                          'dat' => 'Data e Hora Apontamento',
                          'datexp' => 'Data e Hora Exportação');
@@ -79,7 +81,8 @@
                                             <!-- Delimitador  -->
                                             {!! Form::label('delimiter', '*'.Lang::get('models.delimiter').':') !!}
                                             {!! Form::text('delimiter',';', ['class' => 'form-control props', 'id' => 'delimiter', 'required', 'maxlength' => '4']) !!}
-                                           
+                                            {!! Form::checkbox('final_delimiter', '1' , true, ['class' => 'props', 'id' => 'final_delimiter']) !!} Incluir delimitador no final
+                                            <br>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -169,6 +172,7 @@
                         '<option value="dsc">Descrição</option>'+
                         '<option value="prd">Código Interno</option>'+
                         '<option value="qde">Saldo</option>'+
+                        '<option value="loc">Setor</option>'+
                         '<option value="fix">Texto Fixo</option>'+
                         '<option value="dat">Data e Hora Apontamento</option>'+
                         '<option value="datexp">Data e Hora Exportação</option>'+
@@ -220,6 +224,7 @@
             var exampleLine = "";
             var fieldsList = $("select[name^='fieldsOrder[]']");
             var delimiter = "<b>"+$("#delimiter").val()+"</b>";
+            var final_delimiter = $("#final_delimiter").is(":checked");
             if(delimiter){
                 //Loop nos campos para gerar novamente a linha de exemplo
                 fieldsList.map(function() {
@@ -233,10 +238,8 @@
                                 var qdeDec = $("#qdeDec").val('0');
                                 // var qdeDec = $("#qdeDec").focus();
                             } else if(qdeDig == "" || qdeDig == 0){
-                                alert('Total de Digitos não pode ser 0');
-                                $("#qdeMax").val('5');
-                                exampleLine = exampleLine+String(subString(12,5,0,qdeDec))+delimiter;
-                                $("#qdeMax").focus();
+                                //Assume tamanho real da qde
+                                exampleLine = exampleLine+"12"+delimiter;
                             }else{
                                 exampleLine = exampleLine+String(subString(12,qdeDig,0,qdeDec))+delimiter;
                             }
@@ -250,6 +253,14 @@
                             var prdDig = $("#prdMax").val();
                             var prdPre = $("#prdPre").val();
                             exampleLine = exampleLine+subString("PRD01",prdDig,prdPre)+delimiter;
+                            break
+                        case 'loc':
+                            var locDig = $("#prdMax").val();
+                            if(locDig == "" || locDig == 0){
+                                exampleLine = exampleLine+"00991"+delimiter;
+                            }else{
+                                exampleLine = exampleLine+subString("00991",locDig,0)+delimiter;
+                            }
                             break
                         case 'fix':
                             var fix = $("#fixFormat").val();
@@ -269,6 +280,10 @@
                             break
                     }
                 });
+                //Se esta marcado para não mostrar o delimitador final, remove da linha de exemplo
+                if(!final_delimiter){
+                    exampleLine = exampleLine.substring(0, exampleLine.length - delimiter.length)
+                }
                 $("#exampleLine").html(exampleLine);
             }
         }
@@ -324,6 +339,10 @@
                                             '<label for="prdPre">Preencher:</label>'+
                                             '{!! Form::select('prdPre',$arrayPreenc, null, ['class' => 'form-control props', 'id' => 'prdPre']) !!}');            
                     break;
+                    case 'loc':
+                        $("#field_"+i).html('<label for="locMax">Num. Caracteres: </label>'+
+                                            '<input class="form-control props" type="number" size="5" min="0" max="30" name="prdMax" id="prdMax"/>');            
+                    break;
                     case 'ean':
                         $("#field_"+i).html('<label for="eanMax">Num. Dígitos: </label>'+
                                             '<input class="form-control props" type="number" size="5" min="0" max="30" name="eanMax" id="eanMax" />');
@@ -332,6 +351,7 @@
                         $("#field_"+i).html('<label for="fixedValue">Valor:</label>'+
                                             '<input class="form-control props" type="text" size="5" name="fixFormat" id="fixFormat"/>');
                         break;
+                    
                     case 'dat':
                         $("#field_"+i).html('<label for="datFormat">Formato: </label>'+
                                             '{!! Form::select('datFormat',$arrayDat, null, ['class' => 'form-control props', 'id' => 'datFormat']) !!}');            

@@ -213,7 +213,7 @@ class InventoryItem extends Model
      * @var document_id e @var count 
      */
 
-    public static function getAppointments($document_id, $count = '', $summarize = 0)
+    public static function getAppointments($document_id, $count = 1, $summarize = 0)
     {
         switch ($count) {
             case 2:
@@ -226,70 +226,61 @@ class InventoryItem extends Model
                 $status = '';
         }
         if ($summarize == 0) {
-            return InventoryItem::select(
-                'inventory_items.company_id',
+            return Activity::select(
+                'activities.company_id',
                 'pallets.barcode as plt_barcode',
-                'inventory_items.document_id',
-                'inventory_items.location_code',
-                DB::raw("format(SUM(qty_1count), uoms.decimal_places) as qty1"),
+                'activities.document_id',
+                'activities.location_code',
+                DB::raw("format(SUM(activities.prim_qty), uoms.decimal_places) as qty1"),
                 'users.name',
-                DB::raw("format(SUM(qty_2count), uoms.decimal_places) as qty2"),
-                DB::raw("format(SUM(qty_3count), uoms.decimal_places) as qty3"),
+                DB::raw("0 as qty2"),
+                DB::raw("0 as qty3"),
                 DB::raw("format(SUM(products.qty_erp), uoms.decimal_places) as qty_wms"),
-                DB::raw("format(SUM(qty_4count), uoms.decimal_places) as qty4"),
+                DB::raw("0 as qty4"),
                 'labels.barcode as label_barcode',
-                'inventory_items.created_at',
-                'inventory_status.description as description',
+                'activities.created_at',
+                'activity_status.description as description',
                 'deposit_code',
-                'inventory_status_id',
-                'inventory_items.prim_uom_code',
-                DB::raw('CASE WHEN products.customer_code IS NOT NULL AND products.alternative_code IS NOT NULL THEN products.alternative_code ELSE inventory_items.product_code END as product_code'),
-                'products.description as product_description'
-            )
-                ->join("uoms", "inventory_items.prim_uom_code", "uoms.code")
-                ->join('inventory_status', 'inventory_status.id', 'inventory_items.inventory_status_id')
+                'activity_status_id',
+                'activities.prim_uom_code',
+                DB::raw('CASE WHEN products.customer_code IS NOT NULL AND products.alternative_code IS NOT NULL THEN products.alternative_code ELSE activities.product_code END as product_code'),
+                'products.description as product_description',
+                'activities.barcode'
+                )
+                ->join("uoms", "activities.prim_uom_code", "uoms.code")
+                ->join('activity_status', 'activity_status.id', 'activities.activity_status_id')
                 ->join('locations', function ($join) {
-                    $join->on('locations.code', 'inventory_items.location_code')
-                        ->whereColumn('locations.company_id', 'inventory_items.company_id');
+                    $join->on('locations.code', 'activities.location_code')
+                        ->whereColumn('locations.company_id', 'activities.company_id');
                 })
                 ->join('products', function ($join) {
-                    $join->on('products.code', 'inventory_items.product_code')
-                        ->whereColumn('products.company_id', 'inventory_items.company_id');
+                    $join->on('products.code', 'activities.product_code')
+                        ->whereColumn('products.company_id', 'activities.company_id');
                 })
                 ->leftJoin('users', function ($join) {
-                    $join->on('users.id', 'inventory_items.user_1count')
-                        ->whereColumn('users.company_id', 'inventory_items.company_id');
+                    $join->on('users.id', 'activities.user_id')
+                        ->whereColumn('users.company_id', 'activities.company_id');
                 })
-                ->leftJoin('pallets', 'pallets.id', 'inventory_items.pallet_id')
-                ->leftJoin('labels', 'labels.id', 'inventory_items.label_id')
-                ->where('inventory_items.company_id', Auth::user()->company_id)
-                ->where('inventory_items.document_id', $document_id)
-                ->where('inventory_items.inventory_status_id', '<>', 9)
-                ->where(function ($query) {
-                    $query->where("inventory_items.qty_wms", ">", 0)
-                        ->orWhere(function ($query) {
-                            $query->where("inventory_items.qty_1count", ">", "0")
-                                ->orWhere("inventory_items.qty_2count", ">", "0")
-                                ->orWhere("inventory_items.qty_3count", ">", "0")
-                                ->orWhere("inventory_items.qty_4count", ">", "0");
-                        });
-                })
-                ->when($status, function ($query, $status) {
-                    if (count($status) > 0) {
-                        $query->whereIn('inventory_items.inventory_status_id', $status);
-                    }
-                })
+                ->leftJoin('pallets', 'pallets.id', 'activities.pallet_id')
+                ->leftJoin('labels', 'labels.id', 'activities.label_id')
+                ->where('activities.company_id', Auth::user()->company_id)
+                ->where('activities.document_id', $document_id)
+                ->where('activities.activity_status_id', '<>', 9)
+                ->where('activities.description', 'not like', 'Cancelamento%')
+                ->where("activities.prim_qty", ">", 0)
+                ->where("activities.count", $count)
                 ->groupBy(
-                    'inventory_items.company_id',
-                    'inventory_items.product_code',
+                    'activities.company_id',
+                    'activities.product_code',
                     'location_code',
-                    'inventory_items.created_at',
-                    'inventory_status.description',
+                    'activities.created_at',
+                    'activity_status.description',
                     'pallets.barcode',
                     'labels.barcode',
-                    'inventory_items.id',
-                    'inventory_items.user_1count',
-                    'users.name'
+                    'activities.id',
+                    'activities.user_id',
+                    'users.name',
+                    'activities.barcode'
                 )
                 ->orderBy('location_code')
                 ->get();
@@ -312,7 +303,8 @@ class InventoryItem extends Model
                 'inventory_status_id',
                 'inventory_items.prim_uom_code',
                 DB::raw('CASE WHEN products.customer_code IS NOT NULL AND products.alternative_code IS NOT NULL THEN products.alternative_code ELSE inventory_items.product_code END as product_code'),
-                'products.description as product_description'
+                'products.description as product_description',
+                'packings.barcode'
             )
                 ->join("uoms", "inventory_items.prim_uom_code", "uoms.code")
                 ->join('inventory_status', 'inventory_status.id', 'inventory_items.inventory_status_id')
@@ -323,6 +315,11 @@ class InventoryItem extends Model
                 ->join('products', function ($join) {
                     $join->on('products.code', 'inventory_items.product_code')
                         ->whereColumn('products.company_id', 'inventory_items.company_id');
+                })
+                ->join('packings', function ($join) {
+                    $join->on('products.code', 'packings.product_code')
+                    ->whereColumn('products.company_id', 'packings.company_id')
+                    ->where('packings.level', 1);
                 })
                 ->leftJoin('users', function ($join) {
                     $join->on('users.id', 'inventory_items.user_1count')
@@ -359,7 +356,8 @@ class InventoryItem extends Model
                     'inventory_items.user_1count',
                     'products.qty_erp',
                     'inventory_items.prim_uom_code',
-                    'products.description'
+                    'products.description',
+                    'packings.barcode'
                 )
                 ->orderBy('products.code')
                 ->get();

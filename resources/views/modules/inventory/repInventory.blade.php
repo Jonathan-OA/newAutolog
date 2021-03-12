@@ -29,6 +29,7 @@
                                             <th class="th_grid">@lang('models.deposit_code') </th>
                                             <!-- <th class="th_grid">@lang('models.location_code') </th> -->
                                             <th class="th_grid">@lang('models.product_code') </th>
+                                            <th class="th_grid">@lang('models.barcode') </th>
                                             <th class="th_grid">@lang('models.description') </th>
                                             <th class="th_grid">@lang('models.qty_wms') </th>
                                             <th class="th_grid">@lang('models.prim_uom_code') </th>
@@ -104,6 +105,10 @@
                     className: "td_center"
                 },
                 {
+                    data: 'barcode',
+                    className: "td_center"
+                },
+                {
                     data: 'product_description',
                     className: "td_center"
                 },
@@ -145,12 +150,12 @@
                         if(summarize == 0){
                             if(last != null){
                                 $(rows).eq(i).before(
-                                    '<tr class="dataTables_total"><td style="padding: 2px 15px !important" colspan="5"> Total: </td> <td style="padding: 2px 2px !important" nowrap colspan="1" align="right">   ' + totalQty1 + ' </td> <td style="padding: 2px 15px !important" > </td></tr>'
+                                    '<tr class="dataTables_total"><td style="padding: 2px 15px !important" colspan="6"> Total: </td> <td style="padding: 2px 2px !important" nowrap colspan="1" align="right">   ' + totalQty1 + ' </td> <td style="padding: 2px 15px !important" > </td></tr>'
                                 );
                             }
                             totalQty1 = 0;
                             $(rows).eq(i).before(
-                                '<tr class="dataTables_group"><td style="padding: 2px 15px !important" colspan="7">Endereço: ' + group + ' </td> </tr>'
+                                '<tr class="dataTables_group"><td style="padding: 2px 15px !important" colspan="8">Endereço: ' + group + ' </td> </tr>'
                             );
                         }
                         last = group;
@@ -159,7 +164,7 @@
                     totalQty1 += parseFloat(api.rows( {page:'current'} ).data()[i].qty1);
                 });    
                 $(rows).last().after(
-                    '<tr class="dataTables_total"><td style="padding: 2px 15px !important" colspan="5"> Total: </td> <td style="padding: 2px 2px !important" nowrap colspan="1" align="right"> ' + totalQty1 + '</td> <td style="padding: 2px 15px !important" > </td></tr>'
+                    '<tr class="dataTables_total"><td style="padding: 2px 15px !important" colspan="6"> Total: </td> <td style="padding: 2px 2px !important" nowrap colspan="1" align="right"> ' + totalQty1 + '</td> <td style="padding: 2px 15px !important" > </td></tr>'
                 );
                 
             }
