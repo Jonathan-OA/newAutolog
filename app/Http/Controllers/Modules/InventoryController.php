@@ -30,7 +30,7 @@ use App\Models\Activity;
 use App\Models\Task;
 
 ini_set('max_execution_time', 1200); //10 minutes
-ini_set('memory_limit', '2048M'); //Limite de memória
+ini_set('memory_limit', '2048M'); //Limite de
 
 class InventoryController extends AppBaseController
 {
@@ -409,7 +409,7 @@ class InventoryController extends AppBaseController
                 //Tudo certo, grava o arquivo no S3 para consultas futuras
                 //Pasta no padrão CODE+BRANCH/CLIENTE/INVENTARIO
                 $fileDest = Auth::user()->getCompanyInfo()->code.Auth::user()->getCompanyInfo()->branch.'/'.$customer_code.'/'.$inventoryNumber.'.txt';
-                Storage::disk('s3')->put($fileDest, Storage::get(storage_path() . '/' . $fileName));
+                //Storage::disk('s3')->put($fileDest, Storage::get(storage_path() . '/' . $fileName));
 
                 //Remove da pasta local
                 Storage::delete(storage_path() . '/' . $fileName);
