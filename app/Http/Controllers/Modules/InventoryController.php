@@ -30,6 +30,7 @@ use App\Models\Activity;
 use App\Models\Task;
 
 ini_set('max_execution_time', 1200); //10 minutes
+ini_set('memory_limit', '2048M'); //Limite de memória
 
 class InventoryController extends AppBaseController
 {
