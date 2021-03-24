@@ -341,7 +341,8 @@ class InventoryController extends AppBaseController
             }
 
             //Salva o arquivo no storage para ser obtido após a confirmação
-            $input['fileExcel']->move(storage_path(), $fileName);
+            Storage::putFileAs(storage_path(),$input['fileExcel'],$fileName);
+            //$input['fileExcel']->move(storage_path(), $fileName);
 
             return view('modules.inventory.confirmImportFile')->with('fileName', $fileName)
                 ->with('extFile', $extFile)
@@ -396,6 +397,10 @@ class InventoryController extends AppBaseController
             $ret = $importFile->array($file, array('order' => $fieldsOrder, 'separator' => $sepFile));
 
             if ($ret[1] <> 0) {
+
+                //Remove da pasta local
+                Storage::delete(storage_path() . '/' . $fileName);
+
                 Flash::success('Erro ao importar o inventário.  Código de Erro: ' . $ret[1]);
                 return redirect(route('inventory.index'));
             }else{
@@ -404,6 +409,10 @@ class InventoryController extends AppBaseController
                 //Pasta no padrão CODE+BRANCH/CLIENTE/INVENTARIO
                 $fileDest = Auth::user()->getCompanyInfo()->code.Auth::user()->getCompanyInfo()->branch.'/'.$customer_code.'/'.$inventoryNumber.'.txt';
                 Storage::disk('s3')->put($fileDest, file_get_contents(storage_path() . '/' . $fileName));
+
+                //Remove da pasta local
+                Storage::delete(storage_path() . '/' . $fileName);
+                
 
             }
         } else {
