@@ -55,7 +55,7 @@
 
 <!-- Number Field -->
 {!! Form::label('number', Lang::get('models.number').':') !!}
-{!! Form::number('number', null, ['class' => 'form-control']) !!}
+{!! Form::number('number', null, ['class' => 'form-control','maxlength' => '5']) !!}
 
 <!-- Neighbourhood Field -->
 {!! Form::label('neighbourhood', Lang::get('models.neighbourhood').':') !!}
@@ -75,7 +75,7 @@
 
 <!-- Zip Code Field -->
 {!! Form::label('zip_code', Lang::get('models.zip_code').':') !!}
-{!! Form::text('zip_code', null, ['class' => 'form-control']) !!}
+{!! Form::text('zip_code', null, ['class' => 'form-control','maxlength' => '10']) !!}
 
 <!-- Phone1 Field -->
 {!! Form::label('phone1', Lang::get('models.phone1').':') !!}
