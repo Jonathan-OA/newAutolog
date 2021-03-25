@@ -55,7 +55,7 @@
 
 <!-- Number Field -->
 {!! Form::label('number', Lang::get('models.number').':') !!}
-{!! Form::number('number', null, ['class' => 'form-control','maxlength' => '5']) !!}
+{!! Form::number('number', null, ['class' => 'form-control','step' => '1', 'max' => '99999', 'min' => '1']) !!}
 
 <!-- Neighbourhood Field -->
 {!! Form::label('neighbourhood', Lang::get('models.neighbourhood').':') !!}

@@ -342,8 +342,8 @@ class InventoryController extends AppBaseController
             }
 
             //Salva o arquivo no storage para ser obtido após a confirmação
-            Storage::putFileAs(storage_path(),$input['fileExcel'],$fileName);
-            //$input['fileExcel']->move(storage_path(), $fileName);
+            //Storage::putFileAs(storage_path(),$input['fileExcel'],$fileName);
+            $input['fileExcel']->move(storage_path(), $fileName);
 
             return view('modules.inventory.confirmImportFile')->with('fileName', $fileName)
                 ->with('extFile', $extFile)

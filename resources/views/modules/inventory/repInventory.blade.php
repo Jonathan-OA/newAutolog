@@ -77,7 +77,7 @@
             ],
             scrollX: true,
             scrollY: "60vh",
-            pageLength: 100,
+            pageLength: 500,
             ajax: urlSummarized,
             autoWidth: true,
             columnDefs: [{
