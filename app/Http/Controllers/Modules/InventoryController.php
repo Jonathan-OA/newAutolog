@@ -401,9 +401,14 @@ class InventoryController extends AppBaseController
 
                 //Remove da pasta local
                 Storage::delete(storage_path() . '/' . $fileName);
-
-                Flash::success('Erro ao importar o inventário.  Código de Erro: ' . $ret[1]);
-                return redirect(route('inventory.index'));
+                //Campos não preenchidos
+                if ($ret[1] == 6) {
+                    Flash::error($ret[2]);
+                }else{
+                    Flash::error('Erro ao importar o inventário.  Código de Erro: ' . $ret[1]);
+                }
+                
+                return redirect(route('inventory.importFile'));
             }else{
                 $inventoryNumber = $ret[0];
                 //Tudo certo, grava o arquivo no S3 para consultas futuras
@@ -419,7 +424,7 @@ class InventoryController extends AppBaseController
         } else {
             //Arquivo invalido
             Flash::error(Lang::get('validation.permission'));
-            return redirect(url('inventory.importFile'));
+            return redirect(route('inventory.importFile'));
         }
 
 

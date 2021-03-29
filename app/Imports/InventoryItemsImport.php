@@ -121,9 +121,28 @@ class InventoryItemsImport implements ToArray
                 if(trim($desc) == '' && trim($produto) == '') continue;
                 
             }
+            
+            $msgFields = "";
+
+            //Validações de erro na linha
+            if(array_key_exists('prd', $order) && trim($produto) == ''){
+                $erro = 6;
+                $msgFields .= "PRODUTO,";
+                echo 'opa3';
+            }
+            if(array_key_exists('ean', $order) && trim($barcode) == ''){
+                $erro = 6;
+                $msgFields .= "BARCODE,";
+                echo 'opa2';
+            }
+            if(array_key_exists('dsc', $order) && trim($desc) == ''){
+                $erro = 6;
+                $msgFields .= "DESCRIÇÃO,";
+                echo 'opa1';
+            }
 
             //Se achar alguma linha com descricao e produto em branco, encerra o loop
-            if(trim($desc) == '' && trim($produto) == '') break;
+            if((trim($desc) == '' && trim($produto) == '') || $erro == 6) break;
             
             //Deposito
             if(trim($deposito) <> ''){
@@ -247,14 +266,19 @@ class InventoryItemsImport implements ToArray
             $erro = $return;
         }
 
+        
         //Finaliza
         if($erro == 0){
             DB::commit();
         }else{
+            //Campos não preenchidos na linha
+            if($erro == 6){
+                $msgFields = "ERRO: Campos não preenchidos na linha $cont: ".substr($msgFields, 0, -1);
+            }
             DB::rollback();
         }
 
-        return array( $inventoryNumber, $erro) ;
+        return array( $inventoryNumber, $erro, $msgFields) ;
 
 
     }

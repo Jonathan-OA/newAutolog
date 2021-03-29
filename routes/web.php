@@ -78,7 +78,7 @@ Route::group(['middleware' => 'auth'], function() {
     // ----------------------------------------------------------------------------------------------
     // Modulo de Inventário
     // ----------------------------------------------------------------------------------------------
-    Route::get('inventory/importFile', 'Modules\InventoryController@showImportFile'); //Mostra Tela de Importação Excel
+    Route::get('inventory/importFile', 'Modules\InventoryController@showImportFile')->name('inventory.importFile'); //Mostra Tela de Importação Excel
     Route::post('inventory/confirmImportFile', 'Modules\InventoryController@confirmImportFile'); //Confirma a ordem dos campos para importação
     Route::post('inventory/importFile', 'Modules\InventoryController@importFile'); //Importa Excel e Cria IVD com os itens
     Route::get('inventory/{document_id}/exportFile', 'Modules\InventoryController@showExportFile'); //Mostra Tela de Exportação Excel / Txt
@@ -91,7 +91,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('inventory/{document_id}/items/{document_item_id}/edit', 'Modules\InventoryController@editItem'); //Form de edição de itens
     Route::patch('inventory/updateItem/{document_item_id}', 'Modules\InventoryController@updateItem')->name('inventory.updateItem');; //Atualiza item
     Route::post('inventory/{document_id}/auditLocation', 'Modules\InventoryController@auditLocation')->name('inventory.auditLocation');; //Cria item
-    Route::post('inventory/{document_id}/storeItem', 'Modules\InventoryController@storeItem')->name('inventory.storeItem');; //Cria item
+    Route::post('inventory/{document_id}/storeItem', 'Modules\InventoryController@storeItem')->name('inventory.storeItem'); //Cria item
     Route::resource('inventory', 'Modules\InventoryController'); //Ações de documentos de inventário
     Route::get('/inventory/{id}/liberate/{cont?}', 'Modules\InventoryController@liberate'); //Libera Contagem
     Route::get('/inventory/{id}/finalize', 'Modules\InventoryController@finalize'); //Finaliza Contagem
