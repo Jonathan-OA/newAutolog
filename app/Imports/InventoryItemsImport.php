@@ -57,6 +57,7 @@ class InventoryItemsImport implements ToArray
 
         $cont = 0;
         $erro = 0;
+        $arrayErrors = array();
 
         DB::beginTransaction();
         
@@ -128,24 +129,21 @@ class InventoryItemsImport implements ToArray
             if(array_key_exists('prd', $order) && trim($produto) == ''){
                 $erro = 6;
                 $msgFields .= "PRODUTO,";
-                echo 'opa3';
             }
             if(array_key_exists('ean', $order) && trim($barcode) == ''){
                 $erro = 6;
                 $msgFields .= "BARCODE,";
-                echo 'opa2';
             }
             if(array_key_exists('dsc', $order) && trim($desc) == ''){
                 $erro = 6;
                 $msgFields .= "DESCRIÇÃO,";
-                echo 'opa1';
             }
 
             //Se achar alguma linha com descricao e produto em branco, encerra o loop
-            if((trim($desc) == '' && trim($produto) == '') || $erro == 6) break;
+            if(trim($desc) == '' && trim($produto) == '' && $erro <> 6) break;
             
             //Deposito
-            if(trim($deposito) <> ''){
+            if(trim($deposito) <> '' && $erro == 0){
 
                 //Adiciona os dados do deposito atual para inserir posteriormente
                 $arrayInsertDep[] =  ['company_id' => Auth::user()->company_id,
@@ -186,7 +184,7 @@ class InventoryItemsImport implements ToArray
             }
 
 
-            if($unidade <> 'UN'){
+            if($unidade <> 'UN' && $erro == 0){
                //Adiciona os dados do Uom atual para inserir posteriormente, caso seja diferente de UN
                 $arrayInsertUom[] = [ 'code' => $unidade, 'description' => $unidade];
             }
@@ -243,8 +241,13 @@ class InventoryItemsImport implements ToArray
                 $endere = null;
             }
 
+            //Monta a mensagem de erro para cada linha com problemas
+            if(trim($msgFields) <> ''){
+                $arrayErrors[] = "Campos não preenchidos na linha $cont: ".substr($msgFields, 0, -1);
+            }
+
             //Insere no banco a cada 4000 registros
-            if($cont%4000 == 0){
+            if($cont%4000 == 0 && $erro == 0){
                 $return = $this->insertValuesByArray($arrayInsertPrd, $arrayInsertPack, $arrayInsertEnd, $arrayInsertDep, $arrayInsertUom, $arrayInsertBcd);
                 if($return <> 0){
                     $erro = $return;
@@ -260,12 +263,13 @@ class InventoryItemsImport implements ToArray
             }
         }
 
-        //Insere os registros que sobraram e não foram inseridos dentro do loop
-        $return = $this->insertValuesByArray($arrayInsertPrd, $arrayInsertPack, $arrayInsertEnd, $arrayInsertDep, $arrayInsertUom, $arrayInsertBcd);
-        if($return <> 0){
-            $erro = $return;
+        if($erro == 0){
+            //Insere os registros que sobraram e não foram inseridos dentro do loop
+            $return = $this->insertValuesByArray($arrayInsertPrd, $arrayInsertPack, $arrayInsertEnd, $arrayInsertDep, $arrayInsertUom, $arrayInsertBcd);
+            if($return <> 0){
+                $erro = $return;
+            }
         }
-
         
         //Finaliza
         if($erro == 0){
@@ -278,7 +282,7 @@ class InventoryItemsImport implements ToArray
             DB::rollback();
         }
 
-        return array( $inventoryNumber, $erro, $msgFields) ;
+        return array( $inventoryNumber, $erro, $arrayErrors) ;
 
 
     }

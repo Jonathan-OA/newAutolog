@@ -403,7 +403,7 @@ class InventoryController extends AppBaseController
                 Storage::delete(storage_path() . '/' . $fileName);
                 //Campos não preenchidos
                 if ($ret[1] == 6) {
-                    Flash::error($ret[2]);
+                    Flash::error(implode("<br>\n",$ret[2]));
                 }else{
                     Flash::error('Erro ao importar o inventário.  Código de Erro: ' . $ret[1]);
                 }
