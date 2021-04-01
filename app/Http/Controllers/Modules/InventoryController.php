@@ -540,7 +540,7 @@ class InventoryController extends AppBaseController
                 ->select(
                     DB::raw("products.code as prd"),
                     "products.description as dsc",
-                    "activities.barcode as ean",
+                    DB::raw("CASE WHEN activities.barcode = products.code OR activities.barcode = products.alternative_code THEN packings.barcode ELSE activities.barcode END as ean"),
                     "activities.prim_qty as qde",
                     "activities.location_code as loc",
                     DB::raw(isset($input['datFormat']) ? "DATE_FORMAT(activities.start_date, '{$input['datFormat']}') as dat" : "'' as dat"),

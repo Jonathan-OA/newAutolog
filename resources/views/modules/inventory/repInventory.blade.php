@@ -77,7 +77,7 @@
             ],
             scrollX: true,
             scrollY: "60vh",
-            pageLength: 1200,
+            pageLength: 4000,
             ajax: urlSummarized,
             autoWidth: true,
             columnDefs: [{
@@ -142,6 +142,7 @@
                 var last = null;
                 var totalQty1 = 0;
                 var totalQty2 = 0;
+                var totalGer = 0;
                 var qty1 = 0;
                 api.column(groupColumn, {
                     page: 'current'
@@ -162,9 +163,11 @@
                     }
 
                     totalQty1 += parseFloat(api.rows( {page:'current'} ).data()[i].qty1);
+                    totalGer+= parseFloat(api.rows( {page:'current'} ).data()[i].qty1);
                 });    
                 $(rows).last().after(
-                    '<tr class="dataTables_total"><td style="padding: 2px 15px !important" colspan="6"> Total: </td> <td style="padding: 2px 2px !important" nowrap colspan="1" align="right"> ' + totalQty1 + '</td> <td style="padding: 2px 15px !important" > </td></tr>'
+                    '<tr class="dataTables_total"><td style="padding: 2px 15px !important" colspan="6"> Total: </td> <td style="padding: 2px 2px !important" nowrap colspan="1" align="right"> ' + totalQty1 + '</td> <td style="padding: 2px 15px !important" > </td></tr>'+
+                    '<tr class="dataTables_total"><td style="padding: 2px 15px !important" colspan="6"> Total Geral: </td> <td style="padding: 2px 2px !important" nowrap colspan="1" align="right"> ' + totalGer + '</td> <td style="padding: 2px 15px !important" > </td></tr>'
                 );
                 
             }
