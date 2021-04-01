@@ -538,7 +538,7 @@ class InventoryController extends AppBaseController
         if ($jsonFields['options']['summarize'] == 0) {
             $select = DB::table('activities')
                 ->select(
-                    DB::raw("products.code as prd"),
+                    DB::raw("CASE WHEN products.customer_code IS NOT NULL THEN products.alternative_code  ELSE  products.code END as prd"),
                     "products.description as dsc",
                     DB::raw("CASE WHEN activities.barcode = products.code OR activities.barcode = products.alternative_code THEN packings.barcode ELSE activities.barcode END as ean"),
                     "activities.prim_qty as qde",
@@ -568,32 +568,35 @@ class InventoryController extends AppBaseController
 
             $locQuery = ($fieldLocation == 1) ? "inventory_items.location_code" : "";
             $groupLoc = ($fieldLocation == 1) ? ",inventory_items.location_code": "";
-            $select = DB::table('inventory_items')
+
+            $select = DB::table('activities')
                 ->select(
-                    "products.code as prd",
+                    DB::raw("CASE WHEN products.customer_code IS NOT NULL THEN products.alternative_code  ELSE  products.code END as prd"),
                     "products.description as dsc",
-                    "packings.barcode as ean",
-                    DB::raw("SUM(inventory_items.qty_1count) as qde"),
+                    DB::raw("CASE WHEN activities.barcode = products.code OR activities.barcode = products.alternative_code THEN packings.barcode ELSE activities.barcode END as ean"),
+                    DB::raw("SUM(activities.prim_qty) as qde"),
                     DB::raw("' ' as loc"),
                     DB::raw("' ' as dat"),
-                    DB::raw(isset($input['datexpFormat']) ? "DATE_FORMAT(NOW(), '{$input['datexpFormat']}') as datexp" : "'' as datexp"),
+                    DB::raw(isset($input['datexpFormat']) ? "DATE_FORMAT(CONVERT_TZ(NOW(),'SYSTEM','America/Sao_Paulo'), '{$input['datexpFormat']}') as datexp" : "'' as datexp"),
                     "labels.batch as lot",
                     DB::raw(isset($input['fixFormat']) ? "'{$input['fixFormat']}' as fix" : "'' as fix")
                 )
                 ->join('products', function ($join) {
-                    $join->on('products.code', '=', 'inventory_items.product_code')
-                        ->whereColumn('products.company_id', 'inventory_items.company_id');
+                    $join->on('products.code', '=', 'activities.product_code')
+                        ->whereColumn('products.company_id', 'activities.company_id');
                 })
                 ->join('packings', function ($join) {
-                    $join->on('inventory_items.product_code', '=', 'packings.product_code')
-                        ->whereColumn('inventory_items.uom_code', 'packings.uom_code')
-                        ->whereColumn('inventory_items.company_id', 'packings.company_id');
+                    $join->on('activities.product_code', '=', 'packings.product_code')
+                        ->whereColumn('activities.uom_code', 'packings.uom_code')
+                        ->whereColumn('activities.company_id', 'packings.company_id');
                 })
-                ->leftJoin('labels', 'labels.id', 'inventory_items.label_id')
-                ->where('inventory_items.document_id', $document_id)
-                ->where('inventory_items.qty_1count', '>', 0)
+                ->leftJoin('labels', 'labels.id', 'activities.label_id')
+                ->where('activities.document_id', $document_id)
+                ->where('activities.description', 'not like', 'Cancelamento%')
+                ->where('activities.prim_qty', '>', 0)
+                ->where('activities.activity_status_id', '<>', 9)
                 ->groupBy('products.code', 'products.description', 'packings.barcode', 
-                          'labels.batch')
+                          'labels.batch', 'activities.barcode','products.alternative_code','products.customer_code')
                 ->get()
                 ->toArray();
         }
