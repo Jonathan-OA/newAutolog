@@ -125,7 +125,9 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('/api/documentItems/{doc_id}/{statusDsc?}', function($document_id, $stsDsc = '') {
         return App\Models\DocumentItem::getItens($document_id, $stsDsc);
     });
-    
+    Route::get('/api/inventoryItems/{document_id}/{summarize}', function($document_id, $summarize) {
+        return App\Models\InventoryItem::getAppointments($document_id, 1, $summarize);
+    });
     Route::get('/api/inventoryItems/{doc_id}/{statusDsc?}', function($document_id, $stsDsc = '') {
         return App\Models\InventoryItem::getItens($document_id, $stsDsc);
     });
