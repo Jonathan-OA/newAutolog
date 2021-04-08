@@ -112,12 +112,12 @@ app.controller('RepInventory', ['$rootScope', '$scope', '$http', 'uiGridConstant
             },
             enableGridMenu: true,
             columnDefs: [
-                { name: 'Endereço', field: 'location_code', grouping: { groupPriority: 1 }, minWidth: 150, 
+                { name: 'Endereço', field: 'location_code', cellClass:'align-left', grouping: { groupPriority: 1 }, minWidth: 150, 
                   cellTemplate: '<div ng-if="!col.grouping || col.grouping.groupPriority === undefined || col.grouping.groupPriority === null || ( row.groupHeader && col.grouping.groupPriority === row.treeLevel )" class="ui-grid-cell-contents" title="TOOLTIP">{{COL_FIELD CUSTOM_FILTERS}}</div>',
                   footerCellTemplate: '<div class="ui-grid-cell-contents">Total:</div>' },
                 { name: 'Produto', field: 'product_code',minWidth: 90 },
-                { name: 'Barcode', field: 'barcode',  minWidth: 170 },
-                { name: 'Descrição', field: 'product_description', minWidth: 400, customTreeAggregationFinalizerFn: function( aggregation ) {
+                { name: 'Barcode', field: 'barcode',  minWidth: 170, cellClass:'align-left' },
+                { name: 'Descrição', field: 'product_description', cellClass:'align-left', minWidth: 400, customTreeAggregationFinalizerFn: function( aggregation ) {
                     aggregation.rendered = aggregation.value;
                   },footerCellTemplate: '<div class="ui-grid-cell-contents"></div>' },
                 { name: '1ª Cont.', field: 'qty1', treeAggregationType: uiGridGroupingConstants.aggregation.SUM, customTreeAggregationFinalizerFn: function( aggregation ) {

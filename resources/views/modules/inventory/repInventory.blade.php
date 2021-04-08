@@ -31,7 +31,7 @@
                                     Agrupar por Barcode
                                 </span>
                                 <span ng-if="group == 2">
-                                    Agrupar por Setor
+                                    Agrupar por Barcode
                                 </span>
                             </button>
                         </div>
