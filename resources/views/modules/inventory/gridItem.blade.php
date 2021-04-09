@@ -27,6 +27,9 @@
                                         <img class='icon' src='{{asset('/icons/add.png') }}'>
                                     </a>
                                 </div>
+                                <button class="icon_grid" aria-label="@lang('buttons.filter')" data-microtip-position="bottom" role="tooltip" ng-click="toggleFiltering()">
+                                    <img class='icon' src='{{asset('/icons/filter.png') }}'>
+                                </button>
                         </div>
                         <div class="panel-body invent">
                             <div ui-grid="gridDetalhes" ui-grid-auto-resize  ui-grid-resize-columns ui-grid-selection ui-grid-pagination ui-grid-move-columns ui-grid-save-state >

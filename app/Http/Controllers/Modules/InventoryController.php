@@ -281,6 +281,27 @@ class InventoryController extends AppBaseController
     }
 
     /**
+     * Mostra a tela de reimportação de planilha para inventário (Após o início das contagens)
+     *
+     * @return Response
+     */
+
+    public function showReimportFile($document_id)
+    {
+
+        $document = $this->documentRepository->findWithoutFail($document_id);
+
+        //Valida se usuário possui permissão para acessar esta opção
+        if (App\Models\User::getPermission('documents_inv_reimp', Auth::user()->user_type_code)) {
+            return view('modules.inventory.reimportFile')->with('document', $document);
+        } else {
+            //Sem permissão
+            Flash::error(Lang::get('validation.permission'));
+            return redirect(url('inventory'));
+        }
+    }
+
+    /**
      * Confirma a ordem dos campos do arquivo enviado para importação
      * 
      *
@@ -430,6 +451,107 @@ class InventoryController extends AppBaseController
 
         Flash::success('Inventário '.$inventoryNumber.' criado com sucesso!');
         return redirect(route('inventory.index'));
+    }
+
+    /**
+     * Valida arquivo enviado e atualiza a lista do inventário atual
+     *
+     * @return Response
+     */
+
+    public function reimportFile(Request $request)
+    {
+        $input = $request->all();
+        $document_number = $input['document_number']; //Número do Documento
+        $document_id = $input['document_id']; //ID do Documento
+        //Pega a extensão e nome do arquivo
+        $extFile = $input['fileExcel']->clientExtension();
+        $fileName = $input['fileExcel']->getClientOriginalName();
+
+        $customer_code = $input['customer_code']; //Cliente
+        $inventory_value = ""; //Valor por Leitura
+        $billing_type = ""; //Tipo de Cobrança
+
+        //Pega a ordem das colunas e suas informações
+        //Inverte as chaves para que o índice seja a informação do campo e o valor da ordem
+        //Ex: 'qde' => 0, 'end' => 1
+        $fieldsOrder = array_flip($input['fields']);
+        $fieldsOrderJson = json_encode($fieldsOrder);
+
+        $parameters = "";
+
+        if (in_array($extFile, ['txt', 'csv'])) {
+
+            
+            $file = fopen($input['fileExcel'], "r");
+
+            //Pega apenas a primeira linha do arquivo
+            $primLinha = fgets($file);
+
+            //Busca o separador que pode ser ponto e virgula ou apenas virgula
+            $sepFile = (strpos($primLinha, ";")) ? ";" : (strpos($primLinha, ",") ? "," : "");
+
+            if ($sepFile <> "") {
+                $infos = explode($sepFile, $primLinha);
+                $indx = count($infos) - 1;
+                if (trim($infos[$indx]) == "") {
+                    //Exclui ultima posição do array caso esteja vazio (; final)
+                    array_pop($infos);
+                }
+                $countColumns = count($infos);
+                
+                //Valida se a primeira llinha tem a quantidade de informações digitadas no arquivo original
+                if(count($fieldsOrder) == $countColumns){
+                    //Cria o objeto e chama a função passando os parâmetros do txt
+                    $importFile = new InventoryItemsImport($parameters, $customer_code, $inventory_value, $billing_type, $fieldsOrderJson, $document_number);
+                    $ret = $importFile->array($file, array('order' => $fieldsOrder, 'separator' => $sepFile));
+
+                    if ($ret[1] <> 0) {
+
+                        //Remove da pasta local
+                        Storage::delete(storage_path() . '/' . $fileName);
+                        //Campos não preenchidos
+                        if ($ret[1] == 6) {
+                            Flash::error(implode("<br>\n",$ret[2]));
+                        }else{
+                            Flash::error('Erro ao reimportar o inventário.  Código de Erro: ' . $ret[1]);
+                        }
+                        
+                        return redirect(url("inventory/reimportFile/{$document_id}"));
+                    }else{
+                        $inventoryNumber = $ret[0];
+                        //Tudo certo, grava o arquivo no S3 para consultas futuras
+                        //Pasta no padrão CODE+BRANCH/CLIENTE/INVENTARIO
+                        $fileDest = Auth::user()->getCompanyInfo()->code.Auth::user()->getCompanyInfo()->branch.'/'.$customer_code.'/'.$inventoryNumber.'.txt';
+                        Storage::disk('s3')->put($fileDest, $file);
+
+                        //Remove da pasta local
+                        Storage::delete(storage_path() . '/' . $fileName);
+
+                        //Grava Logs
+                        $descricao = 'Reimportação da Lista de Itens de Inventário';
+                        $log = App\Models\Log::wlog('documents_inv_reimp', $descricao, $document_id);
+
+                        Flash::success(Lang::get('validation.reimport_success', ['number' => $inventoryNumber]));
+                        return redirect(url("inventory"));
+                        
+                    }
+
+                }else{
+                     //Quantidade incorreta de informações
+                    Flash::error("ERRO!! Arquivo informado não possui a mesma quantidade de colunas do original (".count($fieldsOrder).").");
+                    return redirect(url("inventory/reimportFile/{$document_id}"));
+                }
+
+            }
+
+        } else {
+            //Arquivo invalido
+            Flash::error(Lang::get('validation.permission'));
+            return redirect(route('inventory.reimportFile'));
+        }
+
+
     }
 
     /**
@@ -1033,13 +1155,6 @@ class InventoryController extends AppBaseController
         }
     }
 
-
-    public function getItems($document_id)
-    {
-        $documents = App\Models\DocumentItem::where('document_id', $document_id)->get();
-        return $documents->toArray();
-    }
-
     public function auditLocation($document_id, AuditLocationRequest $request)
     {
         // print_r($request->all());exit;
@@ -1100,5 +1215,11 @@ class InventoryController extends AppBaseController
             $document = $this->documentRepository->findWithoutFail($document_id);
             return view('modules.inventory.gridItem')->with('document', $document);
         }
+    }
+
+    public function getItems($document_id)
+    {
+        $documents = App\Models\DocumentItem::where('document_id', $document_id)->get();
+        return $documents->toArray();
     }
 }

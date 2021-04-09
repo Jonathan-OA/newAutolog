@@ -79,8 +79,10 @@ Route::group(['middleware' => 'auth'], function() {
     // Modulo de Inventário
     // ----------------------------------------------------------------------------------------------
     Route::get('inventory/importFile', 'Modules\InventoryController@showImportFile')->name('inventory.importFile'); //Mostra Tela de Importação Excel
+    Route::get('inventory/reimportFile/{document_id}', 'Modules\InventoryController@showReimportFile')->name('inventory.reimportFile'); //Mostra Tela de Reimportação Excel
     Route::post('inventory/confirmImportFile', 'Modules\InventoryController@confirmImportFile'); //Confirma a ordem dos campos para importação
     Route::post('inventory/importFile', 'Modules\InventoryController@importFile'); //Importa Excel e Cria IVD com os itens
+    Route::post('inventory/reimportFile', 'Modules\InventoryController@reimportFile'); //Atualiza o arquivo de itens do inventário em execução
     Route::get('inventory/{document_id}/exportFile', 'Modules\InventoryController@showExportFile'); //Mostra Tela de Exportação Excel / Txt
     Route::post('inventory/{document_id}/exportFile', 'Modules\InventoryController@exportFile'); //Exporta contagens
     Route::get('inventory/{document_id}/items', 'Modules\InventoryController@showItems'); //Mostra grid de itens
@@ -132,7 +134,7 @@ Route::group(['middleware' => 'auth'], function() {
         return App\Models\InventoryItem::getItens($document_id, $stsDsc);
     });
     Route::get('/api/inventoryItems/audit/{doc_id}/{location_code}', function($document_id, $location_code) {
-        return App\Models\InventoryItem::getItensAudit($document_id, $location_code);
+        return App\Models\Activity::getItensAudit($document_id, $location_code);
     });
     Route::get('/api/itemsProd/{document}', 'Modules\ProductionController@getItems');
     Route::post('/api/grid/', 'GridController@setColumns');

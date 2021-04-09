@@ -117,6 +117,7 @@ return [
     'status_doc'                => 'Não é possível realizar esta ação com o documento já iniciado.',
     'grid_success'              => 'Configurações de grid salvas com sucesso.',
     'infos_import_error'        => 'O arquivo importado possui mais colunas (:columnsFile) do que as que foram setadas (:fields). Verifique.',
+    'reimport_success'          => 'Lista de itens do inventário (:number) recarregada com sucesso!',
     'customer_not_exist'        => 'Cliente não existe.',
 
     /*

@@ -57,5 +57,7 @@ return [
     'finalize_inv' => 'Finalizar Inventário',
     'msg_finalize_inv' => 'ATENÇÃO! Deseja finalizar este Inventário?',
     'continue' => 'Continuar',
+    'reload_file' => 'Recarregar Arquivo',
+    'reimport' => 'Reimportar',
 
 ];

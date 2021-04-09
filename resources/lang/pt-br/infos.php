@@ -66,6 +66,7 @@ return [
     */
     
     'attention.import'       => '!! ATENÇÃO: Confirme as informações referentes a cada coluna no arquivo antes de CONTINUAR.',    
+    'attention.reimport'     => '!! ATENÇÃO: O novo arquivo deve conter a mesma quantidade de informações do arquivo ANTERIOR.',    
     
 
 ];

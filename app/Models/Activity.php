@@ -5,6 +5,7 @@ namespace App\Models;
 use Eloquent as Model;
 use Carbon\Carbon;
 use Auth;
+use DB;
 
 
 /**
@@ -168,6 +169,70 @@ class Activity extends Model
                         ]);
 
     }
+
+
+     /**
+     * Retorna todos os itens a serem ajustados em um documento desconsiderando o status do parâmetro
+     *
+     * @var array
+     */
+
+    public static function getItensAudit($document_id, $location_code)
+    {
+
+        return Activity::select(
+            'inventory_items.id',
+            'activities.company_id',
+            'activities.document_id',
+            'activities.location_code',
+            'inventory_items.product_code',
+            'products.description',
+            'activities.barcode',
+            DB::raw("format(qty_wms, uoms.decimal_places) as qty_wms"),
+            DB::raw("format(qty_1count, uoms.decimal_places) as qty_1count"),
+            DB::raw("format(qty_2count, uoms.decimal_places) as qty_2count"),
+            'locations.deposit_code',
+            DB::raw("sum(format(prim_qty, uoms.decimal_places)) as total"),
+            DB::raw("max(activities.id) as activity_id")
+            )
+            ->join('inventory_items', 'inventory_items.id', 'activities.inventory_item_id')
+            ->join('inventory_status', 'inventory_status.id', 'inventory_items.inventory_status_id')
+            ->join('locations', function ($join) {
+                $join->on('locations.code', 'inventory_items.location_code')
+                    ->whereColumn('locations.company_id', 'inventory_items.company_id');
+            })
+            ->join('products', function ($join) {
+                $join->on('products.code', 'inventory_items.product_code')
+                    ->whereColumn('products.company_id', 'inventory_items.company_id');
+            })
+            ->join('uoms', function ($join){
+                $join->on('activities.prim_uom_code', 'uoms.code');
+            })
+            ->where('inventory_items.company_id', Auth::user()->company_id)
+            ->where('activities.document_id', $document_id)
+            ->where('inventory_items.location_code', $location_code)
+            ->where('activities.location_code', $location_code)
+            ->where('activities.activity_status_id', 8)
+            ->where('activities.description', 'not like', 'Cancelamento%')
+            ->groupBy(
+                'activities.company_id',
+                'activities.product_code',
+                'activities.location_code',
+                'activities.document_id',
+                'inventory_items.id',
+                'inventory_items.product_code',
+                'activities.barcode',
+                'products.description',
+                'qty_wms',
+                'qty_1count',
+                'qty_2count',
+                'locations.deposit_code',
+                'uoms.decimal_places'
+            )
+            ->get()
+            ->toArray();
+    }
+
 
 
 }

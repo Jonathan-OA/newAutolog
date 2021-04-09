@@ -316,6 +316,7 @@ app.controller('DetCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '
         $scope.gridDetalhes = {};
         $scope.gridDetalhes.data = [];
         $scope.documentId = "";
+        $scope.hasFilter = false;
         $rootScope.page = 'items';
         $scope.gridDetalhes = {
             enableFullRowSelection: false,
@@ -407,10 +408,12 @@ app.controller('DetCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', '
         }
 
         
-        //Esconde / Mostra os filtros
+          //Esconde / Mostra os filtros
         $scope.toggleFiltering = function() {
-            $rootScope.gridDetalhes.enableFiltering = !$scope.gridDetalhes.enableFiltering;
-            $rootScope.gridApiDet.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
+            //Variavel de controle para buscar o filtro externo apenas uma vez
+            $scope.hasFilter = false;
+            $scope.gridDetalhes.enableFiltering = !$scope.gridDetalhes.enableFiltering;
+            $scope.gridApiDet.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
         };
 
 
@@ -441,11 +444,12 @@ app.controller('auditCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants',
             enableGridMenu: true,
             columnDefs: [
                 { name: 'Código', field: 'product_code' },
+                { name: 'Barcode', field: 'barcode' },
                 { name: 'Descrição', field: 'description' },
                 { name: 'Quantidade Prevista', field: 'qty_wms' },
-                { name: 'Primeira Contagem', field: 'qty_1count' },
+                { name: 'Primeira Contagem', field: 'total' },
                 { name: 'Segunda Contagem', field: 'qty_2count' },
-                { name: 'Auditoria', cellTemplate: '<input type="number" id="{{row.entity.id}}" name="{{row.entity.id}}" value="{{row.entity.qty_1count}}" class="form-control" style="margin-left:5% !important;max-width: 90% !important;max-height: 100% !important;"/>' }
+                { name: 'Auditoria', cellTemplate: '<input type="number" id="{{row.entity.id}}" name="{{row.entity.id}}" value="{{row.entity.total}}" class="form-control" style="margin-left:5% !important;max-width: 90% !important;max-height: 100% !important;"/>' }
                 ],
             enablePaginationControls: true,
             paginationPageSize: 18,

@@ -38,6 +38,13 @@
                         <img class='icon' src='{{asset('/icons/3acont.png') }}'>
                 </button>
 
+                <!-- Recarregar arquivo de leitura  -->
+                <span ng-if="row.status_doc == 2">
+                        <button  class="icon_action" ng-click="callRoute('./inventory/reimportFile/'+row.id)" aria-label="@lang('buttons.reload_file')" data-microtip-position="left" role="tooltip">
+                                <img class='icon' src='{{asset('/icons/import.png') }}'>
+                        </button>
+                </span>
+
                 <!-- Finalizar Inventário   -->
                 <button ng-if="(row.status_inv > 1 && row.status_inv != 8 && row.status_inv != 9 || (row.status_inv == 1 && row.counts == 1))" class="icon_action" ng-click="callRouteConfirm('./inventory/'+row.id+'/finalize',1,'@lang('buttons.msg_finalize_inv')')" aria-label="@lang('buttons.finalize_inv')" data-microtip-position="left" role="tooltip">
                         <img class='icon' src='{{asset('/icons/finalize.png') }}'>

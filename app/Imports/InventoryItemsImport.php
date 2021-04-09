@@ -12,15 +12,17 @@ class InventoryItemsImport implements ToArray
     private $value = '';
     private $billing_type = '';
     private $fieldsOrderJson = '';
+    private $documentNumber = '';
 
     //Parametros de inventário enviados pelo construtor no controller de inventário
     //Customer = Cliente e Value = Valor por Leitura
-    public function __construct($parameters, $customer, $value, $billing_type, $fieldsOrderJson){
+    public function __construct($parameters, $customer, $value, $billing_type, $fieldsOrderJson, $documentNumber = ""){
         $this->parameters = $parameters;
         $this->customer_code = $customer;
         $this->value = $value;
         $this->billing_type = $billing_type;
         $this->fieldsOrderJson = $fieldsOrderJson; //Ordem dos campos para importação
+        $this->documentNumber = $documentNumber; //Número do documento para casos de reimportação
     }
 
     
@@ -82,33 +84,39 @@ class InventoryItemsImport implements ToArray
 
             //Primeira linha
             if($cont == 1) {
-                //Valida quantos foram criados na data atual e incrementa 
-                $cInv = \App\Models\Document::where('company_id',Auth::user()->company_id)
-                                            ->where('document_type_code', 'IVD')
-                                            ->where('number', 'like', date('Ymd').'%')
-                                            ->get()
-                                            ->count();
-                $cInv = $cInv+1;
+                //Se não entrou como parâmetro o número do inventário, cria
+                if(trim($this->documentNumber) == ''){
 
-                //Cria doc de inventário
-                $inv = new \App\Models\Document(['company_id' => Auth::user()->company_id,
-                                                 'number' => date('Ymd').$cInv,
-                                                 'document_type_code' => 'IVD',
-                                                 'document_status_id' => 0,
-                                                 'inventory_status_id' => 0,
-                                                 'inventory_value' => $this->value,
-                                                 'billing_type' => $this->billing_type,
-                                                 'customer_code' => $this->customer_code,
-                                                 'user_id' => Auth::user()->id,
-                                                 'emission_date' => \Carbon\Carbon::now(),
-                                                 'comments' => $this->parameters,
-                                                 'order_fields' => $this->fieldsOrderJson
-                                                ]);
-                if(!$inv->save()){
-                    $erro = 1;
-                    break;
+                    //Valida quantos foram criados na data atual e incrementa 
+                    $cInv = \App\Models\Document::where('company_id',Auth::user()->company_id)
+                                                ->where('document_type_code', 'IVD')
+                                                ->where('number', 'like', date('Ymd').'%')
+                                                ->get()
+                                                ->count();
+                    $cInv = $cInv+1;
+
+                    //Cria doc de inventário
+                    $inv = new \App\Models\Document(['company_id' => Auth::user()->company_id,
+                                                    'number' => date('Ymd').$cInv,
+                                                    'document_type_code' => 'IVD',
+                                                    'document_status_id' => 0,
+                                                    'inventory_status_id' => 0,
+                                                    'inventory_value' => $this->value,
+                                                    'billing_type' => $this->billing_type,
+                                                    'customer_code' => $this->customer_code,
+                                                    'user_id' => Auth::user()->id,
+                                                    'emission_date' => \Carbon\Carbon::now(),
+                                                    'comments' => $this->parameters,
+                                                    'order_fields' => $this->fieldsOrderJson
+                                                    ]);
+                    if(!$inv->save()){
+                        $erro = 1;
+                        break;
+                    }else{
+                        $inventoryNumber = $inv->number;
+                    }
                 }else{
-                    $inventoryNumber = $inv->number;
+                    $inventoryNumber = $this->documentNumber;
                 }
 
                 //Busca prefixo de cliente para gravar o produto com esse valor
