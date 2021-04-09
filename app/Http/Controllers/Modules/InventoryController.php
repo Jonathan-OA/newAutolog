@@ -444,6 +444,7 @@ class InventoryController extends AppBaseController
             ->where('code', $document->customer_code)
             ->select('profile_export')
             ->get();
+
         $profileExport = $idExport[0]->profile_export;
 
         //Busca perfis de exportação já gravados
@@ -470,6 +471,7 @@ class InventoryController extends AppBaseController
     {
         $input = $request->all();
         $delimiter = $input['delimiter'];
+        $header = $input['header']; //Cabeçalho fixo no txt
         $final_delimiter = (isset($input['final_delimiter'])) ? 1 : 0;
         $fieldsOrder = $input['fieldsOrder'];
         $document = $this->documentRepository->findWithoutFail($document_id);
@@ -508,16 +510,23 @@ class InventoryController extends AppBaseController
                     break;
             }
         }
-        $jsonFields['options'] = array('summarize' => $input['summarize']);
+        $jsonFields['options'] = array('summarize' => $input['summarize'], 'header' => $header, 'final_delimiter' => $final_delimiter ) ;
 
         //Cadastra o novo perfil de importação se não existir um igual
-        $verProfile = Profile::where('company_id', Auth::user()->company_id)
+        $verProfile = Profile::select('id')
+            ->where('company_id', Auth::user()->company_id)
             ->where('type', 'EXPORT')
             ->whereJsonContains('format', $jsonFields)
-            ->get()
-            ->count();
+            ->get();
 
-        if ($verProfile == 0) {
+        if(is_array($verProfile)){
+            $idProfile = (int)$verProfile[0]->id;
+        }else{
+            $idProfile = 0;
+        }
+        
+            
+        if ($idProfile == 0) {
             $insertProfile = Profile::insertGetId(
                 [
                     'company_id' => Auth::user()->company_id, 'type' => 'EXPORT', 'description' =>  $input['profile_desc'], 'delimiter' =>  $delimiter,
@@ -525,6 +534,8 @@ class InventoryController extends AppBaseController
                 ]
             );
             $input['profile_export'] = $insertProfile;
+        }else{
+            $input['profile_export'] = $idProfile;
         }
 
         //Atualiza no cliente o ultimo perfil utilizado
@@ -533,7 +544,14 @@ class InventoryController extends AppBaseController
             ->update(['profile_export' => $input['profile_export']]);
 
         $content = "";
+
         $fileName = "export_ivd_" . $document_id . "_" . date('Ymd') . "_" . date('His') . ".txt";
+
+        //Se informou cabeçalho, grava o valor fixo na primeira linha
+        if(trim($header) != ''){
+            $content .= $header . "\n";
+        }
+
         //Pega as informações das contagens (se parametro summarize = 1, agrupa por item)
         if ($jsonFields['options']['summarize'] == 0) {
             $select = DB::table('activities')
@@ -972,6 +990,10 @@ class InventoryController extends AppBaseController
             $return = App\Models\InventoryItem::returnLocation($document_id, $location_code, $document->inventory_status_id);
 
             if ($return['erro'] == 0) {
+
+                //Cancela atividades do endereço
+                $ret = App\Models\Activity::returnActivitiesLocation($document_id, $location_code);
+
                 //Grava Logs
                 $descricao = 'Retornou Contagens do Endereço: ' . $location_code;
                 $log = App\Models\Log::wlog('documents_inv_ret', $descricao, $document_id);

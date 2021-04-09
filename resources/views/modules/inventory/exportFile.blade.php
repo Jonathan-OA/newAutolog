@@ -84,6 +84,12 @@
                                             {!! Form::checkbox('final_delimiter', '1' , true, ['class' => 'props', 'id' => 'final_delimiter']) !!} Incluir delimitador no final
                                             <br>
                                         </div>
+                                        <div class="col-md-3">
+                                            <!-- Cabeçalho  -->
+                                            {!! Form::label('header', '*'.Lang::get('models.header').':') !!}
+                                            {!! Form::text('header','', ['class' => 'form-control props', 'id' => 'header', 'maxlength' => '200']) !!}
+                                            <br>
+                                        </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12">
@@ -293,12 +299,13 @@
             $( "#sortable" ).sortable();
             $( "#sortable" ).disableSelection();
             $("input[type='radio'][name='summarize']").on("change", function(event){
-                
+
                 if(summarizeSelected != event.target.value){
                     uptProfile = 1;
                     $('#summarize').val(event.target.value);
                 }
             });
+
             //Muda os número da ordem dos campos caso reordene
             $( "#sortable" ).on( "sortstop", function( event, ui ) {
                 var titlesField = $("span[class^='fieldTitle']");
@@ -400,8 +407,13 @@
                 
                 //Pega o formato do perfil selecionado
                 var newFormat = JSON.parse($('#profile_export option:selected').attr('format'));
+                console.log(newFormat)
+
                 //Seta o delimitador
                 $('#delimiter').val($('#profile_export option:selected').attr('delim'));
+
+                //Seta o cabeçalho
+                $('#header').val(newFormat.options.header);
 
                 //Apaga os blocos atuais
                 $('#sortable:not(".ui-sortable-handle")').children('li').remove();
@@ -430,6 +442,8 @@
 
                 //Seta se é sumarizado ou não
                 $("input[name=summarize][value='"+newFormat.options.summarize+"']").prop("checked",true);
+                //Seta se tem delimitador no final
+                $("input[name=final_delimiter][value='"+newFormat.options.final_delimiter+"']").prop("checked",true);
                 summarizeSelected = newFormat.options.summarize;
                 uptProfile = 0;
                 

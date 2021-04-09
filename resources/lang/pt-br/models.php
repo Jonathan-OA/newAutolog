@@ -358,6 +358,7 @@ return [
     'cost_inventory' => 'Valor',
     'profile_export' => 'Perfil de Exportação',
     'delimiter' => 'Delimitador',
+    'header' => 'Cabeçalho',
     'billing_type' => 'Tipo de Cobrança',
     'inventory_value' => 'Valor Fechado',
     'admin' => 'Administrativo',

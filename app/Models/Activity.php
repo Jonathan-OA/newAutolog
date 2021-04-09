@@ -152,5 +152,22 @@ class Activity extends Model
         return $actvs;
     }
 
+     /**
+     * Função que cancela as activities de um endereço
+     * Parâmetros: ID do documento, Location_code
+     * @var array
+     */
+    public static function returnActivitiesLocation($document_id, $location_code){
+
+        return $updAct = Activity::where('company_id', Auth::user()->company_id)
+                        ->where('document_id', $document_id)
+                        ->where('location_code', $location_code)
+                        ->where('activity_status_id', 8)
+                        ->update([
+                            'activity_status_id' => 9
+                        ]);
+
+    }
+
 
 }
