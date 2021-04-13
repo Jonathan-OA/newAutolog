@@ -51,6 +51,11 @@
                                                 {!! Form::checkbox('fields[]', 'dsc',  ['checked','disabled']) !!} Descrição
                                                 </div> 
                                                 @break
+                                            @case('prd')
+                                                <div class="col-md-2">
+                                                    {!! Form::checkbox('fields[]', 'prd',  ['checked','disabled']) !!} Cod. Interno
+                                                </div> 
+                                                @break
                                             @case('qde')
                                                 <div class="col-md-2">
                                                     {!! Form::checkbox('fields[]', 'qde',  ['checked','disabled']) !!} Quantidade

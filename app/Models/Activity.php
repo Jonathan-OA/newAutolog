@@ -185,7 +185,7 @@ class Activity extends Model
             'activities.company_id',
             'activities.document_id',
             'activities.location_code',
-            'inventory_items.product_code',
+            'products.alternative_code as product_code',
             'products.description',
             'activities.barcode',
             DB::raw("format(qty_wms, uoms.decimal_places) as qty_wms"),
@@ -216,7 +216,7 @@ class Activity extends Model
             ->where('activities.description', 'not like', 'Cancelamento%')
             ->groupBy(
                 'activities.company_id',
-                'activities.product_code',
+                'products.alternative_code',
                 'activities.location_code',
                 'activities.document_id',
                 'inventory_items.id',

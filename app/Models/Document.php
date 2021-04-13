@@ -16,7 +16,7 @@ class Document extends Model
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
-    protected $dates = ['created_at', 'updated_at', 'emission_date', 'start_date', 'end_date', 'billing_date', 'delivery_date'];
+    protected $dates = ['created_at', 'updated_at', 'emission_date', 'start_date', 'end_date', 'billing_date', 'delivery_date','imported_at'];
 
 
     protected $fillable = [
@@ -51,7 +51,8 @@ class Document extends Model
         'inventory_status_id',
         'inventory_value',
         'billing_type',
-        'order_fields'
+        'order_fields',
+        'imported_at'
     ];
 
     /**

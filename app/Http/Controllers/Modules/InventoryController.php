@@ -520,6 +520,12 @@ class InventoryController extends AppBaseController
                         return redirect(url("inventory/reimportFile/{$document_id}"));
                     }else{
                         $inventoryNumber = $ret[0];
+
+                        //Atualiza horario de importação para recarregar arquivos nos coletores
+                        $updDoc = App\Models\Document::where('company_id', Auth::user()->company_id)
+                                          ->where('id', $document_id)
+                                          ->update(['imported_at' => \Carbon\Carbon::now()]);
+
                         //Tudo certo, grava o arquivo no S3 para consultas futuras
                         //Pasta no padrão CODE+BRANCH/CLIENTE/INVENTARIO
                         $fileDest = Auth::user()->getCompanyInfo()->code.Auth::user()->getCompanyInfo()->branch.'/'.$customer_code.'/'.$inventoryNumber.'.txt';
@@ -632,23 +638,27 @@ class InventoryController extends AppBaseController
                     break;
             }
         }
-        $jsonFields['options'] = array('summarize' => $input['summarize'], 'header' => $header, 'final_delimiter' => $final_delimiter ) ;
+        $jsonFields['options'] = array('header' => $header, 'summarize' => $input['summarize'],  'final_delimiter' => $final_delimiter ) ;
 
+        
         //Cadastra o novo perfil de importação se não existir um igual
         $verProfile = Profile::select('id')
             ->where('company_id', Auth::user()->company_id)
             ->where('type', 'EXPORT')
             ->whereJsonContains('format', $jsonFields)
-            ->get();
+            ->get()
+            ->toArray();
 
         if(is_array($verProfile)){
-            $idProfile = (int)$verProfile[0]->id;
+            $idProfile = (int)$verProfile[0]['id'];
         }else{
             $idProfile = 0;
         }
-        
             
         if ($idProfile == 0) {
+            if(trim($input['profile_desc']) == ""){
+                $input['profile_desc'] = "EXP. PADRAO - ".$document->customer_code;
+            }
             $insertProfile = Profile::insertGetId(
                 [
                     'company_id' => Auth::user()->company_id, 'type' => 'EXPORT', 'description' =>  $input['profile_desc'], 'delimiter' =>  $delimiter,

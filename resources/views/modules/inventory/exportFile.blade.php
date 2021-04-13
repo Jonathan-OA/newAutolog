@@ -442,8 +442,12 @@
 
                 //Seta se é sumarizado ou não
                 $("input[name=summarize][value='"+newFormat.options.summarize+"']").prop("checked",true);
-                //Seta se tem delimitador no final
-                $("input[name=final_delimiter][value='"+newFormat.options.final_delimiter+"']").prop("checked",true);
+                
+                //Seta se tem delimitador no final (padrão é true)
+                if(parseInt(newFormat.options.final_delimiter) == parseInt("0")){
+                    $("input[name=final_delimiter]").prop("checked",false);
+                }
+                
                 summarizeSelected = newFormat.options.summarize;
                 uptProfile = 0;
                 

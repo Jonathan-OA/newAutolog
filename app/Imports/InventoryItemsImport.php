@@ -70,15 +70,20 @@ class InventoryItemsImport implements ToArray
             
             $endere = ($isTxt) ? ((array_key_exists('end', $order)) ? $line[$order['end']] : '') : $line[0];
             $deposito = ($isTxt) ? ((array_key_exists('dep', $order)) ? $line[$order['dep']] : '') : $line[1];
-            $produto = ($isTxt) ? ((array_key_exists('prd', $order)) ? $line[$order['prd']] : '') : $line[2];
+            $produto = ($isTxt) ? ((array_key_exists('prd', $order)) ? strtoupper($line[$order['prd']]) : '') : $line[2];
             $desc = ($isTxt) ? ((array_key_exists('dsc', $order)) ? $line[$order['dsc']] : '') : $line[3];
-            $barcode = ($isTxt) ? ((array_key_exists('ean', $order)) ? $line[$order['ean']] : '') : $line[4];
+            $barcode = ($isTxt) ? ((array_key_exists('ean', $order)) ? strtoupper($line[$order['ean']]) : '') : $line[4];
             $saldo = ($isTxt) ? ((array_key_exists('qde', $order)) ? $line[$order['qde']] : null) : $line[5];
             $unidade = ($isTxt) ? ((array_key_exists('uni', $order)) ? $line[$order['uni']] : '') : $line[6];
 
             //Se Chegou até aqui, porém EAN ta preenchido mas Código do Produto não, Código do Produto fica igual ao EAN
             if(!(array_key_exists('prd', $order)) && ($produto == "" && $barcode <> "")){
                 $produto = $barcode;
+            }
+
+            //Se Chegou até aqui, porém PRD ta preenchido mas Barcode não, Código do Produto fica igual ao EAN
+            if(array_key_exists('ean', $order) && ($barcode == "" && $produto <> "")){
+                $barcode = $produto;
             }
             
 
@@ -107,7 +112,8 @@ class InventoryItemsImport implements ToArray
                                                     'user_id' => Auth::user()->id,
                                                     'emission_date' => \Carbon\Carbon::now(),
                                                     'comments' => $this->parameters,
-                                                    'order_fields' => $this->fieldsOrderJson
+                                                    'order_fields' => $this->fieldsOrderJson,
+                                                    'imported_at' => \Carbon\Carbon::now()
                                                     ]);
                     if(!$inv->save()){
                         $erro = 1;
