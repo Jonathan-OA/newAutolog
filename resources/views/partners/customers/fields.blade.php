@@ -49,33 +49,34 @@
     </label>
 </div>
 
+<!-- Zip Code Field -->
+{!! Form::label('zip_code', Lang::get('models.zip_code').':') !!}
+{!! Form::text('zip_code', null, ['class' => 'form-control','maxlength' => '10', 'id' => 'zip_code']) !!}
+
 <!-- Address Field -->
 {!! Form::label('address', Lang::get('models.address').':') !!}
-{!! Form::text('address', null, ['class' => 'form-control', 'maxlength' => '60']) !!}
+{!! Form::text('address', null, ['class' => 'form-control', 'maxlength' => '60', 'id' => 'address']) !!}
 
 <!-- Number Field -->
 {!! Form::label('number', Lang::get('models.number').':') !!}
-{!! Form::number('number', null, ['class' => 'form-control','step' => '1', 'max' => '99999', 'min' => '1']) !!}
+{!! Form::number('number', null, ['class' => 'form-control','step' => '1', 'max' => '99999', 'min' => '1', 'id' => 'number']) !!}
 
 <!-- Neighbourhood Field -->
 {!! Form::label('neighbourhood', Lang::get('models.neighbourhood').':') !!}
-{!! Form::text('neighbourhood', null, ['class' => 'form-control','maxlength' => '40']) !!}
+{!! Form::text('neighbourhood', null, ['class' => 'form-control','maxlength' => '40', 'id' => 'neighbourhood']) !!}
 
 <!-- City Field -->
 {!! Form::label('city', Lang::get('models.city').':') !!}
-{!! Form::text('city', null, ['class' => 'form-control','maxlength' => '30']) !!}
+{!! Form::text('city', null, ['class' => 'form-control','maxlength' => '30', 'id' => 'city']) !!}
 
 <!-- State Field -->
 {!! Form::label('state', Lang::get('models.state').':') !!}
-{!! Form::text('state', null, ['class' => 'form-control', 'maxlength' => '3']) !!}
+{!! Form::text('state', null, ['class' => 'form-control', 'maxlength' => '3', 'id' => 'state']) !!}
 
 <!-- Country Field -->
 {!! Form::label('country', Lang::get('models.country').':') !!}
-{!! Form::text('country', null, ['class' => 'form-control', 'maxlength' => '20']) !!}
+{!! Form::text('country', null, ['class' => 'form-control', 'maxlength' => '20', 'id' => 'country']) !!}
 
-<!-- Zip Code Field -->
-{!! Form::label('zip_code', Lang::get('models.zip_code').':') !!}
-{!! Form::text('zip_code', null, ['class' => 'form-control','maxlength' => '10']) !!}
 
 <!-- Phone1 Field -->
 {!! Form::label('phone1', Lang::get('models.phone1').':') !!}
@@ -102,3 +103,26 @@
 <!-- Submit Field -->
 {!! Form::submit(Lang::get('buttons.save'), ['class' => 'btn btn-primary']) !!}
 <a href="{!! route('customers.index') !!}" class="btn btn-default">@lang('buttons.cancel')</a>
+
+@section('scripts')
+    <script>
+        $(function() {
+            $('#zip_code').change(function(){
+                if($('#zip_code').length = 8){
+                    var cep = $('#zip_code').val();
+
+                    $.ajax("../cep/"+ cep)
+                    .done(function(data) {
+                        var resp = JSON.parse(data);
+                        $('#address').val(resp.logradouro);
+                        $('#neighbourhood').val(resp.bairro);
+                        $('#state').val(resp.uf);
+                        $('#city').val(resp.localidade);
+                        $('#country').val("Brasil");
+                    })
+                }
+            })
+        })
+
+    </script>
+@endsection

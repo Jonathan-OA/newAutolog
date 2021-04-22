@@ -40,6 +40,11 @@
     </label>
 </div>
 
+
+<!-- Zip Code Field -->
+{!! Form::label('zip_code', Lang::get('models.zip_code').':') !!}
+{!! Form::text('zip_code', null, ['class' => 'form-control', 'id' => 'zip_code']) !!}
+
 <!-- Address Field -->
 {!! Form::label('address', Lang::get('models.address').':') !!}
 {!! Form::text('address', null, ['class' => 'form-control']) !!}
@@ -63,10 +68,6 @@
 <!-- Country Field -->
 {!! Form::label('country', Lang::get('models.country').':') !!}
 {!! Form::text('country', null, ['class' => 'form-control']) !!}
-
-<!-- Zip Code Field -->
-{!! Form::label('zip_code', Lang::get('models.zip_code').':') !!}
-{!! Form::text('zip_code', null, ['class' => 'form-control']) !!}
 
 <!-- Phone1 Field -->
 {!! Form::label('phone1', Lang::get('models.phone1').':') !!}
@@ -92,3 +93,12 @@
 <!-- Submit Field -->
 {!! Form::submit(Lang::get('buttons.save'), ['class' => 'btn btn-primary']) !!}
 <a href="{!! route('suppliers.index') !!}" class="btn btn-default">@lang('buttons.cancel')</a>
+
+
+@section('script')
+<script>
+    $('#zip_code').change(function(){
+    })
+
+</script>
+@endsection

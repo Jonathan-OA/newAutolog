@@ -118,4 +118,18 @@ class AppBaseController extends Controller
         
         return Response::json($results);
     }
+
+     /**
+     * Retorna os dados de um endereço de acordo com o cep
+     *
+     * @param  varchar $term, $table
+     *
+     * @return Response
+     */
+    public function getInfosByCep($cep){
+        $url = "https://viacep.com.br/ws/$cep/json/";
+        $results = file_get_contents($url);
+        
+        return Response::json($results);
+    }
 }

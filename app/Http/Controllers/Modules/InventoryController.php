@@ -649,8 +649,12 @@ class InventoryController extends AppBaseController
             ->get()
             ->toArray();
 
+       
         if(is_array($verProfile)){
-            $idProfile = (int)$verProfile[0]['id'];
+            if(count($verProfile) <> 0)
+                $idProfile = (int)$verProfile[0]['id'];
+            else
+                $idProfile = 0;
         }else{
             $idProfile = 0;
         }

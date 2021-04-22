@@ -154,6 +154,10 @@ Route::group(['middleware' => 'auth'], function() {
     //AUTOCOMPLETE
     Route::get('/search', 'AppBaseController@autoComplete');
 
+    //CEP
+    Route::get('/cep/{cep}', 'AppBaseController@getInfosByCep');
+
+
     Route::get('operations/datatable', 'OperationController@getData');
     Route::resource('operations', 'OperationController');
 

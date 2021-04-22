@@ -69,6 +69,9 @@ class CustomerController extends AppBaseController
     public function store(CreateCustomerRequest $request)
     {
         $input = $request->all();
+        $input['code'] = \strtoupper($input['code']);
+        $input['name'] = \strtoupper($input['name']);
+        $input['trading_name'] = \strtoupper($input['trading_name']);
 
         //Se o prefixo não for informado, quebra o nome e gera um automaticamente com as primeiras letras
         if(empty($input['prefix_code'])){
