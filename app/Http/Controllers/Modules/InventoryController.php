@@ -432,6 +432,8 @@ class InventoryController extends AppBaseController
                 return redirect(route('inventory.importFile'));
             }else{
                 $inventoryNumber = $ret[0];
+                $numLines = $ret[3];
+
                 //Tudo certo, grava o arquivo no S3 para consultas futuras
                 //Pasta no padrão CODE+BRANCH/CLIENTE/INVENTARIO
                 $fileDest = Auth::user()->getCompanyInfo()->code.Auth::user()->getCompanyInfo()->branch.'/'.$customer_code.'/'.$inventoryNumber.'.txt';
@@ -449,7 +451,8 @@ class InventoryController extends AppBaseController
         }
 
 
-        Flash::success('Inventário '.$inventoryNumber.' criado com sucesso!');
+        Flash::success('Inventário '.$inventoryNumber.' criado com sucesso! ('.$numLines.' Linhas Processadas)');
+        
         return redirect(route('inventory.index'));
     }
 

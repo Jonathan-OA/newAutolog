@@ -66,7 +66,10 @@ class InventoryItemsImport implements ToArray
         while ($line = fgetcsv($row, 0, $separator)) {
             $cont++;
             
-            if(count($line) == 0) break; //Ultima linha vazia
+            if(count($line) == 1 && count(array_filter($line)) == 0){
+                $cont--;
+                break;  //Ultima linha vazia
+            } 
             
             $endere = ($isTxt) ? ((array_key_exists('end', $order)) ? $line[$order['end']] : '') : $line[0];
             $deposito = ($isTxt) ? ((array_key_exists('dep', $order)) ? $line[$order['dep']] : '') : $line[1];
@@ -296,7 +299,7 @@ class InventoryItemsImport implements ToArray
             DB::rollback();
         }
 
-        return array( $inventoryNumber, $erro, $arrayErrors) ;
+        return array( $inventoryNumber, $erro, $arrayErrors, $cont) ;
 
 
     }
