@@ -51,6 +51,7 @@ class UserType extends Model
     public static function getUserTypes(){
         return UserType::selectRaw("code,CONCAT(code,' - ',description) as description_f")
                     ->where('status', '1')
+                    ->where('code', '<>', 'GERENCIAL')
                     ->pluck('description_f','code');
     }
 

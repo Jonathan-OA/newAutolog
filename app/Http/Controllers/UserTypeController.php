@@ -195,6 +195,7 @@ class UserTypeController extends AppBaseController
      */
     public function getData()
     {
-        return DataTables::of(App\Models\UserType::query())->make(true);
+        //NÃO MOSTRA GERENCIAL NEM SUPORTE NO GRID PARA EVITAR ALTERAÇÕES
+        return DataTables::of(App\Models\UserType::query()->where('code','<>','GERENCIAL'))->make(true);
     }
 }

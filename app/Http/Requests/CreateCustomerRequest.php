@@ -31,7 +31,7 @@ class CreateCustomerRequest extends FormRequest
             'name' => 'required|string|max:50',
             'trading_name' => 'required|string|max:60',
             'state_registration' => 'nullable|string|max:20',
-            'cnpj' => 'required|string|max:20',
+            'cnpj' => 'required|string|max:20|unique:customers,cnpj,NULL,id,company_id,'.Auth::user()->company_id,
             'status' => 'required|in:0,1',
             'profile_import' => 'nullable|integer|exists:profiles,id,company_id,'.Auth::user()->company_id,
             'profile_export' => 'nullable|integer|exists:profiles,id,company_id,'.Auth::user()->company_id,
