@@ -102,6 +102,30 @@ app.controller('RepInventory', ['$rootScope', '$scope', '$http', 'uiGridConstant
             enableHorizontalScrollbar: true,
             treeRowHeaderAlwaysVisible: false,
             showColumnFooter: true,
+            enableGridMenu: true,
+            exporterMenuCsv: false,
+            exporterMenuExcel: false,
+            exporterPdfFilename: 'relatorio_inv_'+$scope.documentNumber+'.pdf',
+            exporterPdfDefaultStyle: {fontSize: 9},
+            exporterPdfTableStyle: {margin: [30, 30, 30, 30]},
+            exporterPdfTableHeaderStyle: {fontSize: 10, bold: true, italics: true, color: 'black'},
+            exporterPdfHeader: {
+                columns: [
+                  { text: '23/04/2021 - 19:12', alignment: 'left' },
+                  { text: 'Inventário', alignment: 'center' }
+                ]
+              },
+            exporterPdfFooter: function ( currentPage, pageCount ) {
+            return { text: currentPage.toString() + ' of ' + pageCount.toString(), style: 'footerStyle' };
+            },
+            exporterPdfCustomFormatter: function ( docDefinition ) {
+            docDefinition.styles.headerStyle = { fontSize: 22, bold: true };
+            docDefinition.styles.footerStyle = { fontSize: 10, bold: true };
+            return docDefinition;
+            },
+            exporterPdfOrientation: 'portrait',
+            exporterPdfPageSize: 'A4',
+            exporterPdfMaxGridWidth: 500,
             onRegisterApi: function(gridApi) {
                 $scope.gridApi = gridApi;
                 $timeout(function() {

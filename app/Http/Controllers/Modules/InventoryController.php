@@ -1239,4 +1239,5 @@ class InventoryController extends AppBaseController
         $documents = App\Models\DocumentItem::where('document_id', $document_id)->get();
         return $documents->toArray();
     }
+
 }

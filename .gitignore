@@ -1,6 +1,7 @@
-/node_modules
-/public/storage
-/vendor
+vendor/
+node_modules/
+storage/
+public/storage/
 /.idea
 Homestead.json
 Homestead.yaml
@@ -11,5 +12,4 @@ Homestead.yaml
 !/vendor/infyomlabs
 !/vendor/flash
 
-node_modules
-storage
+

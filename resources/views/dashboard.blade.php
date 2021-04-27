@@ -12,6 +12,7 @@
                     <div class="col-md-12">
                         <!-- Grid customizavel com os gráficos cadastrados na tabela Graphs -->
                         <div class="grid-stack">
+                            <!--
                             <div class="grid-stack-item"
                                 data-gs-x="0" data-gs-y="0"
                                 data-gs-width="4" data-gs-height="2">
@@ -36,17 +37,17 @@
                                             <h4> Usuários Criados </h4>
                                     </div>
                             </div>
-
+                            -->
                             <div class="grid-stack-item ui-droppable"
                                 data-gs-x="0" data-gs-y="2"
-                                data-gs-width="4" data-gs-height="4">
+                                data-gs-width="4" data-gs-height="6">
                                     <div class="grid-stack-item-content" style="background-color: #fbfbfb"> 
                                             <canvas id="Chart1"></canvas>
                                     </div>
                             </div>
                             <div class="grid-stack-item"
                                 data-gs-x="4" data-gs-y="2"
-                                data-gs-width="4" data-gs-height="4">
+                                data-gs-width="4" data-gs-height="6">
                                     <div class="grid-stack-item-content" style="background-color: #fbfbfb"> 
                                             <canvas id="Chart2"></canvas>
                                     </div>

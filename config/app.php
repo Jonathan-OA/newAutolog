@@ -153,6 +153,7 @@ return [
         \InfyOm\AdminLTETemplates\AdminLTETemplatesServiceProvider::class, 
         Yajra\DataTables\DataTablesServiceProvider::class,
         Orchestra\Parser\XmlServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -222,6 +223,7 @@ return [
         'Input' => Illuminate\Support\Facades\Input::class,
         'ToggleSwitchButton'  => Okipa\LaravelToggleSwitchButton\Facades\ToggleSwitchButton::class,
         'XmlParser' => Orchestra\Parser\Xml\Facade::class,
+        'PDF' => Barryvdh\DomPDF\Facade::class,
     ],
 
 ];

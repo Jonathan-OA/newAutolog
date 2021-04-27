@@ -43,7 +43,7 @@
                         </div>
                     </div>
                     <div class="panel-body">
-                        <div id="gridd" ui-grid="gridOptions" ui-grid-auto-resize  ui-grid-resize-columns  ui-grid-pagination ui-grid-move-columns ui-grid-save-state ui-grid-grouping  >
+                        <div id="gridd" ui-grid="gridOptions" ui-grid-auto-resize  ui-grid-resize-columns  ui-grid-pagination ui-grid-move-columns ui-grid-save-state ui-grid-grouping ui-grid-exporter >
                         </div>
                         <div class="actionsGrid">
                             <span aria-label="@lang('infos.actions_grid')" data-microtip-position="right" role="tooltip">
@@ -60,9 +60,12 @@
 </div>
 @endsection
 @section('scripts')
+    <script src="../../js/pdfmake/pdfmake.min.js"></script>
+    <script src="../../js/pdfmake/vfs_fonts.js"></script>
     <script src="../../js/ui-grid/ui-grid.selection.min.js"></script>
     <script src="../../js/ui-grid/ui-grid.resizecolumns.min.js"></script>
     <script src="../../js/ui-grid/ui-grid.grouping.min.js"></script>
+    <script src="../../js/ui-grid/ui-grid.exporter.min.js"></script>
     <script src="../../js/ui-grid/ui-grid.tree-base.min.js"></script>
     <script src="../../js/angular/repInventory.js"></script>
 @endsection

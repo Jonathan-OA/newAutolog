@@ -10,20 +10,20 @@
     <input id='id' name='id' type='hidden' value='{!! $customer->id !!}'>
     {!! Form::text('code', null, ['class' => 'form-control','readonly' => 'true']) !!}
 @else
-    {!! Form::text('code', null, ['class' => 'form-control']) !!}  
+    {!! Form::text('code', null, ['class' => 'form-control','maxlength' => '40', 'required']) !!}  
 @endif
 
 <!-- Name Field -->
 {!! Form::label('name', Lang::get('models.name').':') !!}
-{!! Form::text('name', null, ['class' => 'form-control']) !!}
+{!! Form::text('name', null, ['class' => 'form-control', 'maxlength' => '100', 'required']) !!}
 
 <!-- Trading Name Field -->
 {!! Form::label('trading_name', Lang::get('models.trading_name').':') !!}
-{!! Form::text('trading_name', null, ['class' => 'form-control']) !!}
+{!! Form::text('trading_name', null, ['class' => 'form-control','maxlength' => '100', 'required']) !!}
 
 <!-- Cnpj Field -->
 {!! Form::label('cnpj', Lang::get('models.cnpj').':') !!}
-{!! Form::text('cnpj', null, ['class' => 'form-control']) !!}
+{!! Form::text('cnpj', null, ['class' => 'form-control', 'id' => 'cnpj', 'minlength' => '18', 'required']) !!}
 
 <!-- State Registration Field -->
 {!! Form::label('state_registration', Lang::get('models.state_registration').':') !!}
@@ -51,11 +51,11 @@
 
 <!-- Zip Code Field -->
 {!! Form::label('zip_code', Lang::get('models.zip_code').':') !!}
-{!! Form::text('zip_code', null, ['class' => 'form-control','maxlength' => '10', 'id' => 'zip_code']) !!}
+{!! Form::text('zip_code', null, ['class' => 'form-control','maxlength' => '10', 'minlength' => '10', 'id' => 'zip_code']) !!}
 
 <!-- Address Field -->
 {!! Form::label('address', Lang::get('models.address').':') !!}
-{!! Form::text('address', null, ['class' => 'form-control', 'maxlength' => '60', 'id' => 'address']) !!}
+{!! Form::text('address', null, ['class' => 'form-control', 'maxlength' => '60', 'id' => 'address', 'required']) !!}
 
 <!-- Number Field -->
 {!! Form::label('number', Lang::get('models.number').':') !!}
@@ -80,11 +80,11 @@
 
 <!-- Phone1 Field -->
 {!! Form::label('phone1', Lang::get('models.phone1').':') !!}
-{!! Form::text('phone1', null, ['class' => 'form-control', 'maxlength' => '15']) !!}
+{!! Form::text('phone1', null, ['class' => 'form-control', 'maxlength' => '15', 'minlength' => '14', 'required',  'id' => 'phone1']) !!}
 
 <!-- Phone2 Field -->
 {!! Form::label('phone2', Lang::get('models.phone2').':') !!}
-{!! Form::text('phone2', null, ['class' => 'form-control', 'maxlength' => '15']) !!}
+{!! Form::text('phone2', null, ['class' => 'form-control', 'maxlength' => '15', 'minlength' => '14', 'id' => 'phone2']) !!}
 
 
 <!-- Obs1 Field -->
@@ -105,11 +105,30 @@
 <a href="{!! route('customers.index') !!}" class="btn btn-default">@lang('buttons.cancel')</a>
 
 @section('scripts')
+    <script src="{{ URL::asset('/js/jquery/jquery.mask.js') }}"></script>
     <script>
         $(function() {
+
+            //Função que valida os dois tipos de telefone
+            var SPMaskBehavior = function (val) {
+                return val.replace(/\D/g, '').length === 11 ? '(00) 00000-0000' : '(00) 0000-00009';
+            },
+            spOptions = {
+            onKeyPress: function(val, e, field, options) {
+                field.mask(SPMaskBehavior.apply({}, arguments), options);
+                }
+            };
+
+
+            //Masks
+            $('#cnpj').mask('00.000.000/0000-00');
+            $('#zip_code').mask('00.000-000');
+            $('#phone1').mask(SPMaskBehavior,spOptions);
+            $('#phone2').mask(SPMaskBehavior,spOptions);
+
             $('#zip_code').change(function(){
                 if($('#zip_code').length = 8){
-                    var cep = $('#zip_code').val();
+                    var cep = $('#zip_code').val().replace(".","").replace("-","");
 
                     $.ajax("../cep/"+ cep)
                     .done(function(data) {

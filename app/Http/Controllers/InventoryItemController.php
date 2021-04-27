@@ -213,10 +213,32 @@ class InventoryItemController extends AppBaseController
             ->with('document', $document);
     }
 
+    /**
+     * Relatório de Apontamentos (Grid Angular)
+     *
+     * @param  int $id
+     *
+     * @return Response
+     */
     public function reportDatatable($document_id, $summarize)
     {
         return Datatables::of(App\Models\InventoryItem::getAppointments($document_id, 1, $summarize))->make(true);
     }
+    
+    /**
+     * Relatório PDF
+     *
+     * @param  int $id
+     *
+     * @return Response
+     */
+    public function reportPDF($document_id, $summarize)
+    {
+        $result = App\Models\InventoryItem::getAppointments($document_id, 1, $summarize);
+        
+
+    }
+
 
 
     /**

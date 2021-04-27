@@ -68,7 +68,7 @@ class InventoryItemsImport implements ToArray
             
             if(count($line) == 1 && count(array_filter($line)) == 0){
                 $cont--;
-                break;  //Ultima linha vazia
+                continue;  // linha vazia
             } 
             
             $endere = ($isTxt) ? ((array_key_exists('end', $order)) ? $line[$order['end']] : '') : $line[0];

@@ -6,6 +6,7 @@
     "type": "project",
     "require": {
         "php": ">=7.2",
+        "barryvdh/laravel-dompdf": "^0.9.0",
         "doctrine/dbal": "2.*",
         "fideloper/proxy": "4.*",
         "infyomlabs/adminlte-templates": "6.*",
