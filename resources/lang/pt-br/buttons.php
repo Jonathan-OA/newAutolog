@@ -29,7 +29,7 @@ return [
     'liberate' => 'Liberar',
     'msg_remove' => 'Deseja excluir este registro?',
     'msg_cancel' => 'Deseja cancelar este documento?',
-    'msg_return' => 'Deseja retornar este documento?',
+    'msg_return' => 'ATENÇÃO!! Deseja retornar este documento? Esta ação apagará todas as leituras já realizadas.',
     'msg_return_location' => 'Deseja retornar as contagens deste Endereço?',
     'send' => 'Enviar',
     'close' => 'Fechar',

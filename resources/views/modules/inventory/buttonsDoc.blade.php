@@ -56,10 +56,13 @@
                                 <img class='icon' src='{{asset('/icons/retornar.png') }}'>
                         </button>
                 </span>
-                <span ng-if="row.status_doc != 0  || row.status_doc == 8|| row.status_doc == 16 ">
+                <span ng-if="row.status_doc != 0   && row.status_doc != 9 ">
                         <button ng-click="callRoute('./inventoryItems/'+row.id+'/report')" class="icon_action" aria-label="@lang('reports.reportInv')" data-microtip-position="left" role="tooltip">
                                 <img class='icon' src='{{asset('/icons/report.png') }}'>
                         </button>
+                </span>
+                <span ng-if="row.status_doc == 16 || row.status_doc == 8">
+                        
                         <button ng-click="callRoute('./inventory/'+row.id+'/exportFile')" class="icon_action" aria-label="@lang('buttons.export')" data-microtip-position="left" role="tooltip">
                                 <img class='icon' src='{{asset('/icons/export.png') }}'>
                         </button>
