@@ -50,6 +50,7 @@ class Document extends Model
         'finalization',
         'inventory_status_id',
         'inventory_value',
+        'inventory_extra_value',
         'billing_type',
         'order_fields',
         'imported_at'
@@ -132,6 +133,7 @@ class Document extends Model
             'documents.document_type_origin',
             'documents.finalization',
             'documents.inventory_value',
+            'documents.inventory_extra_value',
             'documents.billing_type'
         )
             ->join('document_types', 'documents.document_type_code', '=', 'document_types.code')
@@ -197,6 +199,7 @@ class Document extends Model
                 'documents.document_type_origin',
                 'documents.finalization',
                 'documents.inventory_value',
+                'documents.inventory_extra_value',
                 'documents.billing_type'
             )
             ->orderBy('documents.id', 'desc')

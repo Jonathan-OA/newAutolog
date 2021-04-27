@@ -45,7 +45,10 @@ class DocumentRepository extends BaseRepository
         'number_origin',
         'document_type_origin',
         'delivery_date',
-        'order_fields'
+        'order_fields',
+        'inventory_value',
+        'inventory_extra_value',
+        'billing_type'
     ];
 
     /**

@@ -10,12 +10,12 @@
 
                 <!-- Funções para status de documento  0 -->
                 <span ng-if="row.status_doc == 0 || !row.status_inv">
-                        <!-- Selecionar Itens (Apenas status 0 e Casos onde o Inventory_Value é null) -->
+                        <!-- Selecionar Itens (Apenas status 0 e Casos onde o Inventory_Value é null) 
                         <span ng-if="row.inventory_value >= 0">
                                 <button ng-click="callRoute('./inventory/'+row.id+'/selectItems')" class="icon_action" aria-label="@lang('buttons.select_items')" data-microtip-position="left" role="tooltip">
                                         <img class='icon' src='{{ asset('/icons/selectItems.png') }}'>
                                 </button>
-                        </span>
+                        </span>-->
 
                         <!-- Editar (Apenas status 0) -->
                         <button ng-click="callRoute('./inventory/'+row.id+'/edit')" class="icon_action" aria-label="@lang('buttons.edit')" data-microtip-position="left" role="tooltip">

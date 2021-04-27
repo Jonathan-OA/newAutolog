@@ -144,6 +144,7 @@ return [
     'subgroup_code' => 'SubGrupo',
     'margin_div' => 'Divergência',
     'cost' => 'Custo',
+    'extra_cost' => 'Custos Extras ',
     'phase_code' => 'Código da Fase',
     'abz_code' => 'Código ABZ',
     'inventory_date' => 'Ult. Inventário',

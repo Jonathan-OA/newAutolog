@@ -67,6 +67,7 @@
                                     {!! Form::hidden('customer_code', $customer_code) !!}
                                     {!! Form::hidden('billing_type', $billing_type) !!}
                                     {!! Form::hidden('inventory_value', $inventory_value) !!}
+                                    {!! Form::hidden('inventory_extra_value', $inventory_extra_value) !!}
                                     
                                     <br>
                                     <!-- Parâmetros de Inventário -->

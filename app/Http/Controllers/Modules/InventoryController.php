@@ -184,7 +184,7 @@ class InventoryController extends AppBaseController
             $descricao = 'Alterou Documento ID: ' . $id . ' - ' . $requestF['document_type_code'] . ' ' . $requestF['number'] . ' - Valor: ' . $requestF['inventory_value'];
             $log = App\Models\Log::wlog('documents_inv_edit', $descricao, $id);
 
-
+            
             $document = $this->documentRepository->update($request->all(), $id);
 
             Flash::success(Lang::get('validation.update_success'));
@@ -320,6 +320,7 @@ class InventoryController extends AppBaseController
         $fields = $input['fields'];
         $customer_code = $input['customer_code'];
         $inventory_value = $input['cost']; //Preço por Leitura
+        $inventory_extra_value = $input['extra_cost']; //Cobranças Extras
         $billing_type = $input['billing_type']; //Tipo de Cobrança
 
         //Valida se Cliente existe
@@ -331,7 +332,8 @@ class InventoryController extends AppBaseController
         if ($authCustomer == 0) {
             Flash::error(Lang::get('validation.customer_not_exist'));
             return redirect(url('inventory/importFile'))->with('customer_code', $customer_code)
-                ->with('inventory_value', $inventory_value);
+                ->with('inventory_value', $inventory_value)
+                ->with('inventory_extra_value', $inventory_extra_value);
         }
 
         if (in_array($extFile, ['xls', 'xlsx'])) {
@@ -359,7 +361,8 @@ class InventoryController extends AppBaseController
             if ($countColumns <> count($fields)) {
                 Flash::error(Lang::get('validation.infos_import_error', ['fields' => count($fields), 'columnsFile' => $countColumns]));
                 return redirect(url('inventory/importFile'))->with('customer_code', $customer_code)
-                    ->with('inventory_value', $inventory_value);
+                    ->with('inventory_value', $inventory_value)
+                    ->with('inventory_extra_value', $inventory_extra_value);
             }
 
             //Salva o arquivo no storage para ser obtido após a confirmação
@@ -372,6 +375,7 @@ class InventoryController extends AppBaseController
                 ->with('infos', $infos)
                 ->with('customer_code', $customer_code)
                 ->with('inventory_value', $inventory_value)
+                ->with('inventory_extra_value', $inventory_extra_value)
                 ->with('billing_type', $billing_type)
                 ->with('fields', $fields);
         } else {
@@ -395,6 +399,7 @@ class InventoryController extends AppBaseController
         $sepFile = $input['sepFile']; //Separador de cada linha
         $customer_code = $input['customer_code']; //Cliente
         $inventory_value = $input['inventory_value']; //Valor por Leitura
+        $inventory_extra_value = $input['inventory_extra_value']; //Custos extras
         $billing_type = $input['billing_type']; //Tipo de Cobrança
 
         //Pega a ordem das colunas e suas informações
@@ -415,7 +420,7 @@ class InventoryController extends AppBaseController
         } elseif (in_array($extFile, ['txt', 'csv'])) {
             $file = fopen(storage_path() . '/' . $fileName, 'r');
             //Cria o objeto e chama a função passando os parâmetros do txt
-            $importFile = new InventoryItemsImport($parameters, $customer_code, $inventory_value, $billing_type, $fieldsOrderJson);
+            $importFile = new InventoryItemsImport($parameters, $customer_code, $inventory_value, $inventory_extra_value, $billing_type, $fieldsOrderJson);
             $ret = $importFile->array($file, array('order' => $fieldsOrder, 'separator' => $sepFile));
 
             if ($ret[1] <> 0) {

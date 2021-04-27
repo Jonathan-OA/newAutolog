@@ -34,7 +34,11 @@
 
     <!-- Cliente  -->
     {!! Form::label('customer_code', "*".Lang::get('models.customer_code').':') !!}
+    @if(!empty($action) && $action == 'edit')
+        {!! Form::text('customer_code', (isset($document->customer_code)) ? $document->customer_code : '', ['class' => 'form-control', 'id' => 'autocomplete', 'table' => 'customers', 'readonly', 'required']) !!}
+    @else
     {!! Form::text('customer_code', (isset($document->customer_code)) ? $document->customer_code : '', ['class' => 'form-control', 'id' => 'autocomplete', 'table' => 'customers', 'required']) !!}
+    @endif
 
     <!-- Tipo de Cobrança  -->
     <div class="row">
@@ -48,6 +52,15 @@
     {{-- Custo por Leitura no Inventário --}}
     {!! Form::label('inventory_value', "*".Lang::get('models.cost_inventory').':') !!}
     {!! Form::number('inventory_value', (isset($document->inventory_value)) ? $document->inventory_value : '', ['class' => 'form-control', 'step' => '0.01', 'required']) !!}
+
+
+    {{-- Custos Extras --}}
+    <span aria-label="@lang('infos.documents.extra_cost')" data-microtip-position="right" role="tooltip">
+        <img class='icon' src='{{asset('/icons/information.png') }}' >
+    </span>
+    {!! Form::label('inventory_extra_value', "".Lang::get('models.extra_cost').':') !!}
+    {!! Form::number('inventory_extra_value', (isset($document->inventory_extra_value)) ? $document->inventory_extra_value : '', ['class' => 'form-control', 'id' => 'extra_cost', 'step' => '0.01']) !!}
+
 
 
     <!-- Emission Date Field -->

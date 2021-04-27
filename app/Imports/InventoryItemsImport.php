@@ -10,16 +10,18 @@ class InventoryItemsImport implements ToArray
     private $parameters = '';
     private $customer_code = '';
     private $value = '';
+    private $extra_value = '';
     private $billing_type = '';
     private $fieldsOrderJson = '';
     private $documentNumber = '';
 
     //Parametros de inventário enviados pelo construtor no controller de inventário
     //Customer = Cliente e Value = Valor por Leitura
-    public function __construct($parameters, $customer, $value, $billing_type, $fieldsOrderJson, $documentNumber = ""){
+    public function __construct($parameters, $customer, $value, $extra_value, $billing_type, $fieldsOrderJson, $documentNumber = ""){
         $this->parameters = $parameters;
         $this->customer_code = $customer;
         $this->value = $value;
+        $this->extra_value = $extra_value;
         $this->billing_type = $billing_type;
         $this->fieldsOrderJson = $fieldsOrderJson; //Ordem dos campos para importação
         $this->documentNumber = $documentNumber; //Número do documento para casos de reimportação
@@ -110,6 +112,7 @@ class InventoryItemsImport implements ToArray
                                                     'document_status_id' => 0,
                                                     'inventory_status_id' => 0,
                                                     'inventory_value' => $this->value,
+                                                    'inventory_extra_value' => $this->extra_value,
                                                     'billing_type' => $this->billing_type,
                                                     'customer_code' => $this->customer_code,
                                                     'user_id' => Auth::user()->id,

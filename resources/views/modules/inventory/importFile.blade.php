@@ -33,7 +33,18 @@
                                         <div class="col-md-6">
                                             {{-- Custo por Leitura no Inventário --}}
                                             {!! Form::label('cost', "*".Lang::get('models.cost_inventory').':') !!}
-                                            {!! Form::number('cost', (isset($cost)) ? $cost : '', ['class' => 'form-control', 'step' => '0.01', 'required']) !!}
+                                            {!! Form::number('cost', (isset($inventory_value)) ? $inventory_value : '', ['class' => 'form-control', 'step' => '0.01', 'id' => 'cost','required']) !!}
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            {{-- Custo Extras (Importação / Conferência) --}}
+                                            <span aria-label="@lang('infos.documents.extra_cost')" data-microtip-position="right" role="tooltip">
+                                                <img class='icon' src='{{asset('/icons/information.png') }}' >
+                                            </span>
+                                            {!! Form::label('extra_cost', "".Lang::get('models.extra_cost').':') !!}
+                                            {!! Form::number('extra_cost', (isset($inventory_extra_value)) ? $inventory_extra_value : '', ['class' => 'form-control', 'id' => 'extra_cost', 'step' => '0.01']) !!}
                                         </div>
                                     </div>
                                     <hr>
@@ -106,10 +117,15 @@
     </div>
 @endsection
 @section('scripts')
+    <script src="{{ URL::asset('/js/jquery/jquery.mask.js') }}"></script>
     <script>
         $( function() {
-            //Ao clicar em submit valida se ao menos um campo foi preenchido das infos do arquivo
 
+             //Masks
+             //$('#cost').mask('#.##0,00');
+             //$('#extra_cost').mask('#.##0,00');
+
+            //Ao clicar em submit valida se ao menos um campo foi preenchido das infos do arquivo
             $("#formImport").submit(function(e){
                 if($('input[name="fields[]"]:checked').length == 0){
                     e.preventDefault();
