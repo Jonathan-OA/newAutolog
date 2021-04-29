@@ -477,7 +477,8 @@ class InventoryController extends AppBaseController
         $fileName = $input['fileExcel']->getClientOriginalName();
 
         $customer_code = $input['customer_code']; //Cliente
-        $inventory_value = ""; //Valor por Leitura
+        $inventory_value = 0; //Valor por Leitura
+        $inventory_extra_value = 0; //Valores Extras
         $billing_type = ""; //Tipo de Cobrança
 
         //Pega a ordem das colunas e suas informações
@@ -511,7 +512,7 @@ class InventoryController extends AppBaseController
                 //Valida se a primeira llinha tem a quantidade de informações digitadas no arquivo original
                 if(count($fieldsOrder) == $countColumns){
                     //Cria o objeto e chama a função passando os parâmetros do txt
-                    $importFile = new InventoryItemsImport($parameters, $customer_code, $inventory_value, $billing_type, $fieldsOrderJson, $document_number);
+                    $importFile = new InventoryItemsImport($parameters, $customer_code, $inventory_value, $inventory_extra_value, $billing_type, $fieldsOrderJson, $document_number);
                     $ret = $importFile->array($file, array('order' => $fieldsOrder, 'separator' => $sepFile));
 
                     if ($ret[1] <> 0) {
