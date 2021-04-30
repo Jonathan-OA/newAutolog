@@ -231,7 +231,7 @@ class InventoryItem extends Model
                 'pallets.barcode as plt_barcode',
                 'activities.document_id',
                 'activities.location_code',
-                DB::raw("format(SUM(activities.prim_qty), uoms.decimal_places) as qty1"),
+                DB::raw("replace(format(SUM(activities.prim_qty), uoms.decimal_places),',', '') as qty1"),
                 'users.name',
                 DB::raw("0 as qty2"),
                 DB::raw("0 as qty3"),
