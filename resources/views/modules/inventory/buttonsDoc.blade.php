@@ -39,7 +39,7 @@
                 </button>
 
                 <!-- Recarregar arquivo de leitura  -->
-                <span ng-if="row.status_doc == 2">
+                <span ng-if="row.status_doc == 2 || row.status_doc == 1">
                         <button  class="icon_action" ng-click="callRoute('./inventory/reimportFile/'+row.id)" aria-label="@lang('buttons.reload_file')" data-microtip-position="left" role="tooltip">
                                 <img class='icon' src='{{asset('/icons/import.png') }}'>
                         </button>
