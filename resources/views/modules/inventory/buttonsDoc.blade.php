@@ -50,13 +50,13 @@
                         <img class='icon' src='{{asset('/icons/finalize.png') }}'>
                 </button>
 
-                <!-- Retornar (Status 1 ou 2) 
+                <!-- Retornar (Status 1 ou 2) -->
                 <span ng-if="row.status_doc == 1  || row.status_doc == 2">
                         <button ng-click="callRouteConfirm('./inventory/'+row.id+'/return', 1, '@lang('buttons.msg_return')')" class="icon_action" aria-label="@lang('buttons.return')" data-microtip-position="left" role="tooltip">
                                 <img class='icon' src='{{asset('/icons/retornar.png') }}'>
                         </button>
                 </span>
-                -->
+                
 
                 <!-- Relatório de Contagens -->
                 <span ng-if="row.status_doc != 0   && row.status_doc != 9 ">
@@ -75,7 +75,7 @@
                 <!-- Reabrir (Status 8 ou 16) -->
                 <span ng-if="row.status_doc == 8  || row.status_doc == 16">
                         <button ng-click="callRouteConfirm('./inventory/'+row.id+'/reopen', 1, '@lang('buttons.msg_reopen')')" class="icon_action" aria-label="@lang('buttons.reopen')" data-microtip-position="left" role="tooltip">
-                                <img class='icon' src='{{asset('/icons/retornar.png') }}'>
+                                <img class='icon' src='{{asset('/icons/reabrir.png') }}'>
                         </button>
                 </span>
         </div>
