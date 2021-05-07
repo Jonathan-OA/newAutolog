@@ -503,6 +503,44 @@ class Document extends Model
 
         return $return;
     }
+
+    /**
+     * Função que reabre o documento de inventário
+     * Parâmetros: ID do Documento
+     * @var array
+     */
+
+    public static function reopenInventory($document_id)
+    {
+        //Busca documento
+        $doc = App\Models\Document::find($document_id);
+        if (in_array($doc->document_type_code, array('IVD', 'IVG', 'IVR', 'INV'))) {
+            //Só permite retornar com status encerrado ou exportado
+            if (in_array($doc->inventory_status_id, array(8,16))) {
+
+                //Volta status do documento
+                $upTsk = DB::table('documents')->where([
+                    ['company_id', Auth::user()->company_id],
+                    ['id', $document_id]
+                ])->update([
+                    'document_status_id' => 2,
+                    'inventory_status_id' => 1
+                ]);
+
+                $return['erro'] = 0;
+                $return['msg'] = 'Inventário Reaberto com Sucesso';
+            } else {
+                $return['erro'] = 1;
+                $return['msg'] = 'Status de Inventário Inválido para esta Operação.';
+            }
+        } else {
+            $return['erro'] = 1;
+            $return['msg'] = 'Tipo de Documento Inválido para esta Operação.';
+        }
+
+        return $return;
+    }
+
     /**
      * Função que retorna o documento para pendente
      * Parâmetros: ID dos Documentos

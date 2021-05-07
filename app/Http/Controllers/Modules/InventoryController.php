@@ -263,6 +263,39 @@ class InventoryController extends AppBaseController
     }
 
     /**
+     * Reabrir inventário
+     *
+     * @param CreateDocumentRequest $request
+     *
+     * @return Response
+     */
+    public function reopen($document_id)
+    {
+
+        $document = $this->documentRepository->findWithoutFail($document_id);
+
+        //Valida se usuário possui permissão para acessar esta opção
+        if (App\Models\User::getPermission('documents_inv_reopen', Auth::user()->user_type_code)) {
+            $return = App\Models\Document::reopenInventory($document_id);
+
+            if ($return['erro'] == 0) {
+                //Grava Logs
+                $descricao = 'Reabriu Documento de Inventário';
+                $log = App\Models\Log::wlog('documents_inv_reopen', $descricao, $document_id);
+
+                return array('success', Lang::get('infos.reopen_doc', ['doc' =>  $document->number]));
+            } else {
+                //Erro ao retornar
+                return array('danger', $return['msg']);
+            }
+        } else {
+            //Sem permissão
+            //Flash::error(Lang::get('validation.permission'));
+            return array('danger', Lang::get('validation.permission'));
+        }
+    }
+
+    /**
      * Mostra a tela de importação de planilha para inventário
      *
      * @return Response
@@ -1154,6 +1187,7 @@ class InventoryController extends AppBaseController
             return array('danger', Lang::get('validation.permission'));
         }
     }
+    
 
     /**
      * Retorna Contagens de Um Endereço

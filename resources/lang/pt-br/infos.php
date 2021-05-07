@@ -31,6 +31,7 @@ return [
     'liberation_doc'            => 'Documento :doc liberado com sucesso!',
     'cancel_doc'                => 'Documento :doc cancelado com sucesso!',
     'cancel_docs'               => 'Documentos cancelados com sucesso!',
+    'reopen_doc'                => 'Documento :doc reaberto com sucesso!',
     'return_doc'                => 'Documento :doc retornado com sucesso!',
     'return_docs'               => 'Documentos retornados com sucesso!',
     'return_location'           => 'Endereço :location retornado com sucesso!',

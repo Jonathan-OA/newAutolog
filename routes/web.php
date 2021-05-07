@@ -98,6 +98,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('/inventory/{id}/liberate/{cont?}', 'Modules\InventoryController@liberate'); //Libera Contagem
     Route::get('/inventory/{id}/finalize', 'Modules\InventoryController@finalize'); //Finaliza Contagem
     Route::get('/inventory/{id}/return', 'Modules\InventoryController@return'); //Retorna Inventário
+    Route::get('/inventory/{id}/reopen', 'Modules\InventoryController@reopen'); //Reabre Inventário
     Route::get('/inventory/{id}/returnLocation/{location_code}', 'Modules\InventoryController@returnLocation'); //Retorna Um Endereço Especifico
     Route::get('/inventory/{id}/audit/{location_code}', 'Modules\InventoryController@audit'); //Tela de Auditoria
     // ----------------------------------------------------------------------------------------------

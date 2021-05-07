@@ -50,21 +50,32 @@
                         <img class='icon' src='{{asset('/icons/finalize.png') }}'>
                 </button>
 
-                <!-- Retornar , Relatorio de Contagens realizadas e Exportar (Status Doc > 1 e < 8) -->
-                <span ng-if="row.status_doc != 0  && row.status_doc != 8">
+                <!-- Retornar (Status 1 ou 2) 
+                <span ng-if="row.status_doc == 1  || row.status_doc == 2">
                         <button ng-click="callRouteConfirm('./inventory/'+row.id+'/return', 1, '@lang('buttons.msg_return')')" class="icon_action" aria-label="@lang('buttons.return')" data-microtip-position="left" role="tooltip">
                                 <img class='icon' src='{{asset('/icons/retornar.png') }}'>
                         </button>
                 </span>
+                -->
+
+                <!-- Relatório de Contagens -->
                 <span ng-if="row.status_doc != 0   && row.status_doc != 9 ">
                         <button ng-click="callRoute('./inventoryItems/'+row.id+'/report')" class="icon_action" aria-label="@lang('reports.reportInv')" data-microtip-position="left" role="tooltip">
                                 <img class='icon' src='{{asset('/icons/report.png') }}'>
                         </button>
                 </span>
+
+                 <!-- Exportar TXT -->
                 <span ng-if="row.status_doc == 16 || row.status_doc == 8">
-                        
                         <button ng-click="callRoute('./inventory/'+row.id+'/exportFile')" class="icon_action" aria-label="@lang('buttons.export')" data-microtip-position="left" role="tooltip">
                                 <img class='icon' src='{{asset('/icons/export.png') }}'>
+                        </button>
+                </span>
+
+                <!-- Reabrir (Status 8 ou 16) -->
+                <span ng-if="row.status_doc == 8  || row.status_doc == 16">
+                        <button ng-click="callRouteConfirm('./inventory/'+row.id+'/reopen', 1, '@lang('buttons.msg_reopen')')" class="icon_action" aria-label="@lang('buttons.reopen')" data-microtip-position="left" role="tooltip">
+                                <img class='icon' src='{{asset('/icons/retornar.png') }}'>
                         </button>
                 </span>
         </div>
