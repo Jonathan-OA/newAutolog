@@ -516,7 +516,7 @@ class Document extends Model
         $doc = App\Models\Document::find($document_id);
         if (in_array($doc->document_type_code, array('IVD', 'IVG', 'IVR', 'INV'))) {
             //Só permite retornar com status encerrado ou exportado
-            if (in_array($doc->inventory_status_id, array(8,16))) {
+            if (in_array($doc->document_status_id, array(8,16))) {
 
                 //Volta status do documento
                 $upTsk = DB::table('documents')->where([
