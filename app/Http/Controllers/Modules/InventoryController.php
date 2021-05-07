@@ -875,7 +875,11 @@ class InventoryController extends AppBaseController
 
         //Muda Status do documento para "Exportado"
         $document->document_status_id = 16;
-        $document->save();
+        if($document->save()){
+             //Grava log 
+             $descricao = 'Exportou Documento de Inventario';
+             $log = App\Models\Log::wlog('documents_inv_exp', $descricao, $document->id);
+        }
 
         //Chama a tela do grid principal passando o nome do arquivo para download
         return redirect('inventory')->with('fileDownload', $fileName);
@@ -993,7 +997,7 @@ class InventoryController extends AppBaseController
             if (App\Models\InventoryItem::closeItems($document_id)) {
                 //Finaliza Documento
                 $retorno = App\Models\Document::finalizeInventory($document_id);
-                $descricao = 'Finalizou inventario';
+                $descricao = 'Finalizou Documento de Inventario';
                 $log = App\Models\Log::wlog('documents_inv_fin', $descricao, $document_id);
                 Flash::success("Documento Finalizado com Sucesso");
                 return array('success', "Documento Finalizado com Sucesso");
