@@ -46,7 +46,10 @@ class InventoryController extends AppBaseController
 
     public function index()
     {
-        return view('modules.inventory.gridDoc');
+        //Valida se o usuário possui permissão de visualizar todos os inventários ou apenas o que criou
+        $permission_to_view = App\Models\User::getPermission('documents_inv_vis', Auth::user()->user_type_code);
+
+        return view('modules.inventory.gridDoc')->with('permission_to_view', $permission_to_view);
     }
 
     //--------------------------------------------------------------------------------------------
@@ -765,6 +768,7 @@ class InventoryController extends AppBaseController
             $locQuery = ($fieldLocation == 1) ? "inventory_items.location_code" : "";
             $groupLoc = ($fieldLocation == 1) ? ",inventory_items.location_code": "";
 
+            //Caso leia o código interno, considera como o barcode nivel 1
             $select = DB::table('activities')
                 ->select(
                     DB::raw("CASE WHEN products.customer_code IS NOT NULL THEN products.alternative_code  ELSE  products.code END as prd"),
@@ -792,11 +796,14 @@ class InventoryController extends AppBaseController
                 ->where('activities.prim_qty', '>', 0)
                 ->where('activities.activity_status_id', '<>', 9)
                 ->groupBy('products.code', 'products.description', 'packings.barcode', 
-                          'labels.batch', 'activities.barcode','products.alternative_code','products.customer_code')
+                          'labels.batch','products.customer_code', 'products.alternative_code',
+                          DB::raw("CASE WHEN activities.barcode = products.code OR activities.barcode = products.alternative_code THEN packings.barcode ELSE activities.barcode END")
+                          )
                 ->get()
                 ->toArray();
         }
         
+       
         //Gera a variável com o conteudo do arquivo
         foreach ($select as $key => $line) {
             $row = "";

@@ -49,14 +49,20 @@ class UserPermission extends Model
 
     /**
      * Retorna todas as operações cadastradas e as permissões disponíveis para o usuário
-     *
+     * Ajustes ZERO - Apenas inv, Parceiros e Usuários
      * 
      */
-    public static function getPermissions($user_type_code){
+    public static function getPermissions($user_type_code, $module = ""){
         $GLOBALS['userType'] = $user_type_code;
         return DB::table('operations')->leftJoin('user_permissions', function ($join) {
                             $join->on('code', '=', 'operation_code')
                                 ->where('user_type_code', '=', $GLOBALS['userType']);
+                        })
+                        ->whereIn('module_name',['Inventário','Parceiros','Usuários'])
+                        ->when($module, function ($query, $module) {
+                            if (!empty($module)) {
+                                $query->where('module_name', $module);
+                            }
                         })
                         ->orderBy('module_name', 'asc')
                         ->get();
