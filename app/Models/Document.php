@@ -85,11 +85,11 @@ class Document extends Model
 
     /**
      * Função que retorna todos os documentos de um tipo de movimento
-     * Parâmetros: Código do Movimento e quantidade de documentos para retornar
+     * Parâmetros: Código do Movimento, quantidade de documentos para retornar e user_id caso deseja que retorne apenas documentos criados pelo user atual
      * @var array
      */
 
-    public static function getDocuments($moviment_code, $qty)
+    public static function getDocuments($moviment_code, $qty, $user_id = "")
     {
         $docs = Document::select(
             'documents.id',
@@ -158,8 +158,11 @@ class Document extends Model
             ->where([
                 ['documents.company_id', Auth::user()->company_id],
                 ['document_types.moviment_code', $moviment_code]
-            ])
-            ->groupBy(
+            ])->when($user_id, function ($query, $user_id) {
+                if (!empty($user_id)) {
+                    $query->where('documents.user_id', Auth::user()->id);
+                }
+            })->groupBy(
                 'documents.id',
                 'documents.company_id',
                 'documents.number',

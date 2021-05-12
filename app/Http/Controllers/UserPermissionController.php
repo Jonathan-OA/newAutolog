@@ -35,6 +35,7 @@ class UserPermissionController extends AppBaseController
     {
         //Pega todas as operações cadastradas no sistema + permissões para este usuário
         $permissions = App\Models\UserPermission::getPermissions($user_type_code);
+        
         //Pega as permissões cadastradas para o usuário
         $userPermissions = $this->userPermissionRepository->findWhere(['user_type_code' => $user_type_code]);   
         

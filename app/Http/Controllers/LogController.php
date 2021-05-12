@@ -34,10 +34,9 @@ class LogController extends AppBaseController
     public function index($operation = '', Request $request)
     {
         $this->logRepository->pushCriteria(new RequestCriteria($request));
-        $logs = $this->logRepository->all();
+        //$logs = $this->logRepository->all();
 
         return view('logs.index')
-            ->with('logs', $logs)
             ->with('operation', $operation);
     }
 

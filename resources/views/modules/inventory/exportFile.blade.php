@@ -80,7 +80,7 @@
                                         <div class="col-md-3">
                                             <!-- Delimitador  -->
                                             {!! Form::label('delimiter', '*'.Lang::get('models.delimiter').':') !!}
-                                            {!! Form::text('delimiter',';', ['class' => 'form-control props', 'id' => 'delimiter', 'required', 'maxlength' => '4']) !!}
+                                            {!! Form::text('delimiter',';', ['class' => 'form-control props', 'id' => 'delimiter', 'maxlength' => '4']) !!}
                                             {!! Form::checkbox('final_delimiter', '1' , true, ['class' => 'props', 'id' => 'final_delimiter']) !!} Incluir delimitador no final
                                             <br>
                                         </div>

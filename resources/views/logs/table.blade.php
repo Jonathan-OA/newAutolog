@@ -9,14 +9,12 @@
                 <th class="th_grid">@lang('models.created_at')</th>
             </thead>
             <tbody>
-            @foreach($logs as $log)
                 <tr>
-                    <td>{!! $log->user_id !!}</td>
-                    <td>{!! $log->operation_code !!}</td>
-                    <td>{!! $log->description !!}</td>
-                    <td>{!! $log->created_at !!}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                 </tr>
-            @endforeach
             </tbody>
         </table>
         </div>

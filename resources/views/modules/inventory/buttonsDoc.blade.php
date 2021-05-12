@@ -2,14 +2,22 @@
         <!-- Status do Doc: document_status_id (Pendente, Liberado, Execução, Liberado) -->
         <!-- Status do Inv: inventory_status_id (Pendente, 1ª Contagem Pendente, 2ª Contagem Pendente, etc) -->
         <!-- função callRoute com o segundo parametro = 1: acessa a rota por ajax. segundo parametro  vazio: redireciona -->
+        <!-- Parametro permission_to_view indica se o usuario tem permissão para ver todos os documentos ou apenas os que criou -->
         <div ng-attr-id="buttons{%row.id%}" style="overflow: visible !important;">
+
+                <span ng-if=" ({{$permission_to_view}} == 0 && row.user_id != {{Auth::user()->id}})"> 
+                        <span style="padding: 5px">SEM ACESSO</span>
+                </span>    
+
                 <!-- Detalhar -->
-                <button ng-click="callRoute('./inventory/'+row.id+'/items')" class="icon_action" aria-label="@lang('buttons.detail')" data-microtip-position="left" role="tooltip">
-                        <img class='icon' src='{{asset('/icons/detalhes.png') }}'>
-                </button>
+                <span ng-if=" ({{$permission_to_view}} == 1 || row.user_id == {{Auth::user()->id}})"> 
+                        <button ng-click="callRoute('./inventory/'+row.id+'/items')" class="icon_action" aria-label="@lang('buttons.detail')" data-microtip-position="left" role="tooltip">
+                                <img class='icon' src='{{asset('/icons/detalhes.png') }}'>
+                        </button>
+                </span>
 
                 <!-- Funções para status de documento  0 -->
-                <span ng-if="row.status_doc == 0 || !row.status_inv">
+                <span ng-if="(row.status_doc == 0 || !row.status_inv) && ({{$permission_to_view}} == 1 || row.user_id == {{Auth::user()->id}})">
                         <!-- Selecionar Itens (Apenas status 0 e Casos onde o Inventory_Value é null) 
                         <span ng-if="row.inventory_value >= 0">
                                 <button ng-click="callRoute('./inventory/'+row.id+'/selectItems')" class="icon_action" aria-label="@lang('buttons.select_items')" data-microtip-position="left" role="tooltip">
@@ -24,7 +32,7 @@
                 </span>
 
                 <!-- 1ª Contagem  -->
-                <button ng-if="row.status_inv == 0 || !row.status_inv" class="icon_action" ng-click="callRoute('./inventory/'+row.id+'/liberate/1', 1, $scope)" aria-label="@lang('buttons.1acont')" data-microtip-position="left" role="tooltip">
+                <button ng-if="(row.status_inv == 0 || !row.status_inv) && ({{$permission_to_view}} == 1 || row.user_id == {{Auth::user()->id}})" class="icon_action" ng-click="callRoute('./inventory/'+row.id+'/liberate/1', 1, $scope)" aria-label="@lang('buttons.1acont')" data-microtip-position="left" role="tooltip">
                         <img class='icon' src='{{asset('/icons/1acont.png') }}'>
                 </button>
 
@@ -39,19 +47,19 @@
                 </button>
 
                 <!-- Recarregar arquivo de leitura  -->
-                <span ng-if="row.status_doc == 2 || row.status_doc == 1">
+                <span ng-if="(row.status_doc == 2 || row.status_doc == 1) && ({{$permission_to_view}} == 1 || row.user_id == {{Auth::user()->id}})">
                         <button  class="icon_action" ng-click="callRoute('./inventory/reimportFile/'+row.id)" aria-label="@lang('buttons.reload_file')" data-microtip-position="left" role="tooltip">
                                 <img class='icon' src='{{asset('/icons/import.png') }}'>
                         </button>
                 </span>
 
                 <!-- Finalizar Inventário   -->
-                <button ng-if="(row.status_inv > 1 && row.status_inv != 8 && row.status_inv != 9 || (row.status_inv == 1 && row.counts == 1))" class="icon_action" ng-click="callRouteConfirm('./inventory/'+row.id+'/finalize',1,'@lang('buttons.msg_finalize_inv')')" aria-label="@lang('buttons.finalize_inv')" data-microtip-position="left" role="tooltip">
+                <button ng-if="(row.status_inv > 1 && row.status_inv != 8 && row.status_inv != 9 || (row.status_inv == 1 && row.counts == 1)) && ({{$permission_to_view}} == 1 || row.user_id == {{Auth::user()->id}})" class="icon_action" ng-click="callRouteConfirm('./inventory/'+row.id+'/finalize',1,'@lang('buttons.msg_finalize_inv')')" aria-label="@lang('buttons.finalize_inv')" data-microtip-position="left" role="tooltip">
                         <img class='icon' src='{{asset('/icons/finalize.png') }}'>
                 </button>
 
                 <!-- Retornar (Status 1 ou 2) -->
-                <span ng-if="row.status_doc == 1  || row.status_doc == 2">
+                <span ng-if="(row.status_doc == 1  || row.status_doc == 2) && ({{$permission_to_view}} == 1 || row.user_id == {{Auth::user()->id}})">
                         <button ng-click="callRouteConfirm('./inventory/'+row.id+'/return', 1, '@lang('buttons.msg_return')')" class="icon_action" aria-label="@lang('buttons.return')" data-microtip-position="left" role="tooltip">
                                 <img class='icon' src='{{asset('/icons/retornar.png') }}'>
                         </button>
@@ -59,21 +67,21 @@
                 
 
                 <!-- Relatório de Contagens -->
-                <span ng-if="row.status_doc != 0   && row.status_doc != 9 ">
+                <span ng-if="(row.status_doc != 0   && row.status_doc != 9) && ({{$permission_to_view}} == 1 || row.user_id == {{Auth::user()->id}}) ">
                         <button ng-click="callRoute('./inventoryItems/'+row.id+'/report')" class="icon_action" aria-label="@lang('reports.reportInv')" data-microtip-position="left" role="tooltip">
                                 <img class='icon' src='{{asset('/icons/report.png') }}'>
                         </button>
                 </span>
 
                  <!-- Exportar TXT -->
-                <span ng-if="row.status_doc == 16 || row.status_doc == 8">
+                <span ng-if="(row.status_doc == 16 || row.status_doc == 8) && ({{$permission_to_view}} == 1 || row.user_id == {{Auth::user()->id}})">
                         <button ng-click="callRoute('./inventory/'+row.id+'/exportFile')" class="icon_action" aria-label="@lang('buttons.export')" data-microtip-position="left" role="tooltip">
                                 <img class='icon' src='{{asset('/icons/export.png') }}'>
                         </button>
                 </span>
 
                 <!-- Reabrir (Status 8 ou 16) -->
-                <span ng-if="row.status_doc == 8  || row.status_doc == 16">
+                <span ng-if="(row.status_doc == 8  || row.status_doc == 16) && ({{$permission_to_view}} == 1 || row.user_id == {{Auth::user()->id}})">
                         <button ng-click="callRouteConfirm('./inventory/'+row.id+'/reopen', 1, '@lang('buttons.msg_reopen')')" class="icon_action" aria-label="@lang('buttons.reopen')" data-microtip-position="left" role="tooltip">
                                 <img class='icon' src='{{asset('/icons/reabrir.png') }}'>
                         </button>
