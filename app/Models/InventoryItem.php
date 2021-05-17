@@ -245,7 +245,9 @@ class InventoryItem extends Model
                 'activities.prim_uom_code',
                 DB::raw('CASE WHEN products.customer_code IS NOT NULL AND products.alternative_code IS NOT NULL THEN products.alternative_code ELSE activities.product_code END as product_code'),
                 'products.description as product_description',
-                'activities.barcode'
+                'activities.barcode',
+                'activities.batch',
+                'activities.due_date'
                 )
                 ->join("uoms", "activities.prim_uom_code", "uoms.code")
                 ->join('activity_status', 'activity_status.id', 'activities.activity_status_id')
@@ -280,7 +282,9 @@ class InventoryItem extends Model
                     'activities.id',
                     'activities.user_id',
                     'users.name',
-                    'activities.barcode'
+                    'activities.barcode',
+                    'activities.batch',
+                    'activities.due_date'
                 )
                 ->orderBy('location_code')
                 ->get();

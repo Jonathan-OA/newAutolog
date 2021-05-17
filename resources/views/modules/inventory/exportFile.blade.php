@@ -9,6 +9,8 @@
                          'qde' => 'Saldo',
                          'loc' => 'Setor',
                          'fix' => 'Texto Fixo',
+                         'lot' => 'Lote',
+                         'val' => 'Validade',
                          'dat' => 'Data e Hora Apontamento',
                          'datexp' => 'Data e Hora Exportação');
     //Array com as opções para preencher os caracteres a mais
@@ -21,6 +23,10 @@
                         '%Y-%d-%m %H:%i:%s' => 'yyyy-dd-mm H:i:s',
                         '%d/%m/%Y' => 'dd/mm/yyyy',
                         '%d-%m-%Y' => 'dd-mm-yyyy');
+
+    $arrayVal = array('%d/%m/%Y' => 'dd/mm/yyyy',
+                      '%d-%m-%Y' => 'dd-mm-yyyy',
+                      '%Y-%m-%d' => 'yyyy-mm-dd');
 
     //Array com os delimitadores
     $arrayDelim = array(';' => 'Ponto e Vírgula', ':' => 'Dois Pontos', ',' => 'Vírgula');
@@ -180,6 +186,8 @@
                         '<option value="qde">Saldo</option>'+
                         '<option value="loc">Setor</option>'+
                         '<option value="fix">Texto Fixo</option>'+
+                        '<option value="lot">Lote</option>'+
+                        '<option value="val">Validade</option>'+
                         '<option value="dat">Data e Hora Apontamento</option>'+
                         '<option value="datexp">Data e Hora Exportação</option>'+
                     '</select>'+
@@ -271,6 +279,13 @@
                         case 'fix':
                             var fix = $("#fixFormat").val();
                             exampleLine = exampleLine+fix+delimiter;
+                            break
+                        case 'lot':
+                            exampleLine = exampleLine+"LT123"+delimiter;
+                            break
+                        case 'val':
+                            var dat = $("#valFormat").val();
+                            exampleLine = exampleLine+dat+delimiter;
                             break
                         case 'ean':
                             var eanDig = $("#eanMax").val();
@@ -366,6 +381,10 @@
                     case 'datexp':
                         $("#field_"+i).html('<label for="datexpFormat">Formato: </label>'+
                                             '{!! Form::select('datexpFormat',$arrayDat, null, ['class' => 'form-control props', 'id' => 'datexpFormat']) !!}');            
+                    break;
+                    case 'val':
+                        $("#field_"+i).html('<label for="valFormat">Formato: </label>'+
+                                            '{!! Form::select('valFormat',$arrayVal, null, ['class' => 'form-control props', 'id' => 'valFormat']) !!}');            
                     break;
                 }
                 //Verifica se de erro na validação

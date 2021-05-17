@@ -744,7 +744,8 @@ class InventoryController extends AppBaseController
                     "activities.location_code as loc",
                     DB::raw(isset($input['datFormat']) ? "DATE_FORMAT(activities.start_date, '{$input['datFormat']}') as dat" : "'' as dat"),
                     DB::raw(isset($input['datexpFormat']) ? "DATE_FORMAT(CONVERT_TZ(NOW(),'SYSTEM','America/Sao_Paulo'), '{$input['datexpFormat']}') as datexp" : "'' as datexp"),
-                    "labels.batch as lot",
+                    "activities.batch as lot",
+                    DB::raw(isset($input['valFormat']) ? "DATE_FORMAT(activities.due_date, '{$input['valFormat']}') as val" : "'' as val"),
                     DB::raw(isset($input['fixFormat']) ? "'{$input['fixFormat']}' as fix" : "'' as fix")
                 )
                 ->join('products', function ($join) {
@@ -778,7 +779,8 @@ class InventoryController extends AppBaseController
                     DB::raw("' ' as loc"),
                     DB::raw("' ' as dat"),
                     DB::raw(isset($input['datexpFormat']) ? "DATE_FORMAT(CONVERT_TZ(NOW(),'SYSTEM','America/Sao_Paulo'), '{$input['datexpFormat']}') as datexp" : "'' as datexp"),
-                    "labels.batch as lot",
+                    "activities.batch as lot",
+                    DB::raw(isset($input['valFormat']) ? "DATE_FORMAT(activities.due_date, '{$input['valFormat']}') as val" : "'' as val"),
                     DB::raw(isset($input['fixFormat']) ? "'{$input['fixFormat']}' as fix" : "'' as fix")
                 )
                 ->join('products', function ($join) {
@@ -796,7 +798,8 @@ class InventoryController extends AppBaseController
                 ->where('activities.prim_qty', '>', 0)
                 ->where('activities.activity_status_id', '<>', 9)
                 ->groupBy('products.code', 'products.description', 'packings.barcode', 
-                          'labels.batch','products.customer_code', 'products.alternative_code',
+                          'activities.batch','products.customer_code', 'products.alternative_code',
+                          'activities.due_date',
                           DB::raw("CASE WHEN activities.barcode = products.code OR activities.barcode = products.alternative_code THEN packings.barcode ELSE activities.barcode END")
                           )
                 ->get()

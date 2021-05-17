@@ -144,6 +144,8 @@ app.controller('RepInventory', ['$rootScope', '$scope', '$http', 'uiGridConstant
                 { name: 'Descrição', field: 'product_description', cellClass:'align-left', minWidth: 400, customTreeAggregationFinalizerFn: function( aggregation ) {
                     aggregation.rendered = aggregation.value;
                   },footerCellTemplate: '<div class="ui-grid-cell-contents"></div>' },
+                { name: 'Lote', field: 'batch', minWidth: 90 },
+                { name: 'Validade', field: 'due_date', minWidth: 90 , type: 'date', cellFilter: "dateFilter"},
                 { name: '1ª Cont.', field: 'qty1', treeAggregationType: uiGridGroupingConstants.aggregation.SUM, customTreeAggregationFinalizerFn: function( aggregation ) {
                     aggregation.rendered = aggregation.value;
                   }, minWidth: 70  },
