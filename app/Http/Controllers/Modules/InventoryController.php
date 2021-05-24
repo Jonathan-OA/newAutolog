@@ -867,8 +867,8 @@ class InventoryController extends AppBaseController
                 $row = substr($row, 0, -(strlen($delimiter)));
             }
 
-            //se parametro summarize = 0, As linhas são quebradas com quantidade = 1
-            if ($jsonFields['options']['summarize'] == 0) {
+            //se parametro summarize = 0, As linhas são quebradas com quantidade = 1 (Apenas para numeros inteiros)
+            if ($jsonFields['options']['summarize'] == 0 && is_int($line->qde)) {
                 //Contador inicia com o total a ser repetido e vai diminuindo até chegar 2, a ultima linha será adicionada abaixo
                 for ($i = $line->qde; $i > 1; $i--) {
                     $content .= $row . "\n";
