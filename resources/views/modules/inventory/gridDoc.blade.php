@@ -4,7 +4,7 @@
     <div class="row" ng-app="grid_inv">
         <div class="col-md-12 pad-ct">
             <!-- Grid Principal -->
-            <div class="panel panel-default" ng-controller="MainCtrl" >
+            <div class="panel panel-default" ng-controller="MainCtrl"  ng-init="userPermission='{{$permission_to_view}}';userId='{{Auth::user()->id}}'">
                 <div class="panel-heading">
                     @lang('models.inventory')
                 </div>

@@ -26,7 +26,9 @@
 
     $arrayVal = array('%d/%m/%Y' => 'dd/mm/yyyy',
                       '%d-%m-%Y' => 'dd-mm-yyyy',
-                      '%Y-%m-%d' => 'yyyy-mm-dd');
+                      '%Y-%m-%d' => 'yyyy-mm-dd',
+                      '%m/%Y'    => 'mm/yyyy',
+                      '%m/%y'    => 'mm/yy');
 
     //Array com os delimitadores
     $arrayDelim = array(';' => 'Ponto e Vírgula', ':' => 'Dois Pontos', ',' => 'Vírgula');

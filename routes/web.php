@@ -122,8 +122,8 @@ Route::group(['middleware' => 'auth'], function() {
     });
 
     //API
-    Route::get('/api/documents/{moviment}/{qty?}', function($moviment_code, $qty = '15000') {
-        return App\Models\Document::getDocuments($moviment_code, $qty);
+    Route::get('/api/documents/{moviment}/{qty?}/{user_id?}', function($moviment_code, $qty = '15000', $user_id = '') {
+        return App\Models\Document::getDocuments($moviment_code, $qty, $user_id);
     });
     Route::get('/api/documentItems/{doc_id}/{statusDsc?}', function($document_id, $stsDsc = '') {
         return App\Models\DocumentItem::getItens($document_id, $stsDsc);

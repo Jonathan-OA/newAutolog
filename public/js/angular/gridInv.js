@@ -178,6 +178,8 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
         //Variavel de controle para buscar o filtro externo apenas uma vez
         $scope.hasFilter = false;
         $rootScope.page = 'documents';
+        $scope.userPermission = 1; //Caso o usuário não tenha permissão para ver inventários de outros usuarios, variavel ficará com o valor 0
+        $scope.userId = "";
         $scope.gridOptions = {
             enableFullRowSelection: false,
             enableRowSelection: false,
@@ -279,9 +281,17 @@ app.controller('MainCtrl', ['$rootScope', '$scope', '$http', 'uiGridConstants', 
 
         //Carrega grid com os 2 mil ultimos documentos
         $scope.getFirstData = function() {
+           
+            //Permissão para ver todos os inventários ou só os que foram criados pelo usuario atual
+            if($scope.userPermission == 1){
+                var urlGet = 'api/documents/090/2000';
+            }else{
+                var urlGet = 'api/documents/090/2000/'+$scope.userId;
+            }
+
             $http({
                 method: 'GET',
-                url: 'api/documents/090/2000'
+                url: urlGet
             }).then(function(success) {
                 console.log(success.data); 
                 $scope.gridOptions.data = success.data;
