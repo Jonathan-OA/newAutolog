@@ -762,8 +762,10 @@ class InventoryController extends AppBaseController
                 ->where('activities.description', 'not like', 'Cancelamento%')
                 ->where('activities.prim_qty', '>', 0)
                 ->where('activities.activity_status_id', '<>', 9)
+                ->orderByDesc('activities.prim_qty')
                 ->get()
                 ->toArray();
+               
         } else {
 
             $locQuery = ($fieldLocation == 1) ? "inventory_items.location_code" : "";
@@ -806,9 +808,11 @@ class InventoryController extends AppBaseController
                 ->toArray();
         }
         
-       
+       $cont = 0;
+
         //Gera a variável com o conteudo do arquivo
         foreach ($select as $key => $line) {
+            $cont ++;
             $row = "";
             //Loop no formato definido de exportação para ajustar as linhas
             foreach ($jsonFields['fields'] as $field) {
@@ -828,10 +832,15 @@ class InventoryController extends AppBaseController
                         if ($jsonFields['options']['summarize'] == 0) {
                             //Se for 0 considera o tamanho real
                             if($max != 0){
-                                $valueField = substr(str_pad(($valueField <> 0) ? 1 : 0, ($max - $dec), 0, \STR_PAD_LEFT), 0, ($max - $dec)) . $decValue;
+                                $valueField = substr(str_pad(($valueField <> 0 && is_int($valueField)) ? 1 : substr($valueField,0,strpos($valueField,'.')), ($max - $dec), 0, \STR_PAD_LEFT), 0, ($max - $dec)) . $decValue;
                             }else{
-                                //Não sumariza, mostra qde 1 por linha
-                                $valueField = 1;
+                                //Não sumariza, mostra qde 1 por linha quando inteiro para replicar nas linhas por unidade
+                                if(is_int($line->qde)){
+                                    $valueField = 1;
+                                }else{
+                                    $valueField = (float)$valueField;
+                                }
+                                
                             }
                         } else {
                             //Se for 0 considera o tamanho real
@@ -875,6 +884,7 @@ class InventoryController extends AppBaseController
                 }
             }
             
+
             //Adiciona linha no conteúdo do arquivo e pula para proxima linha
             $content .= $row . "\n";
             
