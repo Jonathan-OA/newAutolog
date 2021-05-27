@@ -22,7 +22,9 @@
                         '%Y-%m-%d %H:%i:%s' => 'yyyy-mm-dd H:i:s',
                         '%Y-%d-%m %H:%i:%s' => 'yyyy-dd-mm H:i:s',
                         '%d/%m/%Y' => 'dd/mm/yyyy',
-                        '%d-%m-%Y' => 'dd-mm-yyyy');
+                        '%d-%m-%Y' => 'dd-mm-yyyy',
+                        '%Y%m%d,%H%i%s' => 'yyyymmdd , His',
+                        '%Y%m%d;%H%i%s' => 'yyyymmdd ; His');
 
     $arrayVal = array('%d/%m/%Y' => 'dd/mm/yyyy',
                       '%d-%m-%Y' => 'dd-mm-yyyy',

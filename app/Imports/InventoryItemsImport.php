@@ -27,7 +27,6 @@ class InventoryItemsImport implements ToArray
         $this->documentNumber = $documentNumber; //Número do documento para casos de reimportação
     }
 
-    
 
     /**
      * @param array $row
@@ -64,22 +63,47 @@ class InventoryItemsImport implements ToArray
         $arrayErrors = array();
 
         DB::beginTransaction();
-        
+
         while ($line = fgetcsv($row, 0, $separator)) {
             $cont++;
-            
+
             if(count($line) == 1 && count(array_filter($line)) == 0){
                 $cont--;
                 continue;  // linha vazia
             } 
             
-            $endere = ($isTxt) ? ((array_key_exists('end', $order)) ? $line[$order['end']] : '') : $line[0];
-            $deposito = ($isTxt) ? ((array_key_exists('dep', $order)) ? $line[$order['dep']] : '') : $line[1];
-            $produto = ($isTxt) ? ((array_key_exists('prd', $order)) ? strtoupper($line[$order['prd']]) : '') : $line[2];
-            $desc = ($isTxt) ? ((array_key_exists('dsc', $order)) ? $line[$order['dsc']] : '') : $line[3];
-            $barcode = ($isTxt) ? ((array_key_exists('ean', $order)) ? strtoupper($line[$order['ean']]) : '') : $line[4];
-            $saldo = ($isTxt) ? ((array_key_exists('qde', $order)) ? $line[$order['qde']] : null) : $line[5];
-            $unidade = ($isTxt) ? ((array_key_exists('uni', $order)) ? $line[$order['uni']] : '') : $line[6];
+             //Desconsidera valores invalidos no array para a comparação
+            $lineFilter = array_filter($line, function($value) {
+                return ($value !== null && $value !== false && $value !== ''); 
+            });
+
+            $orderFilter = array_filter($order, function($value) {
+                return ($value !== null && $value !== false && $value !== ''); 
+            });
+
+        
+            //Linha possui mais dados que os definidos 
+            if(count($lineFilter) != count($orderFilter)){
+                $arrayErrors[] = '! Problemas na linha '.$cont.' - Quantidade incorreta de campos!';
+                $erro = 6;
+                continue;
+            }
+
+            
+            try{
+                $endere = ($isTxt) ? ((array_key_exists('end', $order)) ? $line[$order['end']] : '') : $line[0];
+                $deposito = ($isTxt) ? ((array_key_exists('dep', $order)) ? $line[$order['dep']] : '') : $line[1];
+                $produto = ($isTxt) ? ((array_key_exists('prd', $order)) ? strtoupper($line[$order['prd']]) : '') : $line[2];
+                $desc = ($isTxt) ? ((array_key_exists('dsc', $order)) ? $line[$order['dsc']] : '') : $line[3];
+                $barcode = ($isTxt) ? ((array_key_exists('ean', $order)) ? strtoupper($line[$order['ean']]) : '') : $line[4];
+                $saldo = ($isTxt) ? ((array_key_exists('qde', $order)) ? $line[$order['qde']] : null) : $line[5];
+                $unidade = ($isTxt) ? ((array_key_exists('uni', $order)) ? $line[$order['uni']] : '') : $line[6];
+             }catch(Exception $e){
+                $arrayErrors[] = '! Problemas na linha '.$cont.' - Formato inválido!';
+                $erro = 6;
+             }
+
+             $msgFields = "";
 
             //Se Chegou até aqui, porém EAN ta preenchido mas Código do Produto não, Código do Produto fica igual ao EAN
             if(!(array_key_exists('prd', $order)) && ($produto == "" && $barcode <> "")){
@@ -139,11 +163,11 @@ class InventoryItemsImport implements ToArray
                 $prefixCli = $client[0]->prefix_code ?? '';
 
                 //Desconsidera linha de cabeçalho
-                if(trim($desc) == '' && trim($produto) == '') continue;
+                if(trim($desc) == '' && trim($produto) == '') continue; 
                 
             }
             
-            $msgFields = "";
+            
 
             //Validações de erro na linha
             if(array_key_exists('prd', $order) && trim($produto) == ''){
@@ -267,7 +291,7 @@ class InventoryItemsImport implements ToArray
             }
 
             //Insere no banco a cada 4000 registros
-            if($cont%4000 == 0 && $erro == 0){
+            if($cont%3000 == 0 && $erro == 0){
                 $return = $this->insertValuesByArray($arrayInsertPrd, $arrayInsertPack, $arrayInsertEnd, $arrayInsertDep, $arrayInsertUom, $arrayInsertBcd);
                 if($return <> 0){
                     $erro = $return;
