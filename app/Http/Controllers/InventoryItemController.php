@@ -86,7 +86,7 @@ class InventoryItemController extends AppBaseController
      */
     public function show($id)
     {
-        $inventoryItem = $this->inventoryItemRepository->findWithoutFail($id);
+        $inventoryItem = $this->inventoryItemRepository->find($id);
 
         if (empty($inventoryItem)) {
             Flash::error(Lang::get('validation.not_found'));
@@ -109,7 +109,7 @@ class InventoryItemController extends AppBaseController
         //Valida se usuário possui permissão para acessar esta opção
         if (App\Models\User::getPermission('inventory_items_edit', Auth::user()->user_type_code)) {
 
-            $inventoryItem = $this->inventoryItemRepository->findWithoutFail($id);
+            $inventoryItem = $this->inventoryItemRepository->find($id);
 
             if (empty($inventoryItem)) {
                 Flash::error(Lang::get('validation.not_found'));
@@ -135,7 +135,7 @@ class InventoryItemController extends AppBaseController
      */
     public function update($id, UpdateInventoryItemRequest $request)
     {
-        $inventoryItem = $this->inventoryItemRepository->findWithoutFail($id);
+        $inventoryItem = $this->inventoryItemRepository->find($id);
 
         if (empty($inventoryItem)) {
             Flash::error(Lang::get('validation.not_found'));
@@ -207,10 +207,17 @@ class InventoryItemController extends AppBaseController
             ['company_id', Auth::user()->company_id],
             ['id', $document_id]
         ])->get()[0];
+
+        $customer = DB::table('customers')->where([
+            ['company_id', Auth::user()->company_id],
+            ['code', $document->customer_code]
+        ])->get()[0];
+
         return view('modules.inventory.repInventory')
             ->with('document_id', $document_id)
             //->with('inventory_items', $inventory_items)
-            ->with('document', $document);
+            ->with('document', $document)
+            ->with('customer', $customer);
     }
 
     /**

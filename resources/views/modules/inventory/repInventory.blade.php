@@ -13,7 +13,7 @@
         <div class="panel pbread panel-default" ng-controller="RepInventory" ng-init="setDocument('{{ $document->id }}','{{ $document->number }}')">
             <div class="panel-heading">
                 <!-- Texto baseado no arquivo de linguagem -->
-                @lang('reports.reportInv') : {{ $document->document_type_code }} - {{ $document->number }}
+                @lang('reports.reportInv') : {{ $document->document_type_code }} - {{ $document->number }}  
             </div>
             <div class="row" >
                 <div class="col-md-12">
@@ -33,6 +33,9 @@
                                 <span ng-if="group == 2">
                                     Agrupar por Barcode
                                 </span>
+                            </button>
+                            <button class="icon_grid" aria-label="Gerar PDF" data-microtip-position="bottom" role="tooltip" onClick="generatePDF()">
+                                <img class='icon' src='{{asset('/icons/pdf.png') }}'>
                             </button>
                         </div>
                         <!-- Botão de Refresh -->
@@ -68,4 +71,44 @@
     <script src="../../js/ui-grid/ui-grid.exporter.min.js"></script>
     <script src="../../js/ui-grid/ui-grid.tree-base.min.js"></script>
     <script src="../../js/angular/repInventory.js"></script>
+
+    <script>
+    function generatePDF () {
+
+        var dom_el = document.querySelector('[ng-controller="RepInventory"]');
+        var ng_el = angular.element(dom_el);
+        var ng_el_scope = ng_el.scope();
+        var infosGrid = ng_el_scope.gridOptions.data;
+        var arrayTable = [];
+        infosGrid.forEach(function(column){
+            arrayTable.push([column.location_code, column.product_code, column.product_description,  column.barcode, column.qty1]);
+        })
+        
+        var docDefinition = {
+                header: {
+                    columns: [ {text: 'Inventário  {{ $document->number }} ', alignment: 'center', margin: [10,10,10,10] }]
+                },
+                content: [
+                    { text: "Cliente: {{ $customer->name }} "},
+                    { text: "Data: {{date('d/m/Y')}}", margin: [0,0,0,15]},
+                    {
+                        layout: 'lightHorizontalLines', // optional
+                        table: {
+                            // headers are automatically repeated if the table spans over multiple pages
+                            // you can declare how many rows should be treated as headers
+                            headerRows: 1,
+                            widths: [ 50, 'auto', 'auto', 90, 60],
+                            body: [
+                                ['Setor', 'Produto', 'Descrição', 'Barcode',  'Quant.']
+                            ].concat(arrayTable)
+                    }
+                    }
+                ]
+                };
+
+        pdfMake.createPdf(docDefinition).open();
+
+        
+    }
+    </script>
 @endsection
