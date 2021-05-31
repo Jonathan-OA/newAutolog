@@ -67,23 +67,29 @@ class InventoryItemsImport implements ToArray
         while ($line = fgetcsv($row, 0, $separator)) {
             $cont++;
 
+            $maxArray = count($line) - 1;
+            if(trim($line[$maxArray]) == ''){
+                //Retira ultimo elemento vazio do array
+                $lastArray = array_pop($line);
+            }
+            
             if(count($line) == 1 && count(array_filter($line)) == 0){
                 $cont--;
                 continue;  // linha vazia
             } 
             
              //Desconsidera valores invalidos no array para a comparação
-            $lineFilter = array_filter($line, function($value) {
-                return ($value !== null && $value !== false && $value !== ''); 
+            /*$lineFilter = array_filter($line, function($value) {
+                return ($value !== null && $value !== false); 
             });
 
             $orderFilter = array_filter($order, function($value) {
-                return ($value !== null && $value !== false && $value !== ''); 
-            });
+                return ($value !== null && $value !== false); 
+            });*/
 
         
             //Linha possui mais dados que os definidos 
-            if(count($lineFilter) != count($orderFilter)){
+            if(count($line) != count($order)){
                 $arrayErrors[] = '! Problemas na linha '.$cont.' - Quantidade incorreta de campos!';
                 $erro = 6;
                 continue;
