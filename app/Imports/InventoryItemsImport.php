@@ -176,19 +176,21 @@ class InventoryItemsImport implements ToArray
             
 
             //Validações de erro na linha
-            if(array_key_exists('prd', $order) && trim($produto) == ''){
-                $erro = 6;
-                $msgFields .= "PRODUTO,";
-            }
-            if(array_key_exists('ean', $order) && trim($barcode) == ''){
-                $erro = 6;
-                $msgFields .= "BARCODE,";
-            }
-            if(array_key_exists('dsc', $order) && trim($desc) == ''){
-                $erro = 6;
-                $msgFields .= "DESCRIÇÃO,";
-            }
+            if(trim($produto) == '' && trim($barcode) == '') {
+                //Se barcode nem código interno estão preenchidos, pula a linha
+                continue;
+            }else{
+                if(array_key_exists('prd', $order) && trim($produto) == ''){
+                    $erro = 6;
+                    $msgFields .= "PRODUTO,";
+                }
+                if(array_key_exists('ean', $order) && trim($barcode) == ''){
+                    $erro = 6;
+                    $msgFields .= "BARCODE,";
+                }
 
+            }
+            
             //Se achar alguma linha com descricao e produto em branco, encerra o loop
             if(trim($desc) == '' && trim($produto) == '' && $erro <> 6) break;
             
@@ -243,7 +245,7 @@ class InventoryItemsImport implements ToArray
             if(trim($produto) <> ''  && $erro == 0){
          
                 //Descrição (100 caracteres)
-                $desc = (trim($desc) <> '')? substr($desc,0,100) : 'Prd '.$produto;
+                $desc = (trim($desc) <> '')? substr($desc,0,100) : 'ITEM SEM DESCRIÇÃO';
                 
                 //Adiciona os dados do produto atual para inserir posteriormente
                 $arrayInsertPrd[] = ['company_id' => Auth::user()->company_id, 
