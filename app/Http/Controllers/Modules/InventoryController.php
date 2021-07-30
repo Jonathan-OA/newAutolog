@@ -28,6 +28,7 @@ use App\Models\Customer;
 use App\Models\InventoryItem;
 use App\Models\Activity;
 use App\Models\Task;
+use PDF;
 
 ini_set('max_execution_time', 1200); //10 minutes
 ini_set('memory_limit', '2048M'); //Limite de
@@ -49,7 +50,11 @@ class InventoryController extends AppBaseController
         //Valida se o usuário possui permissão de visualizar todos os inventários ou apenas o que criou
         $permission_to_view = App\Models\User::getPermission('documents_inv_vis', Auth::user()->user_type_code);
 
-        return view('modules.inventory.gridDoc')->with('permission_to_view', $permission_to_view);
+        //Valida se o usuário possui permissão para editar valores do inventário mesmo depois de iniciado (Suporte)
+        $permission_to_edit = App\Models\User::getPermission('documents_inv_full_edit', Auth::user()->user_type_code);
+
+        return view('modules.inventory.gridDoc')->with('permission_to_view', $permission_to_view)
+                                                ->with('permission_to_edit', $permission_to_edit) ;
     }
 
     //--------------------------------------------------------------------------------------------
@@ -133,7 +138,7 @@ class InventoryController extends AppBaseController
         //Valida se usuário possui permissão para acessar esta opção
         if (App\Models\User::getPermission('documents_inv_edit', Auth::user()->user_type_code)) {
 
-            $document = $this->documentRepository->findWithoutFail($id);
+            $document = $this->documentRepository->find($id);
 
             //Busca os tipos de documentos para o movimento de inventário
             $document_types = App\Models\DocumentType::getDocumentTypes('090');
@@ -164,7 +169,7 @@ class InventoryController extends AppBaseController
      */
     public function update($id, UpdateDocumentRequest $request)
     {
-        $document = $this->documentRepository->findWithoutFail($id);
+        $document = $this->documentRepository->find($id);
 
         //Valida se documento foi encontrado
         if (empty($document)) {
@@ -205,7 +210,7 @@ class InventoryController extends AppBaseController
      */
     public function liberate($document_id, $cont)
     {
-        $document = $this->documentRepository->findWithoutFail($document_id);
+        $document = $this->documentRepository->find($document_id);
 
         //Valida se usuário possui permissão para acessar esta opção
         if (App\Models\User::getPermission('documents_inv_lib', Auth::user()->user_type_code)) {
@@ -242,7 +247,7 @@ class InventoryController extends AppBaseController
     public function return($document_id)
     {
 
-        $document = $this->documentRepository->findWithoutFail($document_id);
+        $document = $this->documentRepository->find($document_id);
 
         //Valida se usuário possui permissão para acessar esta opção
         if (App\Models\User::getPermission('documents_inv_ret', Auth::user()->user_type_code)) {
@@ -275,7 +280,7 @@ class InventoryController extends AppBaseController
     public function reopen($document_id)
     {
 
-        $document = $this->documentRepository->findWithoutFail($document_id);
+        $document = $this->documentRepository->find($document_id);
 
         //Valida se usuário possui permissão para acessar esta opção
         if (App\Models\User::getPermission('documents_inv_reopen', Auth::user()->user_type_code)) {
@@ -325,7 +330,7 @@ class InventoryController extends AppBaseController
     public function showReimportFile($document_id)
     {
 
-        $document = $this->documentRepository->findWithoutFail($document_id);
+        $document = $this->documentRepository->find($document_id);
 
         //Valida se usuário possui permissão para acessar esta opção
         if (App\Models\User::getPermission('documents_inv_reimp', Auth::user()->user_type_code)) {
@@ -381,8 +386,10 @@ class InventoryController extends AppBaseController
             //Pega apenas a primeira linha do arquivo
             $primLinha = fgets($file);
 
+            $countColumns = 1; //Padrão para garantir casos onde não existe o delimitador
+
             //Busca o separador que pode ser ponto e virgula ou apenas virgula
-            $sepFile = (strpos($primLinha, ";")) ? ";" : (strpos($primLinha, ",") ? "," : "");
+            $sepFile = (strpos($primLinha, ";")) ? ";" : (strpos($primLinha, ",") ? "," : ";");
             if ($sepFile <> "") {
                 $infos = explode($sepFile, $primLinha);
                 $indx = count($infos) - 1;
@@ -401,11 +408,14 @@ class InventoryController extends AppBaseController
                     ->with('inventory_extra_value', $inventory_extra_value);
             }
 
-            //Salva o arquivo no storage para ser obtido após a confirmação
-            //Storage::putFileAs(storage_path(),$input['fileExcel'],$fileName);
-            $input['fileExcel']->move(storage_path(), $fileName);
+            //Salva o arquivo no storage do s3 para ser obtido após a confirmação (cria com o nome do usuário atual na pasta referente ao código do cliente)
+            $path = Auth::user()->getCompanyInfo()->code.Auth::user()->getCompanyInfo()->branch.'/'.$customer_code.'/';
+            $fileName = Auth::user()->code.'.txt';
+            $fileS3 = $path.$fileName;
+            Storage::disk('s3')->putFileAs($path, $input['fileExcel'], $fileName);
 
-            return view('modules.inventory.confirmImportFile')->with('fileName', $fileName)
+
+            return view('modules.inventory.confirmImportFile')->with('fileName', $fileS3)
                 ->with('extFile', $extFile)
                 ->with('sepFile', $sepFile)
                 ->with('infos', $infos)
@@ -413,6 +423,7 @@ class InventoryController extends AppBaseController
                 ->with('inventory_value', $inventory_value)
                 ->with('inventory_extra_value', $inventory_extra_value)
                 ->with('billing_type', $billing_type)
+                ->with('fileS3', $fileS3)
                 ->with('fields', $fields);
         } else {
             //Arquivo invalido
@@ -430,7 +441,7 @@ class InventoryController extends AppBaseController
     public function importFile(Request $request)
     {
         $input = $request->all();
-        $fileName = $input['fileName']; //Nome do Arquivo salvo
+        $fileName = $input['fileName']; //Nome do Arquivo salvo no S3
         $extFile = $input['extFile']; //Extensão do arquivo salvo
         $sepFile = $input['sepFile']; //Separador de cada linha
         $customer_code = $input['customer_code']; //Cliente
@@ -454,15 +465,18 @@ class InventoryController extends AppBaseController
         if (in_array($extFile, ['xls', 'xlsx'])) {
             $file = fopen(storage_path() . '/' . $fileName, 'r');
         } elseif (in_array($extFile, ['txt', 'csv'])) {
-            $file = fopen(storage_path() . '/' . $fileName, 'r');
+            //Gera url temporária do arquivo do s3 para funcionar o fopen e enviar como resource para a classe de immportação
+            $urlFile = Storage::temporaryUrl(
+                $fileName, now()->addMinutes(25)
+            );
+            $file = fopen($urlFile, 'r');
+
             //Cria o objeto e chama a função passando os parâmetros do txt
             $importFile = new InventoryItemsImport($parameters, $customer_code, $inventory_value, $inventory_extra_value, $billing_type, $fieldsOrderJson);
             $ret = $importFile->array($file, array('order' => $fieldsOrder, 'separator' => $sepFile));
 
             if ($ret[1] <> 0) {
 
-                //Remove da pasta local
-                Storage::delete(storage_path() . '/' . $fileName);
                 //Campos não preenchidos
                 if ($ret[1] == 6) {
                     Flash::error(implode("<br>\n",$ret[2]));
@@ -470,7 +484,7 @@ class InventoryController extends AppBaseController
                     Flash::error('Erro ao importar o inventário.  Código de Erro: ' . $ret[1]);
                 }
                 
-                return redirect(route('inventory.importFile'));
+                return redirect(route('inventory.importFile'))->withInput($request->all());
             }else{
                 $inventoryNumber = $ret[0];
                 $numLines = $ret[3];
@@ -478,10 +492,8 @@ class InventoryController extends AppBaseController
                 //Tudo certo, grava o arquivo no S3 para consultas futuras
                 //Pasta no padrão CODE+BRANCH/CLIENTE/INVENTARIO
                 $fileDest = Auth::user()->getCompanyInfo()->code.Auth::user()->getCompanyInfo()->branch.'/'.$customer_code.'/'.$inventoryNumber.'.txt';
-                Storage::disk('s3')->put($fileDest, $file);
+                Storage::disk('s3')->move($fileName, $fileDest);
 
-                //Remove da pasta local
-                Storage::delete(storage_path() . '/' . $fileName);
                 
 
             }
@@ -612,7 +624,7 @@ class InventoryController extends AppBaseController
 
     public function showExportFile($document_id)
     {
-        $document = $this->documentRepository->findWithoutFail($document_id);
+        $document = $this->documentRepository->find($document_id);
         $idExport = App\Models\Customer::where('company_id',  Auth::user()->company_id)
             ->where('code', $document->customer_code)
             ->select('profile_export')
@@ -647,17 +659,31 @@ class InventoryController extends AppBaseController
         $header = $input['header']; //Cabeçalho fixo no txt
         $final_delimiter = (isset($input['final_delimiter'])) ? 1 : 0;
         $fieldsOrder = $input['fieldsOrder'];
-        $document = $this->documentRepository->findWithoutFail($document_id);
+        $document = $this->documentRepository->find($document_id);
+
+        //Ajusta espaços em branco dos campos fixos. Vem com o valor &
+        if(isset($input['fixFormat'])){
+            if(count($input['fixFormat']) >= 1 ){
+                for($i = 0; $i < count($input['fixFormat']); $i++){
+                    $input['fixFormat'][$i] = \str_replace("&", " ", $input['fixFormat'][$i]);
+                }
+            }
+        }
+        
 
         //Gravar perfil de exportação para a proxima utilização
         //insert into profiles
         $jsonFields = array('fields' => array(), 'options' => array());
         //Variavel de controle para ver se detalha ou não por endereço
         $fieldLocation = 0;
+        //Contador para quando se utilizar mais de um texto fixo na exportação. É incrementado a cada loop
+        $countFix = 0;
+        
         foreach ($fieldsOrder as $order => $field) {
             switch ($field) {
                 case 'fix':
-                    $jsonFields['fields'][] = array('code' => $field, $field . 'Format' => $input['fixFormat']);
+                    $jsonFields['fields'][] = array('code' => $field, $field . 'Format' => $input['fixFormat'][$countFix]);
+                    $countFix++;
                     break;
                 case 'loc':
                     $fieldLocation = 1;
@@ -684,7 +710,6 @@ class InventoryController extends AppBaseController
             }
         }
         $jsonFields['options'] = array('header' => $header, 'summarize' => $input['summarize'],  'final_delimiter' => $final_delimiter ) ;
-
         
         //Cadastra o novo perfil de importação se não existir um igual
         $verProfile = Profile::select('id')
@@ -725,28 +750,28 @@ class InventoryController extends AppBaseController
             ->update(['profile_export' => $input['profile_export']]);
 
         $content = "";
-
+        
         $fileName = "export_ivd_" . $document_id . "_" . date('Ymd') . "_" . date('His') . ".txt";
+        //$filePont = fopen($fileName, "w");
 
         //Se informou cabeçalho, grava o valor fixo na primeira linha
         if(trim($header) != ''){
-            $content .= $header . "\n";
+            $content .= "$header\r\n";
         }
-
         //Pega as informações das contagens (se parametro summarize = 1, agrupa por item)
         if ($jsonFields['options']['summarize'] == 0) {
             $select = DB::table('activities')
                 ->select(
                     DB::raw("CASE WHEN products.customer_code IS NOT NULL THEN products.alternative_code  ELSE  products.code END as prd"),
                     "products.description as dsc",
-                    DB::raw("CASE WHEN activities.barcode = products.code OR activities.barcode = products.alternative_code THEN packings.barcode ELSE activities.barcode END as ean"),
+                    DB::raw("CASE WHEN (activities.barcode = products.code OR activities.barcode = products.alternative_code ) AND packings.barcode <> products.code  THEN packings.barcode ELSE activities.barcode END as ean"),
                     "activities.prim_qty as qde",
                     "activities.location_code as loc",
                     DB::raw(isset($input['datFormat']) ? "DATE_FORMAT(activities.start_date, '{$input['datFormat']}') as dat" : "'' as dat"),
                     DB::raw(isset($input['datexpFormat']) ? "DATE_FORMAT(CONVERT_TZ(NOW(),'SYSTEM','America/Sao_Paulo'), '{$input['datexpFormat']}') as datexp" : "'' as datexp"),
                     "activities.batch as lot",
                     DB::raw(isset($input['valFormat']) ? "DATE_FORMAT(activities.due_date, '{$input['valFormat']}') as val" : "'' as val"),
-                    DB::raw(isset($input['fixFormat']) ? "'{$input['fixFormat']}' as fix" : "'' as fix")
+                    DB::raw(isset($input['fixFormat'][0]) ? "'{$input['fixFormat'][0]}' as fix" : "'' as fix")
                 )
                 ->join('products', function ($join) {
                     $join->on('products.code', '=', 'activities.product_code')
@@ -776,14 +801,14 @@ class InventoryController extends AppBaseController
                 ->select(
                     DB::raw("CASE WHEN products.customer_code IS NOT NULL THEN products.alternative_code  ELSE  products.code END as prd"),
                     "products.description as dsc",
-                    DB::raw("CASE WHEN activities.barcode = products.code OR activities.barcode = products.alternative_code THEN packings.barcode ELSE activities.barcode END as ean"),
+                    DB::raw("CASE WHEN (activities.barcode = products.code OR activities.barcode = products.alternative_code ) AND packings.barcode <> products.code  THEN packings.barcode ELSE activities.barcode END as ean"),
                     DB::raw("SUM(activities.prim_qty) as qde"),
-                    DB::raw("' ' as loc"),
+                    DB::raw(in_array('loc', $fieldsOrder) ? "activities.location_code as loc" : "'' as loc"),
                     DB::raw("' ' as dat"),
                     DB::raw(isset($input['datexpFormat']) ? "DATE_FORMAT(CONVERT_TZ(NOW(),'SYSTEM','America/Sao_Paulo'), '{$input['datexpFormat']}') as datexp" : "'' as datexp"),
                     "activities.batch as lot",
                     DB::raw(isset($input['valFormat']) ? "DATE_FORMAT(activities.due_date, '{$input['valFormat']}') as val" : "'' as val"),
-                    DB::raw(isset($input['fixFormat']) ? "'{$input['fixFormat']}' as fix" : "'' as fix")
+                    DB::raw(isset($input['fixFormat'][0]) ? "'{$input['fixFormat'][0]}' as fix" : "'' as fix")
                 )
                 ->join('products', function ($join) {
                     $join->on('products.code', '=', 'activities.product_code')
@@ -802,7 +827,8 @@ class InventoryController extends AppBaseController
                 ->groupBy('products.code', 'products.description', 'packings.barcode', 
                           'activities.batch','products.customer_code', 'products.alternative_code',
                           'activities.due_date',
-                          DB::raw("CASE WHEN activities.barcode = products.code OR activities.barcode = products.alternative_code THEN packings.barcode ELSE activities.barcode END")
+                          DB::raw("CASE WHEN(activities.barcode = products.code OR activities.barcode = products.alternative_code ) AND packings.barcode <> products.code THEN packings.barcode ELSE activities.barcode END"),
+                          DB::raw(in_array('loc', $fieldsOrder) ? "activities.location_code" : "''")
                           )
                 ->get()
                 ->toArray();
@@ -810,14 +836,29 @@ class InventoryController extends AppBaseController
         
        $cont = 0;
 
+       $limit = 999999999;
+       //Valida se o perfil tem permissão para exportação completa ou apenas exportação de teste (demonstração)
+       if (!App\Models\User::getPermission('documents_inv_full_exp', Auth::user()->user_type_code)) {
+            $limit = 20; //Máximo 20 Linhas
+       }
+
         //Gera a variável com o conteudo do arquivo
         foreach ($select as $key => $line) {
             $cont ++;
             $row = "";
+
+            
             //Loop no formato definido de exportação para ajustar as linhas
             foreach ($jsonFields['fields'] as $field) {
                 $code = $field['code'];
-                $valueField = $line->$code;
+                //Lógica para em casos de campo fixo, assumir valor já definido pelo usuário
+                if($code != 'fix'){
+                    $valueField = $line->$code;
+                }else{
+                    $valueField = $field['fixFormat'];
+                }
+                
+                $line->qde = $line->qde * 1; //Garantir que seja numero 
 
                 switch ($code) {
 
@@ -828,28 +869,43 @@ class InventoryController extends AppBaseController
                         $quebra = explode(".", $valueField);
                         //Valor decimal (Se for vazio, remove o ponto da quantidade)
                         $decValue = ($dec > 0) ? '.' . substr(str_pad((!isset($quebra[1]) ? '0' : $quebra[1]), ($dec), 0, \STR_PAD_RIGHT), 0, $dec) : '';
-                        //se parametro summarize = 1, As linhas são quebradas com quantidade = 1
+                        $intValue =  floor($valueField);
+                        //Se parametro summarize = 1, As linhas são quebradas com quantidade = 1
                         if ($jsonFields['options']['summarize'] == 0) {
                             //Se for 0 considera o tamanho real
-                            if($max != 0){
-                                $valueField = substr(str_pad(($valueField <> 0 && is_int($valueField)) ? 1 : substr($valueField,0,strpos($valueField,'.')), ($max - $dec), 0, \STR_PAD_LEFT), 0, ($max - $dec)) . $decValue;
+                           if($max != 0 ){
+                                //Valida se a quantidade original possui mais digitos que o definido. Neste caso, mostra o tamanho real da qde
+                                if(($max - $dec) >= strlen($intValue)){
+                                    $valueField = substr(str_pad(($valueField <> 0 && filter_var($line->qde, FILTER_VALIDATE_INT)) ? 1 : substr($valueField,0,strpos($valueField,'.')), ($max - $dec), 0, \STR_PAD_LEFT), 0, ($max - $dec)) . $decValue;
+                                }else{
+                                    //Não preenche a parte inteira apenas a decimal
+                                    $valueField =  $intValue. $decValue;
+                                }
                             }else{
                                 //Não sumariza, mostra qde 1 por linha quando inteiro para replicar nas linhas por unidade
-                                if(is_int($line->qde)){
+                                if(filter_var($line->qde, FILTER_VALIDATE_INT)){
                                     $valueField = 1;
                                 }else{
                                     $valueField = (float)$valueField;
                                 }
-                                
                             }
                         } else {
                             //Se for 0 considera o tamanho real
                             if($max != 0){
-                                $valueField = substr(str_pad($quebra[0], ($max - $dec), 0, \STR_PAD_LEFT), 0, ($max - $dec)) . $decValue;
+                                //Valida se a quantidade original possui mais digitos que o definido. Neste caso, mostra o tamanho real da qde
+                                if(($max - $dec) >= strlen($intValue)){
+                                    $valueField = substr(str_pad($quebra[0], ($max - $dec), 0, \STR_PAD_LEFT), 0, ($max - $dec)) . $decValue;
+                                }else{
+                                     //Não preenche a parte inteira apenas a decimal
+                                    $valueField =  $intValue. $decValue;
+                                }
                             }else{
                                 $valueField = (float)$valueField;
                             }
                         }
+
+                        //Formata número para que o decimal seja virgula por padrão
+                        $valueField = str_replace(".",",",$valueField);
                         break;
 
                     case 'dsc':
@@ -859,38 +915,56 @@ class InventoryController extends AppBaseController
                             $valueField = substr(str_pad($valueField, $max, "$pre", \STR_PAD_RIGHT), 0, $max);
                         break;
 
+                    case 'ean':
+                            $max = (isset($field[$code . 'Max']) ? $field[$code . 'Max'] : '');
+                            $pre = (isset($field[$code . 'Pre']) ? (($field[$code . 'Pre'] == "") ? " " : $field[$code . 'Pre']) : '');
+                            if ($max <> '' && $max <> 0)if ($max <> '' && $max <> 0)
+                                $valueField = substr(str_pad($valueField, $max, "$pre", \STR_PAD_LEFT), 0, $max);
+                            break;
+
                     case 'prd':
                         $max = (isset($field[$code . 'Max']) ? $field[$code . 'Max'] : '');
                         $pre = (isset($field[$code . 'Pre']) ? (($field[$code . 'Pre'] == "") ? " " : $field[$code . 'Pre']) : '');
-                        if ($max <> '')
-                            $valueField = substr(str_pad($valueField, $max, "$pre", \STR_PAD_RIGHT), 0, $max);
+                        if ($max <> '' && $max <> 0)
+                            $valueField = substr(str_pad($valueField, $max, "$pre", \STR_PAD_LEFT), 0, $max);
                         break;
+
+                    
                 }
                 //Adiciona campo na linha
-                $row .= $valueField . $delimiter;
+                $row .= $valueField.$delimiter;
+
             }
-
-
+            
             //Se foi marcado para não ter o delimitador no final, remove 
-            if($final_delimiter == 0){
+            if($final_delimiter == 0 && $delimiter != ''){
                 $row = substr($row, 0, -(strlen($delimiter)));
             }
 
             //se parametro summarize = 0, As linhas são quebradas com quantidade = 1 (Apenas para numeros inteiros)
-            if ($jsonFields['options']['summarize'] == 0 && is_int($line->qde)) {
+            if ($jsonFields['options']['summarize'] == 0 && filter_var($line->qde, FILTER_VALIDATE_INT)) {
                 //Contador inicia com o total a ser repetido e vai diminuindo até chegar 2, a ultima linha será adicionada abaixo
                 for ($i = $line->qde; $i > 1; $i--) {
-                    $content .= $row . "\n";
+                    $content .= "$row\r\n";
+                    $cont++; //Incrementa o contador 
+                    if((int)$cont >= (int)$limit){
+                        break; //Se não tiver permissão, para de gerar o arquivo na quantidade limite de linhas
+                    }
                 }
             }
             
-
             //Adiciona linha no conteúdo do arquivo e pula para proxima linha
-            $content .= $row . "\n";
+            $content .= "$row\r\n";
             
-        }
+            if((int)$cont >= (int)$limit){
+                break; //Se não tiver permissão, para de gerar o arquivo na quantidade limite de linhas
+            }
 
+        }
+        
         //Grava o Arquivo
+        //fwrite($filePont, $content);
+        //fclose($filePont);
         Storage::disk('public')->put($fileName, $content);
 
         //Muda Status do documento para "Exportado"
@@ -924,7 +998,7 @@ class InventoryController extends AppBaseController
 
         //Valida se usuário possui permissão para acessar esta opção
         if (App\Models\User::getPermission('documents_inv_item_add', Auth::user()->user_type_code)) {
-            $document = $this->documentRepository->findWithoutFail($document_id);
+            $document = $this->documentRepository->find($document_id);
 
             //Pega todos os saldos para montar a tela de itens
             $invItems = App\Models\InventoryItem::getItensForCount($document->id, $invCount, $deposits, $divMax, $divMin);
@@ -1045,7 +1119,7 @@ class InventoryController extends AppBaseController
      */
     public function showItems($document_id)
     {
-        $document = $this->documentRepository->findWithoutFail($document_id);
+        $document = $this->documentRepository->find($document_id);
         return view('modules.inventory.gridItem')->with('document', $document);
     }
 
@@ -1068,7 +1142,7 @@ class InventoryController extends AppBaseController
 
         //Valida se usuário possui permissão para acessar esta opção
         if (App\Models\User::getPermission('documents_inv_item_add', Auth::user()->user_type_code)) {
-            $document = $this->documentRepository->findWithoutFail($document_id);
+            $document = $this->documentRepository->find($document_id);
 
             //Pega todos os saldos para montar a tela de itens
             $stocks = App\Models\Stock::getStockInv($deposits, $document->id);
@@ -1132,8 +1206,8 @@ class InventoryController extends AppBaseController
         //Valida se usuário possui permissão para acessar esta opção
         if (App\Models\User::getPermission('documents_inv_item_edit', Auth::user()->user_type_code)) {
 
-            $document = $this->documentRepository->findWithoutFail($document_id);
-            $document_item = $this->documentItemRepository->findWithoutFail($document_item_id);
+            $document = $this->documentRepository->find($document_id);
+            $document_item = $this->documentItemRepository->find($document_item_id);
 
             return view('modules.inventory.editItem')->with('document', $document)
                 ->with('documentItem', $document_item);
@@ -1155,7 +1229,7 @@ class InventoryController extends AppBaseController
     public function updateItem($id, UpdateDocumentItemRequest $request)
     {
 
-        $documentItem = $this->documentItemRepository->findWithoutFail($id);
+        $documentItem = $this->documentItemRepository->find($id);
 
         //Valida se item foi encontrado
         if (empty($documentItem)) {
@@ -1185,7 +1259,7 @@ class InventoryController extends AppBaseController
     public function returnLocation($document_id, $location_code)
     {
 
-        $document = $this->documentRepository->findWithoutFail($document_id);
+        $document = $this->documentRepository->find($document_id);
 
         //Valida se usuário possui permissão para acessar esta opção
         if (App\Models\User::getPermission('documents_inv_ret', Auth::user()->user_type_code)) {
@@ -1225,7 +1299,7 @@ class InventoryController extends AppBaseController
 
         //Valida se usuário possui permissão para acessar esta opção
         if (App\Models\User::getPermission('documents_inv_ret', Auth::user()->user_type_code)) {
-            $document = $this->documentRepository->findWithoutFail($document_id);
+            $document = $this->documentRepository->find($document_id);
             return view('modules.inventory.gridAudit')
                 ->with('document', $document)
                 ->with('location_code', $location_code);
@@ -1244,22 +1318,78 @@ class InventoryController extends AppBaseController
         if (App\Models\User::getPermission('documents_inv_audit', Auth::user()->user_type_code)) {
 
             foreach ($inputs as $chave => $valor) {
-                if (!in_array($chave, ["_token","number", "location_code", "document_type_code"])) {
+                if (!in_array($chave, ["_token", "number", "location_code", "document_type_code"])) {
                     $inventory_item_id = $chave;
                     $novoValor = $valor;
                     //Pega Inventory Item e Task
                     $invItm = InventoryItem::find($inventory_item_id);
-                    // echo $inventory_item_id;exit;
+                    $valueDif = 0;
+                    //Se for o mesmo valor, evita qualquer alteração
                     if($invItm->qty_1count == $novoValor){
                         continue;
+                    }else{
+                        $valueDif = $novoValor - $invItm->qty_1count;
                     }
+                    
+                    //Loop nas atividades  para realizar a subtração das linhas até chegar no valor correto
+                    $select = DB::table('activities')
+                                ->select(
+                                    'id',
+                                    'prim_qty',
+                                    'qty',
+                                    'product_code'
+                                )
+                                ->where('activities.document_id', $document_id)
+                                ->where('activities.inventory_item_id', $inventory_item_id)
+                                ->where('activities.description', 'not like', 'Cancelamento%')
+                                ->where('activities.prim_qty', '>', 0)
+                                ->where('activities.activity_status_id', '<>', 9)
+                                ->orderBy('activities.prim_qty','desc')
+                                ->get()
+                                ->toArray();
+                    foreach ($select as $key => $line) {
+
+                        if($valueDif == 0) break;
+
+                        //Busca atividade para alterações
+                        $actv = Activity::find($line->id);
+
+                        if($actv){
+                            if($valueDif < 0){
+                                //Subtrai - Auditoria colocou uma quantidade menor que a original
+                                if(($valueDif*-1) >= $actv->prim_qty){
+                                    //Zerou a qde da atividade, cancela a linha
+                                    $valueDif += $actv->prim_qty;
+                                    $actv->activity_status_id = 9;
+                                    $actv->description .= " - Audt: ".($actv->prim_qty*1)." -> 0";
+                                }else{
+                                    $newValueAct = $actv->prim_qty + $valueDif;
+                                    $actv->description .= " - Audt: ".($actv->prim_qty*1)." -> ".($newValueAct*1);
+                                    $actv->prim_qty = $newValueAct;
+                                    $actv->qty = $newValueAct;
+                                    $valueDif = 0;
+                                }
+                            }else{
+                                //Soma - Auditoria colocou uma quantidade maior que a original
+                                $actv->description .= " - Audt: ".($actv->prim_qty*1)." -> ".(($actv->prim_qty*1) + $valueDif);
+                                $actv->prim_qty += $valueDif;
+                                $actv->qty += $valueDif;
+                                $valueDif = 0;
+                            }
+                            $actv->save();
+                        }
+                        
+                    }
+
                     $task = Task::where([
                         ['company_id', Auth::user()->company_id],
                         ['inventory_item_id', $inventory_item_id],
                         ['document_id', $document_id],
                         ['operation_code', "551"]
                     ])->first();
+
                     $description = "Item ajustado: " . $invItm->qty_1count . " -> " . $novoValor;
+
                     //Cria atividade
                     Activity::create(
                         $task->id,
@@ -1286,14 +1416,14 @@ class InventoryController extends AppBaseController
             $descricao = 'Auditoria Documento ID: ' . $document_id . ' - ' . $inputs['document_type_code'] . ' ' . $inputs['number'] . ' - Endereço: ' . $inputs['location_code'];
             $log = App\Models\Log::wlog('documents_inv_audit', $descricao, $document_id);
             Flash::success(Lang::get('infos.audit_location', ['location' =>  $inputs['location_code']]));
-            $document = $this->documentRepository->findWithoutFail($document_id);
+            $document = $this->documentRepository->find($document_id);
             return view('modules.inventory.gridItem')->with('document', $document);
 
             
         } else {
             //Sem permissão
             Flash::error(Lang::get('validation.permission'));
-            $document = $this->documentRepository->findWithoutFail($document_id);
+            $document = $this->documentRepository->find($document_id);
             return view('modules.inventory.gridItem')->with('document', $document);
         }
     }

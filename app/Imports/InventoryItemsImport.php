@@ -37,6 +37,7 @@ class InventoryItemsImport implements ToArray
     {   
         //Desabilita logs do banco para amenizar o uso de cpu
         DB::connection()->disableQueryLog();
+        DB::connection()->unsetEventDispatcher();
 
         //Arrays para realizar os inserts de uma vez só
         $arrayInsertPrd = array();
