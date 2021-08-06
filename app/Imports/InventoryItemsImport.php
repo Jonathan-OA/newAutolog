@@ -125,43 +125,7 @@ class InventoryItemsImport implements ToArray
 
             //Primeira linha
             if($cont == 1) {
-                //Se não entrou como parâmetro o número do inventário, cria
-                if(trim($this->documentNumber) == ''){
-
-                    //Valida quantos foram criados na data atual e incrementa 
-                    $cInv = \App\Models\Document::where('company_id',Auth::user()->company_id)
-                                                ->where('document_type_code', 'IVD')
-                                                ->where('number', 'like', date('Ymd').'%')
-                                                ->get()
-                                                ->count();
-                    $cInv = $cInv+1;
-
-                    //Cria doc de inventário
-                    $inv = new \App\Models\Document(['company_id' => Auth::user()->company_id,
-                                                    'number' => date('Ymd').$cInv,
-                                                    'document_type_code' => 'IVD',
-                                                    'document_status_id' => 0,
-                                                    'inventory_status_id' => 0,
-                                                    'inventory_value' => $this->value,
-                                                    'inventory_extra_value' => $this->extra_value,
-                                                    'billing_type' => $this->billing_type,
-                                                    'customer_code' => $this->customer_code,
-                                                    'user_id' => Auth::user()->id,
-                                                    'emission_date' => \Carbon\Carbon::now(),
-                                                    'comments' => $this->parameters,
-                                                    'order_fields' => $this->fieldsOrderJson,
-                                                    'imported_at' => \Carbon\Carbon::now()
-                                                    ]);
-                    if(!$inv->save()){
-                        $erro = 1;
-                        break;
-                    }else{
-                        $inventoryNumber = $inv->number;
-                    }
-                }else{
-                    $inventoryNumber = $this->documentNumber;
-                }
-
+               
                 //Busca prefixo de cliente para gravar o produto com esse valor
                 $client = \App\Models\Customer::where('company_id', Auth::user()->company_id)
                                               ->where('code',$this->customer_code)
@@ -299,39 +263,85 @@ class InventoryItemsImport implements ToArray
                 $arrayErrors[] = "Campos não preenchidos na linha $cont: ".substr($msgFields, 0, -1);
             }
 
-            //Insere no banco a cada 4000 registros
+            //Insere no banco a cada 3000 registros
             if($cont%3000 == 0 && $erro == 0){
-                $return = $this->insertValuesByArray($arrayInsertPrd, $arrayInsertPack, $arrayInsertEnd, $arrayInsertDep, $arrayInsertUom, $arrayInsertBcd);
-                if($return <> 0){
-                    $erro = $return;
-                    break;
-                }else{
-                    //Limpa os arrays para evitar uma lista muito grande
-                    $arrayInsertPrd = array();
-                    $arrayInsertPack = array();
-                    $arrayInsertEnd = array();
-                    $arrayInsertDep = array();
-                    $arrayInsertBcd = array();
+                //Se chegar no limite de 60 mil linhas, pausa os inserts e continua apenas as validações. O arquivo completo será baixado apenas no android
+                //e itens não cadastrados na importação serão inseridos automaticamente na sincronização
+                if($cont <= 60000){
+                    $return = $this->insertValuesByArray($arrayInsertPrd, $arrayInsertPack, $arrayInsertEnd, $arrayInsertDep, $arrayInsertUom, $arrayInsertBcd);
+                    if($return <> 0){
+                        $erro = $return;
+                        break;
+                    }else{
+                        //Limpa os arrays para evitar uma lista muito grande
+                        $arrayInsertPrd = array();
+                        $arrayInsertPack = array();
+                        $arrayInsertEnd = array();
+                        $arrayInsertDep = array();
+                        $arrayInsertBcd = array();
+                    }
                 }
             }
         }
 
         if($erro == 0){
-            //Insere os registros que sobraram e não foram inseridos dentro do loop
-            $return = $this->insertValuesByArray($arrayInsertPrd, $arrayInsertPack, $arrayInsertEnd, $arrayInsertDep, $arrayInsertUom, $arrayInsertBcd);
-            if($return <> 0){
-                $erro = $return;
+            if($cont <= 60000){
+                //Insere os registros que sobraram e não foram inseridos dentro do loop
+                $return = $this->insertValuesByArray($arrayInsertPrd, $arrayInsertPack, $arrayInsertEnd, $arrayInsertDep, $arrayInsertUom, $arrayInsertBcd);
+                if($return <> 0){
+                    $erro = $return;
+                }
             }
         }
         
         //Finaliza
         if($erro == 0){
-            DB::commit();
-        }else{
-            //Campos não preenchidos na linha
-            if($erro == 6){
-                $msgFields = "ERRO: Campos não preenchidos na linha $cont: ".substr($msgFields, 0, -1);
+            //Cria inventário ou recupera inventário em casos de reimportação
+             //Se não entrou como parâmetro o número do inventário, cria
+             if(trim($this->documentNumber) == ''){
+
+                //Valida quantos foram criados na data atual e incrementa 
+                $cInv = \App\Models\Document::where('company_id',Auth::user()->company_id)
+                                            ->where('document_type_code', 'IVD')
+                                            ->where('number', 'like', date('Ymd').'%')
+                                            ->get()
+                                            ->count();
+                $cInv = $cInv+1;
+
+                //Cria doc de inventário
+                $inv = new \App\Models\Document(['company_id' => Auth::user()->company_id,
+                                                'number' => date('Ymd').$cInv,
+                                                'document_type_code' => 'IVD',
+                                                'document_status_id' => 0,
+                                                'inventory_status_id' => 0,
+                                                'inventory_value' => $this->value,
+                                                'inventory_extra_value' => $this->extra_value,
+                                                'billing_type' => $this->billing_type,
+                                                'customer_code' => $this->customer_code,
+                                                'user_id' => Auth::user()->id,
+                                                'emission_date' => \Carbon\Carbon::now(),
+                                                'comments' => $this->parameters,
+                                                'order_fields' => $this->fieldsOrderJson,
+                                                'imported_at' => \Carbon\Carbon::now(),
+                                                'total_items' => $cont
+                                                ]);
+                if(!$inv->save()){
+                    $erro = 1;
+                }else{
+                    $inventoryNumber = $inv->number;
+                }
+            }else{
+                $inventoryNumber = $this->documentNumber;
             }
+
+            if($erro == 0){
+                DB::commit();   
+            }else{
+                $arrayErrors[] = "Erro ao inserir inventário. Tente novamente.";
+                DB::rollback();
+            }
+        }else{
+            //Erro
             DB::rollback();
         }
 

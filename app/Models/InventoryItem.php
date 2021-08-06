@@ -368,6 +368,37 @@ class InventoryItem extends Model
         }
     }
 
+
+     /**
+     * Retorna o total de leituras realizadas no inventário (Atualizar documents)
+     *
+     * @var document_id e @var count 
+     */
+
+    public static function getTotalAppointments($document_id, $count = 1)
+    {
+        switch ($count) {
+            case 2:
+                $status = array(1, 21);
+                break;
+            case 3:
+                $status = array(1, 2, 31);
+                break;
+            default:
+                $status = '';
+        }
+        
+            return Activity::where('activities.company_id', Auth::user()->company_id)
+                ->where('activities.document_id', $document_id)
+                ->where('activities.activity_status_id', '<>', 9)
+                ->where('activities.description', 'not like', 'Cancelamento%')
+                ->where("activities.prim_qty", ">", 0)
+                ->where("activities.count", $count)
+                ->sum('prim_qty');
+        
+    }
+
+
     /**
      * Retorna os itens pendentes para abertura de proxima contagem (Agrupados por endereço)
      *
@@ -690,27 +721,28 @@ class InventoryItem extends Model
     {
         if ($summarize == 0) {
 
-            $from = ($dateMin <> 0) ? date($dateMin) : 0;
-            $to = ($dateMax <> 0) ? date($dateMax) : 0;
+            $defDate = date('Y-m-d', strtotime('-2 month'));
+            $from = ($dateMin <> 0) ? date($dateMin). " 00:00:00" : $defDate. " 00:00:00";
+            $to = ($dateMax <> 0) ? date($dateMax). " 23:59:59": date('Y-m-d');
 
-            return InventoryItem::select(
+            return Activity::select(
                 'companies.id',
                 'companies.branch',
                 'companies.name',
-                DB::raw("SUM(qty_1count) as items"),
+                DB::raw("SUM(activities.prim_qty) as items"),
                 DB::raw("COUNT(DISTINCT documents.id) as inventories"),
-                DB::raw("IFNULL(SUM(CASE WHEN billing_type = 'VL' THEN qty_1count * inventory_value ELSE 0 END),0) +IFNULL( di.totalFechado, 0) as total"),
-                DB::raw("(IFNULL(SUM(CASE WHEN billing_type = 'VL' THEN qty_1count * inventory_value ELSE 0 END),0) +IFNULL( di.totalFechado, 0)) / SUM(qty_1count) as average"),
-                DB::raw("(IFNULL(SUM(CASE WHEN billing_type = 'VL' THEN qty_1count * inventory_value ELSE 0 END),0) +IFNULL( di.totalFechado, 0) ) * 0.1 as royalties")
-            )
-                ->join('documents', 'documents.id', 'inventory_items.document_id')
+                DB::raw("IFNULL(SUM(CASE WHEN billing_type = 'VL' THEN activities.prim_qty * inventory_value ELSE 0 END),0) +IFNULL( di.totalFechado, 0) +IFNULL( dvl.totalExtraPorLeitura, 0) as total"),
+                DB::raw("(IFNULL(SUM(CASE WHEN billing_type = 'VL' THEN activities.prim_qty * inventory_value ELSE 0 END),0) +IFNULL( di.totalFechado, 0) +IFNULL( dvl.totalExtraPorLeitura, 0) ) / SUM(activities.prim_qty) as average"),
+                DB::raw("(IFNULL(SUM(CASE WHEN billing_type = 'VL' THEN activities.prim_qty * inventory_value ELSE 0 END),0) +IFNULL( di.totalFechado, 0) +IFNULL( dvl.totalExtraPorLeitura, 0) ) * 0.1 as royalties")
+                )
+                ->join('documents', 'documents.id', 'activities.document_id')
                 ->join('document_types', function ($join) {
                     $join->on('document_types.code', 'documents.document_type_code')
                         ->where('document_types.moviment_code', '090');
                 })
-                ->join('companies', 'companies.id', 'inventory_items.company_id')
+                ->join('companies', 'companies.id', 'activities.company_id')
                 ->leftJoin(
-                    DB::raw('(SELECT company_id, SUM(inventory_value) as totalFechado
+                    DB::raw('(SELECT company_id, SUM(inventory_value + IFNULL(inventory_extra_value,0))  as totalFechado
                                      FROM documents 
                                      WHERE billing_type = "VF" AND
                                            inventory_status_id NOT IN (9) AND
@@ -722,13 +754,28 @@ class InventoryItem extends Model
                         $join->on('di.company_id', '=', 'documents.company_id');
                     }
                 )
-                ->whereNotIn('documents.document_status_id', [0, 1, 9])
+                ->leftJoin(
+                    DB::raw('(SELECT company_id, SUM(IFNULL(inventory_extra_value,0))  as totalExtraPorLeitura
+                                     FROM documents 
+                                     WHERE billing_type = "VL" AND
+                                           inventory_status_id NOT IN (9) AND
+                                           document_status_id NOT IN (0,1,9) AND 
+                                           inventory_extra_value IS NOT NULL AND
+                                           inventory_extra_value > 0 AND
+                                           CASE WHEN "' . $from . '" <> "0" AND "' . $to . '" <> "0" THEN start_date between "' . $from . '" and "' . $to . '"
+                                           ELSE 0 = 0 END
+                                     GROUP BY company_id) dvl'),
+                    function ($join) {
+                        $join->on('dvl.company_id', '=', 'documents.company_id');
+                    }
+                )
+                ->whereNotIn('documents.document_status_id', [0, 9])
                 ->where('documents.inventory_status_id', '<>', 9)
-                ->where('inventory_items.inventory_status_id', '<>', 9)
+                ->where('activities.activity_status_id', '<>', '9')
+                ->where('activities.description', 'not like', 'Cancelamento%')
+                ->where('companies.branch', '<>', '00')
                 ->where(function ($query) use ($from, $to) {
                     if (!empty($from) && !empty($to)) {
-                        $from = date($dateMin) . " 00:00:00";
-                        $to = date($dateMax) . " 23:59:59";
                         $query->whereBetween('documents.start_date', [$from, $to]);
                     }
                 })
@@ -736,7 +783,8 @@ class InventoryItem extends Model
                     'companies.branch',
                     'companies.name',
                     'companies.id',
-                    'di.totalFechado'
+                    'di.totalFechado',
+                    'dvl.totalExtraPorLeitura'
                 )
                 ->orderBy('companies.branch')
                 ->get();
@@ -753,7 +801,7 @@ class InventoryItem extends Model
     {
         if ($company_id != "") {
 
-            return InventoryItem::select(
+            return Activity::select(
                 'companies.id',
                 'companies.branch',
                 'companies.name',
@@ -761,14 +809,18 @@ class InventoryItem extends Model
                 'customers.trading_name',
                 'documents.start_date',
                 'documents.end_date',
-                DB::raw("SUM(qty_1count) as items"),
+                DB::raw("SUM(prim_qty) as items"),
                 'documents.billing_type',
                 'documents.inventory_value',
-                DB::raw(" CASE WHEN billing_type = 'VL' THEN SUM( qty_1count * inventory_value) ELSE inventory_value END as total"),
-                DB::raw(" CASE WHEN billing_type = 'VL' THEN SUM( qty_1count * inventory_value) ELSE inventory_value END / SUM(qty_1count) as average"),
-                DB::raw(" CASE WHEN billing_type = 'VL' THEN SUM( qty_1count * inventory_value) ELSE inventory_value END * 0.1 as royalties")
+                DB::raw("IFNULL(documents.inventory_extra_value,0) as inventory_extra_value"),
+                'documents.document_status_id',
+                'document_status.description',
+                DB::raw(" CASE WHEN billing_type = 'VL' THEN SUM( prim_qty * inventory_value) + IFNULL(inventory_extra_value,0) ELSE inventory_value + IFNULL(inventory_extra_value,0) END as total"),
+                DB::raw(" CASE WHEN billing_type = 'VL' THEN SUM( prim_qty * inventory_value) + IFNULL(inventory_extra_value,0) ELSE inventory_value + IFNULL(inventory_extra_value,0) END / SUM(prim_qty) as average"),
+                DB::raw(" CASE WHEN billing_type = 'VL' THEN SUM( prim_qty * inventory_value) + IFNULL(inventory_extra_value,0)  ELSE inventory_value + IFNULL(inventory_extra_value,0) END * 0.1 as royalties")
             )
-                ->join('documents', 'documents.id', 'inventory_items.document_id')
+                ->join('documents', 'documents.id', 'activities.document_id')
+                ->join('document_status', 'documents.document_status_id', 'document_status.id')
                 ->join('customers', function ($join) {
                     $join->on('customers.code', 'documents.customer_code')
                         ->whereColumn('customers.company_id', 'documents.company_id');
@@ -777,11 +829,13 @@ class InventoryItem extends Model
                     $join->on('document_types.code', 'documents.document_type_code')
                         ->where('document_types.moviment_code', '090');
                 })
-                ->join('companies', 'companies.id', 'inventory_items.company_id')
-                ->whereNotIn('documents.document_status_id', [0, 1, 9])
-                ->where('inventory_items.inventory_status_id', '<>', 9)
+                ->join('companies', 'companies.id', 'activities.company_id')
+                ->whereNotIn('documents.document_status_id', [0, 9])
                 ->where('documents.inventory_status_id', '<>', 9)
-                ->where('documents.company_id', '=', $company_id)
+                ->where('activities.activity_status_id', '<>', '9')
+                ->where('activities.description', 'not like', 'Cancelamento%')
+                ->where('companies.branch', '<>', '00')
+                ->where('companies.id', $company_id)
 
                 ->where(function ($query) use ($dateMin, $dateMax) {
                     if (!empty($dateMin) && !empty($dateMax)) {
@@ -799,7 +853,10 @@ class InventoryItem extends Model
                     'documents.end_date',
                     'documents.start_date',
                     'documents.billing_type',
-                    'documents.inventory_value'
+                    'documents.inventory_value',
+                    'documents.document_status_id',
+                    'document_status.description',
+                    'documents.inventory_extra_value'
                 )
                 ->orderBy('documents.start_date')
                 ->get();

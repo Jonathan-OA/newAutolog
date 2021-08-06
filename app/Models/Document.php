@@ -53,6 +53,8 @@ class Document extends Model
         'inventory_extra_value',
         'billing_type',
         'order_fields',
+        'total_items',
+        'total_counts',
         'imported_at'
     ];
 
@@ -73,7 +75,9 @@ class Document extends Model
         'number_origin' => 'string',
         'document_type_origin' => 'string',
         'finalization' => 'integer',
-        'billing_type' => 'string'
+        'billing_type' => 'string',
+        'total_items' => 'integer',
+        'total_counts' => 'integer'
     ];
 
     /**
@@ -519,7 +523,7 @@ class Document extends Model
         $doc = App\Models\Document::find($document_id);
         if (in_array($doc->document_type_code, array('IVD', 'IVG', 'IVR', 'INV'))) {
             //Só permite retornar com status encerrado ou exportado
-            if (in_array($doc->document_status_id, array(8,16))) {
+            if (in_array($doc->document_status_id, array(2,8,16)) && in_array($doc->inventory_status_id, array(8))) {
 
                 //Volta status do documento
                 $upTsk = DB::table('documents')->where([
@@ -701,13 +705,17 @@ class Document extends Model
         $doc = App\Models\Document::find($document_id);
         if (in_array($doc->document_type_code, array('IVD', 'IVG', 'IVR', 'INV'))) {
 
-            //Finaliza Documento
+            //Pega total de leituras no inventário para salvar na documents e aliviar o banco
+            $total_counts = App\Models\InventoryItem::getTotalAppointments($document_id,1);
+
+            //Finaliza Documento e atualiza total de leituras
             $upTsk = DB::table('documents')->where([
                 ['company_id', Auth::user()->company_id],
                 ['id', $document_id]
             ])->update([
                 'document_status_id' => 8,
-                'inventory_status_id' => 8
+                'inventory_status_id' => 8,
+                'total_counts' => $total_counts
             ]);
 
             //Finaliza tarefas

@@ -364,6 +364,14 @@ class InventoryController extends AppBaseController
         $inventory_extra_value = $input['extra_cost']; //Cobranças Extras
         $billing_type = $input['billing_type']; //Tipo de Cobrança
 
+        if(($billing_type == 'VL' && $inventory_value < 0.07) || ($billing_type == 'VF' && $inventory_value < 560)){
+            Flash::error(Lang::get('validation.billing_type_value'));
+            return redirect(url('inventory/importFile'))->with('customer_code', $customer_code)
+                ->with('inventory_value', $inventory_value)
+                ->with('inventory_extra_value', $inventory_extra_value);
+        }
+
+
         //Valida se Cliente existe
         $authCustomer = Customer::where([
             ['code', $customer_code],
@@ -428,7 +436,7 @@ class InventoryController extends AppBaseController
         } else {
             //Arquivo invalido
             Flash::error(Lang::get('validation.permission'));
-            return redirect(url('inventory.importFile'));
+            return redirect(url('inventory/importFile'));
         }
     }
 
@@ -472,9 +480,10 @@ class InventoryController extends AppBaseController
             $file = fopen($urlFile, 'r');
 
             //Cria o objeto e chama a função passando os parâmetros do txt
+            //Importa as linhas do txt e salva o arquivo no S3
             $importFile = new InventoryItemsImport($parameters, $customer_code, $inventory_value, $inventory_extra_value, $billing_type, $fieldsOrderJson);
             $ret = $importFile->array($file, array('order' => $fieldsOrder, 'separator' => $sepFile));
-
+            //Valida se deu erro na importação
             if ($ret[1] <> 0) {
 
                 //Campos não preenchidos
@@ -493,9 +502,6 @@ class InventoryController extends AppBaseController
                 //Pasta no padrão CODE+BRANCH/CLIENTE/INVENTARIO
                 $fileDest = Auth::user()->getCompanyInfo()->code.Auth::user()->getCompanyInfo()->branch.'/'.$customer_code.'/'.$inventoryNumber.'.txt';
                 Storage::disk('s3')->move($fileName, $fileDest);
-
-                
-
             }
         } else {
             //Arquivo invalido
